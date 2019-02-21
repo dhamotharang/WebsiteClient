@@ -1,0 +1,54 @@
+<nh-modal #folderFormModal size="lg"
+          (shown)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase">
+        {isUpdate, select, 0 {Add new folder} 1 {Update folder} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="col-sm-12" [formGroup]="model">
+                <div class="form-group cm-mgb-10">
+                    <label i18n-ghmLabel="@@folderName" ghmLabel="Folder Name" *ngIf="isUpdate"
+                           class="control-label" [required]="true"></label>
+                    <div class="" [class.has-error]="formErrors?.name">
+                        <input type="text" class="form-control"
+                               id="name"
+                               i18n-placeholder="@@enterFolderNamePlaceHolder"
+                               placeholder="Enter folder name."
+                               formControlName="name">
+                        <span class="help-block">
+                               {formErrors?.name, select, required {Folder name is required} maxLength {Folder name
+                                  name not allowed over 300 characters}}
+                             </span>
+                    </div>
+                </div>
+                <div class="form-group cm-mgb-10" *ngIf="isUpdate">
+                    <label i18n-ghmLabel="@@folder" ghmLabel="Folder"
+                           class="control-label"></label>
+                    <div class="" [formGroup]="model">
+                        <nh-dropdown-tree
+                            [width]="500"
+                            [data]="folderTree" i18n-title="@@selectFolderGroup"
+                            title="-- Select Folder --"
+                            formControlName="parentId">
+                        </nh-dropdown-tree>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <ghm-button classes="btn blue cm-mgr-5"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Save</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            nh-dismiss="true"
+                            [type]="'button'"
+                            [loading]="isSaving">
+                    <span i18n="@@cancel">Cancel</span>
+                </ghm-button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

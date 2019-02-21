@@ -1,0 +1,11 @@
+<nh-modal #choiceMenuItemModal [size]="'lg'">
+    <nh-modal-header class="uppercase">
+        <span i18n="@@choiceMenuItem">Choice menu item into menu</span>
+    </nh-modal-header>
+    <nh-modal-content>
+        <app-new-select *ngIf="type === subjectType.news" (onAccept)="acceptSelectListGroup($event)"
+                        (onCancel)="choiceMenuItemModal.dismiss()"></app-new-select>
+        <app-category-select *ngIf="type === subjectType.newsCategory" (onAccept)="acceptSelectListGroup($event)"
+                             (onCancel)="choiceMenuItemModal.dismiss()"></app-category-select>
+    </nh-modal-content>
+</nh-modal>

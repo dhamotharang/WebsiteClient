@@ -1,0 +1,228 @@
+<div class="blog-page blog-content-2">
+    <div class="row">
+        <div class="col-sm-9 cm-pdr-0">
+            <div class="portlet light">
+                <div class="portlet-title cm-mgb-0">
+                    <div class="caption font-blue-sharp uppercase cm-mgt-5 cm-mgl-10">
+                        <i class="icon-speech font-blue-sharp"></i>
+                        <span class="caption-subject font-blue-sharp bold">Content</span>
+                    </div>
+                    <div class="actions">
+                        <a href="javascript:;" class="btn btn-sm default cm-mgr-5" routerLink="/news" title="Back">
+                            <i class="fa fa fa-arrow-left"></i> Back to list </a>
+                        <a href="javascript:;" class="btn btn-sm blue cm-mgr-5"
+                           *ngIf="((newDetail?.status !== newsStatus.pending) && newDetail?.creatorId === currentUser.id)
+                                   || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)"
+                           (click)="edit()">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                        <a href="javascript:;" class="btn btn-sm red cm-mgr-5"
+                           *ngIf="((newDetail?.status === newsStatus.decline || newDetail?.status === newsStatus.draft) && newDetail?.creatorId === currentUser.id)"
+                           [swal]="confirmDeleteNews"
+                           (confirm)="delete()">
+                            <i class="fa fa-trash"></i>
+                            Delete
+                        </a>
+                        <div class="btn-group cm-mgr-5" *ngIf="languages && languages.length > 1">
+                            <a class="btn btn-sm default" href="javascript:;" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="fa fa-globe" aria-hidden="true"></i> {{currentLanguage}}
+                                <i class="fa fa-angle-down" i18n="@@language"> </i>
+                                Language
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li *ngFor="let language of languages">
+                                    <a href="javascript:;" (click)="selectLanguage(language)">
+                                        {{language.name}} </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body cm-pdt-0">
+                    <div class="blog-single-content bordered blog-container">
+                        <div class="media">
+                            <div class="media-left">
+                                <img ghmImage [src]="newDetail?.featureImage" class="w250" [isUrlAbsolute]="true">
+                            </div>
+                            <div class="media-body">
+                                <div class="blog-single-head" *ngFor="let newTranslation of newsTranslation; index as i"
+                                     [hidden]="newTranslation.languageId !== currentLanguage">
+                                    <h4 class="blog-single-head-title">{{newTranslation.title}}
+                                    </h4>
+                                    <ul class="list-inline">
+                                        <li class="list-items">
+                                            <i class="icon-calendar font-blue"></i>
+                                            <a href="javascript:;">{{newDetail?.createTime | dateTimeFormat :
+                                                'DD/MM/YYYY hh:mm'}}</a>
+                                        </li>
+                                        <li class="list-items">
+                                            <i class="icon-user font-blue"></i>
+                                            <a href="javascript:;">{{newDetail.creatorFullName}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="blog-single-description"
+                                     *ngFor="let newTranslation of newsTranslation; index as i"
+                                     [hidden]="newTranslation.languageId !== currentLanguage">
+                                    {{newTranslation.description}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="blog-single-desc" *ngFor="let newTranslation of newsTranslation; index as i"
+                             [hidden]="newTranslation.languageId !== currentLanguage">
+                            <nh-safeHtml [html]="newTranslation.content"></nh-safeHtml>
+                        </div>
+                        <div class="blog-single-foot" *ngFor="let newTranslation of newsTranslation; index as i"
+                             [hidden]="newTranslation.languageId !== currentLanguage || newTranslation.tags?.length === 0">
+                            <ul class="blog-post-tags" *ngIf="newTranslation.tags && newTranslation.tags.length> 0">
+                                <li *ngFor="let tag of newTranslation.tags" class="uppercase">
+                                    <a href="javascript:;">{{tag.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="blog-comments" *ngIf="newDetail?.commentCount > 0">
+                            <h3 class="sbold blog-comments-title" i18n="@@comment">Comments (<span>{{listComment?.length}}</span>)
+                            </h3>
+                            <div class="c-comment-list">
+                                <app-new-comment [comments]="comments"></app-new-comment>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="portlet light">
+                <div class="portlet-title cm-mgb-0">
+                    <div class="caption uppercase cm-mgt-5 cm-mgl-10 cm-mgb-25">
+                        <i class="icon-speech font-blue-sharp"></i>
+                        <span class="caption-subject font-blue-sharp bold">Approve</span>
+                    </div>
+                    <div class="actions">
+                        <a href="javascript:;" class="btn btn-sm blue cm-mgr-5"
+                           *ngIf="currentUser.id === newDetail?.creatorId && (newDetail.status === newsStatus.draft || newDetail?.status === newsStatus.decline)"
+                           [swal]="confirmSendNews"
+                           (confirm)="send(newsStatus.pending)">Send</a>
+                        <a href="javascript:;" class="btn btn-sm blue cm-mgr-5"
+                           *ngIf="newDetail?.status === newsStatus.pending && newDetail?.isApprove"
+                           [swal]="confirmApproveNews"
+                           (confirm)="send(newsStatus.approved)">
+                            Approve </a>
+                        <a href="javascript:;" class="btn btn-sm red cm-mgr-5"
+                           *ngIf="newDetail?.status === newsStatus.pending && newDetail?.isApprove"
+                           [swal]="confirmDeclineNews"
+                           (confirm)="declineNew($event)">
+                            Decline
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body cm-pdt-0">
+                    <div class="blog-single-sidebar bordered blog-container">
+                        <h3 class="blog-sidebar-title uppercase cm-mgt-0" i18n="@@attribute">Attribute</h3>
+                        <div class="form-group cm-mg-0">
+                            <mat-checkbox color="primary" i18n="@@isHost" [disabled]="true"
+                                          [checked]="newDetail?.isHot">
+                                {newDetail?.isHot, select, 0 {Normal} 1 {Hot}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0">
+                            <mat-checkbox color="primary" [disabled]="true" i18n="@@isHomePage"
+                                          [checked]="newDetail?.isHomePage">
+                                {newDetail?.isHomePage, select, 0 {Not Home Page} 1 {Home Page}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0">
+                            <mat-checkbox color="primary" [disabled]="true" i18n="@@isActive"
+                                          [checked]="newDetail?.isActive">
+                                {newDetail?.isActive, select, 0 {Inactive} 1 {Active}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0">
+                            <span class="blog-sidebar-title" i18n="@@status">Status</span> &nbsp;
+                            <span class="badge" [class.badge-danger]="newDetail?.status === newsStatus?.decline"
+                                  [class.badge-success]="newDetail?.status === newsStatus.approved"
+                                  [class.badge-warning]="newDetail?.status === newsStatus.pending"
+                                  [class.badge-draft]="newDetail?.status === newsStatus.draft"> {{newDetail?.status === newsStatus.draft ? 'Draft' :
+                                                                                                    newDetail?.status === newsStatus.pending ? 'Pending' :
+                                                                                                        newDetail?.status === newsStatus.approved ? 'Approved' :
+                                                                                                            newDetail?.status === newsStatus.decline ? 'Decline' : ''}}
+                            </span>
+                        </div>
+                        <div class="form-group cm-mg-0" *ngIf="newDetail?.status === newsStatus?.decline">
+                            <span class="blog-sidebar-title" i18n="@@declineRreason">Decline Reason: {{newDetail?.approverComment}}</span>
+                        </div>
+                        <div class="blog-single-sidebar-recent"
+                             *ngIf="listCategoryNews && listCategoryNews?.length > 0">
+                            <h3 class="blog-sidebar-title uppercase" i18n="@@category">Category</h3>
+                            <ul>
+                                <li *ngFor="let category of listCategoryNews"
+                                    [hidden]="category.languageId !== currentLanguage">
+                                    <a href="javascript:;">{{category.categoryName}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="blog-single-sidebar-recent">
+                            <h3 class="blog-sidebar-title uppercase" i18n="@@category">Seo Content</h3>
+                            <div class="blog-single-seo" *ngFor="let newTranslation of newsTranslation; index as i"
+                                 [hidden]="newTranslation.languageId !== currentLanguage">
+                                <app-new-seo [title]="newTranslation?.metaTitle"
+                                             [seoLink]="newTranslation.seoLink"
+                                             [metaKeyword]="newTranslation.metaKeyword"
+                                             [description]="newTranslation.metaDescription"></app-new-seo>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<swal
+        #confirmDeleteNews
+        i18n="@@confirmDeleteNews"
+        i18n-title="@@titleConfirmDeleteNews"
+        i18n-text="@@textConfitmDeleteNews"
+        title="Are you sure for delete this news?"
+        text="You can't recover this video after news."
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmSendNews
+        i18n="@@confirmSendNews"
+        i18n-title="@@titleConfirmSendNews"
+        i18n-text="@@textConfitmSendNews"
+        title="Are you sure for send this news?"
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmApproveNews
+        i18n="@@confirmApproveNews"
+        i18n-title="@@titleConfirmApproveNews"
+        i18n-text="@@textConfirmApproveNews"
+        title="Are you sure for approve this news?"
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal #confirmDeclineNews
+      i18n="@@confirmDeclineNews"
+      i18n-title="@@titleConfirmDeclineNews"
+      i18n-text="@@textConfirmDeclineNews"
+      title="Decline Reason"
+      input="textarea"
+      type="warning"
+      size="lage"
+      customClass="w500"
+      inputPlaceholder="Please enter decline reason"
+      [showCancelButton]="true"
+      [focusCancel]="true">>
+</swal>

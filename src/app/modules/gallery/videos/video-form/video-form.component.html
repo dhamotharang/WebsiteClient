@@ -1,0 +1,159 @@
+<nh-modal #videoFormModal size="lg"
+          (shown)="onFormModalShown()">
+    <nh-modal-header [showCloseButton]="true" class="uppercase">
+        <i class="fa fa-film"></i> {isUpdate, select, 0 {Add new video} 1 {Update video}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" [formGroup]="model" (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="tab-content" formArrayName="translations">
+                <div class="form-group" *ngIf="languages && languages.length > 1">
+                    <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                           class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <nh-select [data]="languages"
+                                   i18n-title="@@pleaseSelectLanguage"
+                                   title="-- Please select language --"
+                                   name="language"
+                                   [(value)]="currentLanguage"
+                                   (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@typeVideo" class="col-sm-3 control-label" ghmLabel="Video Type"
+                           [required]="true"></label>
+                    <div class="col-sm-9" [class.has-error]="formErrors?.type">
+                        <nh-select
+                                i18n-title="@@videoType"
+                                title="-- Please select video type --"
+                                [data]="videoTypes"
+                                formControlName="type"
+                        ></nh-select>
+                        <span class="help-block">{ formErrors?.type, select, required {Type is required} isValid {Type is number}}</span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@url" ghmLabel="Url" class="col-sm-3 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-9" [class.has-error]="formErrors.url">
+                        <div class="input-group">
+                            <input type="text" class="form-control" i18n-placeholder="@@urlPlaceHolder"
+                                   placeholder="Please enter url"
+                                   formControlName="url"
+                                   id="{{'url ' + currentLanguage}}"
+                                   (change)="changeInput($event)"
+                                   (paste)="changeUrl($event)"/>
+                            <span class="input-group-btn">
+                               <button class="btn blue" type="button" (click)="genderVideo(model.value.url)">
+                                <i class="fa fa-eye"></i></button>
+                            </span>
+                        </div>
+                        <span class="help-block">{ formErrors?.url, select , required {Url is required}
+                            maxLength {Url  not allowed over 500 characters} pattern {Url is inValid}}</span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     [hidden]="translation.value.languageId !== currentLanguage"
+                     *ngFor="let translation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[translation.value.languageId]?.title">
+                    <label i18n-ghmLabel="@@title" ghmLabel="Title" class="col-sm-3 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" i18n-placeholder="@@titleVideoPlaceHolder"
+                               placeholder="Please enter title video "
+                               formControlName="title"/>
+                        <span class="help-block">{translationFormErrors[translation.value.languageId]?.title,
+                                                    select,
+                                                    required {Title is required}
+                                                    maxlength {Title not allowed
+                                                    over 256 characters pattern}
+                                                    pattern {Title is inValid}}</span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@thumbnail" ghmLabel="Thumbnail" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-3" [class.has-error]="formErrors.thumbnail">
+                        <div class="fileinput fileinput-new">
+                            <div class="fileinput-new thumbnail">
+                                <nh-image
+                                        [cssClass]="'w150 cm-mgb-5'"
+                                        [errorImageUrl]="'/assets/images/no-image.png'"
+                                        [value]="model.value.thumbnail">
+                                </nh-image>
+                                <span class="help-block">{formErrors?.thumbnail, select , maxLength {Thumbnail  not allowed over 500 characters}}</span>
+                                <ghm-file-explorer i18n-buttonText="@@selectThumbnail"
+                                                   [buttonText]="'Select thumbnail'"
+                                                   (itemSelected)="onSelectThumbnail($event)"></ghm-file-explorer>
+                            </div>
+                        </div>
+                    </div>
+                    <label i18n-ghmLabel="@@videoLinkId" ghmLabel="VideoId" class="col-sm-3 control-label"
+                           *ngIf="videoType !== VideoType.updateServer"></label>
+                    <div class="col-sm-3" [class.has-error]="formErrors.videoLinkId"
+                         *ngIf="videoType !== VideoType.updateServer">
+                        <input type="text" class="form-control" i18n-placeholder="@@videoLinkId" placeholder="VideoId"
+                               formControlName="videoLinkId" disabled="true"/>
+                        <span class="help-block">{formErrors?.videoLinkId ,select , maxLength {VideoLinkId  not allowed over 100 characters }}</span>
+                    </div>
+                </div>
+                <div class="form-group" [hidden]="translation.value.languageId !== currentLanguage"
+                     *ngFor="let translation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[translation.value.languageId]?.description">
+                    <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                    <textarea type="text" class="form-control" i18n-placeholder="@@description"
+                              placeholder="Please enter description"
+                              formControlName="description" rows="3"></textarea>
+                        <span class="help-block">{ translationFormErrors[translation.value.languageId]?.description, select, maxlength {Description not allowed
+                                                    over 500 characters} }
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@order" class="col-sm-3 control-label" ghmLabel="Order"></label>
+                    <div class="col-sm-3" [class.has-error]="formErrors.order">
+                        <input type="number" class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                               placeholder="Please enter order"
+                               formControlName="order">
+                        <span class="help-block">{formErrors?.order, select, isValid {Order is inValid}}</span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <div class="col-sm-8 col-sm-offset-3">
+                        <mat-checkbox formControlName="isActive" color="primary">
+                            {model.value.isActive, select, 0 {InActive} 1 {Active}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <div class="col-sm-8 col-sm-offset-3">
+                        <mat-checkbox formControlName="isHomePage" color="primary">
+                            {model.value.isHomePage, select, 0 {Not in home page} 1 {In home page}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="button"
+                        (click)="save()"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@cancel">
+                    Cancel
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

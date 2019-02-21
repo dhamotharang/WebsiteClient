@@ -1,0 +1,183 @@
+<div class="survey" *ngIf="!errorMessage; else displayErrorMessageTemplate">
+    <div class="row">
+        <div class="col-sm-12 user-exam cm-mgt-10">
+            <div class="media-left pull-left cm-pdl-10">
+                <img ghmImage
+                     class="avatar-md"
+                     src="{{currentUser?.avatar}}"
+                     [alt]="currentUser?.fullName"/>
+            </div>
+            <div class="user-info">
+                <div class="full-name">{{ currentUser?.fullName }}</div>
+                <div class="description">{{ surveyUserInfo?.officeName }} - {{surveyUserInfo?.positionName }}
+                </div>
+            </div>
+            <hr class="color-border cm-mg-0">
+        </div>
+    </div>
+    <div class="row survey-container">
+        <div class="col-sm-9">
+            <div class="exam-container" [ngStyle]="{'max-height': height + 'px', 'overflow-x': 'hidden'}">
+                <div class="survey-title">
+                    <h4 class="star-title fontSize18 cm-mgt-0">{{ surveyUserInfo?.surveyName }}</h4>
+                    <div class="countdown" *ngIf="!isFinish">
+                        Thời gian còn lại: {{timeRemainTransform}}
+                    </div>
+                    <div class="title-finish" *ngIf="isFinish" i18n="timeExamHasFinished">
+                        <!--Time exam has finished-->
+                        Cảm ơn bạn đã hoàn thành bài thi.
+                    </div>
+                </div>
+                <div class="question-container" *ngIf="listQuestion && listQuestion.length > 0">
+                    <div class="question-item list-group-item" *ngFor="let question of listQuestion; let i = index">
+                        <div class="question-left">
+                            <div class="question-number">{{question.order}}.</div>
+                        </div>
+                        <div class="question-body">
+                            <div class="question-name" [innerHTML]="question.name" [id]="i+1"></div>
+                            <div class="answer-container" *ngIf="question.questionType !== questionType.vote">
+                                <div class="answer-item" *ngFor="let answer of question.answers; let j = index">
+                                    <div class="answer-name">
+                                        <mat-radio-button color="primary" value="answer.answerId"
+                                                          [name]="question.versionId"
+                                                          [disabled]="isFinish"
+                                                          [checked]="answer.isSelected"
+                                                          *ngIf="question.questionType === questionType.singleChoice"
+                                                          (click)="userAnswer(question, answer, i)">
+                                            <span [innerHTML]="answer.name"></span>
+                                        </mat-radio-button>
+                                        <mat-checkbox color="primary"
+                                                      [disabled]="isFinish"
+                                                      *ngIf="question.questionType === questionType.multiChoice"
+                                                      [checked]="answer.isSelected"
+                                                      (change)="userAnswer(question, answer, i)">
+                                            <span [innerHTML]="answer.name"></span>
+                                        </mat-checkbox>
+                                        <textarea type="text" class="form-control"
+                                                  *ngIf="question.questionType === questionType.essay"
+                                                  rows="3"
+                                                  [readonly]="isFinish"
+                                                  name="{{question.versionId}}"
+                                                  i18="@@answerPlaceHolder"
+                                                  i18n-placeholder
+                                                  placeholder="Please enter answer."
+                                                  [(ngModel)]="answer.value"
+                                                  (blur)="answerBlur(question, answer, i, $event)"></textarea>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <input class="form-control" name="{{question.versionId}}"
+                                                       [readonly]="isFinish"
+                                                       *ngIf="question.questionType === questionType.selfResponded"
+                                                       [(ngModel)]="answer.value"
+                                                       i18="@@answerPlaceHolder"
+                                                       i18n-placeholder
+                                                       placeholder="Please enter answer."
+                                                       (blur)="answerBlur(question, answer, i, $event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="answer-container" *ngIf="question.questionType === questionType.vote">
+                                <ul class="list-inline">
+                                    <li *ngFor="let answer of question.answers;" class="list-inline-item cm-pd-0"
+                                        [matTooltip]="answer.name"
+                                        [matTooltipPosition]="'above'">
+                                        <a (click)="userAnswer(question, answer, i, $event)" *ngIf="!isFinish">
+                                            <i class="fa fa-star-o fontSize24"
+                                               [class.color-orange]="answer.order <= question.orderAnswerSelect"
+                                               aria-hidden="true">
+                                            </i>
+                                        </a>
+                                        <i class="fa fa-star-o fontSize24" *ngIf="isFinish"
+                                           [class.color-orange]="answer.order <= question.orderAnswerSelect"
+                                           aria-hidden="true"></i>
+                                    </li>
+                                </ul>
+                            </div><!-- END: .answer-container -->
+                        </div><!-- END: .question-body -->
+                    </div><!-- END: .question-item -->
+                </div><!-- END: .question-container -->
+                <div class="row" class="paging-question">
+                    <!--<div class="col-sm-6">-->
+                        <!--<div class="form-inline">-->
+                            <!--<div class="form-group cm-mgr-5">-->
+                                <!--<nh-select-->
+                                <!--[data]="[{id: 5, name: '5 question'}, {id: 10, name: '10 question'}, {id: 20, name: '20 question'}, {id: 50, name: '50 question'}]"-->
+                                <!--[(ngModel)]="pageSize"-->
+                                <!--&lt;!&ndash;(onSelectItem)="search(1)"></nh-select>&ndash;&gt;-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<ghm-paging [totalRows]="totalQuestion" class="paging"-->
+                                <!--class="cm-mg-0"-->
+                                <!--[pageSize]="pageSize"-->
+                                <!--[currentPage]="currentPage"-->
+                                <!--[pageShow]="6"-->
+                                <!--(pageClick)="search($event)"-->
+                                <!--[isDisabled]="isSearching"-->
+                                <!--[pageName]="'Question'">-->
+                                <!--</ghm-paging>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-sm-3 col-sm-offset-4">
+                        <div class="form-group pull-right">
+                            <ghm-button *ngIf="!isFinish"
+                                type="button"
+                                classes="btn btn-primary"
+                                [swal]="confirmFinishExam"
+                                (confirm)="finishExam()" i18="@@finishExam">Hoàn thành
+                            </ghm-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 score-container">
+            <div class="answer-sheet">
+                <span>Answer sheet</span>
+            </div>
+            <div class="table-question">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                    <tr *ngFor="let row of listRowTableScore">
+                        <td *ngFor="let column of listColTableScore" class="middle center"
+                            [class.has-answer]="listQuestionIndexHasAnswer.indexOf((row - 1) * this.colTableScore + column)>=0">
+                            <a *ngIf="totalQuestion >= ((row - 1) * this.colTableScore + column)">
+                                {{(row - 1) * this.colTableScore + column}}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                <a (click)="showQuestionHasAnswer()" [class.bold]="noTab === questionAnswerStatus.hasAnswer">Đã trả lời: {{totalQuestionHasAnswer}}</a>
+            </p>
+            <p>
+                <a (click)="showQuestionNoAnswer()" [class.bold]="noTab === questionAnswerStatus.noAnswer">Chưa trả lời: {{totalQuestionNotAnswer}}</a>
+            </p>
+            <p>
+                <a (click)="showAllQuestion()" [class.bold]="noTab === questionAnswerStatus.all"> Tổng số câu: {{totalQuestion}}</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<swal
+    #confirmFinishExam
+    i18n="@@confirmFinishExam"
+    i18n-title
+    i18n-text
+    title="Bạn có muốn kết thúc bài thi?"
+    [text]="'Bạn có ' + totalQuestionNotAnswer + ' câu hỏi chưa trả lời.' +'.Bạn không thể làm tiếp tục làm bài thi sau khi kêt thúc.'"
+    type="warning"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<ng-template #displayErrorMessageTemplate>
+    <div class="alert alert-danger cm-mgt-20">{{errorMessage}}</div>
+    <div class="center">
+        <a class="btn btn-primary btn-lg" routerLink="/surveys/my-survey" i18n="goHome">Back to my survey</a>
+    </div>
+</ng-template>

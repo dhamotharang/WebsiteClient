@@ -1,0 +1,83 @@
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-key font-blue-hoki"></i>
+            <span class="caption-subject bold font-blue-hoki uppercase"> Thông tin mã khuyến mại </span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-12 cm-mgb-10">
+                <form action="" class="form-inline" (ngSubmit)="search(1)">
+                    <div class="form-group">
+                        <button type="button" mat-raised-button color="primary" (click)="showGenerate()">
+                            <i class="fa fa-key"></i>
+                            Tạo mã tự động
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" mat-raised-button color="primary" (click)="showAddVoucher()">
+                            <i class="fa fa-gift"></i>
+                            Tạo mã cho người dùng
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm"
+                               (keyup)="keyword = keywordInput.value" #keywordInput/>
+                        <button type="submit" mat-raised-button color="primary">
+                            <mat-icon>search</mat-icon>
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th class="center middle">#</th>
+                        <th class="center middle">Mã giảm giá</th>
+                        <th class="center middle">Sử dụng</th>
+                        <th class="center middle">Tên người dùng</th>
+                        <th class="center middle">Số điện thoại</th>
+                        <th class="center middle"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let promotionVoucher of listPromotionVoucher; let i = index">
+                        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td class="middle">{{promotionVoucher.code}}</td>
+                        <td class="center">
+                            <mat-icon *ngIf="promotionVoucher.usedTime" class="color-green">done</mat-icon>
+                        </td>
+                        <td class="middle">{{promotionVoucher.fullName}}</td>
+                        <td class="middle">{{promotionVoucher.phoneNumber}}</td>
+                        <td class="center middle">
+                            <button type="button" mat-mini-fab color="primary"
+                                    matTooltip="Chỉnh sửa" [matTooltipPosition]="'below'"
+                                    (click)="edit(promotionVoucher)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button type="button" mat-mini-fab color="warn"
+                                    matTooltip="Xóa" [matTooltipPosition]="'below'"
+                                    (click)="delete(promotionVoucher)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6"
+                            (pageClick)="search($event)"
+                            [isDisabled]="isSearching" [pageName]="'Mã giảm giá'"></ghm-paging>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TODO: check this -->
+<!--<promotion-voucher-form-->
+<!--[promotionId]="promotionId"-->
+<!--(generateSuccess)="onGenerateVoucherSuccess($event)"-->
+<!--(updateSuccess)="onUpdateVoucherSuccess($event)"-->
+<!--&gt;</promotion-voucher-form>-->

@@ -1,0 +1,74 @@
+<div class="portlet light">
+    <div class="portlet-title cm-mgb-0">
+        <div class="caption">
+             <span class="caption-subject bold uppercase" i18n="@@language">
+                   <i class="fa fa-language" aria-hidden="true"></i>
+                   Language
+             </span>
+        </div>
+        <div class="actions">
+            <button type="button" *ngIf="!isShowForm" class="btn blue btn-circle" i18n="@@add"
+                    (click)="isShowForm = !isShowForm">
+                <span i18n="@@add"><i class="fa fa-plus"></i> Add</span>
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div *ngIf="isShowForm" class="col-sm-12">
+            <app-config-language-form (onSaveSuccess)="search()"
+                                      (onCloseForm)="isShowForm = false"></app-config-language-form>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th class="center middle w50" i18n="@@no">No</th>
+                <th class="middle w100" i18n="@@code">Code</th>
+                <th class="middle" i18n="@@name">Name</th>
+                <th class="middle center w100" i18n="@@default">Default</th>
+                <th class="middle center w100" i18n="@@isActive">Active</th>
+                <th class="middle center w100" i18n="@@action">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listLanguage; let i = index">
+                <td class="middle center">{{i + 1}}</td>
+                <td class="middle">{{item.languageId}}</td>
+                <td class="middle">{{item.name}}</td>
+                <td class="middle center">
+                    <mat-checkbox color="primary" [checked]="item.isDefault"
+                                  (change)="updateDefault(item, item.isDefault)"></mat-checkbox>
+                </td>
+                <td class="middle center">
+                    {{item.id}}
+                    <mat-checkbox color="primary" [checked]="item.isActive"
+                                  (change)="updateStatus(item, item.isActive)"></mat-checkbox>
+                </td>
+                <td class="center middle">
+                    <a [swal]="confirmDeleteLanguage" class="btn btn-sm red"
+                       (confirm)="delete(item.languageId)" i18n="@@delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<swal  #confirmDeleteLanguage
+        i18n="@@confirmDeleteLanguage"
+        i18n-title="@@confirmTitleDeleteLanguage"
+        i18n-text="@@confirmTextDeleteLanguage"
+        title="Are you sure for delete this language?"
+        text="You can't recover this video after language."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+

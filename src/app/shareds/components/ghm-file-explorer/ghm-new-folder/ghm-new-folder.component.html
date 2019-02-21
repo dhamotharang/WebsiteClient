@@ -1,0 +1,25 @@
+<nh-modal #folderFormModal size="sm" (onShown)="onModalShown()">
+    <nh-modal-header [showCloseButton]="true">
+        <span i18n="@@addNewFolder">Add new folder</span>
+    </nh-modal-header>
+    <form (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="form-group">
+                <input type="text" class="form-control"
+                       i18n-placeholder="@@enterFolderName"
+                       placeholder="Enter folder name"
+                       id="folderName"
+                       name="folderName"
+                       [(ngModel)]="name">
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <button type="submit" class="btn blue cm-mgr-5" [disabled]="!name">
+                <span i18n="@@create">Create</span>
+            </button>
+            <button type="button" class="btn btn-light" i18n="@@cancel" nh-dismiss>
+                Cancel
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

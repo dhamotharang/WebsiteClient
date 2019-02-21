@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form action="" class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nhập tên hoặc số điện thoại cần tìm">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-stripped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th class="center middle w50">STT</th>
+                    <th class="center middle w150">Tên học viên</th>
+                    <th class="center middle w100">Số điện thoại</th>
+                    <th class="center middle w150">Email</th>
+                    <th class="center middle">Địa chỉ</th>
+                    <th class="center middle">Ghi chú</th>
+                    <th class="center middle w100"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let courseRegister of listItems$">
+                    <td class="center">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <td>{{ courseRegister.fullName }}</td>
+                    <td>{{ courseRegister.phoneNumber }}</td>
+                    <td>{{ courseRegister.email }}</td>
+                    <td>{{ courseRegister.address }}</td>
+                    <td>{{ courseRegister.note }}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" matTooltip="Sửa"
+                                [matTooltipPosition]="'above'"
+                                (click)="edit(item)">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" matTooltip="Xóa"
+                                [matTooltipPosition]="'above'"
+                                [swal]="{ title: 'Bạn có chắc chắn muốn xóa học viên này?', type: 'warning' }"
+                                (confirm)="delete(item.id)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                    [isDisabled]="isSearching" [pageName]="'người dùng'"></ghm-paging>
+    </div>
+</div>

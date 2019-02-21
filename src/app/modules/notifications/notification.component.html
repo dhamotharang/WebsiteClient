@@ -1,0 +1,39 @@
+<div class="notification-container">
+    <h1 class="title">Thông báo của bạn</h1>
+    <hr>
+    <ul class="dropdown-menu-list list-notify-container" #notifyContentContainer>
+        <li class="notify-item" *ngFor="let item of listItems$ | async" [class.info]="item.type === 0"
+            [class.warning]="item.type === 1"
+            [class.danger]="item.type === 2" [class.success]="item.type === 3" [class.readed]="item.isRead"
+            (click)="updateRead(item)">
+            <button class="notification-close" (click)="closeNotify(item)">
+                <i class="fa fa-times"></i>
+            </button>
+            <div class="notify-left">
+                <a href="javascript://">
+                    <!--<nh-image [baseUrl]="baseUrl" [value]="item.fromUserImage" [alt]="item.title" [width]="40"-->
+                              <!--[height]="40"></nh-image>-->
+                </a>
+            </div>
+            <div class="notify-body">
+                <p class="content" *ngIf="!item.image" [innerHTML]="item.content"></p>
+                <div class="notify-item" *ngIf="item.image">
+                    <div class="notify-body">
+                        <p class="content" [innerHTML]="item.content"></p>
+                    </div>
+                    <div class="notify-right">
+                        <a href="javascript://">
+                            <!--<nh-image [baseUrl]="baseUrl" [value]="item.image" [width]="40" [height]="40"></nh-image>-->
+                        </a>
+                    </div>
+                </div>
+                <div class="times">
+                    <i class="fa fa-clock-o"></i>{{item.time}}
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                [isDisabled]="isSearching" [pageName]="'thông báo'"></ghm-paging>
+</div><!-- END: .notification-container -->

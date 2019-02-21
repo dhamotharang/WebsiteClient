@@ -1,0 +1,98 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listJobPageTitle">List job</span>
+    <small i18n="@@jobModuleTitle">Job management</small>
+</h1>
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@keywordSearch" i18n-placeholder
+               placeholder="Enter keyword for search please."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+            [data]="[{id: false, name: 'InActive'},{id: true, name: 'Active'}]"
+            i18n-title="@@selectStatus"
+            [title]="'-- Select status --'"
+            [(value)]="isActive"
+            (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn btn-default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button class="btn btn-primary cm-mgr-5" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                type="button">
+            Add
+        </button>
+    </div>
+</form>
+<p-treeTable [value]="jobs">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="middle  w150" i18n="@@jobName">Job name</th>
+            <th class="middle " i18n="@@description">Description</th>
+            <th class="middle center w100" i18n="@@status">Status</th>
+            <th class="middle text-right w150" i18n="@@action">Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td>
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.name}}
+            </td>
+            <td>{{rowData.description}}</td>
+            <td class="center">
+                <span class="badge" [class.badge-danger]="!rowData.isActive"
+                      [class.badge-success]="rowData.isActive">{rowData.isActive, select, 0 {InActive} 1 {Activated}}
+                </span>
+            </td>
+            <td class="text-right">
+                <button class="btn btn-primary btn-sm"
+                        *ngIf="permission.edit"
+                (click)="edit(rowData)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm cm-mgl-5"
+                        *ngIf="permission.delete"
+                        [swal]="confirmDeleteJob"
+                        (click)="delete(rowData.id)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                <!--<ghm-button-->
+                    <!--*ngIf="permission.edit"-->
+                    <!--icon="fa fa-edit" classes="btn btn-primary btn-sm"-->
+                    <!--(clicked)="edit(rowData)"></ghm-button>-->
+                <!--<ghm-button-->
+                    <!--*ngIf="permission.delete"-->
+                    <!--icon="fa fa-trash-o" classes="btn btn-danger btn-sm cm-mgl-5"-->
+                    <!--[swal]="confirmDeleteJob"-->
+                    <!--(confirm)="delete(rowData.id)"></ghm-button>-->
+            </td>
+        </tr>
+    </ng-template>
+</p-treeTable>
+
+<app-job-form (saveSuccessful)="search(1)" (onCloseForm)="search(1)"></app-job-form>
+<swal
+    #confirmDeleteJob
+    i18n="@@confirmDeleteJob"
+    i18n-title
+    i18n-text
+    title="Are you sure for delete this job?"
+    text="You can't recover this job after delete."
+    type="question"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+
+

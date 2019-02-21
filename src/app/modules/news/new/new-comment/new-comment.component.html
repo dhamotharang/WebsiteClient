@@ -1,0 +1,15 @@
+<div class="media" *ngFor="let comment of comments">
+    <div class="media-left">
+        <a href="#">
+            <img ghmImage [src]="comment.avatar" class="media-object w50 avatar" [isUrlAbsolute]="true">
+        </a>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading">
+            <a href="#">{{comment.fullName}}</a> on
+            <span class="c-date">{{comment.sendTime | dateTimeFormat : 'DD/MM/YYYY hh:mm'}}</span>
+        </h4>
+        {{comment.content}}
+        <app-new-comment [comments]="comment.children"></app-new-comment>
+    </div>
+</div>

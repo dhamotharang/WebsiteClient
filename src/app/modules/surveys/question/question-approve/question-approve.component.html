@@ -1,0 +1,166 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listQuestionForApprovePageTitle">List question for approve</span>
+    <small i18n="@@surveyModuleTitle">Survey management</small>
+</h1>
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@keywordSearch" i18n-placeholder
+               placeholder="Enter keyword for search please."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+            [data]="listQuestionType"
+            i18n="@@selectQuestionType"
+            i18n-title
+            [title]="'-- Select question type --'"
+            [(ngModel)]="type"
+            name="type"
+            (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-dropdown-tree [data]="questionGroupTree"
+                          [width]="350"
+                          [selectedText]="questionGroupName"
+                          i18n="@@selectQuestionGroup"
+                          i18n-title
+                          title="-- Select question group --"
+                          [value]="questionGroupId"
+                          name="questionGroupId"
+                          (nodeSelected)="onSelectQuestionGroup($event)"></nh-dropdown-tree>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <ghm-user-suggestion
+            [isShowSelected]="false"
+            (userSelected)="onSelectUser($event)"
+        ></ghm-user-suggestion>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listQuestionStatus"
+                   i18n="@@selectStatus"
+                   i18n-title
+                   [title]="'-- Select status --'"
+                   [(ngModel)]="status"
+                   name="status"
+                   (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn btn-default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <ghm-button
+            *ngIf="isShowApprove"
+            type="button"
+            classes="btn btn-primary cm-mgr-5"
+            i18n="approve"
+            [swal]="confirmApproveQuestion"
+            (confirm)="updateMultiStatus(questionStatus.approved)"
+        >Approve all
+        </ghm-button>
+        <ghm-button
+            type="button"
+            *ngIf="isShowDecline"
+            classes="btn btn-primary cm-mgr-5"
+            i18n="send"
+            (clicked)="updateMultiStatus(questionStatus.decline)"
+        >Decline all
+        </ghm-button>
+    </div>
+</form>
+<div class="table-responsive" [ngStyle]="{'max-height': height + 'px'}">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="middle center w50" i18n="@@no">
+                <mat-checkbox [(ngModel)]="isSelectAll" (change)="checkAll()" color="primary"></mat-checkbox>
+            </th>
+            <th class="middle  w200" i18n="@@questionName">Question Name</th>
+            <th class="middle w150" i18n="@@questionGroupName">Question group name</th>
+            <th class="middle center w150" i18n="@@questionType">Question type</th>
+            <th class="middle center w100" i18n="@@statusApprove">Status approve</th>
+            <th class="middle w150" i18n="@@action">Full name created</th>
+            <th class="middle center w50" i18n="@@approve">Approve</th>
+            <th class="middle center w50" i18n="@@decline">Decline</th>
+            <th class="middle center w50" i18n="@@action" *ngIf="permission.view">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let question of listQuestion; let i = index">
+            <td class="center middle">
+                <mat-checkbox [(ngModel)]="question.isCheck" (change)="checkQuestion(question)"
+                              color="primary"></mat-checkbox>
+            </td>
+            <td class="middle">{{ question.name }}</td>
+            <td class="middle">{{question.questionGroupName}}</td>
+            <td class="middle center"><span>{{question.typeName}}</span></td>
+            <td class="middle center"><span class="badge" [class.badge-danger]="question.questionStatus === questionStatus.decline"
+                                            [class.badge-success]="question.questionStatus === questionStatus.approved"
+                                            [class.badge-warning]="question.questionStatus === questionStatus.pending">{{question.statusName}}</span></td>
+            <td colspan="middle">{{question.fullName}}</td>
+            <td class="middle center">
+                <ghm-button
+                    *ngIf="question.questionStatus === questionStatus.pending"
+                    icon="fa fa-check" classes="btn btn-primary btn-sm"
+                    [swal]="confirmApproveQuestion"
+                    (confirm)="updateStatus(question, questionStatus.approved)"></ghm-button>
+                <button
+                    *ngIf="question.questionStatus !== questionStatus.pending"
+                    class="btn btn-default btn-sm" disabled><i class="fa fa-check"></i></button>
+            </td>
+            <td class="middle center">
+                <button *ngIf="question.questionStatus === questionStatus.pending" class="btn btn-danger btn-sm">
+                    <i class="fa fa-times"
+                    (click)="updateStatus(question, questionStatus.decline)"></i>
+                </button>
+                <button *ngIf="question.questionStatus !== questionStatus.pending" class="btn btn-default btn-sm"
+                        disabled>
+                    <i class="fa fa-times"></i>
+                </button>
+            </td>
+            <td class="center middle" *ngIf="permission.view">
+                <ghm-button
+                    *ngIf="permission.view"
+                    icon="fa fa-eye" classes="btn btn-default btn-sm"
+                    (clicked)="detail(question)"></ghm-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<app-survey-question-detail  (onUpdateStatusSuccess)="search(1)"
+></app-survey-question-detail>
+<app-survey-question-explain-decline-reason
+    [questionVersionId]="questionVersionId"
+    [listQuestionVersionIds]="listQuestionVersionIdDecline"
+    (onUpdateSuccess)="search(1)">
+</app-survey-question-explain-decline-reason>
+<ghm-paging [totalRows]="totalRows"
+            [pageSize]="pageSize"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            (pageClick)="search($event)"
+            [isDisabled]="isSearching"
+            i18n="@@question"
+            i18n-pageName
+            [pageName]="'Question'">
+</ghm-paging>
+
+<swal
+    #confirmApproveQuestion
+    i18n="@@confirmApproveQuestion"
+    i18n-title
+    i18n-text
+    title="Are you sure approve question?"
+    type="question"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>

@@ -1,0 +1,385 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" [class.active]="type === 0" (click)="changeType(0)">
+                Đơn của tôi
+            </button>
+            <!--<button type="button" class="btn btn-default"-->
+                    <!--*ngIf="currentUser?.isLeader"-->
+                    <!--[class.active]="type === 1" (click)="changeType(1)">-->
+                <!--Duyệt đăng ký-->
+            <!--</button>-->
+            <!--<button type="button" class="btn btn-default"-->
+                    <!--*ngIf="isHasApprovePermission || currentUser?.isAdmin"-->
+                    <!--[class.active]="type === 2" (click)="changeType(2)">-->
+                <!--Đơn do tôi tạo-->
+            <!--</button>-->
+        </div>
+    </div>
+</div>
+
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form action="" class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <nh-select
+                    [data]="listMonth"
+                    title="-- Chọn tháng --"
+                    [(value)]="month"
+                    (onSelectItem)="search(1)"
+                ></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    [data]="listYear"
+                    title="-- Chọn năm --"
+                    [(value)]="year"
+                    (onSelectItem)="search(1)"
+                ></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    [data]="[{id: true, name: 'Đã xác nhận'}, {id: false, name: 'Chưa xác nhận'}]"
+                    title="-- Chọn trạng thái --"
+                    [(value)]="isConfirm"
+                    (onSelectItem)="search(1)"
+                ></nh-select>
+            </div>
+            <div class="form-group">
+                <button mat-raised-button color="primary" title="Tìm kiếm">
+                    <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>-->
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" mat-raised-button color="primary" (click)="showRegisterForm()">
+                    <i class="fa fa-plus"></i>
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- BEGIN: table.list-in-out -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover list-in-out table-main">
+                <thead>
+                <tr>
+                    <th class="center w50">#</th>
+                    <th class="center">Nhân viên</th>
+                    <th class="center">Ngày</th>
+                    <th class="center">Nhân viên đăng ký</th>
+                    <th class="center">Trạng thái</th>
+                    <th class="center w150">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of listInOut$ | async; let i = index">
+                    <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <td class="middle">
+                        <a href="javascript://" (click)="detail(item)">{{item.fullName}}</a>
+                    </td>
+                    <td class="middle">{{item.registerDate | dateTimeFormat:'DD/MM/YYYY'}}</td>
+                    <td class="middle">{{item.creatorFullName}}</td>
+                    <td class="center middle">{{item.isConfirmed ? 'Đã xác nhận' : 'Chưa xác nhận'}}</td>
+                    <td class="center middle">
+                        <button type="button" mat-mini-fab color="default" (click)="detail(item)">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <ng-container
+                            *ngIf="(type === 0 || (type === 2 && item.creatorId === currentUser?.id)) && !item.isConfirmed">
+                            <button type="button" mat-mini-fab color="primary" (click)="edit(item)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button type="button" mat-mini-fab color="warn" (click)="delete(item)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </ng-container>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- END: table.list-in-out -->
+        <ghm-paging [totalRows]="totalRows$ | async" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                [isDisabled]="isSearching" [pageName]="'đi muộn về sớm'"></ghm-paging>
+    </div>
+</div>
+
+<nh-modal #formModal size="md" (hidden)="onFormModalHidden()">
+    <nh-modal-header>
+        <i class="fa fa-clock-o"></i>
+        <!--{{isUpdate ? 'Cập nhật đi muộn về sớm' : 'đăng ký đi muộn về sớm'}}-->
+    </nh-modal-header>
+    <div class="form">
+        <form action="" class="form-horizontal form-bordered" (ngSubmit)="save()" [formGroup]="model">
+            <nh-modal-content>
+                <div class="form-body">
+                    <div class="form-group" *ngIf="listShift.length === 0">
+                        <div class="col-sm-12">
+                            <div class="alert alert-danger">
+                                Xin lỗi: Bạn chưa được cấu hình ca làm việc. Vui lòng liên hệ với bộ phận nhân sự để
+                                được trợ giúp.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="alert alert-warning">
+                                Sô phút xin phép đi muộn về sớm tối đa là {{maxInOutMin}} phút
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="alert alert-success" *ngIf="totalApprovedTimes < maxInOutTimes">
+                                Bạn còn {{maxInOutTimes}} lần được phép đi muộn về sớm trong tháng này.
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-group" *ngIf="isHasApprovePermission">-->
+                        <!--<label ghmLabel="Nhân viên" class="control-label col-sm-4"></label>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--&lt;!&ndash;<ghm-user-suggestion&ndash;&gt;-->
+                                <!--&lt;!&ndash;[sources]="listUserSuggestion"&ndash;&gt;-->
+                                <!--&lt;!&ndash;[selectedUsers]="selectedUser"&ndash;&gt;-->
+                                <!--&lt;!&ndash;[isLoading]="isSearchingUser"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(onSelectUser)="onSelectUser($event)"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(onRemoveUser)="onRemoveUser()"&ndash;&gt;-->
+                                <!--&lt;!&ndash;(onKeyUp)="onUserSuggestionKeyUp($event)"&ndash;&gt;-->
+                                <!--&lt;!&ndash;placeholder="Nhập tên nhân viên"&ndash;&gt;-->
+                            <!--&lt;!&ndash;&gt;</ghm-user-suggestion>&ndash;&gt;-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label ghmLabel="Ngày" class="control-label col-sm-4" [required]="true"></label>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--<nh-date formControlName="registerDate"-->
+                                     <!--[type]="'inputButton'"-->
+                                     <!--[title]="'Chọn ngày xin đi muộn về sớm'"-->
+                            <!--&gt;</nh-date>-->
+                            <!--<div class="alert alert-danger" *ngIf="formErrors.registerDate">-->
+                                <!--{{ formErrors.registerDate }}-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <label ghmLabel="Hình thức" class="control-label col-sm-4" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <div class="" formArrayName="shifts"
+                                 *ngFor="let shift of shifts.controls; let shiftIndex = index">
+                                <div class="portlet light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-speech font-green"></i>
+                                            <span class="caption-subject bold font-green uppercase">Hình thức đi muộn về sớm.</span>
+                                        </div>
+                                        <div class="actions">
+                                            <a class="btn btn-circle btn-icon-only btn-default" href="javascript://"
+                                               (click)="removeMethod(shiftIndex)">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body" [formGroupName]="shiftIndex">
+                                        <div class="form-group border-none cm-mgb-10">
+                                            <mat-slide-toggle color="primary"
+                                                              [checked]="shift.value.isInLate"
+                                                              (change)="onChangeIsInLate(shift)">
+                                                {{shift.value.isInLate ? 'Đi muộn' : 'Về sớm'}}
+                                            </mat-slide-toggle>
+                                            <!--<div class="alert alert-danger"-->
+                                                 <!--*ngIf="formErrors.shifts.isInLate">-->
+                                                <!--{{ formErrors.shifts.isInLate }}-->
+                                            <!--</div>-->
+                                        </div>
+                                        <div class="form-group border-none cm-mgb-10">
+                                            <label for="" class="">Ca làm việc</label>
+                                            <nh-select
+                                                title="-- Chọn ca làm việc --"
+                                                [data]="listShift"
+                                                formControlName="shiftId"
+                                            ></nh-select>
+                                            <!--<div class="alert alert-danger"-->
+                                                 <!--*ngIf="formErrors.shifts.shiftId">-->
+                                                <!--{{ formErrors.shifts.shiftId }}-->
+                                            <!--</div>-->
+                                        </div>
+                                        <div class="form-group border-none cm-mgb-10">
+                                            <label for="" class="">Số phút</label>
+                                            <input type="text" class="form-control"
+                                                   placeholder="Nhập số phút"
+                                                   autocomplete="off"
+                                                   formControlName="totalMin"
+                                                   [attr.id]="'totalMin' + shift.value.shiftId + shift.value.isInLate"
+                                            >
+                                            <div *ngIf="shift.value.timeText"
+                                                 [class.bold]="shift.value.isUse"
+                                                 [class.hint-color]="!shift.value.isUse">
+                                                {{shift.value.timeText}}
+                                            </div>
+                                            <!--<div class="alert alert-danger"-->
+                                                 <!--*ngIf="formErrors.shifts.totalMin">-->
+                                                <!--{{ formErrors.shifts.totalMin }}-->
+                                            <!--</div>-->
+                                        </div>
+                                        <div class="form-group border-none cm-mgb-10">
+                                            <label for="" class="">
+                                                Lý do {{shift.value.isInLate ? 'đi muộn' : 'về sớm'}}
+                                            </label>
+                                            <textarea class="form-control" rows="3"
+                                                      placeholder="Vui lòng nhập lý do"
+                                                      formControlName="reason"
+                                                      [attr.id]="'reason' + shift.value.shiftId + shift.value.isInLate">
+                                            </textarea>
+                                            <!--<div *ngIf="formErrors.shifts.reason"-->
+                                                 <!--class="alert alert-danger">-->
+                                                <!--{{formErrors.shifts.reason}}-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" mat-raised-button color="primary" (click)="addNewMethod()"
+                                    *ngIf="totalApprovedTimes < maxInOutTimes; else notEnoughTimesTemplate">
+                                <i class="fa fa-plus"></i>
+                                Thêm hình thức nghỉ
+                            </button>
+                            <ng-template #notEnoughTimesTemplate>
+                                <span
+                                    class="color-red">Rất tiếc. Bạn đã sử dụng hết số lần được phép đi muộn về sớm trong tháng này.</span>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </nh-modal-content>
+            <nh-modal-footer>
+                <button mat-raised-button color="primary">
+                    <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+                    <i class="fa fa-save"></i>
+                    Lưu lại
+                </button>
+                <button type="button" mat-raised-button nh-dismiss="true">
+                    <i class="fa fa-times"></i>
+                    Đóng lại
+                </button>
+            </nh-modal-footer>
+        </form>
+    </div>
+</nh-modal>
+
+<nh-modal #detailModal size="md">
+    <nh-modal-header>
+        <i class="fa fa-clock-o"></i>
+        Chi tiết đi muộn về sớm: "{{inOut?.fullName}}"
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="alert alert-info" *ngIf="totalApprovedInLateOutEarly > 0">
+                        {{inOut?.fullName}} đã được duyệt {{totalApprovedInLateOutEarly}} lần đi muộn về sớm trong
+                        tháng {{inOut?.month}} năm {{inOut?.year}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <label class="label-color">Ngày:</label>
+                    <span class="">
+                        {{inOut?.registerDate | dateTimeFormat:'DD/MM/YYYY'}}
+                        </span>
+                </div>
+            </div>
+            <div class="form-group" *ngFor="let shift of inOut?.shifts">
+                <div class="col-sm-12 cm-mgt-20">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-clock-o"></i>
+                                <span class="caption-subject bold uppercase"> {{shift?.isInLate ? 'Đi muộn' : 'Về sớm'}} {{shift.shiftReportName}}</span>
+                            </div>
+                            <div class="actions">
+                                <a href="javascript:;" class="btn btn-circle btn-sm btn-success"
+                                   *ngIf="!inOut?.isConfirmed && (inOut?.managerUserId === currentUser?.id) && (shift.isApprove == null || shift.isApprove === undefined)"
+                                   (click)="approve(shift, true)">
+                                    <i class="fa fa-check"></i> Duyệt </a>
+                                <a href="javascript:;" class="btn btn-circle btn-sm btn-danger"
+                                   *ngIf="!inOut?.isConfirmed && (inOut?.managerUserId === currentUser?.id) && shift.isApprove !== false"
+                                   (click)="approve(shift, false)">
+                                    <i class="fa fa-times"></i>
+                                    {{shift.isApprove == true ? 'Hủy duyệt' : 'Không duyệt'}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <label for="" class="label-color">Lý do
+                                                {{shift.isInLate ? 'đi muộn' : 'về sớm'}}:</label>
+                                            <div class="form-control">
+                                                {{shift.reason}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group cm-mgt-10" *ngIf="shift.declineReason">
+                                        <div class="col-sm-12">
+                                            <label for="" class="label-color">Lý do không duyệt:</label>
+                                            <div class="color-red form-control">
+                                                {{shift.declineReason}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <label for="" class="label-color">Số phút:</label>
+                                            <span>{{shift.totalMin}}</span>
+                                            <span class="bold">({{shift.timeText}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <label for="" class="label-color">Trạng thái:</label>
+                                            <span
+                                                [class.color-green]="shift.isApprove"
+                                                [class.color-red]="shift.isApprove === false"
+                                            >
+                                    {{shift.isApprove === undefined || shift.isApprove == null ? 'Chờ QLTT duyệt' : shift.isApprove ? 'QLTT đã duyệt' : 'QLTT không duyệt'}}
+                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="inOut?.isConfirmed">
+                                        <div class="col-sm-12">
+                                            <label for="" class="label-color">Ngày xác nhận:</label>
+                                            {{inOut?.confirmDateTime | dateTimeFormat:'DD/MM/YYYY'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button type="button" mat-raised-button color="primary"
+                *ngIf="!inOut?.isConfirmed && (inOut?.managerUserId === currentUser?.id)"
+                (click)="confirm()">
+            <i class="fa fa-check"></i>
+            <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+            Xác nhận
+        </button>
+        <button type="button" mat-raised-button nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

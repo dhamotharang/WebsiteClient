@@ -1,0 +1,30 @@
+//@import "~@angular/cdk/overlay";
+
+$border-color: #ddd;
+
+//@include cdk-overlay();
+.ghm-draggable {
+    user-select: none;
+    //border: 1px solid #55efc4;
+    //background: rgba(129, 236, 236, .3);
+    color: #555;
+
+    &:hover {
+        cursor: move;
+    }
+
+    &.ghm-dragging {
+        border: 2px dashed $border-color !important;
+        color: #fefefe;
+        background: #fefefe;
+    }
+}
+
+.ghm-dragging-helper {
+    border: 1px solid $border-color;
+    padding: 10px;
+    background: white;
+    color: #333;
+}
+
+

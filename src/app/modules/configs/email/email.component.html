@@ -1,0 +1,114 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@configMail">Config Mail</span>
+    <small i18n="@@configModuleTitle">Config</small>
+</h1>
+
+<div class="tabbable-custom">
+    <ul class="nav nav-tabs ">
+        <li class="active">
+            <a href="#emailSend" data-toggle="tab" aria-expanded="true" i18n="@@emailSend" (click)="search(1)">Email Send </a>
+        </li>
+        <li class="">
+            <a href="#emailType" data-toggle="tab" aria-expanded="false" i18n="@@emailType"
+               (click)="searchEmailType()">Email Type</a>
+        </li>
+        <li class="">
+            <a href="#emailTemplate" data-toggle="tab" aria-expanded="false" i18n="@@emailTemplate"
+               (click)="searchEmailTemplate()">Email Template</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="emailSend">
+            <div class="portlet light">
+                <div class="portlet-title cm-mgb-0">
+                    <div class="caption">
+                         <span class="caption-subject bold uppercase" i18n="@@email">
+                               <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                               Email
+                         </span>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="btn blue btn-circle" (click)="add()" i18n="@@add">
+                          <i class="fa fa-plus"></i>  Add
+                        </button>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <table class="table table-hover table-stripped">
+                        <thead>
+                        <tr>
+                            <th class="center middle w50" i18n="@@no">No</th>
+                            <th class="w150" i18n="@@account">Account</th>
+                            <th class="middle" i18n="@@smtpServer">SMTP Server</th>
+                            <th class="center middle w50" i18n="@@port">Port</th>
+                            <th class="center middle w100" i18n="@@action">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of listEmail; let i = index">
+                            <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                            <td class="middle"> {{ item.mailName}}</td>
+                            <td class="middle">
+                                {{item.mailTypeName}}
+                            </td>
+                            <td class="middle center"> {{ item.port }}</td>
+                            <td class="center middle">
+                                <nh-dropdown>
+                                    <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                                        <mat-icon>more_horiz</mat-icon>
+                                    </button>
+                                    <ul class="nh-dropdown-menu right" role="menu">
+                                        <li>
+                                            <a *ngIf="permission.edit"
+                                               (click)="edit(item)"
+                                               i18n="@@edit">
+                                                <i class="fa fa-edit"></i>
+                                                Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a [swal]="confirmDeleteNews"
+                                               (confirm)="delete(item.id)" i18n="@@delete">
+                                                <i class="fa fa-trash"></i>
+                                                Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nh-dropdown>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                                (pageClick)="search($event)"
+                                [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="emailType">
+            <app-config-email-type></app-config-email-type>
+        </div>
+        <div class="tab-pane" id="emailTemplate">
+            <app-config-email-template></app-config-email-template>
+        </div>
+    </div>
+</div>
+
+<app-config-email-form (onSaveSuccess)="search(1)"></app-config-email-form>
+<swal
+        #confirmDeleteNews
+        i18n="@@confirmDeleteEmail"
+        i18n-title="@@confirmTitleDeleteEmail"
+        i18n-text="@@confirmTextDeleteEmail"
+        title="Are you sure for delete this email?"
+        text="You can't recover this video after email."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+

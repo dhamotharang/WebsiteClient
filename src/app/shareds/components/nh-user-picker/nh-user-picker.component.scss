@@ -1,0 +1,104 @@
+$border-color: #ddd;
+$hover-bg-color: #eaeaea;
+
+.rounded-avatar {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.avatar-wrapper {
+    overflow: hidden;
+}
+
+.avatar-xs {
+    width: 16px;
+    hight: 16px;
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+}
+
+.nh-user-picker-container {
+    border: 1px solid $border-color;
+    width: 60%;
+    margin: 0px auto;
+    position: fixed;
+    top: 20%;
+    left: 0;
+    right: 0;
+    background: white;
+    z-index: 9999999;
+
+    ul.nh-user-picker-items {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 10px;
+        margin-bottom: 0;
+        border: 1px solid $border-color;
+        height: 250px;
+        min-height: 250px;
+        max-height: 250px;
+        overflow-y: auto;
+
+        li {
+            border-bottom: 1px solid $border-color;
+            padding: 3px 7px;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background: #eaeaea;
+            }
+
+            a.nh-user-picker-item-action {
+                float: right;
+                color: #D91E18;
+            }
+        }
+    }
+
+    .nh-user-picker-header, .nh-user-picker-body, .nh-user-picker-footer {
+        padding: 10px;
+    }
+
+    .nh-user-picker-header {
+        border-bottom: 1px solid $border-color;
+    }
+
+    .nh-user-picker-body {
+        position: relative;
+        overflow: hidden;
+
+        .nh-user-picker-left {
+            padding-right: 5px;
+        }
+        .nh-user-picker-right {
+            padding-left: 5px;
+        }
+        .nh-user-picker-left, .nh-user-picker-right {
+            width: 50%;
+            display: block;
+            float: left;
+
+            h4.title {
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .nh-user-picker-footer {
+        border-top: 1px solid $border-color;
+        text-align: right;
+
+        button {
+            margin-left: 5px;
+        }
+    }
+}

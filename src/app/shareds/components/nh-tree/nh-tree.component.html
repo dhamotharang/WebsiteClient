@@ -1,0 +1,25 @@
+<ul class="nh-tree nh-root-tree" [style.height]="height + 'px'">
+    <ng-template #recursiveTree let-data>
+        <li *ngFor="let node of data"
+            [class.selected]="node.isSelected">
+            <i class="nh-tree-icon"
+               (click)="expand(node)"
+               [class.nh-tree-loading]="node.isLoading && node.childCount && node.childCount > 0"
+               [class.nh-tree-node-close]="!node.state.opened && ((node.childCount && node.childCount > 0)
+                   || (node.children && node.children.length > 0))"
+               [class.nh-tree-node-open]="node.state.opened && ((node.childCount && node.childCount > 0)
+                   || (node.children && node.children.length > 0))"
+            ></i>
+            <a href="javascript://" (click)="selectNode(node)" [attr.title]="node.text">
+                <i class="nh-tree-icon"
+                   [ngClass]="node.icon ? node.icon + ' nh-custom-icon' : 'nh-tree-icon-folder'"></i>
+                {{ node.text }}
+            </a>
+            <ul *ngIf="node.children.length > 0" class="sub-tree"
+                [class.sub-tree-close]="!node.state.opened">
+                <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: node.children }"></ng-container>
+            </ul>
+        </li>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: data }"></ng-container>
+</ul>

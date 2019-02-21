@@ -1,0 +1,112 @@
+<div class="portlet light">
+    <div class="portlet-title cm-mgb-0">
+        <div class="caption">
+             <span class="caption-subject bold uppercase" i18n="@@template">
+                              <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                               Email Template
+             </span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group cm-mgr-5">
+                <input type="text" class="form-control" placeholder="Nhập tiêu đề tin cần tìm."
+                       [(ngModel)]="keyword" name="keyword">
+            </div>
+            <div class="form-group cm-mgr-5">
+                <nh-select [data]="listStatus"
+                           i18n="@@selectStatus"
+                           i18n-title
+                           [title]="'-- Select status --'"
+                           [(ngModel)]="status"
+                           name="status"
+                           (onSelectItem)="search(1)"></nh-select>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <ghm-button [loading]="isSearching"
+                            [classes]="'btn blue'"
+                            icon="fa fa-search"></ghm-button>
+            </div>
+            <div class="form-group cm-mgl-5">
+                <button class="btn btn-default" type="button" (click)="resetFormSearch()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" class="btn blue" (click)="add()" i18n="@@add">
+                    Add
+                </button>
+            </div>
+        </form>
+        <table class="table table-hover table-stripped">
+            <thead>
+            <tr>
+                <th class="center middle w50" i18n="@@no">No</th>
+                <th class="center middle w100" i18n="@@image">Mail Type</th>
+                <th class="middle" i18n="@@titleNews">Title</th>
+                <th class="middle" i18n="@@smtpServer">Note</th>
+                <th class="center middle w50" i18n="@@smtpServer">Status</th>
+                <th class="center middle w100" i18n="@@action">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listEmailTemplate; let i = index">
+                <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td class="middle center">
+                </td>
+                <td class="middle"></td>
+                <td class="middle"> {{ item.title}}</td>
+                <td class="center middle"> {{ item.description}}</td>
+                <td>
+                 <span class="badge" [class.badge-danger]="!item.isActive"
+                       [class.badge-success]="item.isActive">
+                              {item.activeStatus, select, active {Activated} inActive {InActive}}</span>
+                </td>
+                <td class="center middle">
+                    <nh-dropdown>
+                        <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <ul class="nh-dropdown-menu right" role="menu">
+                            <li>
+                                <a *ngIf="permission.edit"
+                                   (click)="edit(item)"
+                                   i18n="@@edit">
+                                    <i class="fa fa-edit"></i>
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a [swal]="confirmDeleteEmailTemplate"
+                                   (confirm)="delete(item.id)" i18n="@@delete">
+                                    <i class="fa fa-trash"></i>
+                                    Delete
+                                </a>
+                            </li>
+                        </ul>
+                    </nh-dropdown>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                    (pageClick)="search($event)"
+                    [isDisabled]="isSearching" i18n-pageName="@@emailTemplate" pageName="Email template"></ghm-paging>
+    </div>
+</div>
+<app-config-email-template-form></app-config-email-template-form>
+<swal
+        #confirmDeleteEmailTemplate
+        i18n="@@confirmDeleteEmailTemplate"
+        i18n-title="@@confirmTitleDeleteEmailTemplate"
+        i18n-text="@@confirmTextDeleteEmailTemplate"
+        title="Are you sure for delete this email template?"
+        text="You can't recover this video after email template."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>

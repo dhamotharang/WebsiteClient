@@ -1,0 +1,58 @@
+<nh-modal #categoryFormModal size="md" (onShown)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header>
+        <i class="fas fa-folder-open"></i>
+        {{isUpdate ? 'Cập nhật chuyên mục' + model.value.name : 'Thêm mới chuyên mục'}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label ghmLabel="Tên nhóm" class="control-label col-sm-3"
+                           [required]="true"></label>
+                    <div class="col-sm-9">
+                        <input type="text" id="name" class="form-control" placeholder="Nhập tên nhóm"
+                               formControlName="name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Nhóm lớn" class="control-label col-sm-3"></label>
+                    <div class="col-sm-9">
+                        <nh-dropdown-tree
+                            title="-- Chọn chuyên mục cấp trên --"
+                            [data]="categoryTree"
+                            formControlName="parentId"></nh-dropdown-tree>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Kích hoạt" class="control-label col-sm-3"></label>
+                    <div class="col-sm-9">
+                        <mat-checkbox color="primary" formControlName="isActive"></mat-checkbox>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Mô tả" class="control-label col-sm-3"></label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" rows="4" formControlName="description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <ghm-button [loading]="isSaving">Lưu lại</ghm-button>
+            <ghm-button type="button" classes="btn btn-default" icon="fas fa-times" nh-dismiss="true"
+                        [loading]="isSaving">
+                Hủy bỏ
+            </ghm-button>
+            <!--<button mat-raised-button color="primary" [disabled]="isSaving">-->
+            <!--<i class="fas fa-save" *ngIf="isSaving"></i>-->
+            <!--<i class="fas fa-spinner fa-spin" *ngIf="!isSaving"></i>-->
+            <!--Lưu lại-->
+            <!--</button>-->
+            <!--<button mat-raised-button [disabled]="isSaving">-->
+            <!--<i class="fas fa-times"></i>-->
+            <!--Hủy bỏ-->
+            <!--</button>-->
+        </nh-modal-footer>
+    </form>
+</nh-modal>

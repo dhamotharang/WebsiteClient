@@ -1,0 +1,137 @@
+<nh-modal #brandFormModal size="lg"
+          (show)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase bold">
+        {isUpdate, select, 0 {Add new brand} 1 {Update brand} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form">
+                        <div class="form-group" [class.has-error]="formErrors?.logo">
+                            <label i18n-ghmLabel="@@logo" ghmLabel="Logo" class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <ghm-file-explorer buttonText="Select logo"
+                                                   i18n-buttonText="@@selectLogo"
+                                                   (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                                <br>
+                                <img ghmImage [src]="model.value.logo" class="w150" [isUrlAbsolute]="true">
+                                <span class="help-block">{ formErrors?.logo, select,
+                                                            maxLength {Logo not allowed over 500 characters}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.name">
+                            <label i18n-ghmLabel="@@brandName" ghmLabel="Brand Name"
+                                   class="col-sm-4 control-label" [required]="true"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <input class="form-control" formControlName="name" id="name"
+                                       i18n-placeholder="@@enterBrandPlaceHolder"
+                                       placeholder="Enter brand">
+                                <span class="help-block">{ formErrors?.name, select,
+                                                            required {Brand name is required}
+                                                            maxLength {Brand name not allowed over 256 characters}
+                                                            pattern {Brand name must has character}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.email">
+                            <label i18n-ghmLabel="@@email" ghmLabel="Email"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <input class="form-control" formControlName="email"
+                                       i18n-placeholder="@@enterEmailPlaceHolder"
+                                       placeholder="Enter email">
+                                <span class="help-block">{ formErrors?.email, select, maxlength {Email
+                                    name not allowed over 50 characters}
+                                    pattern {Email is invalid}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.phoneNumber">
+                            <label i18n-ghmLabel="@@phoneNumber" ghmLabel="Phone Number"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <input class="form-control" formControlName="phoneNumber"
+                                       i18n-placeholder="@@enterPhoneNumberPlaceHolder"
+                                       placeholder="Enter phone number">
+                                <span class="help-block">{ formErrors?.phoneNumber, select, maxLength {Phone number
+                                    name not allowed over 50 characters}
+                                    pattern {Phone number is invalid}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.website">
+                            <label i18n-ghmLabel="@@website" ghmLabel="Website"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <input class="form-control" formControlName="website"
+                                       i18n-placeholder="@@enterWebsitePlaceHolder"
+                                       placeholder="Enter website">
+                                <span class="help-block">{ formErrors?.website, select,
+                                    maxLength {Website name not allowed over 50 characters}
+                                    pattern {Website is invalid}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.address">
+                            <label i18n-ghmLabel="@@address" ghmLabel="Address"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control"
+                                          i18n-placeholder="@@enterAddressPlaceHolder"
+                                          placeholder="Enter Address"
+                                          formControlName="address"></textarea>
+                                <span class="help-block">{ formErrors?.address, select, maxLength {Address name not allowed over 500 characters}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.description">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control"
+                                          i18n-placeholder="@@enterDescriptionPlaceHolder"
+                                          placeholder="Enter description"
+                                          formControlName="description"></textarea>
+                                <span class="help-block">{ formErrors?.description, select, maxLength {Description
+                                                            name not allowed over 500 characters}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [formGroup]="model">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                    {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <ghm-button classes="btn blue cm-mgr-5"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Save</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            nh-dismiss="true"
+                            [type]="'button'"
+                            [loading]="isSaving">
+                    <span i18n="@@close">Close</span>
+                </ghm-button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

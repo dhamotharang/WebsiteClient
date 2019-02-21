@@ -1,0 +1,86 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nhập tên lớp cần tìm">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" [disabled]="isSearching">
+                    <i class="fas fa-search" *ngIf="!isSearching"> </i>
+                    <i class="fas fa-spinner fa-spin" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button class="btn btn-primary" (click)="add()">
+                    <i class="fas fa-plus"></i>
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover">
+                <thead>
+                <tr>
+                    <th class="center middle w50">STT</th>
+                    <th class="center middle">Tên lớp</th>
+                    <th class="center middle">Mô tả</th>
+                    <th class="center middle w100">Trạng thái</th>
+                    <th class="center middle w100"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let classes of listItems$ | async; let i = index">
+                    <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <td>{{ classes.name }}</td>
+                    <td>{{ classes.description }}</td>
+                    <td><span class="badge "
+                              [class.badge-danger]="!classes.isActive"
+                              [class.badge-success]="classes.isActive"
+                    >{{ classes.isActive ? 'Đã kích hoạt' : 'chưa kích hoạt' }}</span></td>
+                    <td class="center">
+                        <!--<button type="button" class="btn btn-sm btn-primary" matTooltip="Sửa"-->
+                        <!--[matTooltipPosition]="'above'"-->
+                        <!--(click)="edit(classes)">-->
+                        <!--<i class="fas fa-pencil-alt"></i>-->
+                        <!--</button>-->
+                        <!--<button type="button" class="btn btn-sm btn-danger" matTooltip="Xóa"-->
+                        <!--[matTooltipPosition]="'above'"-->
+                        <!--[swal]="{ title: 'Bạn có chắc chắn muốn xóa khóa học', type: 'warning' }"-->
+                        <!--(confirm)="delete(classes.id)">-->
+                        <!--<i class="fas fa-trash-alt"></i>-->
+                        <!--</button>-->
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle btn-sm" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fas fa-bars"></i>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                                <li><a href="javascript://" (click)="register(classes.id)"><i class="fas fa-user"></i>
+                                    Thêm học viên</a></li>
+                                <li><a href="javascript://" (click)="showRegister(classes)">
+                                    <i class="fas fa-users"></i> Người đăng ký</a></li>
+                                <li><a href="javascript://" (click)="edit(classes)"><i class="fas fa-pencil-alt"></i>
+                                    Chính sửa</a>
+                                </li>
+                                <li><a href="javascript://"
+                                       [swal]="{ title: 'Bạn có chắc chắn muốn xóa khóa học', type: 'warning' }"
+                                       (confirm)="delete(classes.id)"><i class="fas fa-trash-alt"></i> Xoá</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                    [isDisabled]="isSearching" pageName="lớp học"></ghm-paging>
+    </div>
+</div>
+
+<app-class-form [courseId]="courseId" (onSaveSuccess)="search(1)"></app-class-form>
+<app-course-register-form [courseId]="courseId"></app-course-register-form>

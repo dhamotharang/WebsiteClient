@@ -1,0 +1,85 @@
+
+<div class="portlet light">
+    <div class="portlet-title cm-mgb-0">
+        <div class="caption">
+             <span class="caption-subject bold uppercase" i18n="@@emailType">
+                              <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                               Email type
+             </span>
+        </div>
+        <div class="actions">
+            <button type="button" class="btn blue btn-circle" (click)="add()" i18n="@@add">
+                <i class="fa fa-plus"></i>  Add
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-hover table-stripped">
+            <thead>
+            <tr>
+                <th class="center middle w50" i18n="@@no">No</th>
+                <th class="center middle" i18n="@@image">Mail Type</th>
+                <th class="middle" i18n="@@titleNews">Host</th>
+                <th class="middle center" i18n="@@smtpServer">Port</th>
+                <th class="center middle w50" i18n="@@smtpServer">Ssl?</th>
+                <th class="center middle w100" i18n="@@action">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listEmailType; let i = index">
+                <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td class="middle center">
+                    {{item.name}}
+                </td>
+                <td class="middle">{{item.host}}</td>
+                <td class="middle center"> {{ item.port}}</td>
+                <td>
+                </td>
+                <td class="center middle">
+                    <nh-dropdown>
+                        <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <ul class="nh-dropdown-menu right" role="menu">
+                            <li>
+                                <a *ngIf="permission.edit"
+                                   (click)="edit(item)"
+                                   i18n="@@edit">
+                                    <i class="fa fa-edit"></i>
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a [swal]="confirmDeleteEmailType"
+                                   (confirm)="delete(item.id)" i18n="@@delete">
+                                    <i class="fa fa-trash"></i>
+                                    Delete
+                                </a>
+                            </li>
+                        </ul>
+                    </nh-dropdown>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                    (pageClick)="search($event)"
+                    [isDisabled]="isSearching" i18n-pageName="@@emailTemplate" pageName="Email template"></ghm-paging>
+    </div>
+</div>
+<app-config-email-type-form (onSaveSuccess)="search(1)"></app-config-email-type-form>
+<swal
+        #confirmDeleteEmailType
+        i18n="@@confirmDeleteEmailType"
+        i18n-title="@@confirmTitleDeleteEmailType"
+        i18n-text="@@confirmTextDeleteEmailType"
+        title="Are you sure for delete this email type?"
+        text="You can't recover this video after email type."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>

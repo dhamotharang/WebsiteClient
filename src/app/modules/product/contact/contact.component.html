@@ -1,0 +1,94 @@
+<table class="table table-bordered table-stripped table-hover">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">No</th>
+        <th class="middle" i18n="@@contactPerson">Contact Person</th>
+        <th class="middle" i18n="@@phoneNumber">Phone Number</th>
+        <th class="middle" i18n="@@emain">Email</th>
+        <th class="middle center" i18n="@@workStatus">Work status</th>
+        <th class="middle center w50" i18n="@@action"
+            *ngIf="(permission.edit || permission.delete || permission.add) && !isReadOnly">
+            <button class="btn btn-sm blue" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                    type="button">
+                <i class="fa fa-plus"></i>
+            </button>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listContact; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">{{ item.fullName }}</td>
+        <td class="middle">{{item.phoneNumber}}</td>
+        <td class="middle">{{item.email}}</td>
+        <td class="middle center"> <span class="badge" [class.badge-danger]="item.status === workStatus.quit"
+                                         [class.badge-success]="item.status === workStatus.official"
+                                         [class.badge-warning]="item.status === workStatus.transfer">
+                                 {item.status, select, 0 {Quit} 1 {Official} 2 {Transfer} other {}}
+                            </span>
+        </td>
+        <td class="middle text-right" *ngIf="(permission.edit || permission.delete) && !isReadOnly">
+            <nh-dropdown>
+                <button type="button" class="btn btn-sm btn-light btn-no-background no-border pull-right"
+                        matTooltip="Menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <ul class="nh-dropdown-menu right" role="menu">
+                    <li>
+                        <a *ngIf="permission.edit"
+                           (click)="edit(item)"
+                           i18n="@@edit">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            (click)="delete(item.id)" i18n="@@delete">
+                            <i class="fa fa-trash"></i>
+                            Delete
+                        </a>
+                    </li>
+                </ul>
+            </nh-dropdown>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<app-product-contact-form
+    [subjectId]="subjectId"
+    [type]="type"
+    [listContact]="listContact"
+    (saveSuccess)="updateSuccess($event)"
+    (insertSuccess)="addSuccess($event)"></app-product-contact-form>
+
+<swal
+    #confirmDeleteContact
+    i18n="@@confirmDeleteContact"
+    i18n-title="@@confirmTitleDeleteContact"
+    i18n-text="@@confirmTextDeleteContact"
+    title="Are you sure for delete this contact?"
+    text="You can't recover this file after contact."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <i class="fa fa-edit"></i>
+        <span i18n="@@edit">Edit</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <i class="fa fa-trash"></i>
+        <span i18n="@@edit">Delete</span>
+    </nh-menu-item>
+</nh-menu>

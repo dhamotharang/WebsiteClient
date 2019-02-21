@@ -1,0 +1,49 @@
+$colors: (
+    primary: #eee,
+    border: #ddd,
+    background: #eee
+);
+$padding: 10px;
+
+nh-menu {
+    border: 1px solid map_get($colors, border);
+    min-width: 250px;
+    background: white;
+    display: none;
+    position: fixed;
+    top: 100px;
+    box-shadow: 0px 0px 5px map_get($colors, border);
+
+    nh-menu-item {
+        position: relative;
+        border-bottom: 1px solid map_get($colors, border);
+        padding: 5px 7px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        &.last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background: map_get($colors, background);
+            cursor: pointer;
+
+            nh-menu {
+                display: block;
+            }
+        }
+
+        .menu-icon {
+            margin-right: 5px;
+        }
+
+        nh-menu {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            display: none;
+        }
+    }
+}

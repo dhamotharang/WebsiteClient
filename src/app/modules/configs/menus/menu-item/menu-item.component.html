@@ -1,0 +1,41 @@
+<div class="menu-list-container">
+    <ul *ngFor="let item of listMenuItem">
+        <li>
+            <div class="item">
+                <i class="fa" [class.fa-user]="item.subjectType === 0" [class.fa-list]="item.subjectType === 1"
+                   [class.fa-files-o]="item.subjectType === 2"></i>
+                   {{item.text}}
+                <ul class="options">
+                    <li>
+                        <i class="fa fa-check color-green" *ngIf="item.isActive"></i>
+                    </li>
+                    <li (click)="edit(item)">
+                        <button class="btn blue btn-sm">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </li>
+                    <li (confirm)="delete(item)"
+                        [swal]="confirmDeleteMenuItem">
+                        <button class="btn red btn-sm cm-mgr-5">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <app-menu-item [listMenuItem]="item.children" (onEditItem)="onEditItem.emit($event)"
+                           (onDelete)="onDelete.emit($event)">
+            </app-menu-item>
+        </li>
+    </ul>
+</div>
+
+<swal #confirmDeleteMenuItem
+    i18n="@@confirmDeleteMenu"
+    i18n-title
+    i18n-text
+    title="Are you sure for delete this menu?"
+    text="You can't recover this menu after delete."
+    type="question"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>

@@ -1,0 +1,95 @@
+<div class="nh-user-picker-container" *ngIf="isShow">
+    <div class="nh-user-picker-header" *ngIf="title">
+        <h4 class="bold">{{ title }}</h4>
+    </div><!-- END: .nh-user-picker-header -->
+    <div class="nh-user-picker-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-danger" i18n="@@PleaseSelectAtLeastOneItem" *ngIf="errorMessage">
+                    {errorMessage, select, required {Please select at least one item} other {}}
+                </div>
+            </div>
+        </div>
+        <div class="nh-user-picker-left">
+            <h4 class="title">{{allTitle}}</h4>
+            <form class="form-inline" (ngSubmit)="search(1)">
+                <div class="form-group cm-mgr-5">
+                    <div class="input-group">
+                        <input type="text" class="form-control"
+                               i18n="@@enterKeyword"
+                               placeholder="Enter keyword"
+                               [(ngModel)]="keyword"
+                               name="keyword">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                                <i class="fa fa-search" *ngIf="!isSearching"></i>
+                            </button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </form>
+            <ul class="nh-user-picker-items">
+                <li *ngFor="let user of source" (click)="selectItem(user)"
+                    class="user-item"
+                    [class.selected]="user.isSelected">
+                    <div class="avatar-wrapper">
+                        <img class="avatar-sm rounded-avatar"
+                             ghmImage
+                             src="{{ user.avatar }}"
+                             alt="{{ user.fullName }}">
+                    </div><!-- END: .avatar-wrapper -->
+                    <div class="user-info">
+                        <span class="full-name">{{ user.fullName }}</span>
+                        <div class="description"> {{user.description }}</div>
+                    </div><!-- END: .info -->
+                </li>
+            </ul>
+        </div><!-- END: .nh-user-picker-left -->
+        <div class="nh-user-picker-right">
+            <h4 class="title">{{selectedTitle}}</h4>
+            <form class="form-inline" (ngSubmit)="search(1)">
+                <div class="form-group text-right">
+                    <button type="button" class="btn btn-primary" i18n="@@deleteAll" (click)="deleteAllSelected()">
+                        Delete all
+                    </button>
+                </div>
+            </form>
+            <ul class="nh-user-picker-items">
+                <li *ngFor="let user of selectedItems"
+                    class="user-item"
+                    (click)="removeSelectedUser(user)">
+                    <div class="avatar-wrapper">
+                        <img class="avatar-sm rounded-avatar"
+                             ghmImage
+                             src="{{ user.avatar }}"
+                             alt="{{ user.fullName }}">
+                    </div><!-- END: .avatar-wrapper -->
+                    <div class="user-info">
+                        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
+                             role="presentation">
+                            <path
+                                    d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                                    fill="currentColor">
+                            </path>
+                        </svg>
+                        <span class="full-name">{{ user.fullName }}</span>
+                        <div class="description"> {{user.description }}</div>
+                    </div><!-- END: .info -->
+                </li>
+            </ul>
+        </div><!-- END: .nh-user-picker-right -->
+    </div><!-- END: .nh-user-picker-body -->
+    <div class="nh-user-picker-footer">
+        <ghm-paging
+                [totalRows]="totalRows"
+                [currentPage]="currentPage"
+                [pageShow]="6"
+                [isDisabled]="isSearching"
+                [pageSize]="pageSize"
+                (pageClick)="search($event)"
+        ></ghm-paging>
+        <button class="btn btn-primary" i18n="@@accept" (click)="accept()">Accept</button>
+        <button class="btn btn-default" i18n="@@cancel" (click)="dismiss()">Cancel</button>
+    </div><!-- END: .nh-user-picker-footer -->
+</div><!-- END: .nh-user-picker-container -->

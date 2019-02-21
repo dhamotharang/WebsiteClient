@@ -1,0 +1,75 @@
+<nh-modal #courseFormModal size="lg" (show)="onCourseModalShown()" (hidden)="onCourseFormModalDismiss()">
+    <nh-modal-header [showCloseButton]="true">
+        <i class="fab fa-leanpub"></i>
+        Tạo khóa học
+    </nh-modal-header>
+    <nh-modal-content class="cm-pd-0">
+        <div class="course-panel">
+            <div class="left-panel">
+                <ul>
+                    <li (click)="changeShowType(0)" [class.active]="showType === 0"><a href="javascript://">Thông tin
+                        khóa học</a></li>
+                    <li *ngIf="isUpdate" (click)="changeShowType(1)" [class.active]="showType === 1"><a
+                        href="javascript://">Thông tin lớp học</a></li>
+                </ul>
+            </div><!-- END: .left-panel -->
+            <div class="right-panel">
+                <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model"
+                      *ngIf="showType === 0; else classTemplate">
+                    <div class="form-group">
+                        <label ghmLabel="Tên khóa học" class="col-sm-4 control-label" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" placeholder="Nhập tên khóa học."
+                                   formControlName="name" id="courseName"/>
+                            <div class="alert alert-danger" *ngIf="formErrors.name">
+                                {{ formErrors.name }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label ghmLabel="Mô tả" class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <textarea type="text" rows="3" class="form-control" placeholder="Nhập tên khóa học."
+                                      formControlName="description"></textarea>
+                            <div class="alert alert-danger" *ngIf="formErrors.description">
+                                {{ formErrors.description }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label ghmLabel="Nội dung" class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <tinymce [elementId]="'courseContentEditor'" formControlName="content"
+                                     #courseContentEditor></tinymce>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label ghmLabel="Kích hoạt" class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <mat-checkbox color="primary" formControlName="isActive"></mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <!--<button class="btn btn-primary" [disabled]="isSaving">-->
+                                <!--<i class="fas fa-save" *ngIf="!isSaving"></i>-->
+                                <!--<i class="fas fa-spinner fa-spin" *ngIf="isSaving"></i>-->
+                                <!--Lưu lại-->
+                            <!--</button>-->
+                            <ghm-button [loading]="isSaving">Lưu lại</ghm-button>
+                            <button type="button" class="btn btn-default" nh-dismiss="true" [disabled]="isSaving">
+                                <i class="fas fa-times"></i>
+                                Hủy bỏ
+                            </button>
+                        </div>
+                    </div>
+                </form><!-- END: .form-horizontal -->
+            </div><!-- END: .right-panel -->
+        </div><!-- END: .course-panel -->
+    </nh-modal-content>
+</nh-modal>
+
+
+<ng-template #classTemplate>
+    <app-class [courseId]="course.id"></app-class>
+</ng-template>

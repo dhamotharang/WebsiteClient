@@ -1,0 +1,155 @@
+<nh-modal #accountFormModal size="md"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase">
+        {isUpdate, select, 0 {Add new account} 1 {Update account}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" [class.has-error]="formErrors?.userName">
+                <label
+                    i18n-ghmLabel="@@userName"
+                    ghmLabel="Username"
+                    class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           i18n-placeholder="@@enterUserNamePlaceholder"
+                           placeholder="Enter username."
+                           formControlName="userName" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.userName,
+                        select,
+                        required {Please enter username.}
+                        maxlength {Username must not exceed 50 characters.}
+                        pattern {Username must be number from 0 to 9 or characters from a to z.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 *ngIf="!isUpdate"
+                 [class.has-error]="formErrors?.password">
+                <label i18n-ghmLabel="@@password"
+                       ghmLabel="Password"
+                       class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control"
+                           i18n-placeholder="@@enterPasswordPlaceholder"
+                           placeholder="Enter password"
+                           formControlName="password" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.password,
+                        select,
+                        required {Please enter password.} maxlength {Password must not exceed 50 characters.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 *ngIf="!isUpdate"
+                 [class.has-error]="formErrors?.confirmPassword">
+                <label i18n-ghmLabel="@@confirmPassword"
+                       ghmLabel="Confirm password"
+                       class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control"
+                           i18n-placeholder="@@enterConfirmPlaceholder"
+                           placeholder="Enter confirm password"
+                           formControlName="confirmPassword" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.confirmPassword,
+                        select,
+                        required {Please confirm password.} maxlength {Confirm password must not exceed 50 characters.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.fullName">
+                <label i18n-ghmLabel="@@fullName"
+                       ghmLabel="Fullname"
+                       class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           i18n-placeholder="@@enterFullNamePlaceholder"
+                           placeholder="Enter fullname"
+                           formControlName="fullName" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.fullName,
+                        select,
+                        required {Please enter fullname.} maxlength {Fullname must not exceed 50 characters.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.phoneNumber">
+                <label i18n-ghmLabel="@@phoneNumber"
+                       ghmLabel="Phone number"
+                       class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           i18n-placeholder="@@enterPhoneNumberPlaceholder"
+                           placeholder="Enter phone number"
+                           formControlName="phoneNumber" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.phoneNumber,
+                        select,
+                        required {Please enter phone number.}
+                        maxlength {Phone number must not exceed 50 characters.}
+                        pattern {Invalid phone number.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.email">
+                <label i18n-ghmLabel="@@email"
+                       ghmLabel="Email"
+                       class="col-sm-4 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control"
+                           i18n-placeholder="@@enterEmailPlaceholder"
+                           placeholder="Enter email."
+                           formControlName="email" autocomplete="off">
+                    <span class="help-block">
+                        {
+                        formErrors?.email,
+                        select,
+                        required {Please enter email.}
+                        maxlength {Email must not exceed 500 characters.}
+                        pattern {Invalid email.}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle color="primary" formControlName="isActive">
+                        {model.value.isActive, select, 0 {InActive} 1 {Active}}
+                    </mat-slide-toggle>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          class="cm-mgr-5"
+                          color="primary"
+                          i18n="@@createAnother">
+                Create another
+            </mat-checkbox>
+            <button class="btn btn-primary cm-mgr-5" i18n="@@saveFormButton">
+                {isUpdate, select, 0 {Add} 1 {Save}}
+            </button>
+            <button type="button" class="btn btn default" nh-dismiss="true" i18n="@@close">
+                Close
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

@@ -1,0 +1,87 @@
+<nh-modal #roleDetailModal size="md">
+    <nh-modal-header>
+        <i class="fa fa-user-secret" aria-hidden="true"></i>
+        <ng-container i18n="@@roleDetailModalTitle">Detail Role: "<span class="bold">{{ role?.name }}</span>"
+        </ng-container>
+    </nh-modal-header>
+
+    <nh-modal-content>
+        <form action="" class="form-horizontal">
+            <div class="form-body">
+                <div class="form-group">
+                    <label i18n-ghmLabel="@@roleName" ghmLabel="Role name" class="col-sm-4 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control">{{ role?.name }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-4 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control height-auto">{{ role?.description }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="center" i18n="@@No">No</th>
+                                <th class="" i18n="@@pageName">Page name</th>
+                                <th class="center" i18n="@@view">View</th>
+                                <th class="center" i18n="@@insert">Add</th>
+                                <th class="center" i18n="@@update">Edit</th>
+                                <th class="center" i18n="@@delete">Delete</th>
+                                <th class="center" i18n="@@export">Export</th>
+                                <th class="center" i18n="@@print">Print</th>
+                                <th class="center" i18n="@@approve">Approve</th>
+                                <th class="center" i18n="@@report">Report</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let page of pages$ | async; let i = index">
+                                <td class="center middle w50">{{ i + 1 }}</td>
+                                <td class="middle">{{ page.pageName }}</td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.view"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.add"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.edit"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.delete"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.export"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.print"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.approve"></i>
+                                </td>
+                                <td class="center middle w50">
+                                    <i class="fa fa-check color-green" *ngIf="page.report"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <ghm-button type="button" classes="btn btn-default"
+                                    nh-dismiss="true"
+                                    i18n="@@close">
+                            Close
+                        </ghm-button>
+                    </div>
+                </div>
+            </div>
+        </form><!-- END form role info -->
+    </nh-modal-content>
+</nh-modal>

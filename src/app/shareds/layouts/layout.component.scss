@@ -1,0 +1,46 @@
+// Admin 1 layout.
+app-admin-1-layout {
+    div.top-menu {
+        ul.navbar-nav li.dropdown {
+            &.ghm-dropdown-open > ul.dropdown-menu {
+                display: block;
+                overflow-y: auto;
+            }
+        }
+
+        // Header
+        ul.dropdown-menu {
+            width: 350px !important;
+            max-width: 350px !important;
+        }
+    }
+
+    .dropdown-notification {
+        .list-notify-container {
+            max-height: 450px;
+            overflow-y: auto;
+            padding-left: 0;
+        }
+        .load-more {
+            display: block;
+            width: 100%;
+
+            button {
+                display: block;
+                width: 100%;
+                text-align: center;
+                background: none;
+                border: none;
+                padding: 10px;
+
+                &:hover {
+                    background: #eaeaea;
+                }
+            }
+        }
+    }
+}
+
+// END: Header
+
+// END admin 1 layout.

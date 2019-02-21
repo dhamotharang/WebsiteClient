@@ -1,0 +1,91 @@
+<nh-modal size="lg" #servicePickerModal>
+    <nh-modal-content>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--bordered">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon">
+								<i class="flaticon-placeholder-2"></i>
+							</span>
+                                <h3 class="m-portlet__head-text">
+                                    Loại dịch vụ
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body" style="overflow: auto; height: 550px;">
+                        <nh-tree
+                            [data]="serviceTree"
+                            (onSelectNode)="onSelectServiceType($event)"
+                        ></nh-tree>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8 cm-pdl-0">
+                <div class="m-portlet m-portlet--success m-portlet--head-solid-bg m-portlet--bordered">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon">
+								<i class="flaticon-placeholder-2"></i>
+							</span>
+                                <h3 class="m-portlet__head-text">
+                                    {{selectedServiceName ? 'Dịch vụ ' + selectedServiceName
+                                    : 'Vui lòng chọn loại dịch vụ'}}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body" style="overflow: auto; height: 550px;">
+                        <table class="table table-responsive table-bordered table-stripped table-hover">
+                            <thead>
+                            <tr>
+                                <th class="center w50">
+                                    <!--<label class="m-checkbox m-checkbox&#45;&#45;square">-->
+                                    <!--<input type="checkbox" [checked]="isSelectAll"-->
+                                    <!--(change)="isSelectAll = !isSelectAll">-->
+                                    <!--<span></span>-->
+                                    <!--</label>-->
+                                    <mat-checkbox color="primary" [checked]="isSelectAll"
+                                                  (change)="isSelectAll = !isSelectAll"></mat-checkbox>
+                                </th>
+                                <th class="w100">Mã dịch vụ</th>
+                                <th class="w200">Tên dịch vụ</th>
+                                <th>Ghi chú</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let item of listService">
+                                <th class="center">
+                                    <!--<label class="m-checkbox m-checkbox&#45;&#45;square">-->
+                                        <!--<input type="checkbox" [checked]="item.isSelected"-->
+                                               <!--(change)="item.isSelected = !item.isSelected">-->
+                                        <!--<span></span>-->
+                                    <!--</label>-->
+                                    <mat-checkbox color="primary" [checked]="item.isSelected"
+                                                  (change)="item.isSelected = !item.isSelected"></mat-checkbox>
+                                </th>
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.note}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button mat-raised-button color="primary" (click)="acceptSelect()">
+            <i class="fa fa-check"></i>
+            Đồng ý
+        </button>
+        <button mat-raised-button color="default" type="button" nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal><!-- END: promotionSubjectFormModal -->

@@ -1,0 +1,118 @@
+<nh-modal #tenantFormModal size="md"
+          (hidden)="tenantFormModalHidden()"
+          (shown)="tenantFormModalShown()">
+    <nh-modal-header>
+        <i class="fa fa-desktop"></i>
+        <span class="cm-mgl-5">{isUpdate, select, 0 {Add new tenant} 1 {Update tenant info}}</span>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <mat-tab-group [selectedIndex]="0"
+                           (selectedTabChange)="onTabChange($event)">
+                <mat-tab i18n-label="@@tenantInfo" label="Tenant info">
+                    <div class="col-sm-12 cm-mgt-10">
+                        <div class="form-group" [class.has-error]="formErrors.name">
+                            <label ghmLabel="Tên khách hàng"
+                                   class="col-sm-3 control-label"
+                                   [required]="true"
+                            ></label>
+                            <div class="col-sm-9">
+                                <input type="text" value=""
+                                       id="name"
+                                       class="form-control"
+                                       placeholder="Nhập tên tenant"
+                                       formControlName="name"/>
+                                <span class="help-block" *ngIf="formErrors.name"> {{formErrors.name}} </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.has-error]="formErrors.email">
+                            <label ghmLabel="Email"
+                                   class="col-sm-3 control-label"
+                                   [required]="true"
+                            ></label>
+                            <div class="col-sm-9">
+                                <input type="text" value="" class="form-control"
+                                       placeholder="Nhập email"
+                                       formControlName="email"/>
+                                <span class="help-block" *ngIf="formErrors.email"> {{formErrors.email}} </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.has-error]="formErrors.phoneNumber">
+                            <label ghmLabel="Số điện thoại"
+                                   class="col-sm-3 control-label"
+                                   [required]="true"
+                            ></label>
+                            <div class="col-sm-9">
+                                <input type="text" value="" class="form-control"
+                                       placeholder="Nhập số điện thoại"
+                                       formControlName="phoneNumber"/>
+                                <span class="help-block"
+                                      *ngIf="formErrors.phoneNumber"> {{formErrors.phoneNumber}} </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.has-error]="formErrors.address">
+                            <label ghmLabel="Địa chỉ"
+                                   class="col-sm-3 control-label"
+                                   [required]="true"
+                            ></label>
+                            <div class="col-sm-9">
+                    <textarea type="text" rows="3" class="form-control"
+                              placeholder="Nhập địa chỉ"
+                              formControlName="address">
+                    </textarea>
+                                <span class="help-block" *ngIf="formErrors.address"> {{formErrors.address}} </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label ghmLabel="Ghi chú"
+                                   class="col-sm-3 control-label"
+                            ></label>
+                            <div class="col-sm-9">
+                    <textarea type="text" rows="3" class="form-control"
+                              placeholder="Nhập ghi chú"
+                              formControlName="note">
+                    </textarea>
+                                <div class="alert alert-danger" *ngIf="formErrors.note">
+                                    {{ formErrors.note }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label i18n-ghmLabel="@@supportedLanguages" ghmLabel="Supported languages"
+                                   class="col-sm-3 control-label"
+                            ></label>
+                            <div class="col-sm-9">
+                                <nh-suggestion
+                                        [multiple]="true"
+                                        [loading]="isSearching"
+                                        [sources]="languageSuggestions"
+                                        (itemSelected)="onLanguageSelected($event)"
+                                        (itemRemoved)="onLanguageRemoved($event)"
+                                        (searched)="onSearchLanguage($event)"></nh-suggestion>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <mat-checkbox color="primary" formControlName="isActive"> Kích hoạt</mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab><!-- END: tenant info -->
+                <mat-tab i18n-label="@@pages" label="Pages">
+
+                </mat-tab><!-- END: Tenant pages -->
+            </mat-tab-group>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <button class="btn blue cm-mgr-5" i18n="@@save" [class.disabled]="isSaving">
+                Save
+            </button>
+            <button type="button" class="btn btn-light"
+                    nh-dismiss
+                    i18n="@@cancel"
+                    [class.disabled]="isSaving">
+                Cancel
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

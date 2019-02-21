@@ -1,0 +1,35 @@
+export class HistoryCustomerCareViewModel {
+    id: number;
+    patientDoctorId: number;
+    careDate: Date;
+    customerId: string;
+    customerName: string;
+    customerPhone: string;
+    content: string;
+    blameContent: string;
+    userId: string;
+    userFullName: string;
+    status: number;
+    satisfaction: number;
+    examinationDate: Date;
+    billId: number;
+    billNo: number;
+    durationCall: number;
+    doctorId: string;
+    doctorFullName: string;
+    channelId: number;
+    channelName: string;
+    statusApprove: number;
+    isAbnormal: boolean;
+    isCheck: boolean = false;
+    blameHospitalDifferent: string = '';
+    isNotGlad: boolean;
+    joinedServiceNames: string;
+    userIdApprove: string;
+    fullNameApprove: string;
+    userIdMark: string;
+    fullNameMark: string;
+    isMark: boolean;
+    totalScore: number;
+    rating: number;
+}

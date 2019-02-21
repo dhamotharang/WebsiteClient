@@ -1,0 +1,151 @@
+<nh-modal #eventDayDetailModal size="lg">
+    <nh-modal-header>
+        <i class="fa fa-event"></i>
+        <span class="uppercase" i18n="@@eventDetail">Event detail</span>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-calendar"></i>
+                            <span i18n="@@eventDaysTitle" class="caption-subject bold uppercase"> Event day info </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="display: block;">
+                        <div class="form form-horizontal">
+                            <div class="form-group" *ngIf="languages.length > 1">
+                                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                                       class="col-sm-4 control-label"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <nh-select [data]="languages"
+                                               [(value)]="currentLanguage"></nh-select>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventDayTranslation of eventDayDetail?.eventDayTranslations; index as i"
+                                 [hidden]="eventDayTranslation.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@eventDayName" ghmLabel="Event day name"
+                                       class="col-sm-4 control-label"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.eventDayTranslations[i]?.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventDayTranslation of eventDayDetail?.eventDayTranslations; index as i"
+                                 [hidden]="eventDayTranslation.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                                       class="col-sm-4 control-label"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control height-auto">
+                                        {{ eventDayDetail?.eventDayTranslations[i]?.description }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@date" ghmLabel="Date"
+                                       class="col-sm-4 control-label"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.eventDate | dateTimeFormat:'DD/MM/YYYY' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@limitedUsers" ghmLabel="Limited users"
+                                       class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.limitedUsers }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@limitedAccompanyPersons" ghmLabel="Limited accompany users"
+                                       class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.limitedAccompanyPersons }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventDayTranslation of eventDayDetail?.eventDayTranslations; index as i"
+                                 [hidden]="eventDayTranslation.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@address" ghmLabel="Address"
+                                       class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control height-auto">
+                                        {{ eventDayDetail?.eventDayTranslations[i]?.address }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@from" ghmLabel="From"
+                                       class="col-sm-4 control-label"></label>
+                                <div class="col-sm-3">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.startHour }}:{{ eventDayDetail?.startMinute }}
+                                    </div>
+                                </div>
+                                <label i18n-ghmLabel="@@from" ghmLabel="To"
+                                       class="col-sm-2 control-label"></label>
+                                <div class="col-sm-3">
+                                    <div class="form-control">
+                                        {{ eventDayDetail?.endHour }}:{{ eventDayDetail?.endMinute }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <mat-slide-toggle color="primary" i18n="@@IsAllowAccompanyPerson"
+                                                      [disabled]="true"
+                                                      [checked]="eventDayDetail?.isAllowAccompanyPerson">
+                                        {eventDayDetail?.isAllowAccompanyPerson, select, 0 {Allow accompany person} 1
+                                        {Don't
+                                        allow
+                                        accompany
+                                        person}}
+                                    </mat-slide-toggle>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <mat-slide-toggle color="primary" i18n="@@isActive"
+                                                      [disabled]="true"
+                                                      [checked]="eventDayDetail?.isActive">
+                                        {eventDayDetail?.isActive, select, 0 {In active} 1 {Active}}
+                                    </mat-slide-toggle>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <mat-slide-toggle color="primary" i18n="@@staffOnly"
+                                                      [disabled]="true"
+                                                      [checked]="eventDayDetail?.staffOnly">
+                                        Staff only
+                                    </mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END: Event day info -->
+                </div>
+            </div><!-- END: .col-sm-6 -->
+            <div class="col-sm-6">
+
+            </div><!-- END: .col-sm-6 -->
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer class="text-right">
+        <button type="button" nh-dismiss class="btn btn-default" i18n="@@close">
+            Close
+        </button>
+    </nh-modal-footer>
+</nh-modal>

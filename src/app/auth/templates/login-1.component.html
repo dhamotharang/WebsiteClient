@@ -1,0 +1,305 @@
+<div class="login overflow-h" #loginWrapper>
+    <!-- BEGIN LOGO -->
+    <div class="logo">
+        <a href="index.html">
+            <img src="./assets/images/logo.png" alt=""> </a>
+    </div>
+    <!-- END LOGO -->
+    <!-- BEGIN LOGIN -->
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        <form class="login-form" method="post" novalidate="novalidate" style="display: block;" (ngSubmit)="signIn()"
+              *ngIf="!isShowForgotPassword; else forgotPasswordTemplate">
+            <h3 class="form-title font-green">Đăng nhập</h3>
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span> Vui lòng nhập tên đăng nhập và mật khẩu. </span>
+            </div>
+            <div class="form-group">
+                <div class="alert alert-success center"
+                     role="alert" [class.alert-success]="isSuccess"
+                     [class.alert-danger]="!isSuccess" *ngIf="message" i18n="@@authMessage">
+                    {message, select, invalid_username_or_password {Invalid username or password} other {}}
+                </div>
+            </div>
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Tên đăng nhập</label>
+                <input class="form-control form-control-solid placeholder-no-fix valid" type="text" autocomplete="off"
+                       id="username"
+                       placeholder="Nhập tên đăng nhập" name="username" aria-required="true" aria-invalid="false"
+                       aria-describedby="username-error"
+                       [(ngModel)]="model.userName"></div>
+            <div class="alert alert-danger" *ngIf="userNameErrorMessage">{{ userNameErrorMessage }}</div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Mật khẩu</label>
+                <input class="form-control form-control-solid placeholder-no-fix valid" type="password"
+                       autocomplete="off" placeholder="Nhập mật khẩu" name="password" aria-required="true"
+                       aria-invalid="false" aria-describedby="password-error"
+                       [(ngModel)]="model.password"></div>
+            <div class="alert alert-danger" *ngIf="passwordErrorMessage">{{ passwordErrorMessage }}</div>
+            <div class="form-actions">
+                <ghm-button icon="" [loading]="isLoggingIn">Đăng nhập</ghm-button>
+                <!--<button type="submit" class="btn green uppercase">Đăng nhập</button>-->
+                <!--<label class="rememberme check mt-checkbox mt-checkbox-outline">-->
+                <!--<input type="checkbox" name="remember" value="1">Remember-->
+                <!--<span></span>-->
+                <!--</label>-->
+                <!--<a href="javascript:;" id="forget-password" class="forget-password" (click)="forgotPassword()">Quên mật khẩu?</a>-->
+            </div>
+            <!--<div class="login-options">-->
+            <!--<h4>Or login with</h4>-->
+            <!--<ul class="social-icons">-->
+            <!--<li>-->
+            <!--<a class="social-icon-color facebook" data-original-title="facebook" href="javascript:;"></a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a class="social-icon-color twitter" data-original-title="Twitter" href="javascript:;"></a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a class="social-icon-color googleplus" data-original-title="Goole Plus"-->
+            <!--href="javascript:;"></a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a class="social-icon-color linkedin" data-original-title="Linkedin" href="javascript:;"></a>-->
+            <!--</li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <div class="create-account">
+                <p>
+                    <a href="javascript:;" id="register-btn" class="uppercase" (click)="forgotPassword()">Quên
+                        mật khẩu</a>
+                </p>
+            </div>
+        </form>
+        <!-- END LOGIN FORM -->
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+        <ng-template #forgotPasswordTemplate>
+            <form class="forget-form" method="post" novalidate="novalidate" (ngSubmit)="sendForgotPassword()">
+                <h3 class="font-green">Bạn quên mật khẩu ?</h3>
+                <p> Vui lòng nhập email vào ô bên dưới để khởi tạo lại mật khẩu. </p>
+                <div class="form-group">
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off"
+                           id="forgot-password-email"
+                           placeholder="Nhập email"
+                           name="email"
+                           [(ngModel)]="email"></div>
+                <div class="form-actions">
+                    <button type="button" id="back-btn" class="btn green btn-outline"
+                            (click)="isShowForgotPassword = false">Quay lại
+                    </button>
+                    <button type="submit" class="btn btn-success uppercase pull-right">Gửi</button>
+                </div>
+            </form>
+        </ng-template>
+
+        <!-- END FORGOT PASSWORD FORM -->
+        <!-- BEGIN REGISTRATION FORM -->
+        <!--<form class="register-form" action="index.html" method="post" novalidate="novalidate">-->
+        <!--<h3 class="font-green">Sign Up</h3>-->
+        <!--<p class="hint"> Enter your personal details below: </p>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Full Name</label>-->
+        <!--<input class="form-control placeholder-no-fix" type="text" placeholder="Full Name" name="fullname">-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--&lt;!&ndash;ie8, ie9 does not support html5 placeholder, so we just show field title for that&ndash;&gt;-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Email</label>-->
+        <!--<input class="form-control placeholder-no-fix" type="text" placeholder="Email" name="email"></div>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Address</label>-->
+        <!--<input class="form-control placeholder-no-fix" type="text" placeholder="Address" name="address"></div>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">City/Town</label>-->
+        <!--<input class="form-control placeholder-no-fix" type="text" placeholder="City/Town" name="city"></div>-->
+        <!--<p class="hint"> Enter your account details below: </p>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Username</label>-->
+        <!--<input class="form-control placeholder-no-fix valid" type="text" autocomplete="off"-->
+        <!--placeholder="Username" name="username" aria-required="true" aria-invalid="false"-->
+        <!--aria-describedby="username-error"></div>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Password</label>-->
+        <!--<input class="form-control placeholder-no-fix valid" type="password" autocomplete="off"-->
+        <!--id="register_password" placeholder="Password" name="password" aria-required="true"-->
+        <!--aria-invalid="false" aria-describedby="register_password-error"></div>-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label visible-ie8 visible-ie9">Re-type Your Password</label>-->
+        <!--<input class="form-control placeholder-no-fix" type="password" autocomplete="off"-->
+        <!--placeholder="Re-type Your Password" name="rpassword"></div>-->
+        <!--<div class="form-group margin-top-20 margin-bottom-20">-->
+        <!--<label class="mt-checkbox mt-checkbox-outline">-->
+        <!--<input type="checkbox" name="tnc"> I agree to the-->
+        <!--<a href="javascript:;">Terms of Service </a> &amp;-->
+        <!--<a href="javascript:;">Privacy Policy </a>-->
+        <!--<span></span>-->
+        <!--</label>-->
+        <!--<div id="register_tnc_error"></div>-->
+        <!--</div>-->
+        <!--<div class="form-actions">-->
+        <!--<button type="button" id="register-back-btn" class="btn green btn-outline">Trở lại</button>-->
+        <!--<button type="submit" id="register-submit-btn" class="btn btn-success uppercase pull-right">Gửi-->
+        <!--</button>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!-- END REGISTRATION FORM -->
+    </div>
+    <div class="copyright"> 2018 GhmSoft - ThaiThinhMedic.</div>
+</div>
+
+<!--<div class="m-grid__item m-grid__item&#45;&#45;fluid m-grid m-grid&#45;&#45;ver-desktop m-grid&#45;&#45;desktop m-grid&#45;&#45;tablet-and-mobile m-grid&#45;&#45;hor-tablet-and-mobile m-login m-login&#45;&#45;1 m-login&#45;&#45;signin" id="m_login">-->
+<!--<div class="m-grid__item m-grid__item&#45;&#45;order-tablet-and-mobile-2 m-login__aside">-->
+<!--<div class="m-stack m-stack&#45;&#45;hor m-stack&#45;&#45;desktop">-->
+<!--<div class="m-stack__item m-stack__item&#45;&#45;fluid">-->
+<!--<div class="m-login__wrapper">-->
+<!--<div class="m-login__logo">-->
+<!--<a href="#">-->
+<!--<img src="./assets/images/logo.png">-->
+<!--</a>-->
+<!--</div>-->
+<!--<div class="m-login__signin">-->
+<!--<div class="m-login__head">-->
+<!--<h3 class="m-login__title">-->
+<!--Đăng nhập hệ thống-->
+<!--</h3>-->
+<!--<div class="m&#45;&#45;margin-top-40 m-alert m-alert&#45;&#45;outline m-alert&#45;&#45;outline-2x alert fade show" role="alert"-->
+<!--[class.alert-success]="isSuccess"-->
+<!--[class.alert-danger]="!isSuccess"-->
+<!--*ngIf="message">-->
+<!--{{message}}-->
+<!--</div>-->
+<!--</div>-->
+<!--<form (ngSubmit)="signin()" class="m-login__form m-form" action="">-->
+<!--&lt;!&ndash;<ng-template #alertSignin></ng-template>&ndash;&gt;-->
+<!--<div class="form-group m-form__group">-->
+<!--<input class="form-control m-input" type="text" placeholder="Tên đăng nhập" name="userName" [(ngModel)]="model.userName" autocomplete="off">-->
+<!--<div class="alert alert-danger" *ngIf="userNameErrorMessage">-->
+<!--{{userNameErrorMessage}}-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="form-group m-form__group">-->
+<!--<input class="form-control m-input m-login__form-input&#45;&#45;last" type="password" placeholder="Mật khẩu" name="password" [(ngModel)]="model.password">-->
+<!--<div class="alert alert-danger" *ngIf="passwordErrorMessage">-->
+<!--{{passwordErrorMessage}}-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row m-login__form-sub">-->
+<!--&lt;!&ndash;<div class="col m&#45;&#45;align-left">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="m-checkbox m-checkbox&#45;&#45;focus">&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="checkbox" name="remember" [(ngModel)]="model.remember" #remember="ngModel">&ndash;&gt;-->
+<!--&lt;!&ndash;Remember me&ndash;&gt;-->
+<!--&lt;!&ndash;<span></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</label>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<div class="col m&#45;&#45;align-right">-->
+<!--<a href="javascript:;" id="m_login_forget_password" class="m-link">-->
+<!--Quên mật khẩu ?-->
+<!--</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="m-login__form-action">-->
+<!--<button [disabled]="loading" [ngClass]="{'m-loader m-loader&#45;&#45;right m-loader&#45;&#45;light': loading}" id="m_login_signin_submit" class="btn btn-focus m-btn m-btn&#45;&#45;pill m-btn&#45;&#45;custom m-btn&#45;&#45;air">-->
+<!--Đăng nhập-->
+<!--</button>-->
+<!--</div>-->
+<!--</form>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="m-login__signup">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="m-login__head">&ndash;&gt;-->
+<!--&lt;!&ndash;<h3 class="m-login__title">&ndash;&gt;-->
+<!--&lt;!&ndash;Sign Up&ndash;&gt;-->
+<!--&lt;!&ndash;</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="m-login__desc">&ndash;&gt;-->
+<!--&lt;!&ndash;Enter your details to create your account:&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<form (ngSubmit)="f.form.valid && signup()" #f="ngForm" class="m-login__form m-form" action="">&ndash;&gt;-->
+<!--&lt;!&ndash;<ng-template #alertSignup></ng-template>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group m-form__group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input class="form-control m-input" type="text" placeholder="Fullname" name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group m-form__group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input class="form-control m-input" type="text" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" autocomplete="off">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group m-form__group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input class="form-control m-input" type="password" placeholder="Password" name="password" [(ngModel)]="model.password" #password="ngModel">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group m-form__group">&ndash;&gt;-->
+<!--&lt;!&ndash;<input class="form-control m-input m-login__form-input&#45;&#45;last" type="password" placeholder="Confirm Password" name="rpassword" [(ngModel)]="model.rpassword" #rpassword="ngModel">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="row form-group m-form__group m-login__form-sub">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col m&#45;&#45;align-left">&ndash;&gt;-->
+<!--&lt;!&ndash;<label class="m-checkbox m-checkbox&#45;&#45;focus">&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="checkbox" name="agree" [(ngModel)]="model.agree" #agree="ngModel">&ndash;&gt;-->
+<!--&lt;!&ndash;I Agree the&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="#" class="m-link m-link&#45;&#45;focus">&ndash;&gt;-->
+<!--&lt;!&ndash;terms and conditions&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;.&ndash;&gt;-->
+<!--&lt;!&ndash;<span></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="m-form__help"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="m-login__form-action">&ndash;&gt;-->
+<!--&lt;!&ndash;<button [disabled]="loading" [ngClass]="{'m-loader m-loader&#45;&#45;right m-loader&#45;&#45;light': loading}" id="m_login_signup_submit" class="btn btn-focus m-btn m-btn&#45;&#45;pill m-btn&#45;&#45;custom m-btn&#45;&#45;air">&ndash;&gt;-->
+<!--&lt;!&ndash;Sign Up&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;<button [disabled]="loading"  id="m_login_signup_cancel" class="btn btn-outline-focus  m-btn m-btn&#45;&#45;pill m-btn&#45;&#45;custom">&ndash;&gt;-->
+<!--&lt;!&ndash;Cancel&ndash;&gt;-->
+<!--&lt;!&ndash;</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--<div class="m-login__forget-password">-->
+<!--<div class="m-login__head">-->
+<!--<h3 class="m-login__title">-->
+<!--Bạn quên mật khẩu ?-->
+<!--</h3>-->
+<!--<div class="m-login__desc">-->
+<!--Nhập email của bạn đang tạo lại mật khẩu!-->
+<!--</div>-->
+<!--</div>-->
+<!--<form (ngSubmit)="f.form.valid && forgotPass()" #f="ngForm" class="m-login__form m-form" action="">-->
+<!--<ng-template #alertForgotPass></ng-template>-->
+<!--<div class="form-group m-form__group">-->
+<!--<input class="form-control m-input" type="text" placeholder="Email" name="email" [(ngModel)]="model.email" #email="ngModel" id="m_email" autocomplete="off">-->
+<!--</div>-->
+<!--<div class="m-login__form-action">-->
+<!--<button [disabled]="loading" [ngClass]="{'m-loader m-loader&#45;&#45;right m-loader&#45;&#45;light': loading}" id="m_login_forget_password_submit" class="btn btn-focus m-btn m-btn&#45;&#45;pill m-btn&#45;&#45;custom m-btn&#45;&#45;air">-->
+<!--Yêu cầu-->
+<!--</button>-->
+<!--<button [disabled]="loading"  id="m_login_forget_password_cancel" class="btn btn-outline-focus m-btn m-btn&#45;&#45;pill m-btn&#45;&#45;custom">-->
+<!--Hủy bỏ-->
+<!--</button>-->
+<!--</div>-->
+<!--</form>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="m-stack__item m-stack__item&#45;&#45;center">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="m-login__account">&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="m-login__account-msg">&ndash;&gt;-->
+<!--&lt;!&ndash;Don't have an account yet ?&ndash;&gt;-->
+<!--&lt;!&ndash;</span>&ndash;&gt;-->
+<!--&lt;!&ndash;&nbsp;&nbsp;&ndash;&gt;-->
+<!--&lt;!&ndash;<a href="javascript:;" id="m_login_signup" class="m-link m-link&#45;&#45;focus m-login__account-link">&ndash;&gt;-->
+<!--&lt;!&ndash;Sign Up&ndash;&gt;-->
+<!--&lt;!&ndash;</a>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="m-grid__item m-grid__item&#45;&#45;fluid m-grid m-grid&#45;&#45;center m-grid&#45;&#45;hor m-grid__item&#45;&#45;order-tablet-and-mobile-1	m-login__content" style="background-image: url(./assets/app/media/img//bg/bg-4.jpg)">-->
+<!--<div class="m-grid__item m-grid__item&#45;&#45;middle">-->
+<!--<h3 class="m-login__welcome">-->
+<!--ThaiThinhMedic-->
+<!--</h3>-->
+<!--<p class="m-login__msg">-->
+<!--Chào mừng bạn đến với trang thông tin nội bộ.-->
+<!--<br>-->
+<!--Công ty Cổ phần Bệnh viện Thái Thịnh-->
+<!--</p>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->

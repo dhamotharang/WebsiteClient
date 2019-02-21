@@ -1,0 +1,306 @@
+<nh-modal #customerModal size="lg"
+          (show)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        {isUpdate, select, 0 {Add new customer} 1 {Update customer} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal user-form" (ngSubmit)="save()" [formGroup]="model" autocomplete="off">
+        <nh-modal-content>
+            <div class="tabbable-custom">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" [class.active]="tabNo === 0">
+                        <a href="javascript://" role="tab" data-toggle="tab"
+                           i18n="@@informationCustomer" (click)="changeTabView(0)">Information Customer </a>
+                    </li>
+                    <li role="presentation" [class.active]="tabNo === 1">
+                        <a href="javascript://" role="tab" data-toggle="tab" (click)="changeTabView(1)">Relationship</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light bordered">
+                                    <div class="portlet-title tabbable-line">
+                                        <div class="caption caption-md">
+                                            <i class="icon-globe theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase"
+                                                  i18n="@@informationCustomer">Information Customer</span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <!--Họ Tên-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n="@@customerName" i18n-ghmLabel
+                                                   ghmLabel="Customer Name"></label>
+                                            <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.fullName">
+                                                <input type="text" value="" class="form-control"
+                                                       autocomplete="off"
+                                                       i18n-placeholder="@@enterFullNamePlaceHolder"
+                                                       placeholder="Enter Customer Name"
+                                                       formControlName="fullName"/>
+                                                <span class="help-block">
+                                                    {{ formErrors.fullName }}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@customerCode" i18n-ghmLabel
+                                                   ghmLabel="Customer Code"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control" disabled>{{model.value.customerCode}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Ngày sinh giới tính-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n="@@birthday" i18n-ghmLabel ghmLabel="Birthday"></label>
+                                            <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.birthday">
+                                                <nh-date [type]="'inputButton'"
+                                                         [title]="'Chọn ngày sinh'"
+                                                         [format]="'MM/DD/YYYY'"
+                                                         formControlName="birthday"
+                                                         [mask]="true"></nh-date>
+                                                <span class="help-block">
+                                                        {{ formErrors.birthday}}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n="@@gender" i18n-ghmLabel ghmLabel="Gender"></label>
+                                            <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.gender">
+                                                <nh-select
+                                                    [data]="[{id: gender.female, name: 'Nữ'},{id: gender.male, name: 'Nam'}, {id: gender.other, name: 'Giới tính khác'}]"
+                                                    i18n-title="@@selectGender"
+                                                    [title]="'-- Select Gender --'"
+                                                    formControlName="gender"></nh-select>
+                                                <span class="help-block">
+                                                        {{formErrors.gender}}
+                                                    </span>
+                                            </div>
+                                        </div>
+                                        <!--Số điện thoại email-->
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <app-patient-contact [listPatientContact]="listPatientContact"
+                                                                     [customerId]="id"
+                                                                     [isUpdate]="isUpdate"
+                                                                     [type]="contactType.mobilePhone"
+                                                                     [label]="'Mobile'"
+                                                                     i18n-placeholder="@@placeholderMobile"
+                                                                     [placeholder]="'Please enter mobile'"
+                                                                     (onSelectPatientContact)="selectPatientContact($event)"></app-patient-contact>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <app-patient-contact [listPatientContact]="listPatientContact"
+                                                                     [customerId]="id"
+                                                                     [isUpdate]="isUpdate"
+                                                                     [type]="contactType.email"
+                                                                     [label]="'Email'"
+                                                                     i18n-placeholder="@@placeholderEmail"
+                                                                     [placeholder]="'Please enter email'"
+                                                                     (onSelectPatientContact)="selectPatientContact($event)"></app-patient-contact>
+                                            </div>
+                                        </div>
+                                        <!--Nguồn khách Số CMND-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@customerSource" i18n-ghmLabel
+                                                   ghmLabel="Customer Source"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.patientResourceId">
+                                                <nh-select [data]="listPatientResource"
+                                                           i18n-title="@@selectPatientSource"
+                                                           [liveSearch]="true"
+                                                           [title]="' -- Select customer source --'"
+                                                           (onInsertValue)="insertPatientResource($event)"
+                                                           formControlName="patientResourceId"></nh-select>
+                                                <span class="help-block">
+                                                        {{ formErrors.patientResourceId }}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@identificationCard" i18n-ghmLabel
+                                                   ghmLabel="ID Card"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.idCardNumber ">
+                                                <input type="text" value="" class="form-control"
+                                                       i18n-placeholder="@@enterIdentificationCardPlaceHolder"
+                                                       placeholder="Enter Identification Card"
+                                                       formControlName="idCardNumber"/>
+                                                <span class="help-block">
+                                                        {{ formErrors.idCardNumber}}
+                                                    </span>
+                                            </div>
+                                        </div>
+                                        <!--Nghề nghiệp quốc gia-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@job" i18n-ghmLabel ghmLabel="Job"></label>
+                                            <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.jobId">
+                                                <nh-select formControlName="jobId"
+                                                           [data]="listJob"
+                                                           [liveSearch]="true"
+                                                           (onInsertValue)="insertJob($event)"
+                                                           i18n-title="@@selectJob"
+                                                           [title]="'-- Select job --'"></nh-select>
+                                                <span class="help-block">
+                                                        {{formErrors.jobId}}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@national" i18n-ghmLabel
+                                                   ghmLabel="National"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.nationalId">
+                                                <nh-select [liveSearch]="true" [data]="listNational"
+                                                           i18n-title="@@selectNationality"
+                                                           [title]="'-- Select National --'"
+                                                           formControlName="nationalId"
+                                                           (onSelectItem)="onSelectNational($event)"></nh-select>
+                                                <span class="help-block">
+                                                        {{formErrors.nationalId}}
+                                                    </span>
+                                            </div>
+                                        </div>
+                                        <!--Tỉnh thành, quận huyện-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@province" i18n-ghmLabel ghmLabel="Province"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.provinceId">
+                                                <nh-select [liveSearch]="true" [data]="listProvince"
+                                                           i18n-title="@@selectProvince"
+                                                           [title]="'-- Select Province --'"
+                                                           formControlName="provinceId"
+                                                           [isEnable]="enableSelectProvince"
+                                                           (onSelectItem)="onProvinceSelect($event)"></nh-select>
+                                                <span class="help-block">
+                                                        {{formErrors.provinceId}}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@district" i18n-ghmLabel ghmLabel="District"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.districtId">
+                                                <nh-select [liveSearch]="true" [data]="listDistrict"
+                                                           i18n-title="@@selectDistrict"
+                                                           [title]="'-- Select District --'"
+                                                           [isEnable]="enableSelectDistrict"
+                                                           formControlName="districtId"></nh-select>
+                                                <span class="help-block">{{formErrors.districtId}}</span>
+                                            </div>
+                                        </div>
+                                        <!--Dân tộc, tôn giáo-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@ethnic" i18n-ghmLabel ghmLabel="Ethnic"></label>
+                                            <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.ethnicId">
+                                                <nh-select [liveSearch]="true" [data]="listEthnic"
+                                                           i18n-title="@@selectEthic"
+                                                           [title]="'-- Select Ethnic --'"
+                                                           formControlName="ethnicId"></nh-select>
+                                                <span class="help-block">
+                                                        {{formErrors.ethnicId}}
+                                                    </span>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label" i18n="@@religion"
+                                                   i18n-ghmLabel ghmLabel="Religion"></label>
+                                            <div class="col-md-4 col-sm-3"
+                                                 [class.has-error]="formErrors.religionId">
+                                                <nh-select [liveSearch]="true"
+                                                           [data]="listReligion"
+                                                           i18n-title="@@selectDenomination"
+                                                           [title]="'-- Select religion --'"
+                                                           formControlName="religionId"></nh-select>
+                                                <span class="help-block">{{formErrors.religionId}}</span>
+                                            </div>
+                                        </div>
+                                        <!--Địa chỉ liên  hệ-->
+                                        <div class="form-group cm-mgb-5" [formGroup]="model"
+                                             [class.has-error]="formErrors.address">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel = "@@addressContact"
+                                                   ghmLabel="Address"></label>
+                                            <div class="col-md-10 col-sm-9">
+                                                <textarea type="text" value="" class="form-control"
+                                                          autocomplete="off"
+                                                          i18n-placeHolder="@@addressPlaceHolder"
+                                                          placeholder="Enter Address"
+                                                          formControlName="address" rows="3"></textarea>
+                                                <div class="help-block">
+                                                    {{formErrors.address}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Quan hệ với nhân viên-->
+                                        <div class="form-group cm-mgb-5">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@isRelationship"
+                                                   ghmLabel="Is Relationship"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <nh-select [liveSearch]="true" [data]="listRelationshipTypes"
+                                                           i18n="@@selectTypeRelation"
+                                                           i18n-title
+                                                           [title]="'-- Select type relationship --'"></nh-select>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@employee" ghmLabel="Employee"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <ghm-user-suggestion
+                                                    (userSelected)="onSelectEmployee($event)"
+                                                ></ghm-user-suggestion>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="portlet-title tabbable-line">
+                                            <div class="caption caption-md">
+                                                <i class="icon-globe theme-font hide"></i>
+                                                <span class="caption-subject font-blue-madison bold uppercase"
+                                                      i18n="@@contactPerson">Contact Person</span>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <app-customer-contact-person
+                                                        [customerId]="id"
+                                                        [listContactPerson]="listContactPerson"></app-customer-contact-person>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="form-group pull-right">
+                <div class="col-sm-12">
+                    <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                                  *ngIf="!isUpdate"
+                                  i18n="@@isCreateAnother"
+                                  class="cm-mgr-5"
+                                  color="primary">
+                        Create another
+                    </mat-checkbox>
+                    <button class="btn btn-primary cm-mgr-5" type="submit"
+                            [disabled]="isSaving">
+                        <i class="fa fa-save" *ngIf="!isSaving"></i>
+                        <i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>
+                        Lưu lại
+                    </button>
+                    <button class="btn btn-default" type="button" (click)="closeModal()"
+                            [disabled]="isSaving || formErrors.length > 0">
+                        <i class="fa fa-times"></i>
+                        Hủy bỏ
+                    </button>
+                </div>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

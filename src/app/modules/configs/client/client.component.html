@@ -1,0 +1,114 @@
+<div class="m-portlet">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="flaticon-computer"></i>
+							</span>
+                <h3 class="m-portlet__head-text">
+                    Danh sách Client.
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-inline" (ngSubmit)="search()">
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Nhập từ khoá tìm kiếm"
+                               (keyup)="keyword = searchBox.value" #searchBox>
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<nh-select-->
+                            <!--[data]="[{id: 1, name: 'Kích hoạt'}, {id: 0, name: 'Chưa kích hoạt'}]"-->
+                            <!--[title]="'&#45;&#45; Tất cả trạng thái &#45;&#45;'"-->
+                            <!--[(value)]="moduleIdSearch"-->
+                            <!--(onSelectItem)="search(1)"></nh-select>-->
+                    <!--</div>-->
+                    <div class="form-group">
+                        <button mat-raised-button color="primary" type="submit">
+                            <i class="fa fa-search"></i>
+                            Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="form-group pull-right">
+                        <button type="button" mat-raised-button color="primary" (click)="addNew()">
+                            <i class="fa fa-plus"></i>
+                            Thêm mới
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <!--<div class="col-sm-12">-->
+            <!--<table-->
+            <!--class="table table-striped table-bordered table-hover table-full-width dataTable no-footer table-main">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--<th class="center w50">STT</th>-->
+            <!--<th class="center">Tên trang</th>-->
+            <!--<th class="center">Module</th>-->
+            <!--<th class="center">Icon</th>-->
+            <!--<th class="center w100">Thứ tự</th>-->
+            <!--<th class="center">Đường dẫn</th>-->
+            <!--<th class="center w100">Public</th>-->
+            <!--<th class="center w100">Kích hoạt</th>-->
+            <!--<th class="center w150" *ngIf="isHasUpdatePermission || isHasDeletePermission">Sửa, Xóa</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<ng-template ngFor let-parent let-parentIndex="index" [ngForOf]="listPages">-->
+            <!--<tr>-->
+            <!--<td colspan="9" class="bg-info bold middle color-white">{{parent.modulesName}}</td>-->
+            <!--</tr>-->
+            <!--<tr *ngFor="let page of parent.listPage; let i = index">-->
+            <!--<td class="center middle">{{(currentPage - 1) * pageSize + i + 1}}</td>-->
+            <!--<td class="middle">{{page.name}}</td>-->
+            <!--<td class="middle">{{page.modulesName}}</td>-->
+            <!--<td class="w100 center middle">-->
+            <!--<i [class]="page.icon"></i>-->
+            <!--</td>-->
+            <!--<td class="middle">-->
+            <!--<span *ngIf="!isHasUpdatePermission">{{page.order}}</span>-->
+            <!--<input *ngIf="isHasUpdatePermission" type="text" class="form-control text-right"-->
+            <!--value="{{page.order}}"-->
+            <!--(blur)="onOrderBlur(page, $event)"/>-->
+            <!--</td>-->
+            <!--<td class="middle">{{page.url}}</td>-->
+            <!--<td class="center middle">-->
+            <!--<i *ngIf="!isHasUpdatePermission && page.isPubclic"-->
+            <!--class="fa fa-check color-green size-16"></i>-->
+            <!--&lt;!&ndash;<mat-checkbox color="primary" *ngIf="isHasUpdatePermission" [checked]="page.isPublic"&ndash;&gt;-->
+            <!--&lt;!&ndash;(change)="changePublicStatus(page)"></mat-checkbox>&ndash;&gt;-->
+            <!--</td>-->
+            <!--<td class="center middle">-->
+            <!--<i *ngIf="!isHasUpdatePermission && page.isActive"-->
+            <!--class="fa fa-check color-green size-16"></i>-->
+            <!--<mat-checkbox color="primary" *ngIf="isHasUpdatePermission" [checked]="page.isActive"-->
+            <!--(change)="changeActiveStatus(page)"></mat-checkbox>-->
+            <!--</td>-->
+            <!--<td class="center middle w100" *ngIf="isHasUpdatePermission || isHasDeletePermission">-->
+            <!--<a *ngIf="isHasUpdatePermission" mat-mini-fab color="primary" href="javascript://"-->
+            <!--(click)="setUpdate(page)">-->
+            <!--<i class="fa fa-pencil"></i>-->
+            <!--</a>-->
+            <!--<a *ngIf="isHasDeletePermission" mat-mini-fab color="warn"-->
+            <!--class="btn btn-danger btn-sm" (click)="delete(page)">-->
+            <!--<i class="fa fa-trash-o"></i>-->
+            <!--</a>-->
+            <!--</td>-->
+            <!--</tr>-->
+            <!--&lt;!&ndash; /ko &ndash;&gt;-->
+            <!--</ng-template>-->
+            <!--</tbody>-->
+            <!--</table>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"-->
+            <!--[isDisabled]="isSearching" [pageName]="'trang'"></ghm-paging>-->
+        </div>
+    </div>
+</div>

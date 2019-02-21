@@ -1,0 +1,168 @@
+$colors: red, orange, green, blue, purple;
+$step-active-color: #27ae60;
+$repeat: 20;
+$border-color: #ddd;
+@function nh-calculate-width($itemLength) {
+    @return 1 / $itemLength * 100%;
+}
+
+nh-wizard {
+    .nh-wizard-container {
+        padding: 50px 20px 20px;
+        border: 1px solid $border-color;
+        border-radius: 10px;
+        box-shadow: 5px 5px 5px $border-color;
+        background: white;
+
+        .nh-wizard-header {
+            text-align: center;
+            border-bottom: 1px solid $border-color;
+            padding-bottom: 20px;
+
+            @for $i from 1 through 10 {
+                &.nh-wizard-header-#{$i} {
+                    ul li {
+                        width: nh-calculate-width($i);
+                    }
+                }
+            }
+
+            ul {
+                padding-left: 0;
+                text-align: center;
+
+                li {
+                    list-style: none;
+                    display: inline-block;
+                    position: relative;
+
+                    &:last-child::before {
+                        border: none;
+                    }
+
+                    &:first-child::after {
+                        border: none;
+                    }
+
+                    &::before, &::after {
+                        content: '';
+                        position: absolute;
+                        top: 25%;
+                        z-index: 1;
+                    }
+
+                    &::before {
+                        left: -4em;
+                        width: 100%;
+                        border: 3px solid $border-color;
+                        left: 50%;
+                    }
+
+                    &::after {
+                        width: 0;
+                        left: -50%;
+                        border: 3px solid $step-active-color;
+                    }
+
+                    &.active {
+                        &::after {
+                            width: 100%;
+                        }
+
+                        div.step-container div.step {
+                            background-position: -100% 0;
+                        }
+                    }
+
+                    div.step-container {
+                        padding-bottom: 60px;
+
+                        div.step {
+                            width: 60px;
+                            height: 60px;
+                            border-radius: 50% !important;
+                            color: white;
+                            background-size: 200% 100%;
+                            background-image: linear-gradient(to right, $border-color 50%, $step-active-color 50%);
+                            padding: 5px;
+                            margin: 0 auto;
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            z-index: 4;
+
+                            .step-inner {
+                                border-radius: 100% !important;
+                                width: 50px;
+                                height: 50px;
+                                display: table-cell;
+                                vertical-align: middle;
+                                position: absolute;
+                                z-index: 2;
+                                background: white;
+                                color: #333;
+                                font-size: 20px;
+                                padding: 10px 0;
+                            }
+
+                            i {
+                                font-style: normal;
+                                font-weight: bold;
+                            }
+                        }
+                    }
+
+                    div.title {
+                        text-align: center;
+                        margin-top: 10px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        nh-step {
+            .step-content-container {
+                padding: 20px 0;
+            }
+
+            .nh-wizard-step-footer {
+                clear: both;
+                overflow: hidden;
+                padding: 20px 0 0;
+                border-top: 1px solid $border-color;
+
+                button {
+                    border: 1px solid #999;
+                    background: white;
+                    border-radius: 20px;
+                    padding: 7px 30px;
+
+                    &.back {
+                        float: left;
+                        color: #333;
+                    }
+
+                    &.next {
+                        float: right;
+                        border: 1px solid #3498db;
+                        background: #3498db;
+                        color: white;
+                    }
+
+                    &.finish {
+                        background-color: $step-active-color;
+                        color: white;
+                        border: 1px solid $step-active-color;
+                    }
+
+                    .btn-default {
+                        color: #333;
+                    }
+                }
+            }
+        }
+
+    }
+
+}

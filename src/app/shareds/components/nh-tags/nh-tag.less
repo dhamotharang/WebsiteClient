@@ -1,0 +1,105 @@
+@main-color: #007455;
+@border-color: #ccc;
+@second-color: #b01a1f;
+@padding: 10px;
+
+.nh-wrapper-suggestion {
+    padding-bottom: 1px;
+    display: block;
+    width: 100%;
+
+    .list-tag-input {
+        border: 1px solid rgba(0, 0, 0, .15);
+        margin-bottom: 0px !important;
+        list-style-type: none;
+        padding-left: 0px !important;
+        margin-left: 0px;
+        height: 32px;
+
+        .tag {
+            padding-left: 3px;
+            color: #46799b;
+            font-size: 14px;
+            background: #e0eaf1;
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 3px 15px 3px 3px;
+            position: relative;
+            margin-right: 5px;
+            border-radius: 2px !important;
+            margin-bottom: 2px;
+        }
+
+        .remove-tag {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            font-size: 14px !important;
+        }
+
+        input:focus {
+            border: none !important;
+        }
+
+        .tag-input {
+            border: none !important;
+            width: 100px;
+            height: 29px;
+            padding-left: 10px;
+            &:hover {
+                border: none !important;
+            }
+            &:focus {
+                border: none !important;
+                border: solid 1px white;
+            }
+        }
+
+        .dropdown-menu {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            display: block;
+            .selected {
+                background: @main-color;
+                color: white !important;
+            }
+
+            li {
+                padding-left: 3px;
+                border-bottom: solid 1px #CCCCCC;
+                padding: 3px 0px;
+                cursor: pointer;
+                &:hover {
+                    background: @main-color;
+                    color: white !important;
+
+                    a {
+                        background: @main-color;
+                        color: white;
+                    }
+                }
+                &:active {
+                    background: @main-color;
+                    color: white !important;
+                }
+                p {
+                    margin-bottom: 5px !important;
+                    margin-top: 5px !important;
+                    padding-left: 15px;
+                    font-size: 13px;
+                    font-style: italic;
+                }
+
+                a {
+                    display: inline;
+                    padding-bottom: 0px;
+                    padding-top: 0px;
+
+                    &:hover {
+                        background: @main-color;
+                    }
+                }
+            }
+        }
+    }
+}

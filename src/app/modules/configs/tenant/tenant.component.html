@@ -1,0 +1,73 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listTenantTitle">Tenants</span>
+    <small i18n="@@ConfigModuleTitle">Config module</small>
+</h1>
+
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form action="" class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text"
+                       i18n-placeholder="@@enterKeywordPlaceholder"
+                       placeholder="Enter keyword" class="form-control cm-mgr-5"
+                       name="keyword" [(ngModel)]="keyword">
+            </div>
+            <div class="form-group">
+                <ghm-button classes="btn blue" icon="fa fa-search"
+                            i18n-matTooltip="@@search"
+                            matTooltip="Search"
+                            [loading]="isSearching"></ghm-button>
+            </div>
+            <div class="form-group pull-right">
+                <ghm-button classes="btn blue" type="button" (clicked)="add()" i18n="@@add">
+                    Add
+                </ghm-button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th class="center middle w50" i18n="@@no">No</th>
+                <th class="center middle" i18n="@@tenantName">Tenant name</th>
+                <th class="center middle w150" i18n="@@email">Email</th>
+                <th class="center middle w100" i18n="@@phoneNumber">Phone number</th>
+                <th class="center middle w100" i18n="@@status">Status</th>
+                <th class="center middle w50" *ngIf="permission.edit" i18n="@@actions">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listItems$ | async; let i = index">
+                <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td class="middle">{{ item.name }}</td>
+                <td class="middle">{{ item.email }}</td>
+                <td class="middle">{{ item.phoneNumber }}</td>
+                <td class="middle center">
+                    <span class="badge"
+                          [class.badge-danger]="!item.isActive"
+                          [class.badge-success]="item.isActive">
+                        {item.isActive, select, 0 {InActive} 1 {Activated}}
+                    </span>
+                </td>
+                <td class="center middle" *ngIf="permission.edit">
+                    <ghm-button type="button" classes="btn blue btn-outline btn-sm"
+                                icon="fa fa-edit"
+                                i18n-matTooltip="@@edit"
+                                matTooltip="Edit"
+                                (click)="edit(item)">
+                    </ghm-button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                    [isDisabled]="isSearching" [pageName]="'tenant'"></ghm-paging>
+    </div>
+</div>
+
+<app-tenant-form (saveSuccessful)="search(1)"></app-tenant-form>

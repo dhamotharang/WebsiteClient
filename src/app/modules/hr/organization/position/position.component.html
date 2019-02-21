@@ -1,0 +1,105 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listPositionPageTitle">List position</span>
+    <small i18n="@@positionModuleTitle">Position management</small>
+</h1>
+
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)" #positionSearchForm="ngForm">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control"
+               i18n="@@enterSearchKeyWord"
+               i18n-placeholder
+               placeholder="Enter search keyword" #searchBox
+               (keyup)="keyword = searchBox.value">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="button" class="btn btn-default" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right" *ngIf="permission.add">
+        <button type="button" class="btn btn-primary" (click)="add()" i18n="@@add">
+            Add
+        </button>
+    </div>
+</form><!-- END: search-form -->
+
+<div class="table-responsive">
+    <table class="table table-hover table-stripped">
+        <thead>
+        <tr>
+            <th class="middle center w50" i18n="@@no">STT</th>
+            <th class="middle w250" i18n="@@positionName">Position name</th>
+            <th class="middle w100" i18n="@@shortName">Short name</th>
+            <th class="middle w100" i18n="@@isManager">Is manager</th>
+            <th class="middle w100" i18n="@@isMultiple">Is multiple</th>
+            <th class="middle" i18n="@@description">Description</th>
+            <th class="middle text-right w100" i18n="@@action">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let position of listItems$ | async; let i = index">
+            <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="middle">
+                <a href="javascript://" (click)="edit(position)"
+                   *ngIf="permission.edit; else positionNameWithoutEdit">{{position.name}}</a>
+                <ng-template #positionNameWithoutEdit>
+                    {{ position.name }}
+                </ng-template>
+            </td>
+            <td class="middle">{{ position.shortName }}</td>
+            <td class="middle center">
+                <i class="fa fa-check color-green" *ngIf="position.isManager"></i>
+            </td>
+            <td class="middle center">
+                <i class="fa fa-check color-green" *ngIf="position.isMultiple"></i>
+            </td>
+            <td class="middle">{{ position.description }}</td>
+            <td class="text-right middle">
+                <button
+                    class="btn btn-primary btn-sm"
+                    i18n="@@edit"
+                    i18n-matTooltip
+                    matTooltip="Edit"
+                    [matTooltipPosition]="'above'"
+                    (click)="edit(position)">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <ghm-button
+                    *ngIf="permission.delete"
+                    icon="fa fa-trash-o" classes="btn btn-danger btn-sm"
+                    [swal]="confirmDeletePosition"
+                    (confirm)="delete(position.id)"></ghm-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div><!-- END: table-responsive -->
+
+<ghm-paging [totalRows]="totalRows"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            [isDisabled]="isSearching"
+            [pageSize]="pageSize"
+            (pageClick)="search($event)"
+></ghm-paging>
+
+<app-position-form (saveSuccessful)="search(currentPage)"></app-position-form>
+
+<swal
+    #confirmDeletePosition
+    i18n-title="@@confirmDeletePositionTitle"
+    i18n-text="@@confirmDeletePositionText"
+    title="Are you sure for delete this position?"
+    text="You can't recover this position after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>

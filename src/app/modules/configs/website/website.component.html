@@ -1,0 +1,42 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@configInformation">Config Information</span>
+    <small i18n="@@configModuleTitle">Config</small>
+</h1>
+<div class="tabbable-custom">
+    <ul class="nav nav-tabs ">
+        <li class="active">
+            <a href="#info" data-toggle="tab" aria-expanded="true" i18n="@@info">Information </a>
+        </li>
+        <li class="">
+            <a href="#socialNetwork" data-toggle="tab" aria-expanded="false" i18n="@@socialNetwork" (click)="searchSocialNetwork()"> Social Network</a>
+        </li>
+        <li class="">
+            <a href="#contactInformation" data-toggle="tab" aria-expanded="false" i18n="@@contactInformation" (click)="searchBranch()">Contact Information </a>
+        </li>
+        <li class="">
+            <a href="#coreValues" data-toggle="tab" aria-expanded="false" i18n="@@coreValues" (click)="searchCoreValue()">Core Values </a>
+        </li>
+        <li class="">
+            <a href="#language" data-toggle="tab" aria-expanded="false" i18n="@@language" (click)="searchLanguage()"> Language</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="info">
+            <app-config-website-info></app-config-website-info>
+        </div>
+        <div class="tab-pane" id="socialNetwork">
+           <app-config-social-network></app-config-social-network>
+        </div>
+        <div class="tab-pane" id="contactInformation">
+            <app-config-website-branch></app-config-website-branch>
+        </div>
+        <div class="tab-pane" id="coreValues">
+            <app-config-website-core-values></app-config-website-core-values>
+        </div>
+        <div class="tab-pane" id="language">
+            <app-config-language></app-config-language>
+        </div>
+    </div>
+</div>
+
+

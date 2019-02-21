@@ -1,0 +1,106 @@
+<button type="button"
+        class="btn btn-blue {{ buttonClass }}"
+        (click)="showExplorer()">
+    {{ buttonText }}
+</button>
+
+<ng-template #ghmExplorerTemplate>
+    <div class="ghm-file-explorer-container">
+        <div class="header">
+            <h4 class="header-title uppercase gray bold">{{ headerTitle }}</h4>
+            <svg
+                *ngIf="showCloseButton"
+                (click)="closeModal()"
+                width="24" height="24" viewBox="0 0 24 24" focusable="false"
+                role="presentation"
+                class="btn-close">
+                <path
+                    d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                    fill="currentColor">
+                </path>
+            </svg>
+        </div><!-- END: .header -->
+        <div class="actions">
+            <ul class="breadcrumb">
+                <li>
+                    <a href="javascript://" (click)="showDirectory()" i18n="@@myDriver">My driver</a>
+                </li>
+                <li *ngFor="let item of breadcrumbs">
+                    <a href="javascript://" (click)="showDirectory(item)">{{ item.name }}</a>
+                </li>
+            </ul><!-- END: .breadcrumb -->
+            <ghm-file-upload
+                [folderId]="currentFolderId"
+            ></ghm-file-upload>
+            <div>
+                <button type="button" class="btn btn-light" i18n="@@newFolder" (click)="createNewFolder()">
+                    <i class="fa fa-folder cm-mgr-5"></i>
+                    <span i81n="@@newFolder">New folder</span>
+                </button>
+                <button type="button" class="btn btn-light" (click)="isGridView = !isGridView">
+                    <i class="fa fa-list" *ngIf="isGridView"></i>
+                    <i class="fa fa-th-large" *ngIf="!isGridView"></i>
+                </button>
+            </div>
+        </div><!-- END: .actions -->
+        <div class="content">
+            <div class="list-ghm-fe"
+                 [class.list]="!isGridView"
+                 [class.grid]="isGridView">
+                <div *ngIf="explorerItems.length === 0; else listItemTemplate" i18n="@@folderIsEmpty">
+                    Folder is empty.
+                </div>
+                <ng-template #listItemTemplate>
+                    <div class="ghm-fe-item" *ngFor="let item of explorerItems"
+                         (click)="selectItem(item)"
+                         (dblclick)="openItem(item)">
+                        <div class="ghm-fe-item-prop ghm-fe-item-select" *ngIf="multiple && !isGridView">
+                            <mat-checkbox color="primary" [checked]="item.isSelected"
+                                          (change)="changeSelectedStatus(item)"></mat-checkbox>
+                        </div>
+                        <div class="ghm-fe-item-prop">
+                            <div class="ghm-fe-item-content"
+                                 [class.selected]="item.isSelected">
+                                <div class="ghm-fe-item-icon">
+                                    <img src="{{ item.absoluteUrl }}" *ngIf="item.isImage; else fileTemplate">
+                                    <ng-template #fileTemplate>
+                                        <i class="icon icon-{{ item.extension }}"></i>
+                                    </ng-template>
+                                </div><!-- END: .ghm-fe-item-icon -->
+                                <div class="ghm-fe-name">
+                                    {{ item.name}}
+                                </div><!-- END: .ghm-fe-item-name -->
+                            </div><!-- END: .ghm-fe-item-content -->
+                        </div><!-- END: .ghm-fe-item-prop -->
+                        <div class="ghm-fe-item-prop ghm-fe-owner">
+                            {{ item.creatorFullName }}
+                        </div><!-- END: .ghm-fe-owner -->
+                        <div class="ghm-fe-item-prop ghm-fe-lu">
+                            <div class="ghm-fe-lu-item">
+                                <div class="ghm-fe-lu-date">{{ item.createTime | dateTimeFormat:'DD/MM/YYYY' }}</div>
+                                <div class="ghm-fe-lu-u">Tôi</div>
+                            </div>
+                        </div><!-- END: .ghm-fe-last-update -->
+                        <div class="ghm-fe-item-prop ghm-fe-size">
+                            {{ item.sizeString }}
+                        </div>
+                    </div><!-- END: .ghm-file-explorer-item -->
+                </ng-template>
+            </div><!-- END: .wrapper-list-items -->
+        </div><!-- END: .content -->
+        <div class="footer {{ footerClass }}">
+            <button type="button" class="btn btn-blue primary" (click)="confirmSelect()"
+                    *ngIf="multiple" [class.disabled]="!isMultipleSelected">
+                {{ confirmText }}
+            </button>
+
+            <button type="button" class="btn btn-light btn-close" (click)="closeModal()">
+                {{ closeText }}
+            </button>
+        </div><!-- END: .footer -->
+    </div><!-- END: .ghm-file-explorer-container -->
+</ng-template>
+
+<ghm-new-folder
+    [parentId]="currentFolderId"
+    (saveSuccessful)="onSaveFolderSuccessful($event)"></ghm-new-folder>

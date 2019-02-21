@@ -1,0 +1,49 @@
+{
+  "_args": [
+    [
+      "tinymce@4.7.3",
+      "D:\\Project\\Clients\\ThaiThinhMedic"
+    ]
+  ],
+  "_from": "tinymce@4.7.3",
+  "_id": "tinymce@4.7.3",
+  "_inBundle": false,
+  "_integrity": "sha1-Osej1E2qthgU5WATL1lsxH0BR6w=",
+  "_location": "/tinymce",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "tinymce@4.7.3",
+    "name": "tinymce",
+    "escapedName": "tinymce",
+    "rawSpec": "4.7.3",
+    "saveSpec": null,
+    "fetchSpec": "4.7.3"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/tinymce/-/tinymce-4.7.3.tgz",
+  "_spec": "4.7.3",
+  "_where": "D:\\Project\\Clients\\ThaiThinhMedic",
+  "author": {
+    "name": "Ephox Corporation"
+  },
+  "bugs": {
+    "url": "https://github.com/tinymce/tinymce/issues"
+  },
+  "description": "Web based JavaScript HTML WYSIWYG editor control.",
+  "keywords": [
+    "editor",
+    "wysiwyg",
+    "tinymce",
+    "richtext",
+    "javascript",
+    "html"
+  ],
+  "license": "LGPL-2.1",
+  "main": "tinymce.js",
+  "name": "tinymce",
+  "version": "4.7.3"
+}

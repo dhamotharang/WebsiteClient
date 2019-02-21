@@ -1,0 +1,102 @@
+<nh-modal #officeContactFormModal
+          size="sm"
+          (hidden)="onModalHidden()">
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group"
+                 [class.has-error]="formErrors.userId">
+                <label i18n="@@fullName" i18n-ghmLabel ghmLabel="Full name"
+                       class="col-sm-12"
+                       [required]="true"></label>
+                <div class="col-sm-12">
+                    <ghm-user-suggestion
+                        [selectedUser]="selectedUser"
+                        (userSelected)="onUserSelected($event)"
+                    ></ghm-user-suggestion>
+                    <span class="help-block">
+                        {
+                        formErrors.userId,
+                        select, required {Please select user}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.phoneNumber">
+                <label i18n="@@phoneNumber" i18n-ghmLabel ghmLabel="PhoneNumber"
+                       class="col-sm-12"
+                       [required]="true"></label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" formControlName="phoneNumber"
+                           i18n-placeholder="@@enterPhoneNumber"
+                           placeholder="Enter phone number.">
+                    <span class="help-block">
+                        {
+                        formErrors.phoneNumber,
+                        select,
+                        required {Phone number is required}
+                        maxlength {Phone number not allowed over 50 characters}
+                        pattern {Phone number invalid}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.email">
+                <label i18n="@@email" i18n-ghmLabel ghmLabel="Email"
+                       class="col-sm-12"></label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" formControlName="email"
+                           i18n-placeholder="@@enterEmail"
+                           placeholder="Enter email address.">
+                    <span class="help-block">
+                        {
+                        formErrors.email,
+                        select,
+                        maxlength {Email not allowed over 500 characters}
+                        pattern {Email invalid}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.fax">
+                <label i18n="@@fax" i18n-ghmLabel ghmLabel="Fax"
+                       class="col-sm-12"
+                ></label>
+                <div class="col-sm-12">
+                    {{formErrors.fax}}
+                    <input type="text" class="form-control" formControlName="fax"
+                           i18n-placeholder="@@enterFax"
+                           placeholder="Enter fax.">
+                    <span class="help-block">
+                        {
+                        formErrors.fax,
+                        select,
+                        maxlength {Fax not allowed over 50 characters}
+                        pattern {Fax invalid}
+                        }
+                    </span>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                Save
+            </ghm-button>
+            <ghm-button type="button" classes="btn btn-default"
+                        nh-dismiss="true"
+                        [loading]="isSaving"
+                        i18n="@@cancel">
+                Cancel
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

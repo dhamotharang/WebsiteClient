@@ -1,0 +1,194 @@
+<nh-modal #eventDayFormModal
+          size="md"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        <i class="fa fa fa-calendar cm-mgr-5"></i>
+        <span i18n="@@eventDayFormModalTitle">{isUpdate, select, 0 {Add new event day} 1 {Update event day}}</span>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" *ngIf="languages.length > 1">
+                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                       class="col-sm-4 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-8">
+                    <nh-select [data]="languages"
+                               [(value)]="currentLanguage"></nh-select>
+                </div>
+            </div>
+            <span formArrayName="modelTranslations">
+                <div class="form-group" *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                    <label i18n-ghmLabel="@@eventDayName" ghmLabel="Event day name"
+                           class="col-sm-4 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Enter event day name"
+                               i18n-placeholder="@@enterEventDayName" formControlName="name">
+                        <span *ngIf="translationFormErrors[modelTranslation.value.languageId]?.name"
+                              class="help-block" i18n="@@eventDayNameErrorMessage">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.name,
+                            select, required {Please enter event day name} maxlength {Event day name must not exceed 256 characters}
+                            }
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                    <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                           class="col-sm-4 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <textarea rows="3" class="form-control" placeholder="Enter description"
+                                  i18n-placeholder="@@enterDescription"
+                                  formControlName="description"></textarea>
+                        <span *ngIf="translationFormErrors[modelTranslation.value.languageId]?.description"
+                              class="help-block" i18n="@@descriptionErrorMessage">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.description,
+                            select, required {Please enter description}
+                            maxlength {Description must not exceed 1000 characters}
+                            }
+                        </span>
+                    </div>
+                </div>
+            </span><!-- END: wrapper info by language -->
+            <div class="form-group"
+                 [class.has-error]="formErrors?.eventDate">
+                <label i18n-ghmLabel="@@date" ghmLabel="Date"
+                       class="col-sm-4 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-8">
+                    <nh-date
+                        [mask]="true"
+                        formControlName="eventDate"
+                    ></nh-date>
+                    <span *ngIf="formErrors?.eventDate" class="help-block" i18n="@@eventDateErrorMessage">
+                        {
+                        formErrors?.eventDate,
+                        select, required {Please select event date}
+                        }
+                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.limitedUsers">
+                <label i18n-ghmLabel="@@limitedUsers" ghmLabel="Limited users"
+                       class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="limitedUsers"
+                           i18n-placeholder="@@limitedUsersPlaceholder"
+                           placeholder="Enter limited users">
+                    <span *ngIf="formErrors?.limitedUsers" class="help-block"
+                          i18n="@@eventLimitedUsersErrorMessage">
+                                        {
+                                        formErrors?.limitedUsers,
+                                        select, isValid {Limited users must be number}
+                                        }
+                                    </span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.limitedAccompanyPersons">
+                <label i18n-ghmLabel="@@limitedAccompanyPersons" ghmLabel="Limited accompany users"
+                       class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="limitedAccompanyPersons"
+                           i18n-placeholder="@@limitedAccompanyPersonsPlaceholder"
+                           placeholder="Enter limited accompany persons">
+                    <span *ngIf="formErrors?.limitedAccompanyPersons" class="help-block"
+                          i18n="@@eventLimitedAccompanyPersonsErrorMessage">
+                                        {
+                                        formErrors?.limitedAccompanyPersons,
+                                        select, isValid {Limited accompany person must be number}
+                                        }
+                                    </span>
+                </div>
+            </div>
+            <span formArrayName="modelTranslations">
+                 <div class="form-group" *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                      [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                      [formGroupName]="i"
+                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
+                    <label i18n-ghmLabel="@@address" ghmLabel="Address"
+                           class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <textarea rows="3" class="form-control" placeholder="Enter address"
+                                  i18n-placeholder="@@enterAddress" formControlName="address"></textarea>
+                        <span *ngIf="translationFormErrors[modelTranslation.value.languageId]?.address"
+                              class="help-block" i18n="@@eventAddressErrorMessage">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.address,
+                            select, maxlength {Address must not exceed 500 characters}
+                            }
+                        </span>
+                    </div>
+                </div>
+            </span>
+            <div class="form-group">
+                <label i18n-ghmLabel="@@from" ghmLabel="From"
+                       class="col-sm-4 control-label"></label>
+                <div class="col-sm-3">
+                    <nh-time
+                        [(hour)]="model?.value.startHour"
+                        [(minute)]="model?.value.startMinute"
+                    ></nh-time>
+                </div>
+                <label i18n-ghmLabel="@@from" ghmLabel="To"
+                       class="col-sm-2 control-label"></label>
+                <div class="col-sm-3">
+                    <nh-time
+                        [(hour)]="model?.value.endHour"
+                        [(minute)]="model?.value.endMinute"
+                    ></nh-time>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle color="primary" i18n="@@isAllowAccompanyPerson"
+                                      formControlName="isAllowAccompanyPerson">
+                        {model.value.isAllowAccompanyPerson, select, 0 {Allow accompany person} 1 {Don't allow accompany
+                        person}}
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle color="primary" i18n="@@isActive" formControlName="isActive">
+                        {model.value.isActive, select, 0 {In active} 1 {Active}}
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle color="primary" i18n="@@staffOnly" formControlName="staffOnly">
+                        Staff only
+                    </mat-slide-toggle>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                Save
+            </ghm-button>
+            <ghm-button type="button" classes="btn btn-light"
+                        nh-dismiss="true"
+                        [loading]="isSaving"
+                        i18n="@@cancel">
+                Cancel
+            </ghm-button>
+        </nh-modal-footer>
+    </form><!-- END: form -->
+</nh-modal>

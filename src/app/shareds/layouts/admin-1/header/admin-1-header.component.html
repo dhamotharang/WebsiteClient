@@ -1,0 +1,108 @@
+<!-- BEGIN HEADER INNER -->
+<div class="page-header-inner ">
+    <!-- BEGIN LOGO -->
+    <div class="page-logo">
+        <a href="index.html">
+            <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default"/> </a>
+        <div class="menu-toggler sidebar-toggler" (click)="toggleSidebar()">
+            <span></span>
+        </div>
+    </div>
+    <!-- END LOGO -->
+    <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+    <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+       data-target=".navbar-collapse">
+        <span></span>
+    </a>
+    <!-- END RESPONSIVE MENU TOGGLER -->
+    <!-- BEGIN TOP NAVIGATION MENU -->
+    <div class="top-menu">
+        <ul class="nav navbar-nav pull-right">
+            <!-- BEGIN NOTIFICATION DROPDOWN -->
+            <!-- DOC: Apply "dropdown-dark" class after "dropdown-extended" to change the dropdown styte -->
+            <!-- DOC: Apply "dropdown-hoverable" class after below "dropdown" and remove data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to enable hover dropdown mode -->
+            <!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
+            <li class="dropdown dropdown-extended dropdown-notification"
+                id="header_notification_bar"
+                ghmDropdown
+            >
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                   data-close-others="true">
+                    <i class="icon-bell"></i>
+                    <span class="badge badge-default" *ngIf="totalNotifications > 0"> {{ totalNotifications }} </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="external">
+                        <h3>
+                            <span class="bold">
+                                {{ totalUnreadNotification }}
+                                <span i18n="@@pending">pending</span>
+                            </span>
+                            <span i18n="@@notification">notifications</span></h3>
+                        <!-- TODO: Add view all notifications -->
+                        <!--<a routerLink="/notifications" i18n="@@viewAll">View all</a>-->
+                    </li>
+                    <li>
+                        <ul class="dropdown-menu-list list-notify-container" style="height: 250px;"
+                            data-handle-color="#637283">
+                            <ng-template ngFor let-item [ngForOf]="notifications">
+                                <app-notification-item [notification]="item"></app-notification-item>
+                            </ng-template>
+                        </ul>
+                    </li>
+                    <li class="load-more">
+                        <button type="button" i18n="@@loadMore" [disabled]="currentPage > totalPages"
+                                (click)="loadMore()">Load more
+                        </button>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown dropdown-user" ghmDropdown>
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                   data-close-others="true">
+                    <img alt="" ghmImage class="img-circle" src="{{ currentUser?.avatar }}"/>
+                    <span class="username username-hide-on-mobile"> {{ currentUser?.fullName }} </span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-default">
+                    <li>
+                        <a href="page_user_profile_1.html">
+                            <i class="icon-user"></i> <span i18n="@@userProfile">Profile</span> </a>
+                    </li>
+                    <li>
+                        <a href="javascript://" (click)="changePassword()">
+                            <i class="icon-key"></i>
+                            <span i18n="@@changePass">Change password</span>
+                        </a>
+
+                    <li>
+                        <a routerLink="/config/settings">
+                            <i class="icon-settings"></i>
+                            <span i18n="@@userSettings">User settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript://" (click)="signOut()">
+                            <i class="icon-logout"></i>
+                            <span i18n="@@signOut">Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- END USER LOGIN DROPDOWN -->
+            <!-- BEGIN QUICK SIDEBAR TOGGLER -->
+            <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+            <li class="dropdown dropdown-quick-sidebar-toggler">
+                <a href="javascript:;" class="dropdown-toggle" (click)="signOut()">
+                    <i class="icon-logout"></i>
+                </a>
+            </li>
+            <!-- END QUICK SIDEBAR TOGGLER -->
+        </ul>
+    </div>
+    <!-- END TOP NAVIGATION MENU -->
+</div>
+<!-- END HEADER INNER -->
+<!-- END HEADER -->
+
+<app-change-password></app-change-password>

@@ -1,0 +1,41 @@
+<div class="form-group"
+     *ngFor=" let userContact of listUserContacts | searchUserContact : type; let i = index">
+    <label class="col-md-4 col-sm-6 control-label">{{label}}</label>
+    <div class="col-md-8 col-sm-6" [class.has-error]="contactValue.invalid" *ngIf="!isDetail">
+        <div class="input-group">
+            <input type="text" class="form-control"
+                   placeholder="{{placeholder}}"
+                   [(ngModel)]="userContact.contactValue"
+                   [pattern]="type === contactType.email ? '[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}' : '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'"
+                   #contactValue = "ngModel"
+                   (keypress)="onKeyPress(userContact, $event)"/>
+            <div class="input-group-btn" *ngIf="i > 0">
+                <button class="btn btn-danger" type="button"
+                        (click)="delete(userContact)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="input-group-btn" *ngIf="userId">
+                <button class="btn btn-default" type="button" [disabled]="contactValue.invalid"
+                        (click)="updateUserContact(userContact)">
+                    <i class="fa fa-save"></i>
+                </button>
+            </div>
+            <div class="input-group-btn">
+                <button class="btn btn-primary" type="button" [disabled]="contactValue.invalid"
+                        (click)="add(userContact)">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <span *ngIf="contactValue.invalid && !isDetail" class="help-block">
+           {{type == contactType.email ? 'Email không đúng định dạng.' : 'Số điện thoại không đúng định dạng'}}
+        </span>
+    </div>
+    <div class="col-md-8 col-sm-6" *ngIf="isDetail">
+        <div class="form-control">
+            {{userContact.contactValue}}
+        </div>
+    </div>
+</div>
+

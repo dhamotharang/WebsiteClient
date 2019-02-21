@@ -1,0 +1,18 @@
+<div class="nh-wizard-container">
+    <div class="nh-wizard-header nh-wizard-header-{{steps.length}}">
+        <ul>
+            <li *ngFor="let step of steps" [class.active]="step.id <= currentStep">
+                <div class="step-container">
+                    <div class="step">
+                        <div class="step-inner">
+                            <i [ngClass]="step.icon">{{step.id}}</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="title">{{step.title}}</div>
+                <div class="description">{{step.description}}</div>
+            </li>
+        </ul>
+    </div>
+    <ng-content></ng-content>
+</div><!-- END: .nh-wizard-container -->

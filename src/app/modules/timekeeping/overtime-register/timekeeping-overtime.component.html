@@ -1,0 +1,356 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" [class.active]="type === 0" (click)="changeType(0)">
+                Đơn của tôi
+            </button>
+            <!--<button type="button" class="btn btn-default"-->
+                    <!--*ngIf="currentUser?.isLeader == 1 || currentUser?.isLeader == 2"-->
+                    <!--[class.active]="type === 1" (click)="changeType(1)">-->
+                <!--Duyệt đăng ký-->
+            <!--</button>-->
+        </div>
+    </div>
+</div>
+
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form action="" class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Vui lòng nhập tên nhân viên cần tìm"
+                       (keyup)="keyword = keywordInput.value" #keywordInput/>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Chọn tháng"
+                    [data]="listMonth"
+                    [value]="month"
+                    (onSelectItem)="onSelectMonth($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Chọn năm --"
+                    [data]="listYear"
+                    [value]="year"
+                    (onSelectItem)="onSelectYear($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Trạng thái --"
+                    [data]="[{id: 0, name: 'Mới'},{id: 1, name: 'QLTT đã duyệt'},{id: 2, name: 'QLTT không duyệt'}]"
+                    (onSelectItem)="onSelectStatus($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <button mat-raised-button color="primary">
+                    <i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>
+                    <i class="fa fa-search" *ngIf="!isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" mat-raised-button color="primary" (click)="showRegisterModal()">
+                    <i class="fa fa-plus"></i>
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped table-main">
+                <thead>
+                <tr>
+                    <th class="center w50">#</th>
+                    <th class="center">Nhân viên</th>
+                    <th class="center">Ngày đăng ký</th>
+                    <th class="center">Thời gian thêm giờ</th>
+                    <th class="center w150">Trạng thái</th>
+                    <th class="center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of $listOvertimeRegisters | async; let i = index">
+                    <td class="center middle">{{(currentPage - 1) * pageSize + i + 1}}</td>
+                    <td class="middle">
+                        <a href="javascript://" (click)="detail(item)">{{item.fullName}}</a>
+                    </td>
+                    <td class="middle">{{item.registerTime | dateTimeFormat:'DD/MM/YYYY HH:mm'}}</td>
+                    <td class="middle text-right">{{item.totalMinutesText}}</td>
+                    <td class="middle"
+                        [class.color-red]="item.status === STATUS.MANAGER_DECLINE"
+                        [class.color-green]="item.status === STATUS.MANAGER_APPROVE"
+                    >{{item.statusText}}
+                    </td>
+                    <td class="center middle w150">
+                        <button type="button" mat-mini-fab color="default" (click)="detail(item)"><i
+                            class="fa fa-eye"></i></button>
+
+                        <ng-container
+                            *ngIf="currentUser?.id === item.managerUserId && item.status === STATUS.WAITING_MANAGER_APPROVE">
+                            <button type="button" mat-mini-fab color="primary"
+                                    (click)="approve(item, true)">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <button type="button" mat-mini-fab color="warn"
+                                    (click)="approve(item, false)">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="currentUser?.id === item.userId && item.status === STATUS.WAITING_MANAGER_APPROVE">
+                            <button type="button" mat-mini-fab color="primary" (click)="edit(item)">
+                                <i class="fa fa-edit"></i></button>
+                            <button type="button" mat-mini-fab color="warn" (click)="delete(item)"><i
+                                class="fa fa-trash-o"></i></button>
+                        </ng-container>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ghm-paging [totalRows]="totalRows$ | async" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" [pageName]="'đăng ký làm thêm giờ'"></ghm-paging>
+</div>
+
+<nh-modal #registerFormModal size="md">
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-icon-clock"></i>
+            Đăng ký làm thêm giờ
+        </h4>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" *ngIf="(listShift$ | async)?.length === 0 || (listShift$ | async) == null">
+                <div class="col-sm-12">
+                    <div class="alert alert-danger">
+                        Xin lỗi: Bạn chưa được cấu hình ca làm việc. Vui lòng liên hệ với bộ phận nhân sự để được trợ giúp.
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Ngày" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <nh-date
+                        title="Chọn thời gian"
+                        formControlName="registerDate"
+                        [type]="'inputButton'"></nh-date>
+                    <!--<div class="alert alert-danger"-->
+                         <!--*ngIf="formErrors.registerDate">-->
+                        <!--{{ formErrors.registerDate}}-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Ca làm việc" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <div class="btn-group" role="group" *ngFor="let shift of listShift$ | async">
+                        <button type="button" class="btn btn-default"
+                                [class.active]="model.value.shiftId === shift.id"
+                                (click)="model.patchValue({shiftId: shift.id})">{{shift.name}}
+                        </button>
+                    </div>
+                    <!--<div class="alert alert-danger"-->
+                         <!--*ngIf="formErrors.shiftId">-->
+                        <!--{{ formErrors.shiftId}}-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Từ" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-sm-4">
+                    <div class="row" formGroupName="from">
+                        <div class="col-sm-12">
+                            <div class="input-group-input" role="group">
+                                <input class="form-control w70" formControlName="hour" placeholder="Giờ" type="text">
+                                <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                <input class="form-control w70" formControlName="minute" placeholder="Phút" type="text">
+                            </div>
+                            <!--<div class="alert alert-danger"-->
+                                 <!--*ngIf="formErrors.from.hour || formErrors.from.minute">-->
+                                <!--{{ formErrors.from.hour }} {{ formErrors.from.minute }}-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+                <label ghmLabel="Đến" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-sm-4">
+                    <div class="row" formGroupName="to">
+                        <div class="col-sm-12">
+                            <div class="input-group-input" role="group">
+                                <input class="form-control w70" formControlName="hour" placeholder="Giờ" type="text">
+                                <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                <input class="form-control w70" formControlName="minute" placeholder="Phút" type="text">
+                            </div>
+                            <!--<div class="alert alert-danger"-->
+                                 <!--*ngIf="formErrors.to.hour || formErrors.to.minute">-->
+                                <!--{{ formErrors.to.hour }} {{ formErrors.to.minute }}-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10 col-sm-9 col-md-offset-2 col-sm-offset-3">
+                    Tổng số phút: {{totalMinutes}}
+                    <span *ngIf="totalMinutes == ''" class="color-red">Giá trị thời gian "từ" không được phép lớn hơn giá trị thời gian "đến"</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Hình thức" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <nh-select
+                        title="-- Chọn hình thức làm thêm --"
+                        [data]="listType"
+                        formControlName="type">
+                    </nh-select>
+                    <!--<div class="alert alert-danger"-->
+                         <!--*ngIf="formErrors.type">-->
+                        <!--{{ formErrors.type}}-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="" class="col-md-2 col-sm-3 control-label"></label>
+                <div class="col-md-10 col-sm-9">
+                    <textarea class="form-control" rows="3" placeholder="Nội dung ghi chú"
+                              formControlName="note"></textarea>
+                </div>
+            </div>
+        </nh-modal-content>
+        <!--<nh-modal-footer>-->
+            <!--<button mat-raised-button color="primary">-->
+                <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+                <!--<i class="fa fa-send" *ngIf="!isSaving"></i>-->
+                <!--Gửi-->
+            <!--</button>-->
+            <!--<button mat-raised-button type="button" nh-dismiss="true">-->
+                <!--<i class="fa fa-times"></i>-->
+                <!--Đóng lại-->
+            <!--</button>-->
+        <!--</nh-modal-footer>-->
+    </form>
+</nh-modal>
+
+<nh-modal #detailModal size="md" (hidden)="onDetailModalHidden()">
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-register"></i>
+            Chi tiết đăng ký làm thêm giờ của nhân viên: "{{overtimeRegister?.fullName}}"
+        </h4>
+    </nh-modal-header>
+
+    <nh-modal-content class="form">
+        <div class="form-horizontal form-bordered">
+            <div class="form-body">
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Ngày"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{overtimeRegister?.registerDate | dateTimeFormat:'DD/MM/YYYY hh:mm'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Ca làm việc"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{overtimeRegister?.shiftReportName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Từ"></label>
+                    <div class="col-sm-2">
+                        <div class="bold">
+                            {{overtimeRegister?.from.hour}}
+                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                            {{overtimeRegister?.from.minute}}
+                        </div>
+                    </div>
+                    <label for="" [class]="'col-sm-2 control-label'"
+                           text="Đến"></label>
+                    <div class="col-sm-4">
+                        <div class="bold">
+                            {{overtimeRegister?.to.hour}}
+                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                            {{overtimeRegister?.to.minute}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Tổng số phút"></label>
+                    <div class="col-sm-9 col-md-10">
+                        <div class="bold">
+                            {{overtimeRegister?.totalMinutesText}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Hình thức"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{overtimeRegister?.typeText}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Ghi chú"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold height-auto">
+                            {{overtimeRegister?.note}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Trạng thái"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold"
+                             [class.color-green]="overtimeRegister?.status === STATUS.MANAGER_APPROVE"
+                             [class.color-red]="overtimeRegister?.status === STATUS.MANAGER_DECLINE">
+                            {{overtimeRegister?.statusText}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="overtimeRegister.status === STATUS.MANAGER_DECLINE">
+                    <label [class]="'col-md-2 col-sm-3 control-label'"
+                           text="Lý do"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold auto-height">
+                            {{overtimeRegister?.declineReason}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button mat-raised-button color="primary"
+                *ngIf="currentUser?.id === overtimeRegister?.managerUserId && overtimeRegister?.status === STATUS.WAITING_MANAGER_APPROVE"
+                (click)="approve(overtimeRegister, true, true)">
+            <i class="fa fa-check"></i>
+            Duyệt
+        </button>
+        <button mat-raised-button color="warn"
+                *ngIf="currentUser?.id === overtimeRegister?.managerUserId && overtimeRegister?.status === STATUS.WAITING_MANAGER_APPROVE"
+                (click)="approve(overtimeRegister, false, true)">
+            <i class="fa fa-times"></i>
+            Không duyệt
+        </button>
+        <button type="button" mat-raised-button color="default" nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

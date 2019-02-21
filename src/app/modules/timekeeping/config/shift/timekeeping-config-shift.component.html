@@ -1,0 +1,607 @@
+<div class="portlet light bordered portlet-holiday">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="far fa-calendar-check"></i>
+            <span class="caption-subject bold uppercase"> Cấu hình ca làm việc.</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <mat-tab-group>
+            <mat-tab class="tab-shift-group">
+                <ng-template mat-tab-label>
+                    <i class="fa fa-th-list cm-mgr-5"></i> Danh sách nhóm ca làm việc
+                </ng-template>
+                <div class="cm-pdt-10">
+                    <div class="text-right cm-mgb-10">
+                        <button mat-raised-button color="primary" type="button" (click)="showShiftGroupFormModal()">
+                            <i class="fa fa-plus"></i>
+                            Thêm nhóm
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th class="center w50">STT</th>
+                                <th class="center">Tên nhóm</th>
+                                <th class="center">Mô tả</th>
+                                <th class="center w100">Sử dụng</th>
+                                <th class="center w100"></th>
+                            </tr>
+                            </thead>
+                            <tbody *ngIf="isSearchingShiftGroup">
+                            <tr>
+                                <td colspan="5">
+                                    <div class="spinner">
+                                        <div class="rect1"></div>
+                                        <div class="rect2"></div>
+                                        <div class="rect3"></div>
+                                        <div class="rect4"></div>
+                                        <div class="rect5"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody
+                                *ngIf="listShiftGroups.length === 0 && !isSearchingShiftGroup; else shiftGroupContentTemplate">
+                            <tr>
+                                <td colspan="5" class="center bold">
+                                    Chưa cấu hình nhóm ca làm việc click
+                                    <a href="javascript://" (click)="showShiftGroupFormModal()">vào đây</a>
+                                    để thêm cấu hình nhóm ca làm việc
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <ng-template #shiftGroupContentTemplate>
+                            <tbody>
+                            <tr *ngFor="let shiftGroup of listShiftGroups; let i = index">
+                                <td class="center">{{ i + 1 }}</td>
+                                <td>
+                                    what the fuck?
+                                    <a href="javascript://" (click)="editGroup(shiftGroup)">{{ shiftGroup.name }}</a>
+                                </td>
+                                <td>{{ shiftGroup.description }}</td>
+                                <td class="center">
+                                    <mat-checkbox color="primary" [checked]="shiftGroup.isActive"
+                                                  (change)="updateGroupActive(shiftGroup)"
+                                    ></mat-checkbox>
+                                </td>
+                                <td class="center">
+                                    <button type="button" mat-mini-fab color="primary"
+                                            matTooltip="Sửa" matTooltipPosition="above"
+                                            (click)="editGroup(shiftGroup)">
+                                        <!--<i class="fa fa-edit"></i>-->
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button type="button" mat-mini-fab color="warn"
+                                            matTooltip="Xóa" matTooltipPosition="above"
+                                            (click)="deleteGroup(shiftGroup)">
+                                        <!--<i class="fa fa-trash-o"></i>-->
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                            </ng-template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- END: .table-responsive -->
+            </mat-tab><!-- END: .tab-shift-group -->
+            <mat-tab class="tab-shift">
+                <ng-template mat-tab-label>
+                    <i class="fa fa-codepen cm-mgr-5"></i> Danh sách ca làm việc
+                </ng-template>
+                <div class="text-right cm-mgb-10 cm-pdt-10">
+                    <button mat-raised-button color="primary" type="button" (click)="showShiftFormModal()">
+                        <i class="fa fa-plus cm-mgr-5"></i>
+                        Thêm ca làm việc
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center w50">STT</th>
+                            <th class="center">Tên ca</th>
+                            <th class="center">Vào</th>
+                            <th class="center">Ra</th>
+                            <th class="center"></th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="listShifts.length === 0; else shiftContentTemplate">
+                        <tr>
+                            <td colspan="5" class="bold center">
+                                Chưa cấu hình ca làm việc click
+                                <a href="javascript://" (click)="showShiftFormModal()">vào đây</a>
+                                để thêm cấu hình ca làm việc
+                            </td>
+                        </tr>
+                        </tbody>
+                        <ng-template #shiftContentTemplate>
+                            <tbody>
+                            <tr *ngFor="let shift of listShifts; let i = index">
+                                <td class="center">{{i+1}}</td>
+                                <td>
+                                    <a href="javascript://" (click)="edit(shift)">{{shift.name}}</a>
+                                </td>
+                                <td class="text-right">{{shift.startTime?.hour}}:{{shift.startTime?.minute}}</td>
+                                <td class="text-right">{{shift.endTime?.hour}}:{{shift.endTime?.minute}}</td>
+                                <td class="center w100">
+                                    <button type="button" mat-mini-fab color="primary" (click)="edit(shift)"
+                                            matTooltip="Sửa" matTooltipPosition="above">
+                                        <!--<i class="fa fa-edit"></i>-->
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button type="button" mat-mini-fab color="warn" (click)="delete(shift)"
+                                            matTooltip="Xóa" matTooltipPosition="above">
+                                        <!--<i class="fa fa-trash-o"></i>-->
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </ng-template>
+                    </table>
+                </div>
+            </mat-tab><!-- END: .tab-shift -->
+        </mat-tab-group>
+
+        <nh-modal #timekeepingShiftGroupModal (onShown)="onGroupModalShow()" [size]="'md'">
+            <nh-modal-header [showCloseButton]="true">
+                <h4 class="title">
+                    <i class="fa fa-th-list"></i>
+                    Danh sách nhóm ca làm việc
+                </h4>
+            </nh-modal-header>
+            <nh-modal-content>
+                <div class="text-right cm-mgb-10">
+                    <button class="btn btn-primary" type="button" (click)="showShiftGroupFormModal()">
+                        <i class="fa fa-plus"></i>
+                        Thêm mới nhóm
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center w50">STT</th>
+                            <th class="center">Tên nhóm</th>
+                            <th class="center">Mô tả</th>
+                            <th class="center w100">Sử dụng</th>
+                            <th class="center w100"></th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="isSearchingShiftGroup">
+                        <tr>
+                            <td colspan="5">
+                                <div class="spinner">
+                                    <div class="rect1"></div>
+                                    <div class="rect2"></div>
+                                    <div class="rect3"></div>
+                                    <div class="rect4"></div>
+                                    <div class="rect5"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody
+                            *ngIf="listShiftGroups.length === 0 && !isSearchingShiftGroup; else shiftGroupContentTemplate">
+                        <tr>
+                            <td colspan="5" class="center bold">
+                                Chưa cấu hình nhóm ca làm việc click
+                                <a href="javascript://" (click)="showShiftGroupFormModal()">vào đây</a>
+                                để thêm cấu hình ca làm việc
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <ng-template #shiftGroupContentTemplate>
+                        <tbody>
+                        <tr *ngFor="let shiftGroup of listShiftGroups; let i = index">
+                            <td class="center">{{ i + 1 }}</td>
+                            <td>{{ shiftGroup.name }}</td>
+                            <td>{{ shiftGroup.description }}</td>
+                            <td class="center">
+                                <mat-checkbox color="primary" [checked]="shiftGroup.isActive"
+                                              (change)="updateGroupActive(shiftGroup)"
+                                ></mat-checkbox>
+                            </td>
+                            <td class="center w100">
+                                <button type="button"
+                                        mat-mini-fab color="primary"
+                                        (click)="editGroup(shiftGroup)">
+                                    <!--<i class="fa fa-edit"></i>-->
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn btn-danger btn-sm"
+                                        mat-mini-fab color="warn"
+                                        (click)="deleteGroup(shiftGroup)">
+                                    <!--<i class="fa fa-trash-o"></i>-->
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                        </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+            </nh-modal-content>
+            <nh-modal-footer>
+                <button type="button"
+                        mat-raised-button color="default"
+                        nh-dismiss="true">
+                    <!--<i class="fa fa-times"></i>-->
+                    <mat-icon>close</mat-icon>
+                    Đóng lại
+                </button>
+            </nh-modal-footer>
+        </nh-modal><!-- END: timekeepingShiftGroupModal -->
+
+        <nh-modal #timekeepingShiftFormModal [size]="'md'"
+                  (show)="onShowShiftFormModal()"
+                  (hidden)="onHiddenModal()">
+            <nh-modal-header [showCloseButton]="true">
+                <h4 class="title">
+                    <i class="fa"
+                       [class.fa-plus]="!isUpdate"
+                       [class.fa-edit]="isUpdate"
+                    ></i>
+                    <span *ngIf="isUpdate; else addNewTextTemplate">Cập nhật ca làm việc</span>
+                    <ng-template #addNewTextTemplate>
+                        Thêm mới ca làm việc
+                    </ng-template>
+                </h4>
+            </nh-modal-header>
+            <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="formModel">
+                <nh-modal-content>
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>Thông tin ca làm việc
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                <label for="" class="col-md-3 col-sm-4 control-label" [required]="true"
+                                       ghmLabel="Tên ca làm việc"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <input type="text" class="form-control" id="shiftName"
+                                           placeholder="Nhập tên ca làm việc" formControlName="name">
+                                    <div class="alert alert-danger" *ngIf="formErrors.name && isSubmitted">
+                                        {{ formErrors.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-md-3 col-sm-4 control-label" [required]="true"
+                                       ghmLabel="Tên báo cáo"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <input class="form-control" id="reportName"
+                                           placeholder="Nhập tên ca làm việc" formControlName="reportName">
+                                    <div class="alert alert-danger" *ngIf="formErrors.reportName && isSubmitted">
+                                        {{ formErrors.reportName }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-md-3 col-sm-4 control-label" [required]="true"
+                                       ghmLabel="Mã ca"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <input type="text" class="form-control" id="shiftCode"
+                                           placeholder="Nhập ký hiệu ca VD: S - Ca sáng C - Ca chiều T - Ca tối"
+                                           formControlName="code">
+                                    <div class="alert alert-danger" *ngIf="formErrors.code && isSubmitted">
+                                        {{ formErrors.code }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-md-3 col-sm-4 control-label"
+                                       ghmLabel="Là ca gối của ca"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <nh-select
+                                        [data]="listShifts"
+                                        [title]="'-- Vui lòng chọn ca --'"
+                                        formControlName="referenceId"
+                                    ></nh-select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-md-3 col-sm-4 control-label"
+                                       ghmLabel="Thời gian được phép"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Thời gian được phép đi trê"
+                                               formControlName="inLatency">
+                                        <span class="input-group-addon">Phút đi trễ</span>
+                                        <input type="text" class="form-control" placeholder="Thời gian được phép về sớm"
+                                               formControlName="outLatency">
+                                        <span class="input-group-addon">Phút về sớm</span>
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.inLatency && isSubmitted">
+                                        {{ formErrors.inLatency }}
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.outLatency && isSubmitted">
+                                        {{ formErrors.outLatency }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="ccol-md-2 col-sm-4 control-label" ghmLabel="Giờ bắt đầu ca"
+                                       [required]="true"></label>
+                                <div class="col-sm-8 col-md-3" formGroupName="startTime">
+                                    <div class="input-group-input" role="group">
+                                        <input type="text" class="form-control w70" placeholder="Giờ"
+                                               formControlName="hour">
+                                        <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                        <input type="text" class="form-control w70" placeholder="Phút"
+                                               formControlName="minute">
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.startTime.hour && isSubmitted">
+                                        {{ formErrors.startTime.hour }}
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.startTime.minute && isSubmitted">
+                                        {{ formErrors.startTime.minute }}
+                                    </div>
+                                </div>
+                                <label for="" class="col-md-2 col-sm-4 control-label" ghmLabel="Giờ kết thúc ca"
+                                       [required]="true"></label>
+                                <div class="col-sm-8 col-md-4" formGroupName="endTime">
+                                    <div class="input-group-input" role="group">
+                                        <input type="text" class="form-control w70" placeholder="Giờ"
+                                               formControlName="hour">
+                                        <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                        <input type="text" class="form-control w70" placeholder="Phút"
+                                               formControlName="minute">
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.endTime.hour && isSubmitted">
+                                        {{ formErrors.endTime.hour }}
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.endTime.minute && isSubmitted">
+                                        {{ formErrors.endTime.minute }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="" ghmLabel="Tính" [required]="true"></label>
+                                <div class="col-sm-8 col-md-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control"
+                                               placeholder="Nhập số công sẽ được tính cho ca làm việc này"
+                                               formControlName="workUnit">
+                                        <span class="input-group-addon">Công</span>
+                                    </div>
+                                    <div class="alert alert-danger" *ngIf="formErrors.workUnit && isSubmitted">
+                                        {{ formErrors.workUnit }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>Thời gian hiểu ca
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div formGroupName="meaningTime">
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 col-sm-4 control-label" ghmLabel="Giờ bắt đầu ca vào"
+                                           [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9" formGroupName="startTimeIn">
+                                        <div class="input-group-input" role="group">
+                                            <input type="text" class="form-control w70" placeholder="Giờ"
+                                                   formControlName="hour">
+                                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                            <input type="text" class="form-control w70" placeholder="Phút"
+                                                   formControlName="minute">
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.startTimeIn.hour && isSubmitted">
+                                            {{ formErrors.meaningTime.startTimeIn.hour }}
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.startTimeIn.minute && isSubmitted">
+                                            {{ formErrors.meaningTime.startTimeIn.minute }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 col-sm-4 control-label" ghmLabel="Giờ kết thúc ca vào"
+                                           [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9" formGroupName="endTimeIn">
+                                        <div class="input-group-input" role="group">
+                                            <input type="text" class="form-control w70" placeholder="Giờ"
+                                                   formControlName="hour">
+                                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                            <input type="text" class="form-control w70" placeholder="Phút"
+                                                   formControlName="minute">
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.endTimeIn.hour && isSubmitted">
+                                            {{ formErrors.meaningTime.endTimeIn.hour }}
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.endTimeIn.minute && isSubmitted">
+                                            {{ formErrors.meaningTime.endTimeIn.minute }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 col-sm-4 control-label" ghmLabel="Giờ bắt đầu ca ra"
+                                           [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9" formGroupName="startTimeOut">
+                                        <div class="input-group-input" role="group">
+                                            <input type="text" class="form-control w70" placeholder="Giờ"
+                                                   formControlName="hour">
+                                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                            <input type="text" class="form-control w70" placeholder="Phút"
+                                                   formControlName="minute">
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.startTimeOut.hour && isSubmitted">
+                                            {{ formErrors.meaningTime.startTimeOut.hour }}
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.startTimeOut.minute && isSubmitted">
+                                            {{ formErrors.meaningTime.startTimeOut.minute }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-md-3 col-sm-4 control-label" ghmLabel="Giờ kết thúc ca ra"
+                                           [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9" formGroupName="endTimeOut">
+                                        <div class="input-group-input" role="group">
+                                            <input type="text" class="form-control w70" placeholder="Giờ"
+                                                   formControlName="hour">
+                                            <span class="cm-pdt-10 cm-pdl-5 cm-pdr-5">:</span>
+                                            <input type="text" class="form-control w70" placeholder="Phút"
+                                                   formControlName="minute">
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.endTimeOut.hour && isSubmitted">
+                                            {{ formErrors.meaningTime.endTimeOut.hour }}
+                                        </div>
+                                        <div class="alert alert-danger"
+                                             *ngIf="formErrors.meaningTime.endTimeOut.minute && isSubmitted">
+                                            {{ formErrors.meaningTime.endTimeOut.minute }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-md-9 col-sm-offset-4 col-md-offset-3">
+                                    <mat-slide-toggle color="primary" formControlName="isOvertime">Ca này được tính là
+                                        làm thêm giờ
+                                    </mat-slide-toggle>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nh-modal-content>
+                <nh-modal-footer>
+                    <button type="submit" mat-raised-button color="primary">
+                        <!--<i class="fa fa-save" *ngIf="!isSaving"></i>-->
+                        <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+                        <mat-icon>save</mat-icon>
+                        Lưu lại
+                    </button>
+                    <button type="button" mat-raised-button nh-dismiss="true">
+                        <!--<i class="fa fa-times"></i>-->
+                        <mat-icon>close</mat-icon>
+                        Đóng lại
+                    </button>
+                </nh-modal-footer>
+            </form>
+        </nh-modal><!-- END: timekeepingShiftFormModal -->
+
+        <nh-modal #timekeepingShiftGroupFormModal [size]="'sm'" (hidden)="onHiddenModal()">
+            <nh-modal-header [showCloseButton]="true">
+                <h4 class="title">
+                    <i class="fa"
+                       [class.fa-plus]="!isUpdate"
+                       [class.fa-edit]="isUpdate"
+                    ></i>
+                    <span *ngIf="isUpdate; else addNewTextTemplate">Cập nhật nhóm</span>
+                    <ng-template #addNewTextTemplate>
+                        Thêm mới nhóm
+                    </ng-template>
+                </h4>
+            </nh-modal-header>
+            <form class="form-horizontal" (ngSubmit)="saveGroup()" [formGroup]="groupFormModel">
+                <nh-modal-content>
+                    <div class="form-group">
+                        <label for="" class="col-md-3 col-sm-4 control-label" [required]="true"
+                               ghmLabel="Tên nhóm"></label>
+                        <div class="col-sm-8 col-md-9">
+                            <input type="text" class="form-control" id="shiftGroupName"
+                                   placeholder="Nhập tên nhóm ca làm việc"
+                                   formControlName="name">
+                            <div class="alert alert-danger" *ngIf="groupFormErrors.name && isSubmitted">
+                                {{ groupFormErrors.name }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-md-3 col-sm-4 control-label"
+                               ghmLabel="Mô tả"></label>
+                        <div class="col-sm-8 col-md-9">
+                            <textarea type="text" class="form-control" id="shiftGroupDescription"
+                                      placeholder="Nhập mô tả nhóm ca làm việc"
+                                      formControlName="description"></textarea>
+                            <div class="alert alert-danger" *ngIf="groupFormErrors.description && isSubmitted">
+                                {{ groupFormErrors.description }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-md-9 col-sm-offset-4 col-md-offset-3">
+                            <mat-slide-toggle color="primary" formControlName="isActive">Sử dụng nhóm này
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="" class="col-md-3 col-sm-4 control-label"
+                               ghmLabel="Ca làm việc"></label>
+                        <div class="col-sm-8 col-md-9">
+                            <nh-select
+                                #selectShiftDropdown
+                                [multiple]="true"
+                                [data]="listShifts"
+                                [title]="'-- Chọn ca làm việc --'"
+                                (onSelectItem)="onSelectShift($event)"
+                            ></nh-select>
+                            <div class="alert alert-danger" *ngIf="groupFormErrors.shifts && isSubmitted">
+                                {{ groupFormErrors.shifts }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-md-9 col-sm-offset-4 col-md-offset-3">
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="center w50">STT</th>
+                                    <th class="center">Tên ca</th>
+                                    <th class="center">Mã ca</th>
+                                    <th class="center w100">Vào</th>
+                                    <th class="center w100">Ra</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let item of groupFormModel.value.shifts; let i = index">
+                                    <td class="center">{{i+ 1}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td class="center">{{item.code}}</td>
+                                    <td>{{item.startTime.hour}}:{{item.startTime.minute}}</td>
+                                    <td>{{item.endTime.hour}}:{{item.endTime.minute}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </nh-modal-content>
+                <nh-modal-footer>
+                    <button type="submit" mat-raised-button color="primary">
+                        <!--<i class="fa fa-save" *ngIf="!isSaving"></i>-->
+                        <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+                        <mat-icon>save</mat-icon>
+                        Lưu lại
+                    </button>
+                    <button type="button" mat-raised-button nh-dismiss="true">
+                        <!--<i class="fa fa-times"></i>-->
+                        <mat-icon>close</mat-icon>
+                        Đóng lại
+                    </button>
+                </nh-modal-footer>
+            </form>
+        </nh-modal><!-- END: timekeepingShiftGroupFormModal -->
+    </div>
+</div><!-- END: .portlet-shift -->

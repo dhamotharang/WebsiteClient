@@ -1,0 +1,248 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@roleFormPageTitle">{isUpdate, select, 0 {Add new role} 1 {Update role}}</span>
+    <small i18n="@@configModuleTitle">Configs</small>
+</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+            <div class="form-body">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-red-sunglo">
+                            <i class="icon-share font-red-sunglo"></i>
+                            <span class="caption-subject bold uppercase" i18n="@@roleInfo"> Role info </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <ghm-alert [type]="message?.type" *ngIf="message?.content"
+                                           i18n="@@roleFormMessage">
+                                    {
+                                    message?.content, select,
+                                    inValid {Please select at least permission for each page.}
+                                    selectOne {Please select at least one page.}
+                                    }
+                                </ghm-alert>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.has-error]="formErrors.name">
+                            <label i18n-ghmLabel="@@roleName" ghmLabel="Role name" class="col-sm-4 control-label"
+                                   [required]="true"></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"
+                                       i18n-placeholder="@@enterRoleNamePlaceholder"
+                                       placeholder="Enter role name." id="name"
+                                       formControlName="name">
+                                <span class="help-block"
+                                      i18n="@@roleNameValidationMessage" *ngIf="formErrors.name">
+                                {formErrors.name, sroleelect, required {Role name can not be null} maxlength {Role name not allowed over 256 characters} other {}}
+                        </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [class.has-error]="formErrors.description">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-4 control-label"
+                                   [required]="true"></label>
+                            <div class="col-sm-8">
+                                    <textarea class="form-control" rows="3"
+                                              i18n-placeholder="@@enterDescriptionPlaceHolder"
+                                              placeholder="Enter description."
+                                              formControlName="description"></textarea>
+                                <span class="help-block" i18n="@@roleDescriptionValidationMessage"
+                                      *ngIf="formErrors.description">
+                            {formErrors.description, select, maxlength {Role name not allowed over 256 characters}}
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="form-group">-->
+                <!--<label i18n-ghmLabel="@@pages" ghmLabel="Pages" class="col-sm-4 control-label"></label>-->
+                <!--<div class="col-sm-8">-->
+                <!--<button type="button" class="btn btn-primary cm-mgb-10" i18n="@@selectPage"-->
+                <!--(click)="showSelectPage()">Select page-->
+                <!--</button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption font-red-sunglo">
+                                    <i class="icon-share font-red-sunglo"></i>
+                                    <span class="caption-subject bold uppercase" i18n="@@pages"> Pages</span>
+                                </div>
+                                <div class="actions">
+                                    <a href="javascript:;" class="btn btn-circle blue btn-outline" i18n="@@add"
+                                       (click)="showSelectPage()">
+                                        Add
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th class="center" i18n="@@No">No</th>
+                                            <th class="" i18n="@@pageName">Page name</th>
+                                            <th class="center" i18n="@@full">Full</th>
+                                            <th class="center" i18n="@@view">View</th>
+                                            <th class="center" i18n="@@insert">Add</th>
+                                            <th class="center" i18n="@@update">Edit</th>
+                                            <th class="center" i18n="@@delete">Delete</th>
+                                            <th class="center" i18n="@@export">Export</th>
+                                            <th class="center" i18n="@@print">Print</th>
+                                            <th class="center" i18n="@@approve">Approve</th>
+                                            <th class="center" i18n="@@report">Report</th>
+                                            <th class="center" i18n="@@actions">Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let page of selectedPages; let i = index">
+                                            <td class="center middle w50">{{ i + 1 }}</td>
+                                            <td class="middle">
+                                                <span [innerHTML]="page.pageName"></span>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.full"
+                                                              (change)="changeFullPermission(page)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.view"
+                                                              (change)="changePermission(page, permissionConst.view)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.add"
+                                                              (change)="changePermission(page, permissionConst.add)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.edit"
+                                                              (change)="changePermission(page, permissionConst.edit)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.delete"
+                                                              (change)="changePermission(page, permissionConst.delete)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.export"
+                                                              (change)="changePermission(page, permissionConst.export)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.print"
+                                                              (change)="changePermission(page, permissionConst.print)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.approve"
+                                                              (change)="changePermission(page, permissionConst.approve)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <mat-checkbox [(checked)]="page.report"
+                                                              (change)="changePermission(page, permissionConst.report)"
+                                                              color="primary"></mat-checkbox>
+                                            </td>
+                                            <td class="center middle w50">
+                                                <button type="button" class="btn btn-sm btn-danger"
+                                                        (click)="deletePage(page)">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END: list pages -->
+                    <div class="col-sm-6">
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption font-red-sunglo">
+                                    <i class="icon-share font-red-sunglo"></i>
+                                    <span class="caption-subject bold uppercase" i18n="@@users"> Users</span>
+                                </div>
+                                <div class="actions">
+                                    <a href="javascript:;" class="btn btn-circle blue btn-outline" i18n="@@add"
+                                       (click)="showUsers()">
+                                        Add
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="wrapper-list-users cm-pdl-0">
+                                    <li class="user-item" *ngFor="let user of listSelectedUsers">
+                                        <div class="avatar-wrapper">
+                                            <img class="avatar-sm rounded-avatar"
+                                                 ghmImage
+                                                 src="{{ user.avatar }}"
+                                                 alt="{{ user.fullName }}">
+                                        </div><!-- END: .avatar-wrapper -->
+                                        <div class="user-info">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" focusable="false"
+                                                 role="presentation"
+                                                 (click)="removeUser(user.id)">
+                                                <path
+                                                        d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                                                        fill="currentColor">
+                                                </path>
+                                            </svg>
+                                            <span class="full-name">{{ user.fullName }}</span>
+                                            <div class="description"> {{ user.description }}</div>
+                                        </div><!-- END: .info -->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!-- END: list users -->
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-4 text-right">
+                        <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                                      *ngIf="!isUpdate"
+                                      i18n="@@isCreateAnother"
+                                      class="cm-mgr-5"
+                                      color="primary">
+                            Create another
+                        </mat-checkbox>
+                        <ghm-button classes="btn btn-primary cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                            Save
+                        </ghm-button>
+                        <ghm-button type="button" classes="btn btn-default"
+                                    (click)="closeForm()"
+                                    i18n="@@cancel">
+                            Cancel
+                        </ghm-button>
+                    </div>
+                </div>
+            </div>
+        </form><!-- END form role info -->
+    </div>
+</div>
+
+<ghm-select-picker
+        title="Chọn trang phân quyền"
+        allTitle="Tất cả trang"
+        selectedTitle="Trang được chọn"
+        [source]="listPages"
+        (accepted)="onAcceptedSelectPage($event)"
+></ghm-select-picker>
+
+<nh-user-picker
+        i18n-title="@@selectParticipant"
+        i18n-allTitle="@@listUser"
+        i18n-selectedTitle="@@listSelectedUser"
+        title="Select participant"
+        allTitle="List user"
+        selectedTitle="List selected user"
+        [selectedItems]="listSelectedUsers"
+        (accepted)="onAcceptSelectUsers($event)"
+></nh-user-picker>

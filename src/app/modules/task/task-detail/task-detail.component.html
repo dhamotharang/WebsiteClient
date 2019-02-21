@@ -1,0 +1,419 @@
+<div class="row tasks-container">
+    <div class="col-sm-8">
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-clipboard"></i> Thay đổi giao diện phần mềm quản lý công việc.
+                </div>
+            </div>
+            <div class="portlet-body">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aperiam dolores eveniet
+                ex excepturi exercitationem reprehenderit rerum similique sint? Amet earum incidunt laborum
+                minus nihil optio repellendus velit voluptatem voluptatibus.
+            </div>
+        </div><!-- END: Main box -->
+        <div class="portlet box red">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-sad"></i> Lý do chậm tiến độ
+                </div>
+            </div>
+            <div class="portlet-body portlet-collapsed-on-mobile">
+                <div>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores commodi dicta dignissimos dolorem
+                    doloribus enim hic impedit, mollitia neque omnis pariatur placeat rem repellendus
+                    soluta sunt suscipit tempora unde voluptates.
+                </div>
+                <ul class="task-actions">
+                    <li>
+                        <a href="javascript://" class="btn btn-success">
+                            <i class="fa fa-check"></i>
+                            Duyệt
+                        </a>
+                        <a href="javascript://" class="btn btn-danger">
+                            <i class="fa fa-times"></i>
+                            Không duyệt
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-clipboard"></i> Tệp tin đính kèm
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-hover table-light">
+                            <thead>
+                            <tr>
+                                <th class="center w50">STT</th>
+                                <th>Tên tập tin</th>
+                                <th class="w150"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let attachment of listAttachments; let i = index">
+                                <td class="center middle">{{ i + 1 }}</td>
+                                <td><a href="javascript://">{{ attachment.name }}</a></td>
+                                <td class="center">
+                                    <button type="button" class="btn btn-default btn-sm">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-download"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabbable-custom ">
+                    <ul class="nav nav-tabs ">
+                        <li class="active">
+                            <a href="#tab_5_1" data-toggle="tab">
+                                <i class="fa fa-comments-o"></i>
+                                Bình luận
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab_5_2" data-toggle="tab">
+                                <i class="fa fa-history"></i>
+                                Lịch sử
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_5_1">
+                            <ul class="media-list comment-list">
+                                <li class="media">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                                 alt="Nguyễn Huy Hoàng">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <a href="javascript://" class="media-fullname">Nguyễn Huy Hoàng</a>
+                                            <small class="comment-time">1 giờ trước</small>
+                                        </h4>
+                                        <div class="comment-content">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
+                                            consectetur
+                                            eveniet labore laboriosam maxime qui quisquam reprehenderit
+                                            temporibus! Aliquam esse nemo tempora.
+                                            Ad eum iusto necessitatibus veniam. Laudantium, nisi, tenetur.
+                                        </div>
+                                        <div class="comment-footer">
+                                            <ul class="comment-actions">
+                                                <li>
+                                                    <a href="javascript://" class="active">
+                                                        <i class="fa fa-thumbs-o-up"></i>
+                                                        250
+                                                    </a>
+                                                    <a href="javascript://">
+                                                        <i class="fa fa-comments-o"></i>
+                                                        <span>Trả lời </span>250
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="comment-box-container">
+                                <textarea class="form-control" rows="3"
+                                          placeholder="Nhập nội dung bình luận."></textarea>
+                                <div class="comment-box-footer">
+                                    <ul class="comment-box-actions">
+                                        <li>
+                                            <a href="javascript://"><i class="fa fa-paperclip"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript://"><i class="fa fa-users"></i></a>
+                                        </li>
+                                        <li class="pull-right">
+                                            <button class="btn btn-primary">
+                                                Gửi bình luận
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_5_2">
+                            <p> Howdy, I'm in Section 2. </p>
+                            <p> Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis
+                                nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+                                vulputate velit esse molestie
+                                consequat. Ut wisi enim ad minim veniam, quis nostrud exerci tation. </p>
+                            <p>
+                                <a class="btn green" href="ui_tabs_accordions_navs.html#tab_5_2" target="_blank">
+                                    Activate this tab via URL </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-info"></i> Thông tin công việc
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Trạng thái
+                        </div>
+                        <div class="col-sm-8">
+                            <span class="color-blue">Đang xử lý</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Ngày tạo
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Nhóm công việc
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Thời gian bắt đầu
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Thời gian kết thúc
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Số ngày dự kiến
+                        </div>
+                        <div class="col-sm-8">
+                            1
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Ngày bắt đầu
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Ngày hoàn thành
+                        </div>
+                        <div class="col-sm-8">
+                            01/01/2018
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            Số ngày thực hiện
+                        </div>
+                        <div class="col-sm-8">
+                            1
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i> Người chịu trách nhiệm
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="media-list">
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <a href="javascript://" class="media-fullname">Nguyễn Huy Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i> Người tham gia
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="media-list">
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i> Người theo dõi
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="media-list">
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                            <li class="media">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object avatar" src="/assets/layouts/layout/img/photo2.jpg"
+                                             alt="Nguyễn Huy Hoàng">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="javascript://" class="media-fullname">Nguyễn Huy
+                                        Hoàng</a></h4>
+                                    <span>Lập trình viên</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

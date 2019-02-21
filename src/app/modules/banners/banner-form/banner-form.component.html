@@ -1,0 +1,121 @@
+<nh-modal #bannerFormModal size="lg"
+          (show)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header [showCloseButton]="true" class="uppercase">
+        {isUpdate, select, 0 {Add new banner} 1 {Update banner} other {}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.name">
+                <label i18n-ghmLabel="@@bannerGroup" ghmLabel="Banner Group" class="col-sm-3 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@bannerGroupPlaceHolder"
+                           id="name"
+                           placeholder="Please enter banner group"
+                           formControlName="name"/>
+                    <span class="help-block">{ formErrors?.name, select, required {Banner group is required} maxLength {Banner group not allowed
+                                                    over 256 characters}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label i18n-ghmLabel="@@typeBanner" class="col-sm-3 control-label" ghmLabel="Banner Type"
+                       [required]="true"></label>
+                <div class="col-sm-3" [class.has-error]="formErrors?.type">
+                    <nh-select
+                        i18n-title="@@bannerType"
+                        title="-- Please select banner type --"
+                        [data]="bannerTypes"
+                        formControlName="type"
+                    ></nh-select>
+                    <span class="help-block" >{ formErrors?.type, select, required {Type is required} isValid {Type is invalid}} </span>
+                </div>
+                <label i18n-ghmLabel="@@positionBanner" class="col-sm-3 control-label" ghmLabel="Banner Position"
+                       [required]="true"></label>
+                <div class="col-sm-3" [class.has-error]="formErrors?.position">
+                    <nh-select
+                            i18n-title="@@bannerPosition"
+                            title="-- Please select banner position --"
+                            [data]="positions"
+                            formControlName="position"
+                    ></nh-select>
+                    <span class="help-block" >{ formErrors?.position, select, required {Position is required} isValid {Position is invalid}} </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label i18n-ghmLabel="@@show" class="col-sm-3 control-label" ghmLabel="Show"></label>
+                <div class="col-sm-3" [class.has-error]="formErrors?.displayType">
+                    <nh-select
+                        i18n-title="@@show"
+                        title="-- Please select display type --"
+                        [data]="displayTypes"
+                        formControlName="displayType"
+                    ></nh-select>
+                    <span class="help-block" >{ formErrors?.displayType , select, required {Display type is required} isValid {Display type is invalid}}</span>
+                </div>
+                <label i18n-ghmLabel="@@effect" class="col-sm-3 control-label" ghmLabel="Effect"></label>
+                <div class="col-sm-3" [class.has-error]="formErrors?.effectType">
+                    <nh-select
+                            i18n-title="@@effectType"
+                            title="-- Please select effect type --"
+                            [data]="effectTypes"
+                            formControlName="effectType"></nh-select>
+                    <span class="help-block" *ngIf="formErrors?.effectType">{formErrors?.effectType, select, required {EffectType is required} isValid {EffectType is invalid}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.description">
+                <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <textarea type="text" class="form-control" i18n-placeholder="@@description"
+                              placeholder="Please enter description"
+                              formControlName="description" rows="3"></textarea>
+                    <span class="help-block">{ formErrors?.description, select, maxlength {Description not allowed
+                                                    over 500 characters}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-3">
+                    <mat-checkbox formControlName="isPopup" color="primary">
+                        {model.value.isPopup, select, 0 { Not Show popup} 1 {Show poppup}}
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-3">
+                    <mat-checkbox formControlName="isActive" color="primary">
+                        {model.value.isActive, select, 0 {InActive} 1 {Active}}
+                    </mat-checkbox>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <span class="caption-subject font-blue-sharp bold uppercase" i18n="@@listImage"> List image </span>
+            </div>
+            <div class="col-sm-12">
+                <app-banner-item [bannerId]="id" [listBannerItem]="listBannerItem"
+                                  (onSelectListBannerItem)="selectBannerItem($event)"></app-banner-item>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="submit"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@close">
+                    Close
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

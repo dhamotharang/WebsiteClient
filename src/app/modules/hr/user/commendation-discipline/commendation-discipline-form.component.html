@@ -1,0 +1,94 @@
+<h4 class="title">{{ modelForm.value.id ? 'Cập nhập quá trình công tác' : 'Thêm mới quá trình công tác' }}</h4>
+<hr/>
+<form class="form-horizontal" (ngSubmit)="save()" [formGroup]="modelForm" *ngIf="model">
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Hình thức"></label>
+        <div class="col-md-10 col-sm-9">
+            <nh-select [data]="[{id: false, name: 'Kỷ luật'}, {id: true, name: 'Khen thưởng'}]"
+                       [title]="'-- Chọn hình thức --'"
+                       (onSelectItem)="onSelectType($event)"
+                       formControlName="type" [width]="350"></nh-select>
+            <div class="alert alert-danger" *ngIf="formErrors.type">
+                {{ formErrors.type }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Mức độ"></label>
+        <div class="col-md-10 col-sm-9">
+            <nh-select [data]="listCategory"
+                       [title]="'-- Chọn mức độ --'"
+                       [isEnable]="isEnableCategory"
+                       formControlName="categoryId" [width]="350"></nh-select>
+            <div class="alert alert-danger" *ngIf="formErrors.categoryId">
+                {{ formErrors.categoryId }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Thời gian"></label>
+        <div class="col-md-10 col-sm-9">
+            <nh-date
+                formControlName="time"
+                [type]="'inputButton'"
+                [placeholder]="'Chọn thời gian'"
+                [mask]="true"></nh-date>
+            <div class="alert alert-danger" *ngIf="formErrors.time && isSubmitted">
+                {{ formErrors.time }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Quyết định số"></label>
+        <div class="col-md-10 col-sm-9">
+            <input type="text" class="form-control" formControlName="decisionNo"/>
+            <div class="alert alert-danger" *ngIf="formErrors.decisionNo">
+                {{ formErrors.decisionNo }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Mức khen thưởng/Kỷ luật"></label>
+        <div class="col-md-10 col-sm-9">
+            <!--<textarea class="form-control" formControlName="money"></textarea>-->
+            <input type="text" class="form-control" formControlName="money"/>
+            <div class="alert alert-danger" *ngIf="formErrors.money">
+                {{ formErrors.money }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 col-sm-3 control-label"
+               [required]="true"
+               ghmLabel="Lý do"></label>
+        <div class="col-md-10 col-sm-9">
+            <textarea class="form-control" formControlName="reason"></textarea>
+            <div class="alert alert-danger" *ngIf="formErrors.reason">
+                {{ formErrors.reason }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10 col-sm-9 col-md-offset-2 col-md-offset-3">
+            <button mat-raised-button color="primary" type="submit" [disabled]="isSaving">
+                <i class="fa fa-save" *ngIf="!isSaving"></i>
+                <i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>
+                Lưu lại
+            </button>
+            <button mat-raised-button color="accent" type="button" (click)="closeForm()" [disabled]="isSaving">
+                <i class="fa fa-times"></i>
+                Đóng lại
+            </button>
+        </div>
+    </div>
+</form>

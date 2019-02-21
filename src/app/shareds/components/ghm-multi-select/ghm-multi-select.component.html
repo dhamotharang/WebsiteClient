@@ -1,0 +1,57 @@
+<nh-modal #pickerModal size="md" id="pickerModal">
+    <nh-modal-header>
+        <i class="{{titleIcon}}"></i>
+        {{title}}
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="row">
+            <div class="col-sm-6 left-col">
+                <form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm"
+                               name="keyword" [(ngModel)]="keyword">
+                    </div>
+                    <div class="form-group">
+                        <ghm-button icon="fas fa-search" [loading]="isSearching">
+                            Tìm kiếm
+                        </ghm-button>
+                    </div>
+                </form><!-- END: form search -->
+                <hr>
+                <ul class="list-picker">
+                    <li *ngFor="let item of listItems$ | async" (click)="selectItem(item)">
+                        {{item.name}}
+                        <a href="javascript://" class="btn-action">
+                            Thêm
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6"
+                            (pageClick)="search($event)"
+                            [isShowSummary]="false"
+                            [isDisabled]="isSearching" pageName="Chuyên mục"></ghm-paging>
+            </div><!-- END: .left-col -->
+            <div class="col-sm-6 right-col">
+                <ul class="list-picker">
+                    <li *ngFor="let item of listSelected" (click)="removeItem(item)">
+                        {{item.name}}
+                        <a href="javascript://" class="btn-action">
+                            Xóa
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div><!-- END: .right-col -->
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button type="button" class="btn btn-primary" (click)="accept()">
+            <i class="fas fa-check"></i> Đồng ý
+        </button>
+        <button type="button" class="btn btn-default" nh-dismiss="true">
+            <i class="fas fa-times"></i> Hủy bỏ
+        </button>
+    </nh-modal-footer>
+</nh-modal>

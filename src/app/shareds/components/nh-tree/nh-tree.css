@@ -1,0 +1,102 @@
+ul.nh-tree {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+ul.nh-tree .nh-tree-icon,
+ul.nh-tree .nh-tree-node {
+  background-image: url("32px.png");
+  background-repeat: no-repeat;
+}
+ul.nh-tree li.nh-tree-node {
+  background-position: -292px -4px;
+  background-repeat: repeat-y;
+}
+ul.nh-tree li.nh-selected {
+  background-color: #ddd;
+  cursor: auto;
+}
+ul.nh-tree li:last-child {
+  background: none !important;
+}
+ul.nh-tree li .nh-tree-icon {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  display: inline-block;
+  background-position: -68px -4px;
+  float: left;
+}
+ul.nh-tree li .nh-tree-icon:hover {
+  cursor: pointer;
+}
+ul.nh-tree li .nh-tree-node-open {
+  background-position: -132px -4px !important;
+}
+ul.nh-tree li .nh-tree-node-close {
+  background-position: -100px -4px;
+}
+ul.nh-tree li .nh-tree-icon-folder {
+  background-position: -260px -4px;
+}
+ul.nh-tree li .nh-tree-icon-folder-open {
+  background-position: -260px -4px;
+}
+ul.nh-tree li .nh-icon-checkbox {
+  background-position: -166px -4px;
+}
+ul.nh-tree li .hh-icon-checkbox-checked {
+  background-position: -230px -4px;
+}
+ul.nh-tree li .nh-icon-child-check {
+  background-position: -196px -4px;
+}
+ul.nh-tree li a {
+  display: block;
+  vertical-align: top;
+  height: 24px;
+  line-height: 27px;
+  text-decoration: none;
+  padding: 0 4px 0 1px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+ul.nh-tree li a:hover {
+  background-color: #ddd;
+  cursor: auto;
+  text-decoration: none;
+}
+ul.nh-tree li a.nh-selected {
+  background-color: #ddd;
+}
+ul.nh-tree li ul.sub-tree {
+  list-style: none;
+  padding-left: 25px;
+  overflow: hidden;
+}
+.nh-tree-dropdown {
+  position: relative;
+}
+.nh-tree-dropdown button {
+  border-radius: 0;
+}
+.nh-tree-dropdown .nh-content-wrapper {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid #ddd;
+  min-width: 250px;
+  box-shadow: 5px 5px rgba(102, 102, 102, 0.1);
+  margin-bottom: 10px;
+  background: white;
+  z-index: 9999;
+  overflow: hidden;
+}
+.nh-tree-dropdown .nh-content-wrapper .nh-tree-content {
+  padding: 10px;
+}
+.nh-tree-dropdown .nh-content-wrapper .nh-tree-footer {
+  border-top: 1px solid #ddd;
+  padding: 10px;
+}

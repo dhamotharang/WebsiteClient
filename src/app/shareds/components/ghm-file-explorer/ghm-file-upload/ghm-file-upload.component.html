@@ -1,0 +1,11 @@
+<input
+    #fileInput
+    class="hidden"
+    type="file"
+    [attr.multiple]="multiple ? true : null"
+    (change)="onFileChange($event)">
+
+<button type="button" class="btn btn-blue" (click)="fileInput.click()">
+    <i class="fa fa-cloud-upload cm-mgr-5"></i>
+    <span i18n="@@chooseFile">Choose file</span>
+</button>

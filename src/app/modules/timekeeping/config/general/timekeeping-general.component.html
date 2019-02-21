@@ -1,0 +1,48 @@
+<div class="portlet light bordered portlet-holiday">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="fas fa-cogs"></span>
+            <span class="caption-subject bold uppercase"> Cấu hình chung.</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+            <div class="form-group">
+                <label for="" class="col-sm-4 control-label">Được phép đi sớm/về trễ</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Nhập số phút được phép đi sớm về muộn"
+                               formControlName="maxInOutMin">
+                        <span class="input-group-addon">Phút</span>
+                    </div>
+                    <div class="alert alert-danger" *ngIf="formErrors.maxInOutMin">
+                        {{ formErrors.maxInOutMin }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="" class="col-sm-4 control-label">Được phép đi trễ/về sớm</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control"
+                               placeholder="Nhập số lần tối đa được phép đi sớm về muộn."
+                               formControlName="maxInOutTimes">
+                        <span class="input-group-addon">Lần / Tháng</span>
+                    </div>
+                    <div class="alert alert-danger" *ngIf="formErrors.maxInOutTimes">
+                        {{ formErrors.maxInOutTimes }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <button mat-raised-button color="primary">
+                        <i class="fa fa-save" *ngIf="!isSaving"></i>
+                        <i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>
+                        Lưu lại
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!-- END: .portlet-config-symbol -->

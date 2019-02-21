@@ -1,0 +1,89 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listFeedbackCustomerPageTitle">Feedback</span>
+    <small i18n="@@customerModuleTitle">Customer management</small>
+</h1>
+
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@keywordSearch" i18n-placeholder
+               placeholder="Enter keyword for search please."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-date [(ngModel)]="fromDate"
+                 i18n-placeholder="@@selectFromDate"
+                 [format]="'DD/MM/YYYY'"
+                 [placeholder]="'Select from date'"
+                 (removedDateEvent)="search(1)"
+                 name="formDate"></nh-date>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-date [(ngModel)]="toDate"
+                 i18n-placeholder="@@selectToDate"
+                 [format]="'DD/MM/YYYY'"
+                 [placeholder]="'Select from date'"
+                 (removedDateEvent)="search(1)"
+                 name="toDate"></nh-date>
+    </div>
+    <div class="form-group">
+        <nh-select [data]="[{id: true, name: 'Đã giải quyết'}, {id: false, name: 'Chưa giải quyết'}]"
+                   [title]="'-- Tất cả --'" [(value)]="isResolve"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn blue" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+</form>
+
+<div class="">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="middle center w50" i18n="@@no">No</th>
+            <th class="middle" i18n="@@customerName">Customer Name</th>
+            <th class="middle" i18n="@@phoneNumber">Phone Number</th>
+            <th class="middle" i18n="@@email">Email</th>
+            <th class="middle w150" i18n="@@dateSend">Send date</th>
+            <!--<th class="middle center w50" i18n="@@isResolve">Is Resolve?</th>-->
+            <th class="middle center w50" *ngIf="permission.view || permission.edit">Sửa, Xóa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listFeedback; let i = index">
+            <td class=" middle center">{{(currentPage - 1) * pageSize + i + 1}}</td>
+            <td class="middle">
+                <a href="javascript://" (click)="detail(item)">{{item.fullName}}</a>
+            </td>
+            <td class="middle">
+                {{item.phoneNumber}}
+            </td>
+            <td class="middle">{{item.email}}</td>
+            <td class="middle">
+                {{item.createTime|dateTimeFormat:"DD/MM/YYYY hh:mm"}}
+            </td>
+            <!--<td class="middle center">-->
+                <!--<mat-checkbox color="primary" [checked]="item.isResolve"-->
+                              <!--(change)="updateResolve(item)"></mat-checkbox>-->
+            <!--</td>-->
+            <td class="middle center">
+                <ghm-button
+                    *ngIf="permission.view"
+                    icon="fa fa-eye" classes="btn default btn-sm"
+                    (clicked)="detail(item)"></ghm-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n="@@customer" i18n-pageName [pageName]="'Customer'"></ghm-paging>
+
+
+<app-customer-feedback-detail></app-customer-feedback-detail>

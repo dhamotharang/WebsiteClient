@@ -1,0 +1,307 @@
+<nh-modal #registerFormModal size="full"
+          (hidden)="onModalHidden()">
+    <nh-modal-header [showCloseButton]="true">
+        <h4 class="title uppercase bold" i18n="@@register">Register</h4>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-share font-green-sharp"></i>
+                                <span class="caption-subject bold uppercase"
+                                      i18n="@@eventDayInfo"> Event day info</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.role">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Role"
+                                       i18n-ghmLabel="@@role"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <nh-select
+                                            i18n-title="@@selectRole"
+                                            [title]="'-- Select role --'"
+                                            [data]="registerRoles"
+                                            formControlName="role"
+                                    ></nh-select>
+                                    <span class="help-block">
+                                        {
+                                            formErrors?.role,
+                                            select,
+                                            required {Please select role}
+                                            isValid {Phone number invalid}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.phoneNumber">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Phone number"
+                                       i18n-ghmLabel="@@phoneNumber"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <nh-suggestion
+                                            *ngIf="model.value.role === registerRole.customer; else formPhoneNumber"
+                                            [sources]="customerSuggestion"
+                                            (itemSelected)="onCustomerSelected($event)"
+                                            (itemRemoved)="onCustomerRemoved()"
+                                            (searched)="onSearchCustomer($event)"></nh-suggestion>
+                                    <span class="help-block">
+                                        {
+                                            formErrors?.phoneNumber,
+                                            select,
+                                            required {Please enter phone number}
+                                            maxLength {Phone number not allowed over 50 characters}
+                                            pattern {Phone number invalid}
+                                        }
+                                    </span>
+                                    <ng-template #formPhoneNumber>
+                                        <input type="text" class="form-control"
+                                               placeholder="Enter phone number"
+                                               i18n="@@enterPhoneNumberPlaceholder"
+                                               formControlName="phoneNumber">
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.fullName">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="FullName"
+                                       i18n-ghmLabel="@@fullName"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control"
+                                           placeholder="Enter fullname"
+                                           i18n="@@enterFullNamePlaceholder"
+                                           formControlName="fullName">
+                                    <span class="help-block">
+                                        {
+                                            formErrors?.fullName,
+                                            select,
+                                            required {Please select fullname}
+                                            maxLength {FullName not allowed over 50 characters}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.email">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Email"
+                                       i18n-ghmLabel="@@email"></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control"
+                                           placeholder="Enter email"
+                                           i18n="@@enterEmailPlaceholder"
+                                           formControlName="email">
+                                    <span class="help-block">
+                                        {
+                                            formErrors?.email,
+                                            select,
+                                            maxLength {Email not allowed over 500 characters}
+                                            pattern {Invalid email}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.address">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Address"
+                                       i18n-ghmLabel="@@address"></label>
+                                <div class="col-sm-8">
+                                    <textarea type="text" class="form-control height-auto"
+                                              placeholder="Enter address"
+                                              formControlName="address"
+                                              i18n="@@enterAddressPlaceholder"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="model.value.role !== registerRole.customer">
+                                <label i18n-ghmLabel="@@avatar" ghmLabel="Avatar"
+                                       class="col-sm-4 control-label"></label>
+                                <div class="col-sm-8">
+                                    <div class="cm-mgb-5">
+                                        <ghm-file-explorer
+                                                i18n-buttonText="@@chooseImage"
+                                                buttonText="Choose image"
+                                                (itemSelected)="onSelectedImage($event)"></ghm-file-explorer>
+                                        <button
+                                                *ngIf="model.value.thumbnail"
+                                                class="btn red cm-mgl-5"
+                                                i18n="@@removeThumbnail" (click)="removeThumbnail()">
+                                            Remove thumbnail
+                                        </button>
+                                    </div>
+                                    <div class="thumbnail-preview">
+                                        <img ghmImage [src]="model.value.avatar" alt="" [isUrlAbsolute]="true">
+                                    </div><!-- END: .thumbnail-preview -->
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.note">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Note"
+                                       i18n-ghmLabel="@@note"></label>
+                                <div class="col-sm-8">
+                                    <textarea type="text" class="form-control height-auto"
+                                              placeholder="Enter note"
+                                              formControlName="note"
+                                              i18n="@@enterNotePlaceholder"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-share font-green-sharp"></i>
+                                <span class="caption-subject bold uppercase"
+                                      i18n="@@eventDayInfo"> Event day info</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.eventDayRegisters">
+                                <div class="col-sm-12">
+                                    <ul class="ghm-list-item-container" formArrayName="eventDayRegisters">
+                                        <li class="help-block">
+                                            {formErrors?.eventDayRegisters, select, required {Please select at least
+                                            event
+                                            day.}}
+                                        </li>
+                                        <li *ngIf="eventDayRegisters?.length > 0">
+                                            <mat-checkbox color="primary" i18n="@@selectAll"
+                                                          [checked]="isSelectAll"
+                                                          (change)="changSelectAll()"> Select all
+                                            </mat-checkbox>
+                                        </li>
+                                        <li *ngFor="let eventDay of eventDayRegisters.controls; let i = index"
+                                            [formGroupName]="i">
+                                            <mat-checkbox
+                                                    color="primary"
+                                                    [checked]="eventDay?.value.isSelected"
+                                                    (change)="changeSelectStatus(eventDay)">
+                                                <span class="bold cm-mgr-5">{{ eventDay?.value.eventDayName }}</span>
+                                                <span>({{ eventDay?.value.eventDayDate | dateTimeFormat:'DD/MM/YYYY' }})</span>
+                                            </mat-checkbox>
+
+                                            <ul class="ghm-list-item-container" *ngIf="eventDay?.value.isSelected">
+                                                <li>
+                                                    <table class="table table-stripped table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th i18n="@@fullName">FullName</th>
+                                                            <th class="text-right" i18n="@@phoneNumber">Phone number
+                                                            </th>
+                                                            <th class="text-right" i18n="@@actions">Actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr *ngFor="let item of eventDay.value.accompanyPersons">
+                                                            <td>{{ item.fullName }}</td>
+                                                            <td class="text-right">{{ item.phoneNumber }}</td>
+                                                            <td class="text-right">
+                                                                <button type="button"
+                                                                        class="btn blue btn-outline btn-sm cm-mgr-5"
+                                                                        i18n-matTooltip="@@edit"
+                                                                        matTooltip="Edit"
+                                                                        (click)="editAccompanyPerson(eventDay, item)">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                        class="btn red btn-outline btn-sm cm-mgr-5"
+                                                                        i18n-matTooltip="@@delete"
+                                                                        matTooltip="Delete"
+                                                                        (click)="removeAccompanyPerson(eventDay?.value, item)">
+                                                                    <i class="fa fa-trash-o"></i>
+                                                                </button>
+                                                                <button type="button" type="button"
+                                                                        class="btn blue btn-outline btn-sm"
+                                                                        i18n-matTooltip="@@copy"
+                                                                        matTooltip="Copy"
+                                                                        (click)="copyAccompanyPerson(item)">
+                                                                    <i class="fa fa-clipboard"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr [formGroup]="getAccompanyPersonModel(eventDay)">
+                                                            <td [class.has-error]="accompanyFormErrors[eventDay?.value.eventDayId]?.fullName">
+                                                                <input type="text" class="form-control"
+                                                                       formControlName="fullName"
+                                                                       [attr.id]="'fullName' + eventDay?.value.eventDayId">
+                                                                <span class="help-block">
+                                                                    {
+                                                                    accompanyFormErrors[eventDay?.value.eventDayId]?.fullName,
+                                                                    select,
+                                                                    required {Please enter fullname}
+                                                                    maxLength {Fullname not allowed over than 50 characters}
+                                                                    }
+                                                                </span>
+                                                            </td>
+                                                            <td [class.has-error]="accompanyFormErrors[eventDay?.value.eventDayId]?.phoneNumber">
+                                                                <input type="text" class="form-control"
+                                                                       formControlName="phoneNumber">
+                                                                <span class="help-block">
+                                                                    {
+                                                                    accompanyFormErrors[eventDay?.value.eventDayId]?.phoneNumber,
+                                                                    select,
+                                                                    required {Please enter phone number}
+                                                                    maxLength {Phone number not allowed over 50 characters}
+                                                                    pattern {Phone number invalid}
+                                                                    }
+                                                                </span>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <button type="button" class="btn blue cm-mgr-5"
+                                                                        i18n-matTooltip="@@add"
+                                                                        matTooltip="Add"
+                                                                        (click)="saveAccompanyPerson(eventDay)">
+                                                                    <i class="fa fa-save"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-light"
+                                                                        i18n-matTooltip="@@paste"
+                                                                        matTooltip="Paste"
+                                                                        [class.disabled]="!accompanyPersonCopied"
+                                                                        (click)="pasteAccompanyPerson(eventDay)">
+                                                                    <i class="fa fa-clipboard"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn blue cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                Save
+            </ghm-button>
+            <ghm-button type="button" classes="btn btn-light" nh-dismiss [loading]="isSaving" i18n="@@cancel">
+                Cancel
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

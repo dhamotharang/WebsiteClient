@@ -1,0 +1,232 @@
+$borderColor: #ddd;
+$main-color: #007455;
+$main-colorHover: #007411;
+$disabled-color: #ccc;
+$silver-color: #858c96;
+$day-item-width: 40px;
+
+.editable {
+    border-bottom: 1px dashed dodgerblue;
+}
+
+//.nh-date-backdrop {
+//    background: rgba(0, 0, 0, 0.5);
+//    position: fixed;
+//    left: 0;
+//    top: 0;
+//    display: block;
+//    width: 100%;
+//    height: 100%;
+//    z-index: 9998;
+//}
+
+.nh-date-container {
+    background: white;
+    border: 1px solid $borderColor;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+
+    .nh-date-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span, button {
+            padding: 8px 10px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        button.btn-month, button.btn-year {
+            background: transparent;
+            border: none;
+            flex: 2;
+            font-weight: bold;
+
+            &:active, &:hover, &:visited, &:focus {
+                outline: none;
+                border: none;
+            }
+        }
+
+        .btn-navigate {
+            flex: 1;
+
+            &.next {
+                text-align: right;
+            }
+        }
+    }
+
+    .nh-date-body {
+        display: table;
+
+        & > div {
+            display: table-row;
+        }
+
+        .nh-day-container {
+            display: table;
+
+            .nh-day-row {
+                display: table-row;
+
+                &:first-child {
+                    .nh-day-item {
+                        background: $borderColor;
+
+                        &:hover {
+                            cursor: default;
+                        }
+                    }
+                }
+
+                .nh-day-item {
+                    display: table-cell;
+                    padding: 8px 10px;
+                    text-align: center;
+                    vertical-align: middle;
+                    border-top: 1px solid $borderColor;
+                    border-right: 1px solid $borderColor;
+                    transition: all 300ms ease-in-out;
+
+                    &:hover, &.active {
+                        cursor: pointer;
+                        background: $borderColor;
+                    }
+                }
+            }
+        }
+
+        .nh-date-grid-container {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            width: 250px;
+            margin-bottom: 0;
+
+            &.nh-day-years-container {
+                height: 250px;
+                overflow: auto;
+            }
+
+            .nh-item {
+                flex: 1 33%;
+                padding: 20px 10px;
+                border-top: 1px solid $borderColor;
+                border-left: 1px solid $borderColor;
+                text-align: center;
+                transition: all 300ms ease-in-out;
+
+                &:hover {
+                    cursor: pointer;
+                    background: $borderColor;
+                }
+            }
+        }
+    }
+
+    .nh-date-footer-container {
+        border-top: 1px solid $borderColor;
+        text-align: center;
+        padding: 10px;
+        display: block !important;
+
+        button {
+            border: 1px solid $borderColor;
+            padding: 7px 20px;
+            margin-left: 5px;
+            border-radius: 20px !important;
+
+            &:active, &:hover, &:focus, &:visited {
+                outline: none;
+            }
+
+            &.button-accept {
+                color: #fff;
+                background-color: #007bff;
+                border-color: #007bff;
+
+                &:focus {
+                    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .5);
+                }
+
+                &:hover {
+                    color: #fff;
+                    background-color: #0062cc;
+                    border-color: #005cbf;
+                }
+            }
+
+            &.button-cancel {
+                color: #212529;
+                background-color: #dae0e5;
+                border-color: #d3d9df;
+
+                &:focus {
+                    box-shadow: 0 0 0 0.2rem rgba(248, 249, 250, .5);
+                }
+
+                &:hover {
+                    color: #212529;
+                    background-color: #e2e6ea;
+                    border-color: #dae0e5;
+                }
+            }
+        }
+    }
+}
+
+nh-time {
+    .nh-time-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+
+        .nh-time-split {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .nh-hour, .nh-minute, .nh-time-split {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .nh-hour, .nh-minute {
+            .nh-increase {
+                svg {
+                    -ms-transform: rotate(180deg); /* IE 9 */
+                    -webkit-transform: rotate(180deg); /* Safari */
+                    transform: rotate(180deg);
+                }
+            }
+
+            .nh-increase, .nh-decrease {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .nh-increase {
+                margin-bottom: -5px;
+            }
+
+            svg {
+                width: 15px;
+            }
+
+            input {
+                padding: 5px;
+                width: 50px;
+                text-align: center;
+            }
+        }
+    }
+}

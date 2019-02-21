@@ -1,0 +1,129 @@
+<nh-modal #registerModal size="full">
+    <nh-modal-header [showCloseButton]="true">
+        <h4 class="title uppercase bold" i18n="@@register">Register detail</h4>
+    </nh-modal-header>
+    <form class="form-horizontal">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-share font-green-sharp"></i>
+                                <span class="caption-subject bold uppercase"
+                                      i18n="@@eventDayInfo"> Event day info </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Phone number"
+                                       i18n-ghmLabel="@@phoneNumber"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventRegisterDetail?.phoneNumber }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="FullName"
+                                       i18n-ghmLabel="@@fullName"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventRegisterDetail?.fullName }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Email"
+                                       i18n-ghmLabel="@@email"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control">
+                                        {{ eventRegisterDetail?.email }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Address"
+                                       i18n-ghmLabel="@@address"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control height-auto">
+                                        {{ eventRegisterDetail?.address }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"
+                                       ghmLabel="Note"
+                                       i18n-ghmLabel="@@note"></label>
+                                <div class="col-sm-8">
+                                    <div class="form-control height-auto">
+                                        {{ eventRegisterDetail?.note }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-share font-green-sharp"></i>
+                                <span class="caption-subject bold uppercase"
+                                      i18n="@@eventDayInfo"> Event day info </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <ul class="ghm-list-item-container">
+                                        <li *ngFor="let eventRegister of eventRegisterDetail?.eventDayRegisters">
+                                            <mat-checkbox [disabled]="true" [checked]="eventRegister.isSelected">
+                                                <span class="bold cm-mgr-5">{{ eventRegister?.eventDayName }}</span>
+                                                <span>({{ eventRegister?.eventDayDate | dateTimeFormat:'DD/MM/YYYY' }})</span>
+                                            </mat-checkbox>
+
+                                            <ul class="ghm-list-item-container" *ngIf="eventRegister?.isSelected">
+                                                <li>
+                                                    <table class="table table-stripped table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th i18n="@@fullName">FullName</th>
+                                                            <th class="text-right" i18n="@@phoneNumber">Phone number
+                                                            </th>
+                                                            <th class="text-right" i18n="@@actions">Actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr *ngFor="let accompanyPerson of eventRegister?.accompanyPersons">
+                                                            <td>{{ accompanyPerson?.fullName }}</td>
+                                                            <td class="text-right">{{ accompanyPerson?.phoneNumber }}
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <ghm-button type="button" classes="btn btn-default" nh-dismiss
+                        i18n="@@close">
+                Close
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

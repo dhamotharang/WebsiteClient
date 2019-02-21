@@ -1,0 +1,301 @@
+<h1 class="page-title">
+    <span i18n="@@updateEventFormTitle" class="cm-mgr-5">{isUpdate, select, 0 {Add new event} 1 {Update event}}</span>
+    <small i18n="@@eventModuleTitle">Events management</small>
+</h1>
+
+<nh-wizard [currentStep]="1" #eventWizard>
+    <nh-step
+        i18n-title="@@step1"
+        i18n-description="@@eventStep1Description"
+        title="Step 1"
+        description="Event info"
+        [step]="1"
+        (next)="save()">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift font-blue-hoki"></i>
+                    <span class="caption-subject bold font-blue-hoki uppercase" i18n="@@eventInfo">
+                        Event info
+                    </span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form [formGroup]="model"
+                      (ngSubmit)="save()">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group" *ngIf="languages.length > 1">
+                                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                                       class="control-label"
+                                       [required]="true"></label>
+                                <nh-select [data]="languages"
+                                           [(value)]="currentLanguage"></nh-select>
+                            </div>
+                            <span formArrayName="modelTranslations">
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                    <label i18n-ghmLabel="@@eventName" ghmLabel="Event name"
+                                           class="control-label"
+                                           [required]="true"></label>
+                                    <div>
+                                        <input type="text" class="form-control" placeholder="Enter event name"
+                                               i18n-placeholder="@@enterEventName" formControlName="name">
+                                        <span *ngIf="translationFormErrors[modelTranslation.value.languageId]?.name"
+                                              class="help-block" i18n="@@eventNameErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.name,
+                                            select, required {Please enter event name} maxlength {Event name must not exceed 256 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label i18n-ghmLabel="@@thumbnail" ghmLabel="Thumbnail"
+                                           class="control-label"></label>
+                                    <div>
+                                        <div class="cm-mgb-5">
+                                            <ghm-file-explorer
+                                                i18n-buttonText="@@chooseImage"
+                                                buttonText="Choose image"
+                                                (itemSelected)="onSelectedImage($event)"></ghm-file-explorer>
+                                            <button
+                                                *ngIf="model.value.thumbnail"
+                                                class="btn red cm-mgl-5"
+                                                i18n="@@removeThumbnail" (click)="removeThumbnail()">
+                                                Remove thumbnail
+                                            </button>
+                                        </div>
+                                        <div class="thumbnail-preview">
+                                            <img ghmImage [src]="model.value.thumbnail" alt="">
+                                        </div><!-- END: .thumbnail-preview -->
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                                    <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                                           class="control-label"
+                                           [required]="true"></label>
+                                    <div>
+                                        <textarea rows="3" class="form-control" placeholder="Enter description"
+                                                  i18n-placeholder="@@enterDescription"
+                                                  formControlName="description"></textarea>
+                                        <span
+                                            *ngIf="translationFormErrors[modelTranslation.value.languageId]?.description"
+                                            class="help-block" i18n="@@eventDescriptionErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.description,
+                                            select, requried {Please enter description}
+                                            maxlength {Description must not exceed 500 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.content">
+                                    <label i18n-ghmLabel="@@content" ghmLabel="Content"
+                                           class="control-label"
+                                           [required]="true"></label>
+                                    <div>
+                                        <ghm-file-explorer i18n-buttonText="@@appendImageToContent" buttonText="Append image to content"
+                                                           [multiple]="true"
+                                                           (itemSelected)="onAcceptContentImages($event)"
+                                                           (acceptSelected)="onAcceptContentImages($event)"></ghm-file-explorer>
+                                        <tinymce #eventContentEditor
+                                                 [height]="350"
+                                                 elementId="eventContent{{ modelTranslation.value.languageId }}"
+                                                 formControlName="content"></tinymce>
+                                        <span *ngIf="translationFormErrors[modelTranslation.value.languageId]?.content"
+                                              class="help-block" i18n="@@eventDescriptionErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.content,
+                                            select,
+                                            required {please enter content}
+                                            maxlength {Event description must not exceed 500 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
+                                    <label i18n-ghmLabel="@@address" ghmLabel="Address"
+                                           class="control-label"></label>
+                                    <div>
+                                        <input rows="3" class="form-control" placeholder="Enter address"
+                                                  i18n-placeholder="@@enterAddress"
+                                                  formControlName="address"/>
+                                        <span
+                                                *ngIf="translationFormErrors[modelTranslation.value.languageId]?.address"
+                                                class="help-block" i18n="@@eventAddressErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.address,
+                                            select,
+                                            maxlength {Description must not exceed 500 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </span><!-- END: wrapper info by language -->
+                        </div> <!-- END: left col -->
+                        <div class="col-sm-6">
+                            <span formArrayName="modelTranslations">
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaTitle">
+                                    <label i18n-ghmLabel="@@metaTitle" ghmLabel="Meta title"
+                                           class="control-label"></label>
+                                    <div>
+                                        <input type="text" class="form-control" placeholder="Enter meta title"
+                                               i18n-placeholder="@@enterMetaTitle" formControlName="metaTitle">
+                                        <span
+                                            *ngIf="translationFormErrors[modelTranslation.value.languageId]?.metaTitle"
+                                            class="help-block" i18n="@@eventMetaTitleErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.metaTitle,
+                                            select, maxlength {Meta title must not exceed 256 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
+                                    <label i18n-ghmLabel="@@metaDescription" ghmLabel="Meta description"
+                                           class="control-label"></label>
+                                    <div>
+                                        <textarea rows="3" class="form-control" placeholder="Enter meta description"
+                                                  i18n-placeholder="@@enterMetaDescription"
+                                                  formControlName="metaDescription"></textarea>
+                                        <span
+                                            *ngIf="translationFormErrors[modelTranslation.value.languageId]?.metaDescription"
+                                            class="help-block" i18n="@@eventMetaDescriptionErrorMessage">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.metaDescription,
+                                            select, maxlength {Meta description must not exceed 500 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.tags">
+                                    <label i18n-ghmLabel="@@metaDescription" ghmLabel="Tags"
+                                           class="control-label"></label>
+                                    <div>
+                                    </div>
+                                </div>
+                            </span>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@startDate" ghmLabel="Start date"
+                                       class="control-label"></label>
+                                <nh-date
+                                    [format]="'DD/MM/YYYY'"
+                                    [mask]="true" formControlName="startDate"></nh-date>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@endDate" ghmLabel="End date"
+                                       class="control-label"></label>
+                                <nh-date
+                                    [format]="'DD/MM/YYYY'"
+                                    [mask]="true" formControlName="endDate"></nh-date>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.limitedUsers">
+                                <label i18n-ghmLabel="@@limitedUsers" ghmLabel="Limited users"
+                                       class="control-label"></label>
+                                <div>
+                                    <input type="text" class="form-control" formControlName="limitedUsers"
+                                           i18n-placeholder="@@limitedUsersPlaceholder"
+                                           placeholder="Enter limited users">
+                                    <span *ngIf="formErrors?.limitedUsers" class="help-block"
+                                          i18n="@@eventLimitedUsersErrorMessage">
+                                        {
+                                        formErrors?.limitedUsers,
+                                        select, isValid {Limited users must be number}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.limitedAccompanyPersons">
+                                <label i18n-ghmLabel="@@limitedAccompanyUsers" ghmLabel="Limited accompany person"
+                                       class="control-label"></label>
+                                <div>
+                                    <input type="text" class="form-control" formControlName="limitedAccompanyPersons"
+                                           i18n-placeholder="@@limitedAccompanyPersonsPlaceholder"
+                                           placeholder="Enter limited accompany users">
+                                    <span *ngIf="formErrors?.limitedUsers" class="help-block"
+                                          i18n="@@eventLimitedAccompanyPersonsErrorMessage">
+                                        {
+                                        formErrors?.limitedAccompanyPersons,
+                                        select, isValid {Limited accompany person must be number}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowOverload"
+                                                  formControlName="isAllowRegisterWhenOverload">
+                                    {model.value.isAllowRegisterWhenOverload, select, 0 {Not allow overload} 1
+                                    {Allow
+                                    overload}}
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isActive" formControlName="isActive">
+                                    {model.value.isActive, select, 0 {In active} 1 {Active}}
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@staffOnly" formControlName="staffOnly">
+                                    Staff only
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowRegister"
+                                                  formControlName="isAllowRegister">
+                                    Allow register
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowAccompanyPerson"
+                                                  formControlName="isAllowAccompanyPerson">
+                                    Allow accompany person
+                                </mat-slide-toggle>
+                            </div>
+                        </div><!-- END: right col -->
+                    </div>
+                </form>
+            </div>
+        </div><!-- END: info portlet -->
+    </nh-step><!-- END: step 1 -->
+
+    <nh-step i18n-title="@@step2"
+             i18n-description="@@eventStep2Description"
+             title="Step 2"
+             description="Event days info"
+             [step]="2"
+             (back)="onStepBack($event)"
+             (finish)="onFinishCreateEvent($event)">
+        <app-event-day [eventId]="id"
+                       [eventDays]="eventDays"></app-event-day>
+    </nh-step><!-- END: step 2 -->
+</nh-wizard>

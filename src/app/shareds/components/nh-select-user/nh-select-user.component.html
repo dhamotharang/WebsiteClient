@@ -1,0 +1,71 @@
+﻿<div class="wrapper-nh-select-user">
+    <a href="javascript://" class="editable" *ngIf="type==='link'" (click)="showPopup($event)">{{text ? text :
+        defaultText}}</a>
+    <button class="btn btn-danger btn-xs" *ngIf="text" (click)="removeSelectedUser($event)">
+        <i class="fa fa-trash-o"></i>
+    </button>
+    <div class="nh-popup" *ngIf="isShowPopup">
+        <div class="nh-header">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <input #keyword
+                                   type="text" class="form-control"
+                                   placeholder="Nhập tên, SĐT, email người dùng cần tìm"
+                                   (keyup)="onSearchKeyUp($event)">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" (click)="search(keyword.value)">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div><!-- /input-group -->
+                    </div>
+                </div>
+            </div>
+        </div><!-- end .hearder -->
+        <div class="nh-content">
+            <div class="tabbable-custom nav-justified">
+                <ul class="nav nav-tabs nav-justified">
+                    <li [class.active]="tabValue == 0">
+                        <a href="#tab_office" data-toggle="tab" (click)="onTabClick(0)"> Sơ đồ tổ chức </a>
+                    </li>
+                    <li [class.active]="tabValue == 1">
+                        <a href="#tab_user" data-toggle="tab" (click)="onTabClick(1)"> Tìm kiếm </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane" id="tab_office" [class.active]="tabValue == 0">
+                    </div><!-- end #tab_office-->
+                    <div class="tab-pane" id="tab_user" [class.active]="tabValue == 1">
+                        <div class="spinner" *ngIf="isSearching">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                        <ul class="media-list wrapper-list-user" *ngIf="!isSearching">
+                            <li class="media user-item" *ngFor="let item of listUsers" (click)="selectUser(item)">
+                                <div class="media-left">
+                                    <a href="javascript://">
+                                        <!--<img class="media-object avatar" src="{{ item.image + '?w=40&h=40&mode=pad' }}"-->
+                                        <!--alt="{{ item.fullName }}"-->
+                                        <!--onError="this.src = '/assets/images/noavatar.png?w=40&h=40&mode=pad'">-->
+                                        <nh-image [baseUrl]="appConfig.baseUrl" [value]="item.image"
+                                                  [alt]="item.fullName"></nh-image>
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{ item.fullName }}</h4>
+                                    <label class="label-color">{{ item.titleName }}</label>
+                                </div>
+                            </li>
+                        </ul>
+                        <div *ngIf="listUsers.length === 0 && !isSearching">Không tìm thấy bản ghi.</div>
+                    </div><!-- end #tab_office-->
+                </div>
+            </div><!-- end tab -->
+        </div><!-- end .content -->
+    </div>
+</div><!-- end .wrapper-select-user -->

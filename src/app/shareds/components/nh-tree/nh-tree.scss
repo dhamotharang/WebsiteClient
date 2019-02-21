@@ -1,0 +1,183 @@
+$border-color: #ddd;
+$mainColor: #007455;
+
+ul.nh-tree-default-value {
+    list-style: none;
+    border-bottom: 1px solid $border-color;
+    padding: 6px 0;
+    margin-bottom: 0;
+}
+
+ul.nh-tree {
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    padding-left: 0;
+    margin: 0;
+    list-style-type: none;
+    list-style-image: none;
+    width: 100%;
+    overflow: auto;
+
+    &.nh-root-tree > li {
+        margin-right: 0;
+    }
+
+    .nh-tree-icon, .nh-tree-node {
+        background-image: url('/assets/images/32px.png');
+        background-repeat: no-repeat;
+    }
+
+    li {
+        display: block;
+        min-height: 24px;
+        line-height: 24px;
+        margin-left: 24px;
+        min-width: 24px;
+        white-space: nowrap;
+
+        &.nh-tree-node {
+            background-position: -292px -4px;
+            background-repeat: repeat-y;
+        }
+
+        &.selected > a {
+            background-color: $mainColor;
+            color: white;
+            cursor: auto;
+
+            i.nh-custom-icon {
+                background: $mainColor;
+                color: #fff;
+            }
+        }
+
+        &:last-child {
+            background: none !important;
+        }
+
+        .nh-tree-icon {
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            display: inline-block;
+            background-position: -68px -4px;
+            vertical-align: top;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &.nh-tree-loading {
+                background-image: url('/assets/images/loading.gif');
+                background-repeat: no-repeat;
+                background-position: 3px 5px !important;
+            }
+        }
+
+        .nh-tree-node-open {
+            background-position: -132px -4px !important;
+        }
+
+        .nh-tree-node-close {
+            background-position: -100px -4px;
+        }
+
+        .nh-tree-icon-folder {
+            background-position: -260px -4px;
+        }
+
+        .nh-tree-icon-folder-open {
+            background-position: -260px -4px;
+        }
+
+        .nh-icon-checkbox {
+            background-position: -166px -4px;
+        }
+
+        .hh-icon-checkbox-checked {
+            background-position: -230px -4px;
+        }
+
+        .nh-icon-child-check {
+            background-position: -196px -4px;
+        }
+
+        .nh-custom-icon {
+            background: #fff;
+        }
+
+        a {
+            line-height: 24px;
+            height: 24px;
+            display: inline-block;
+            color: #000;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 0 4px 0 1px;
+            margin: 0;
+            vertical-align: top;
+
+            &:hover {
+                background-color: $mainColor;
+                color: white;
+                cursor: auto;
+                text-decoration: none;
+
+                i.nh-custom-icon {
+                    background: $mainColor;
+                    color: #fff;
+                }
+            }
+
+            &:active, &:focus, &:visited {
+                outline: none;
+                text-decoration: none;
+            }
+        }
+    }
+
+    ul.sub-tree {
+        &.sub-tree-close {
+            display: none;
+        }
+    }
+}
+
+.nh-tree-dropdown {
+    position: relative;
+
+    button {
+        border-radius: 0;
+    }
+
+    .nh-content-wrapper {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border: 1px solid $border-color;
+        min-width: 350px;
+        box-shadow: 5px 5px rgba(102, 102, 102, .1);
+        margin-bottom: 10px;
+        background: white;
+        z-index: 9999;
+        overflow-x: auto;
+
+        .nh-tree-content {
+            overflow-y: hidden;
+
+            nh-tree {
+                ul.nh-tree.nh-root-tree {
+                    padding: 10px;
+                }
+            }
+        }
+
+        .nh-tree-footer {
+            border-top: 1px solid $border-color;
+            padding: 10px;
+        }
+    }
+}

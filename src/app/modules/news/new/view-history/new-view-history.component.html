@@ -1,0 +1,86 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5">{{newTitle}}</span>
+    <small i18n="@@newModuleTitle">New management</small>
+</h1>
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <nh-date [mask]="true"
+                 [(ngModel)]="fromDate"
+                 name="fromDate"
+                 (selectedDateEvent)="search(1)"></nh-date>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-date [mask]="true"
+                 [(ngModel)]="toDate"
+                 name="toDate"
+                 (selectedDateEvent)="search(1)"></nh-date>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listBrowser"
+                   [(ngModel)]="browser"
+                   name="browser"
+                   i18n="@@titleSelectBrowser"
+                   [title]="'-- Please slect browser --'"
+                   (onSelectItem)="search(1)">
+        </nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listLanguage"
+                   [(ngModel)]="language"
+                   name="language"
+                   i18n="@@titleSelectLanguage"
+                   [title]="'-- Please slect language --'"
+                   (onSelectItem)="search(1)">
+        </nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+          [data]="[{id: true, name: 'Like'}, {id: false, name: 'Dont like'}]"
+          [(ngModel)]="isLike"
+          name="isLike"
+          i18n="@@titleSelect"
+          [title]="'-- Please slect  --'"
+          (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <ghm-button [loading]="isSearching"
+                    [classes]="'btn blue'"
+                    icon="fa fa-search"></ghm-button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-stripped">
+        <thead>
+        <tr>
+            <th class="center middle w50" i18n="@@no">No</th>
+            <th class="middle w100" i18n="@@dateTime">Date time</th>
+            <th class="middle" i18n="@@user">User</th>
+            <th class="middle" i18n="@@ip">IP</th>
+            <th class="middle w100" i18n="@@browser">Browser</th>
+            <th class="middle w100" i18n="@@language">Language</th>
+            <th class="middle w100" i18n="@@nation">National</th>
+            <th class="middle center w50" i18n="@@action">Is Like</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listItems$ | async; let i = index">
+            <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="middle">{{ item.viewTime | dateTimeFormat: 'DD/MM/YYYY hh:mm' }}</td>
+            <td class="middle">{{item.userFullName}}</td>
+            <td class="middle">{{item.ip}}</td>
+            <td class="middle">{{item.browser}}</td>
+            <td class="middle">{{item.language}}</td>
+            <td class="middle">{{item.national}}</td>
+            <td class="middle"><i *ngIf="item.isLike" class="fa fa-check green"></i></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n-pageName="@@view" pageName="View"></ghm-paging>

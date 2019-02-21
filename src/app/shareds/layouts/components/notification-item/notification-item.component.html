@@ -1,0 +1,17 @@
+<li class="notify-item info"
+    [class.readed]="notification.isRead"
+    (click)="read(notification)">
+    <div class="notify-left">
+        <a href="javascript://">
+            <img ghmImage
+                 alt="{{ notification.senderFullName }}" class="img-circle avatar-sm"
+                 src="{{ notification.senderAvatar }}">
+        </a>
+    </div>
+    <div class="notify-body">
+        <div [innerHTML]="notification.title"></div>
+        <div class="times">
+            <i class="fa fa-clock-o"></i> {{ notification.createTimeText }}
+        </div>
+    </div>
+</li>

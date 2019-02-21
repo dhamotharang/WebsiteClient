@@ -1,0 +1,32 @@
+<nh-modal #explainDeclineReasonModal size="sm"
+(onShow)="showModal()">
+    <nh-modal-header>
+        <h4 class="modal-title">
+            <i class="fa fa-bullhorn" i18n="@@declineReason">Decline reason</i>
+        </h4>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-12" [class.has-error]="errorMessage">
+                </div>
+                <div class="col-sm-12" [class.has-error]="errorMessage">
+                    <textarea class="form-control"
+                              rows="4"
+                              [(ngModel)]="explain"></textarea>
+                    <span class="help-block">
+                        {{errorMessage}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button class="btn btn-primary" type="button" (click)="save()">
+            Lưu lại
+        </button>
+        <button class="btn btn-default" type="button" nh-dismiss="true">
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

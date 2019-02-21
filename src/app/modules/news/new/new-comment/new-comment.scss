@@ -1,0 +1,26 @@
+.media {
+    margin: 15px 0;
+    .media-body > .media:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.media-object {
+    height: 50px;
+    width: 50px;
+    border-radius: 50px !important;
+}
+
+.media-heading {
+    a {
+        color: #9aa5b2 !important;
+        font-weight: 600 !important;
+        &:hover {
+            color: #3598DC;
+            text-decoration: none;
+        }
+    }
+    .c-date {
+        font-size: 14px;
+    }
+}

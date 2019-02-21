@@ -1,0 +1,283 @@
+<h1 class="page-title">
+   <span class="uppercase">
+       {isUpdate, select, 0 {Add new news} 1 {Update news} other {}}
+    </span>
+</h1>
+<div class="form">
+    <form action="" class="form-horizontal" [formGroup]="model">
+        <div class="row new-content" formArrayName="modelTranslations">
+            <div class="col-sm-8">
+                <div class="portlet light">
+                    <div class="portlet-title">
+                        <div class="caption">
+                                <span class="caption-subject bold uppercase"
+                                      i18n="@@newContent">
+                                     <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                    News content
+                                </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body cm-pdt-0">
+                        <div class="form-group cm-mg-0" *ngIf="languages && languages.length > 1">
+                            <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                                   class="control-label"></label>
+                            <nh-select [data]="languages"
+                                       i18n-title="@@pleaseSelectLanguage"
+                                       title="-- Please select language --"
+                                       name="language"
+                                       [(value)]="currentLanguage"
+                                       (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.title">
+                            <label class="control-label" i18n-ghmLabel="@@title" ghmLabel="Title"
+                                   [required]="true"></label>
+                            <input type="text" id="{{'title ' + currentLanguage}}" class="form-control" i18n-placeholder="@@titlePlaceHolder"
+                                   placeholder="Please enter title"
+                                   formControlName="title"/>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.title, select, required {Title is required} maxLength {Title not allowed
+                                                          over 256 characters}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model"
+                             [class.has-error]="formErrors?.categoriesNews">
+                            <label class="control-label" i18n-ghmLabel="@@group" ghmLabel="Group"
+                                   [required]="true"></label>
+                            <nh-dropdown-tree [data]="categoryTree"
+                                              [title]="categoryText"
+                                              [isMultiple]="true"
+                                              formControlName="categoriesNews"
+                                              (accepted)="onAcceptSelectCategory($event)">
+                            </nh-dropdown-tree>
+                            <span class="help-block">{formErrors?.categoriesNews, select, required {Category is required}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                            <label class="control-label" i18n-ghmLabel="@@descriptionPlaceHolder"
+                                   ghmLabel="Description"></label>
+                            <textarea rows="3" class="form-control" i18n-placeholder="@@descriptionPlaceholder"
+                                      placeholder="Please enter description"
+                                      formControlName="description"></textarea>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.description, select, maxLength {Description not allowed over 1000 characters}} </span>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.content">
+                            <label class="control-label" i18n-ghmlabel="@@content" ghmLabel="Content"
+                                   [required]="true"></label>
+                            <div class="form-group cm-mg-0"
+                                 *ngIf="!isUpdate || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)
+                            || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)">
+                                <ghm-file-explorer i18n-buttonText="@@appendImageToContent"
+                                                   [buttonText]="'Append image to content '"
+                                                   [multiple]="true"
+                                                   (acceptSelected)="afterUploadImageContent($event)"></ghm-file-explorer>
+                            </div>
+                            <tinymce [elementId]="'content'+ i" formControlName="content"
+                                     [(ngModel)]="modelTranslation.value.content" [height]="350"></tinymce>
+                            <span class="help-block">
+                                {translationFormErrors[modelTranslation.value.languageId]?.content, select, required {Content is required}}
+                            </span>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model">
+                            <mat-checkbox color="primary" formControlName="isHot" i18n="@@isHot">
+                                {model.value.isHot, select, 0 {Normal} 1 {Hot}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model">
+                            <mat-checkbox color="primary" formControlName="isHomePage" i18n="@@isHomePage">
+                                {model.value.isHomePage, select, 0 {Not Home Page} 1 {Home Page}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model">
+                            <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                            </mat-checkbox>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model"
+                             [class.has-error]="formErrors.source">
+                            <label class="control-label" i18n-ghmLabel="@@source" ghmLabel="Source"></label>
+                            <input type="text" class="form-control" i18n-placeholder="@@sourceHolder"
+                                   placeholder="Please enter source" formControlName="source"/>
+                            <span class="help-block">{formErrors?.source, select, maxLength {Scource  not allowed over 256 characters}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                             <span class="caption-subject bold uppercase" i18n="@@seoContent">
+                                <i class="fa fa-line-chart" aria-hidden="true"></i>
+                                 Seo content
+                             </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body cm-pdt-0">
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaKeyword">
+                            <label class="control-label" i18n-ghmLabel="@@metaKeyword"
+                                   ghmLabel="Meta Keyword"> </label>
+                            <input type="text" class="form-control" i18n-placeholder="@@metaKeywordPlaceHolder"
+                                   placeholder="Please enter meta keyword"
+                                   formControlName="metaKeyword"/>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.metaKeyword, select, maxLength {Meta Keyword not allowed
+                                                          over 300 characters}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaTitle">
+                            <label class="control-label" i18n-ghmLabel="@@metaTitle"
+                                   ghmLabel="Meta Title"></label>
+                            <input type="text" class="form-control" i18n-placeholder="@@metaTitlePlaceHolder"
+                                   placeholder="Please enter meta title"
+                                   formControlName="metaTitle"/>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.metaTitle, select, maxLength {MetaTitle not allowed
+                                                          over 256 characters}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0" [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.seoLink">
+                            <label class="control-label" i18n-ghmLabel="@@seoLink" ghmLabel="Seo Link"></label>
+                            <!--{{modelTranslation.value.seoLink}}-->
+                            <input type="text" class="form-control" i18n-placeholder="@@seoLinkHolder"
+                                   placeholder="Please enter seoLink" formControlName="seoLink"/>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.seoLink, select,
+                                maxLength {SeoLink not allowed over 256 characters}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i"
+                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
+                            <label class="control-label" i18n-ghmLabel="@@metaDescriptionPlaceHolder"
+                                   ghmLabel="Meta Description"></label>
+                            <textarea rows="3" class="form-control" i18n-placeholder="@@metaDescriptionPlaceholder"
+                                      placeholder="Please enter meta description"
+                                      formControlName="metaDescription"></textarea>
+                            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.metaDescription, select,
+                                maxLength {Meta Description not allowed over 1000 characters}}</span>
+                        </div>
+                        <div class="form-group cm-mg-0"
+                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                             [formGroupName]="i">
+                            <label class="control-label" i18n-ghmLabel="@@tags" ghmLabel="Tags"></label>
+                            <nh-tag [type]="tagType.new"
+                                    [listTag]="modelTranslation.value.tags"
+                                    [languageId]="currentLanguage"
+                                    [tenantId]="currentUser.tenantId"
+                                    [objectId]="id"
+                                    (onRemove)="removeTag($event)"
+                                    (onSelect)="selectTag($event)"
+                                    (onSelectListItem)="selectListTag($event)"
+                            ></nh-tag>
+                        </div>
+                    </div>
+                    <div class="portlet-title cm-mgt-20">
+                        <div class="caption">
+                             <span class="caption-subject font-blue-sharp bold uppercase" i18n="@@image">
+                                Image
+                             </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="form-group cm-mg-0 display-table" [formGroup]="model">
+                            <div class="fileinput fileinput-new" [class.has-error]="formErrors.featureImage">
+                                <div class="fileinput-new thumbnail">
+                                    <img ghmImage [src]="model.value.featureImage" class="w150" [isUrlAbsolute]="true">
+                                    <ghm-file-explorer *ngIf="!isUpdate || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)
+                            || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
+                                                       i18n-buttonText="@@selectImage"
+                                                       [buttonText]="'Select image'"
+                                                       (itemSelected)="afterUploadImage($event)"></ghm-file-explorer>
+                                    <span class="help-block">{formErrors?.featureImage, select, required {Image is required} maxLength {Image url  not allowed over 1000 characters}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mg-0" [formGroup]="model">
+                            <label class="control-label" i18n-ghmLabel="@@altImage" ghmLabel="Alt Image"></label>
+                            <div [class.has-error]="formErrors.altImage" class="cm-mgt-10">
+                                <input type="text" class="form-control" i18n-placeholder="@@altImage"
+                                       placeholder="Please enter alt image" formControlName="altImage"/>
+                                <span class="help-block">{formErrors?.altImage, select, maxLength {Alt  not allowed over 256 characters}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mg-0 display-table" [formGroup]="model">
+                            <div class="fileinput fileinput-new" [class.has-error]="formErrors.featureImage">
+                                <div class="fileinput-new thumbnail">
+                                    <img ghmImage [src]="model.value.bannerImage" class="w150" [isUrlAbsolute]="true">
+                                    <ghm-file-explorer *ngIf="!isUpdate || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)
+                            || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
+                                                       i18n-buttonText="@@selectImage"
+                                                       [buttonText]="'Select banner image'"
+                                                       (itemSelected)="afterUploadImageBanner($event)"></ghm-file-explorer>
+                                    <span class="help-block">{formErrors?.bannerImage, select, required {Banner image is required} maxLength {Banner image url  not allowed over 1000 characters}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mg-0" *ngIf="isUpdate">
+                            <span class="blog-sidebar-title" i18n="@@status">Status</span> &nbsp;
+                            <span class="label" [class.label-danger]="newDetail?.status === newsStatus?.decline"
+                                  [class.label-success]="newDetail?.status === newsStatus.approved"
+                                  [class.label-warning]="newDetail?.status === newsStatus.pending"
+                                  [class.label-draft]="newDetail?.status === newsStatus.draft"> {{newDetail?.status === newsStatus.draft ? 'Draft' :
+                                                                                                    newDetail?.status === newsStatus.pending ? 'Pending' :
+                                                                                                        newDetail?.status === newsStatus.approved ? 'Approved' :
+                                                                                                            newDetail?.status === newsStatus.decline ? 'Decline' : ''}}
+                            </span>
+                        </div>
+                        <div class="form-group cm-mg-0" *ngIf="newDetail?.status === newsStatus?.decline">
+                            <span class="blog-sidebar-title" i18n="@@declineRreason">Decline Reason: {{newDetail?.approverComment}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group cm">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <ghm-button classes="btn blue cm-mgr-5" type="button"
+                            *ngIf="!isUpdate || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)
+                            || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
+                            [loading]="isSaving"
+                            (clicked)="save(true)">
+                    <span i18n="@@saveAndSend">Save & Send</span>
+                </ghm-button>
+                <ghm-button classes="btn blue cm-mgr-5"
+                            type="button"
+                            *ngIf="!isUpdate || (newDetail?.status === newsStatus.pending && newDetail?.isApprove)
+                            || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
+                            (clicked)="save(false)"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Save</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            (clicked)="closeForm()"
+                            [type]="'button'">
+                    <span i18n="@@cancel">Cancel</span>
+                </ghm-button>
+            </div>
+        </div>
+    </form>
+</div>

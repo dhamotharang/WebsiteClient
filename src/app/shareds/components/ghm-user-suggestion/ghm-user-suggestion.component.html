@@ -1,0 +1,101 @@
+<div class="hus-container"
+     [class.active]="isActive">
+    <div class="hus-search-wrapper"
+         (click)="activeSuggestion()">
+        <div class="hus-search-content">
+            <ng-container *ngIf="isMultiple; else singleTemplate">
+                <ul class="hus-selected-wrapper" *ngIf="selectedUsers.length > 0">
+                    <li class="hus-item-selected" *ngFor="let user of selectedUsers">
+                        <div class="hus-item">
+                            <div class="avatar-wrapper">
+                                <img class="avatar-xs rounded-avatar"
+                                     src="{{ user.avatar }}"
+                                     alt="{{ user.name }}"
+                                     (error)="onImageError(user)">
+                            </div><!-- END: .avatar-wrapper -->
+                            <div class="user-info">
+                                <span class="full-name">{{ user.name }}</span>
+                            </div><!-- END: .info -->
+                            <span class="remove" (click)="removeSelectedUser(user)">
+                                <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
+                                     role="presentation">
+                                    <path
+                                        d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                                        fill="currentColor">
+                                    </path>
+                                </svg>
+                            </span><!-- END: .remove -->
+                        </div><!-- END: .hus-item -->
+                    </li>
+                </ul><!-- END: .hus-selected-wrapper -->
+            </ng-container><!-- END: display selected users -->
+            <div class="hus-search-input">
+                <input type="text"
+                       [(ngModel)]="keyword"
+                       name="searchUserSuggestion"
+                       autocomplete="off"
+                       placeholder="{{placeholder}}"
+                       (keydown.enter)="$event.preventDefault()"
+                       (keyup)="inputKeyUp($event)">
+            </div><!-- END: .hus-search-input -->
+        </div><!-- END: .hus-search-content -->
+        <div class="hus-search-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                <path
+                    d="M16.436 15.085l3.94 4.01a1 1 0 0 1-1.425 1.402l-3.938-4.006a7.5 7.5 0 1 1 1.423-1.406zM10.5 16a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"
+                    fill="currentColor" fill-rule="evenodd"></path>
+            </svg>
+        </div><!-- END: .hus-search-icon -->
+    </div><!-- END: .hus-search-wrapper -->
+    <div class="hus-search-result-wrapper" *ngIf="isActive">
+        <ul>
+            <li class="searching" *ngIf="isLoading; else loadDoneTemplate">
+                <div class="m-loader m-loader--brand"></div>
+            </li>
+            <li i18n="@@cantFindPerson" *ngIf="keyword && listUsers.length === 0 && !isLoading">
+                We can't find that person. Enter their email to find them.
+            </li>
+        </ul>
+    </div><!-- END: .hus-search-result-wrapper -->
+</div><!-- END: .hus-container -->
+
+<ng-template #loadDoneTemplate>
+    <li class="hus-item" *ngFor="let user of listUsers"
+        [class.active]="user.isActive"
+        (click)="selectUser(user)">
+        <div class="avatar-wrapper">
+            <img class="avatar-sm rounded-avatar"
+                 src="{{ user.avatar }}"
+                 alt="{{ user.name }}"
+                 (error)="onImageError(user)">
+        </div><!-- END: .avatar-wrapper -->
+        <div class="user-info">
+            <div class="full-name">{{ user.name }}</div>
+            <div class="description" *ngIf="user.email">{{ user.email }}</div>
+        </div><!-- END: .info -->
+    </li><!-- END: .hus-item -->
+</ng-template><!-- END: search result template -->
+
+<ng-template #singleTemplate>
+    <div class="hus-item" *ngIf="selectedUser">
+        <div class="avatar-wrapper">
+            <img class="avatar-sm rounded-avatar"
+                 src="{{ selectedUser?.avatar }}"
+                 alt="{{ selectedUser?.name }}"
+                 (error)="onImageError(selectedUser)">
+        </div><!-- END: .avatar-wrapper -->
+        <div class="user-info">
+            <span class="full-name">{{ selectedUser?.name }}</span>
+            <span class="description">{{ selectedUser?.email }}</span>
+        </div><!-- END: .info -->
+        <span class="remove" (click)="removeSelectedUser(selectedUser)">
+            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
+                 role="presentation">
+                <path
+                    d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                    fill="currentColor">
+                </path>
+            </svg>
+        </span><!-- END: .remove -->
+    </div><!-- END: .hus-item -->
+</ng-template><!-- END: single selected template -->

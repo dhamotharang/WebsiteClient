@@ -1,0 +1,220 @@
+<nh-modal #customerDetailModal size="lg"
+          (onShown)="onModalShow()">
+    <nh-modal-header>
+        <ng-container i18n="@@informationCustomer">Information customer</ng-container>
+    </nh-modal-header>
+    <form class="form-horizontal user-form">
+        <nh-modal-content>
+            <div class="tabbable-custom">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" [class.active]="tabNo === 1">
+                        <a href="javascript://" role="tab" data-toggle="tab"
+                           i18n="@@informationCustomer" (click)="clickTabNo(1)">Information Customer </a>
+                    </li>
+                    <li role="presentation" [class.active]="tabNo === 2">
+                        <a href="javascript://" role="tab" data-toggle="tab" (click)="clickTabNo(2)">Relationship</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light bordered">
+                                    <div class="portlet-title tabbable-line">
+                                        <div class="caption caption-md">
+                                            <i class="icon-globe theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase"
+                                                  i18n="@@informationCustomer">Information Customer</span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <!--Họ Tên-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n-ghmLabel="@@customerName"
+                                                   ghmLabel="Customer Name"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">{{customerDetail.fullName}}</div>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@customerCode"
+                                                   ghmLabel="Customer Code"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control" disabled>{{customerDetail.customerCode}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Ngày sinh giới tính-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n-ghmLabel="@@birthday" ghmLabel="Birthday"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">{{customerDetail.birthday |
+                                                    dateTimeFormat:"DD/MM/YYYY"}}
+                                                </div>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                                                   i18n-ghmLabel="@@gender" ghmLabel="Gender"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control ">
+                                                    {{ customerDetail.gender === gender.female ? 'Nữ' : gender.male
+                                                    ?
+                                                    'Nam' : 'Giới tính khác' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Số điện thoại email-->
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <app-patient-contact [listPatientContact]="listPatientContact"
+                                                                     [isDetail]="true"
+                                                                     [label]="'Mobile'"
+                                                                     i18n="@@placeholderMobile"
+                                                                     i18n-placeholder
+                                                                     [placeholder]="'Please enter mobile'"
+                                                                     [type]="contactType.mobilePhone"></app-patient-contact>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <app-patient-contact [listPatientContact]="listPatientContact"
+                                                                     [isDetail]="true"
+                                                                     [label]="'Email'"
+                                                                     i18n="@@placeholderEmail"
+                                                                     i18n-placeholder
+                                                                     [placeholder]="'Please enter email'"
+                                                                     [type]="contactType.email"></app-patient-contact>
+                                            </div>
+                                        </div>
+                                        <!--Nguồn khách Số CMND-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@customerSource"
+                                                   ghmLabel="Customer Source"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <nh-select [data]="listPatientResource"
+                                                           [isEnable]="false"
+                                                           [value]="customerDetail.patientResourceId"></nh-select>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@identificationCard"
+                                                   ghmLabel="ID Card"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">{{customerDetail.idCardNumber}}</div>
+                                            </div>
+                                        </div>
+                                        <!--Nghề nghiệp quốc gia-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@job" ghmLabel="Job"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <nh-select
+                                                    [data]="listJob"
+                                                    [value]="customerDetail.jobId"
+                                                    [isEnable]="false"></nh-select>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@national"
+                                                   ghmLabel="National"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">{{customerDetail.nationalName}}</div>
+                                            </div>
+                                        </div>
+                                        <!--Tỉnh thành, quận huyện-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@province" ghmLabel="Province"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">
+                                                    {{customerDetail.provinceName}}
+                                                </div>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@district" ghmLabel="District"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">
+                                                    {{customerDetail.districtName}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Dân tộc, tôn giáo-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@ethnic" ghmLabel="Ethnic"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">
+                                                    {{customerDetail.ethnicName}}
+                                                </div>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label" i18n-ghmLabel="@@religion"
+                                                   ghmLabel="Religion"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <div class="form-control">
+                                                    {{customerDetail.religionName}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Địa chỉ liên  hệ-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n-ghmLabel="@@addressContact"
+                                                   ghmLabel="Address"></label>
+                                            <div class="col-md-10 col-sm-9">
+                                                <div class="form-control">
+                                                    {{customerDetail.address}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Quan hệ với nhân viên-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 col-sm-3 control-label"
+                                                   i18n="@@isRelationship" i18n-ghmLabel
+                                                   ghmLabel="Is Relationship"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <nh-select [liveSearch]="true" [data]="listTypeRelationship"
+                                                           [isEnable]="false"></nh-select>
+                                            </div>
+                                            <label class="col-md-2 col-sm-3 control-label" i18n="@@employee"
+                                                   i18n-ghmLabel ghmLabel="Employee"></label>
+                                            <div class="col-md-4 col-sm-3">
+                                                <!--<ghm-user-suggestion-->
+                                                <!--(userSelected)="onSelectEmployee($event)"-->
+                                                <!--&gt;</ghm-user-suggestion>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="portlet-title tabbable-line">
+                                            <div class="caption caption-md">
+                                                <i class="icon-globe theme-font hide"></i>
+                                                <span class="caption-subject font-blue-madison bold uppercase"
+                                                      i18n="@@contactPerson">Contact Person</span>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <app-customer-contact-person
+                                                        [isDetail]="true"
+                                                        [listContactPerson]="listContactPerson"></app-customer-contact-person>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="form-group pull-right">
+                <div class="col-sm-12">
+                    <button class="btn btn-default" type="button" (click)="closeModal()" i18n="@@close">
+                        <i class="fa fa-times"></i>
+                        Close
+                    </button>
+                </div>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

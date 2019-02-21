@@ -1,0 +1,58 @@
+<div class="table-responsive">
+    <table class="table table-hover table-stripped">
+        <thead>
+        <tr>
+            <th class="middle w150" i18n="@@contactType">Contact Type</th>
+            <th class="middle" i18n="@@contactValue">Contact Value</th>
+            <th class="center middle w100" i18n="@@action" *ngIf="permission.delete || permission.add">
+                <button class="btn btn-sm blue" (click)="addBranchItem()" type="button">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listBranchItem; let i = index">
+            <td class="middle center">
+                <nh-select [data]="contactTypes"
+                           [(ngModel)]="item.contactType"
+                           i18n-title="@@titelContactType"
+                           [title]="'-- Select contact type'"></nh-select>
+            </td>
+            <td class="middle">
+                <span *ngIf="!item.isEdit && !item.isNew; else valueInput">{{item.contactValue}}</span>
+                <ng-template #valueInput>
+                    <input class="form-control" [(ngModel)]="item.contactValue" i18n-placeHolder="valuePlaceHolder"
+                           placeholder="Please enter value" name="contactvalue">
+                </ng-template>
+            </td>
+            <td class="middle center">
+                <button *ngIf="permission.edit && item.id && item.isEdit"
+                        type="button"
+                        class="btn blue btn-sm"
+                        (click)="item.isEdit = true">
+                    <i class="fa fa-save"></i>
+                </button>
+                <button *ngIf="permission.edit && item.id && !item.isEdit"
+                        type="button"
+                        class="btn blue btn-sm"
+                        (click)="item.isEdit = true">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button *ngIf="permission.edit && item.id && item.isEdit"
+                        type="button"
+                        class="btn red btn-sm"
+                        (click)="item.isEdit = false">
+                    <i class="fa fa-ban"></i>
+                </button>
+                <button *ngIf="permission.delete && !(item.isEdit && item.id)"
+                        type="button"
+                        class="btn red btn-sm"
+                        (click)="deleteBranchItem(i)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

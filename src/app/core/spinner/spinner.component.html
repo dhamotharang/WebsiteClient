@@ -1,0 +1,12 @@
+<div class="spinner-backdrop" *ngIf="visible"></div>
+<div class="m-page-loader m-page-loader--non-block" style="margin-left: -80px; margin-top: -20px;"
+     *ngIf="visible">
+    <div class="m-blockui">
+        <span>
+            {{!message ? 'Đang tải dữ liệu. Vui lòng đợi...' : message}}
+        </span>
+        <span>
+            <div class="m-loader m-loader--brand"></div>
+        </span>
+    </div>
+</div>

@@ -1,0 +1,161 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form action="" class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nhập tên công việc cần tìm.">
+            </div>
+            <div class="form-group">
+                <ghm-button classes="btn btn-primary" icon="fa fa-search" [loading]="isSearching"></ghm-button>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Chọn phòng ban, nhân viên --"
+                    [data]="[]"></nh-select>
+            </div>
+            <div class="form-group pull-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary" (click)="add()">
+                        <i class="fa fa-plus"></i>
+                        Thêm
+                    </button>
+                    <button type="button" class="btn btn-primary druseropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="javascript:;">
+                                <i class="fa fa-plus"></i>
+                                Thêm mới
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">
+                                <i class="fa fa-plus"></i>
+                                Thêm từ công việc mẫu
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!-- END: Search Area -->
+<hr>
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <ul class="nav task-main-nav" id="myTaskTab" role="tablist">
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-play" ng-reflect-ng-class="fa fa-play"></i>
+                    <span>Đang xử lý</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-users" ng-reflect-ng-class="fa fa-users"></i>
+                    <span>Tham gia</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn active" href="javascript://">
+                    <i class="fa fa-user" ng-reflect-ng-class="fa fa-user"></i>
+                    <span>Tạo bởi tôi</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-eye" ng-reflect-ng-class="fa fa-eye"></i>
+                    <span>Theo dõi</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-tasks" ng-reflect-ng-class="fa fa-tasks"></i>
+                    <span>Tất cả</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-exclamation-triangle" ng-reflect-ng-class="fa fa-exclamation-triangle"></i>
+                    <span>Quá hạn</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="btn" href="javascript://">
+                    <i class="fa fa-clock-o" ng-reflect-ng-class="fa fa-clock-o"></i>
+                    <span>Chờ duyệt hoàn thành</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div><!-- END: .task-main-nav -->
+<hr>
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-hover table-light">
+            <thead>
+            <tr>
+                <th class="middle">Công việc</th>
+                <th class="w100 center middle">Ngày dự kiến bắt đầu</th>
+                <th class="w100 center middle">Ngày dự kiến hoàn thành</th>
+                <th class="w100 center middle">Ngày bắt đầu</th>
+                <th class="w100 center middle">Ngày hoàn thành</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listItems">
+                <td>
+                    <div class="media media-task-info">
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a routerLink="/tasks/detail/{{ item.id }}" class="task-name">{{ item.name }}</a>
+                            </h4>
+                            <ul class="task-metas">
+                                <li>
+                                    <a href="javascript://">
+                                        <i class="fa fa-comments-o"></i>
+                                        <span>{{ item.commentCount }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript://">
+                                        <i class="fa fa-user"></i>
+                                        <span>{{ item.creatorFullName }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+                <td class="center middle">
+                    <span>
+                        <i class="fa fa-calendar"></i>
+                        {{ item.startDate }}
+                    </span>
+                </td>
+                <td class="center middle">
+                    <span>
+                        <i class="fa fa-calendar"></i>
+                        {{ item.startDate }}
+                    </span>
+                </td>
+                <td class="center middle">
+                    <span>
+                        <i class="fa fa-calendar"></i>
+                        {{ item.startDate }}
+                    </span>
+                </td>
+                <td class="center middle">
+                    <span>
+                        <i class="fa fa-calendar"></i>
+                        {{ item.endDate }}
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                    [isDisabled]="isSearching" [pageName]="'công việc'"></ghm-paging>
+    </div>
+</div>
+<app-task-form></app-task-form>

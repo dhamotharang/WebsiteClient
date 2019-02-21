@@ -1,0 +1,67 @@
+<nh-modal #emailTypeFormModal size="lg">
+    <nh-modal-header [showCloseButton]="true" class="uppercase">
+        <i class="fa fa-email"></i> {isUpdate, select, 0 {Add new email} 1 {Update email} other {}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" [formGroup]="model">
+                <label i18n-ghmLabel="@@smtp" class="col-sm-3 control-label" ghmLabel="Name"
+                       [required]="true"></label>
+                <div class="col-sm-9" [class.has-error]="formErrors.name">
+                    <input type="text" class="form-control" i18n-placeholder="@@name"
+                           id="name"
+                           placeholder="Please enter email type"
+                           formControlName="name"/>
+                    <span class="help-block">{ formErrors?.name, select, required {Email type is required} maxlength {Email type not allowed
+                                                    over 256 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <label i18n-ghmLabel="@@smtp" class="col-sm-3 control-label" ghmLabel="SMTP Server"
+                       [required]="true"></label>
+                <div class="col-sm-9" [class.has-error]="formErrors.host">
+                    <input type="text" class="form-control" i18n-placeholder="@@smtpServerPlaceHolder"
+                           placeholder="Please enter smtp server"
+                           formControlName="host"/>
+                    <span class="help-block">{ formErrors?.host, select, required {SMTP Server is required} maxlength {SMTP Server not allowed
+                                                    over 256 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <label i18n-ghmLabel="@@port" ghmLabel="Port" class="col-sm-3 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-9" [class.has-error]="formErrors.port">
+                    <input class="form-control" i18n-placeholder="@@portPlaceholder"
+                           placeholder="Please enter port" formControlName="port">
+                    <span class="help-block">{formErrors?.port, select, required {PORT is required} isValid {Port is inValid}}</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <mat-checkbox color="primary" formControlName="ssl" i18n="@@ssl">
+                        {model.value.ssl, select, 0 {TSL} 1 {SSI}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="submit"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@cancel">
+                    Cancel
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

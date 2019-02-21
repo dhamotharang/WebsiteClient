@@ -1,0 +1,156 @@
+
+<div class="portlet light">
+    <div class="portlet-title cm-mgb-0">
+        <div class="caption">
+             <span class="caption-subject bold uppercase" i18n="@@language">
+                   <i class="fa fa-globe" aria-hidden="true"></i>
+                   Social Netwok
+             </span>
+        </div>
+        <div class="actions">
+            <button class="btn btn-circle blue" (click)="addSocialNetWork()" type="button" i18n="@@add">
+                <i class="fa fa-plus"></i> Add
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-hover table-stripped">
+            <thead>
+            <tr>
+                <th class="middle w50" i18n="@@icon">Image</th>
+                <th class="middle w150" i18n="@@name">Social Netwok</th>
+                <th class="middle" i18n="@@url">Url</th>
+                <th class="middle" i18n="@@icon">Icon</th>
+                <th class="middle" i18n="@@icon">Order</th>
+                <th class="center middle w100" i18n="@@action"
+                    *ngIf="permission.delete || permission.edit">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listSocialNetwork ; let i = index">
+                <ng-container *ngIf="!item.isEdit && !item.isNew; else formInput">
+                    <td class="middle">
+                        <img ghmImage [src]="item.image" class="w50" [isUrlAbsolute]="true">
+                    </td>
+                    <td class="middle">
+                        <span *ngIf="!item.isEdit && !item.isNew">{{item.name}}</span>
+                    </td>
+                    <td class="middle">
+                        <a *ngIf="!item.isEdit && !item.isNew" href="{{item.url}}">{{item.url}}</a>
+                    </td>
+                    <td class="middle">
+                        <span *ngIf="!item.isEdit && !item.isNew">{{item.icon}}</span>
+                    </td>
+                    <td class="middle">
+                        <span *ngIf="!item.isEdit && !item.isNew">{{item.order}}</span>
+                    </td>
+                    <td class="middle center">
+                        <button *ngIf="permission.edit && item.isEdit"
+                                type="button"
+                                class="btn blue btn-sm" (click)="save(item)">
+                            <i class="fa fa-save"></i>
+                        </button>
+                        <button *ngIf="permission.edit && item.id && !item.isEdit"
+                                type="button"
+                                class="btn blue btn-sm"
+                                (click)="edit(item)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button *ngIf="item.id && item.isEdit"
+                                type="button"
+                                class="btn red btn-sm"
+                                (click)="item.isEdit = false">
+                            <i class="fa fa-ban"></i>
+                        </button>
+                        <button *ngIf="permission.delete && !(item.isEdit && item.id)"
+                                type="button"
+                                class="btn red btn-sm"
+                                [swal]="confirmDeleteSocialNetwork"
+                                (confirm)="delete(item, i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </ng-container>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #formInput>
+    <!--<form action="" [formGroup]="model" (ngSubmit)="save()" style="display: contents">-->
+    <td class="middle">
+        <div class="fileinput fileinput-new" [class.has-error]="formErrors?.image">
+            <div class="fileinput-new thumbnail" [formGroup]="model">
+                <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
+                     [isUrlAbsolute]="true" *ngIf="model.value.image"
+                     src="{{model.value.image}}">
+                <ghm-file-explorer [buttonText]="'Select image'"
+                                   (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
+                <span class="help-block">{formErrors?.image, select, maxLength {Image is over 500 character}}</span>
+            </div>
+        </div>
+    </td>
+    <td class="middle">
+        <div [class.has-error]="formErrors?.name" [formGroup]="model">
+            <input class="form-control" formControlName="name" i18n-placeHolder="namePlaceHolder"
+                   placeholder="Please enter name">
+            {{formErrors?.name}}
+            <span class="help-block">{formErrors?.name, select, required {Name is required} maxLength {Name is over 256 character}}</span>
+        </div>
+    </td>
+    <td class="middle">
+        <div [class.has-error]="formErrors?.url" [formGroup]="model">
+            <input class="form-control" formControlName="url" i18n-placeHolder="namePlaceHolder"
+                   placeholder="Please enter url">
+            <span class="help-block" i18n="@@urlNotCorrect">{formErrors?.url , select, maxLength {Url is over 500 character} pattern {Url is not valid}}</span>
+        </div>
+    </td>
+    <td class="middle">
+        <div [class.has-error]="formErrors?.icon" [formGroup]="model">
+            <input class="form-control" formControlName="icon" i18n-placeHolder="namePlaceHolder"
+                   placeholder="Please enter icon">
+            <span class="help-block">{formErrors?.icon , select, maxLength {Icon is over 50 character}}</span>
+        </div>
+    </td>
+    <td class="middle">
+        <div [class.has-error]="formErrors?.icon" [formGroup]="model">
+            <input class="form-control" formControlName="order" i18n-placeHolder="namePlaceHolder"
+                   placeholder="Please enter order">
+            <span class="help-block">{formErrors?.order , select, isValid {Order must is numder}}</span>
+        </div>
+    </td>
+    <td class="middle center">
+        <button *ngIf="permission.edit"
+                type="button"
+                class="btn blue btn-sm" (click)="save()">
+            <i class="fa fa-save"></i>
+        </button>
+        <button
+                type="button"
+                class="btn red btn-sm"
+                (click)="hideForm()">
+            <i class="fa fa-ban"></i>
+        </button>
+    </td>
+    <!--</form>-->
+</ng-template>
+
+<swal
+        #confirmDeleteSocialNetwork
+        i18n="@@confirmDeleteSocialNetwork"
+        i18n-title="@@confirmTitleDeleteSocialNetwork"
+        i18n-text="@@confirmTextDeleteSocialNetwork"
+        title="Are you sure for delete this socialNetwork?"
+        text="You can't recover this socialNetwork after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+

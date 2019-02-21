@@ -1,0 +1,190 @@
+<div *ngIf="!isShowForm">
+    <form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+        <div class="form-group" *ngIf="isShowSearchBox">
+            <input type="text" placeholder="Nhập tên người dùng" class="form-control" #trainingHistorySearch
+                   (keyup)="searchKeyUp(trainingHistorySearch.value)"/>
+        </div>
+        <div class="form-group">
+            <nh-select [data]="[{id: false, name: 'Ngoài công ty'}, {id: true, name: 'Trong công ty'}]"
+                       [title]="'-- Chọn quá trình --'"
+                       [width]="350"
+                       [(value)]="typeSearch"></nh-select>
+        </div>
+        <div class="form-group">
+            <nh-select [data]="listCourse" [title]="'-- Chọn khóa đào tạo --'" [width]="350"
+                       [(value)]="courseIdSearch"
+                       (onSelectItem)="onSelectCourse($event)"></nh-select>
+        </div>
+        <div class="form-group">
+            <nh-select [data]="listCoursePlace" [title]="'-- Chọn địa điểm đào tạo --'" [width]="350"
+                       [(value)]="coursePlaceIdSearch"
+                       (onSelectItem)="onSelectCoursePlace($event)"></nh-select>
+        </div>
+        <div class="form-group">
+            <nh-date
+                [type]="'inputButton'"
+                [placeholder]="'Chọn từ ngày'"
+                [mask]="true"
+                (selectedDateEvent)="onFromDateSelect($event)"></nh-date>
+        </div>
+        <div class="form-group">
+            <nh-date
+                [type]="'inputButton'"
+                [placeholder]="'Chọn từ ngày'"
+                [mask]="true"
+                (selectedDateEvent)="onToDateSelect($event)"></nh-date>
+        </div>
+        <div class="form-group">
+            <button mat-raised-button color="primary" type="submit">
+                <i class="fa fa-search" *ngIf="!isSearching"></i>
+                <i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>
+                <span class="hidden-xs">Tìm kiếm</span>
+            </button>
+        </div>
+        <div class="form-group pull-right" *ngIf="isHasInsertPermission && allowAdd">
+            <button mat-raised-button color="primary" class="pull-right" type="button" (click)="addNew()"><i
+                class="fa fa-plus"></i> Thêm mới
+            </button>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="center middle w50">STT</th>
+                        <th class="center middle w250">Tên khóa đào tạo</th>
+                        <th class="center middle w250" middle>Nơi đào tạo</th>
+                        <th class="center middle w150">Quá trình</th>
+                        <th class="center middle w100">Từ ngày</th>
+                        <th class="center middle w100">Đến ngày</th>
+                        <th class="center middle w100">Cấp chứng chỉ</th>
+                        <th class="center middle w100">
+                            Sửa, Xóa
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="!isSearching">
+                    <tr *ngFor="let item of listTraining; let i = index">
+                        <td class="center">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td>{{ item.courseName }}</td>
+                        <td>{{ item.coursePlaceName }}</td>
+                        <td>{{ item.type === 0 ? "Ngoài công ty" : "Trong công ty" }}</td>
+                        <td>{{ item.fromDate | dateTimeFormat:"DD/MM/YYYY"}}</td>
+                        <td>{{ item.toDate | dateTimeFormat:"DD/MM/YYYY"}}</td>
+                        <td class="center">
+                            <i class="fa fa-check color-green size-18" *ngIf="item.isHasCertificate"></i>
+                        </td>
+                        <td class="center">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle btn-sm" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="true">
+                                    <i class="fa fa-bars"></i>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                                    <li *ngIf="isHasViewPermission"><a href="javascript://" (click)="detail(item)"><i
+                                        class="fa fa-eye"></i>
+                                        Chi tiết</a>
+                                    </li>
+                                    <li *ngIf="isHasUpdatePermission && allowAdd"><a href="javascript://"
+                                                                                     (click)="setUpdate(item)"><i
+                                        class="fa fa-pencil"></i>
+                                        Chỉnh sửa</a>
+                                    </li>
+                                    <li *ngIf="isHasDeletePermission && allowAdd"><a href="javascript://"
+                                                                                     (click)="delete(item)"><i
+                                        class="fa fa-trash-o"></i> Xóa</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody *ngIf="isSearching">
+                    <tr>
+                        <td colspan="8" class="center">
+                            <div class="spinner" *ngIf="isSearching">
+                                <div class="rect1"></div>
+                                <div class="rect2"></div>
+                                <div class="rect3"></div>
+                                <div class="rect4"></div>
+                                <div class="rect5"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="5" (pageClick)="onPageClick($event)"
+            [isDisabled]="isSearching"
+            [pageName]="'quá trình đào tạo'"></ghm-paging>
+    <!-- end table -->
+</div>
+
+<!-- TODO: Check -->
+<!--<app-training-history-form *ngIf="isShowForm" [listType]="listType" [model]="model" [userId]="userId"-->
+                       <!--(onCloseForm)="onFormClosed($event)"></app-training-history-form>-->
+
+<nh-modal #trainingHistoryDetailModal size="md">
+    <nh-modal-header>
+        <h4 class="modal-title">Thông tin quá trình đào tạo.</h4>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Tên khóa đào tạo</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{ model.courseName }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Nơi đào tạo</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{ model.coursePlaceName }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Quá trình đào tạo</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{ !model.type ? "Ngoài công ty" : "Trong công ty"}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Từ ngày</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{ model.fromDate | dateTimeFormat:"DD/MM/YYYY" }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Đến ngày</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{ model.toDate | dateTimeFormat:"DD/MM/YYYY" }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Được cấp chứng chỉ</label>
+                <div class="col-sm-9">
+                    <i class="fa fa-check color-green size-18" *ngIf="model.isHasCertificate"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Kết quả</label>
+                <div class="col-sm-9">
+                    <div class="form-control height-auto">{{model.result}}</div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button mat-raised-button type="button" nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

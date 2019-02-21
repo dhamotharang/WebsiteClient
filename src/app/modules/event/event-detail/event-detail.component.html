@@ -1,0 +1,169 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@eventDetailTitle">Event detail</span>
+    <small i18n="@@eventModuleTitle">Events management</small>
+</h1>
+
+<div class="tabbable-custom ">
+    <ul class="nav nav-tabs ">
+        <li [class.active]="viewType === 0">
+            <a href="javascript://" i18n="@@eventInfo" (click)="changeViewType(0)"> Event info </a>
+        </li>
+        <li [class.active]="viewType === 1">
+            <a href="javascript://" i18n="@@eventDayInfo" (click)="changeViewType(1)"> Event day info </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <ng-container *ngIf="viewType === 0; else eventDaysTemplate">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group" *ngIf="languages.length > 1">
+                                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                                       class="control-label"
+                                       [required]="true"></label>
+                                <nh-select [data]="languages"
+                                           [(value)]="currentLanguage"></nh-select>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@eventName" ghmLabel="Event name"
+                                       class="control-label"
+                                       [required]="true"></label>
+                                <div>
+                                    <div class="form-control height-auto"
+                                         [innerHTML]="eventDetail?.eventTranslations[i]?.name "></div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                                       class="control-label"
+                                       [required]="true"></label>
+                                <div>
+                                    <div class="form-control height-auto"
+                                         [innerHTML]="eventDetail?.eventTranslations[i]?.description "></div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@content" ghmLabel="Content"
+                                       class="control-label"
+                                       [required]="true"></label>
+                                <div>
+                                    <div class="form-control height-auto"
+                                         [innerHTML]="eventDetail?.eventTranslations[i]?.content "></div>
+                                </div>
+                            </div>
+                        </div> <!-- END: left col -->
+                        <div class="col-sm-6">
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@metaTitle" ghmLabel="Meta title"
+                                       class="control-label"></label>
+                                <div>
+                                    <div
+                                        class="form-control">{{ eventDetail?.eventTranslations[i]?.metaTitle }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@metaDescription" ghmLabel="Meta description"
+                                       class="control-label"></label>
+                                <div>
+                                    <div class="form-control height-auto">{{
+                                        eventDetail?.eventTranslations[i]?.metaDescription}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let eventTranslation of eventDetail?.eventTranslations; index as i"
+                                 [hidden]="eventTranslation?.languageId !== currentLanguage">
+                                <label i18n-ghmLabel="@@metaDescription" ghmLabel="Tags"
+                                       class="control-label"></label>
+                                <div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@startDate" ghmLabel="Start date"
+                                       class="control-label"></label>
+                                <div class="form-control">{{ eventDetail?.startDate | dateTimeFormat:'DD/MM/YYYY'}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label i18n-ghmLabel="@@endDate" ghmLabel="End date"
+                                       class="control-label"></label>
+                                <div class="form-control">{{ eventDetail?.endDate | dateTimeFormat:'DD/MM/YYYY' }}</div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.limitedUsers">
+                                <label i18n-ghmLabel="@@limitedUsers" ghmLabel="Limited users"
+                                       class="control-label"></label>
+                                <div>
+                                    <div class="form-control">{{ eventDetail?.limitedUsers}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 [class.has-error]="formErrors?.limitedAccompanyPersons">
+                                <label i18n-ghmLabel="@@limitedAccompanyUsers" ghmLabel="Limited accompany person"
+                                       class="control-label"></label>
+                                <div>
+                                    <div class="form-control">{{ eventDetail?.limitedAccompanyPersons}}</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowOverload"
+                                                  [disabled]="true"
+                                                  [checked]="eventDetail?.isAllowRegisterWhenOverload">
+                                    {eventDetail?.isAllowRegisterWhenOverload, select, 0 {Not allow overload} 1
+                                    {Allow
+                                    overload}}
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isActive"
+                                                  [disabled]="true"
+                                                  [checked]="eventDetail?.isActive">
+                                    {eventDetail?.isActive, select, 0 {In active} 1 {Active}}
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@staffOnly"
+                                                  [disabled]="true"
+                                                  [checked]="eventDetail?.staffOnly">
+                                    Staff only
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowRegister"
+                                                  [disabled]="true"
+                                                  [checked]="eventDetail?.isAllowRegister">
+                                    Allow register
+                                </mat-slide-toggle>
+                            </div>
+                            <div class="form-group">
+                                <mat-slide-toggle color="primary" i18n="@@isAllowAccompanyPerson"
+                                                  [disabled]="true"
+                                                  [checked]="eventDetail?.isAllowAccompanyPerson">
+                                    Allow accompany person
+                                </mat-slide-toggle>
+                            </div>
+                        </div><!-- END: right col -->
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #eventDaysTemplate>
+    <app-event-day [eventId]="id"
+                   [readonly]="true"></app-event-day>
+</ng-template>

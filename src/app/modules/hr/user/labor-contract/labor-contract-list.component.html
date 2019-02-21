@@ -1,0 +1,203 @@
+<div *ngIf="!isShowForm">
+    <form class="form-inline cm-mgb-10 cm-mgb-10" (ngSubmit)="search(1)">
+        <div class="form-group">
+            <input type="text" placeholder="Nhập số hợp đồng" class="form-control" #laborContractSearch
+                   (keyup)="keyword = laborContractSearch.value"/>
+        </div>
+        <div class="form-group">
+            <nh-select [data]="listType" [title]="'-- Chọn loại hợp đồng --'"
+                       [isEnable]="listType.length > 0"
+                       [width]="350"
+                       [multiple]="true"
+                       (onSelectItem)="onSelectType($event)"></nh-select>
+        </div>
+        <div class="form-group">
+            <nh-date name="searchFromDate"
+                     [type]="'inputButton'"
+                     [placeholder]="'Chọn từ ngày'"
+                     [mask]="true"
+                     [(ngModel)]="fromDateSearch"></nh-date>
+        </div>
+        <div class="form-group">
+            <nh-date name="searchToDate"
+                     [type]="'inputButton'"
+                     [placeholder]="'Chọn từ ngày'"
+                     [mask]="true"
+                     [(ngModel)]="toDateSearch"></nh-date>
+        </div>
+        <div class="form-group">
+            <button mat-raised-button color="primary" type="submit">
+                <i class="fa fa-search" *ngIf="!isSearching"></i>
+                <i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>
+                <span class="hidden-xs">Tìm kiếm</span>
+            </button>
+        </div>
+        <div class="form-group pull-right" *ngIf="allowAdd && isHasInsertPermission">
+            <button mat-raised-button color="primary" class="pull-right" type="button" (click)="addNew()">
+                <i class="fa fa-plus"></i> Thêm hợp đồng
+            </button>
+        </div>
+    </form>
+
+    <div class="row div col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th class="middle w50 center class=center">STT</th>
+                    <th class="middle center w100">Số hợp đồng</th>
+                    <th class="middle center w150">Tên người dùng</th>
+                    <th class="middle center w350">Loại hợp đồng</th>
+                    <th class="middle center w50">Sử dụng</th>
+                    <th class="middle center">Từ ngày</th>
+                    <th class="middle center">Đến ngày</th>
+                    <th class="middle center w100"
+                        *ngIf="isHasViewPermission || isHasUpdatePermission || isHasDeletePermission"></th>
+                </tr>
+                </thead>
+                <tbody *ngIf="!isSearching">
+                <tr *ngFor="let item of listContract; let i = index">
+                    <td class="center">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <td><a href="javascript://" (click)="detail(item)">{{ item.no }}</a></td>
+                    <td><a href="javascript://" (click)="detail(item)">{{ item.fullName }}</a></td>
+                    <td>{{ item.typeName }}</td>
+                    <td class="center">
+                        <i class="fa fa-check color-green size-18" *ngIf="item.isUse"></i>
+                    </td>
+                    <td>{{ item.fromDate | dateTimeFormat:'DD/MM/YYYY' }}</td>
+                    <td>{{ item.toDate | dateTimeFormat:'DD/MM/YYYY' }}</td>
+                    <td class="center w100"
+                        *ngIf="isHasViewPermission || isHasUpdatePermission || isHasDeletePermission">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle btn-sm" type="button"
+                                    id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-bars"></i>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+                                <li *ngIf="isHasViewPermission" (click)="detail(item)"><a
+                                    href="javascript://"><i
+                                    class="fa fa-eye"></i> Chi tiết</a></li>
+                                <li *ngIf="isHasUpdatePermission && allowAdd" (click)="setUpdate(item)"><a
+                                    href="javascript://"><i
+                                    class="fa fa-pencil"></i> Chỉnh sửa</a></li>
+                                <li *ngIf="isHasDeletePermission && allowAdd" (click)="delete(item)"><a
+                                    href="javascript://"><i
+                                    class="fa fa-trash-o"></i> Xóa</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody *ngIf="isSearching">
+                <tr>
+                    <td colspan="9" class="center">
+                        <div class="spinner" *ngIf="isSearching">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="5" (pageClick)="onPageClick($event)"
+            [isDisabled]="isSearching" [pageName]="'hợp đồng'"></ghm-paging>
+</div>
+<user-labor-contract-form *ngIf="isShowForm" [listType]="listType"
+                          [contract]="contract"
+                          [userId]="userId"
+                          [listAttachment]="listAttachment"
+                          (onCloseForm)="onFormClosed($event)"
+></user-labor-contract-form>
+
+<nh-modal #laborContractDetailModal size="md">
+    <nh-modal-header>
+        <h4 class="modal-title">Chi tiết hợp đồng mã số {{contract.no}} - Nhân viên: {{contract.fullName}}</h4>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Số hợp đồng</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{contract.no}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Họ tên người dùng</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{contract.fullName}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Loại hợp đồng</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{contract.typeName}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Từ ngày</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{contract.fromDate | dateTimeFormat:'DD/MM/YYYY'}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Đến ngày</label>
+                <div class="col-sm-9">
+                    <div class="form-control">{{contract.toDate | dateTimeFormat:'DD/MM/YYYY'}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Đang sử dụng</label>
+                <div class="col-sm-9">
+                    <i class="fa fa-check color-green size-18" *ngIf="contract.isUse"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Ghi chú</label>
+                <div class="col-sm-9">
+                    <div class="form-control height-auto">{{contract.note}}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Tệp tin đính kèm</label>
+                <div class="col-sm-9">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="center w50">STT</th>
+                            <th class="center">Tên tệp tin</th>
+                            <th class="center">Dung lượng</th>
+                            <th class="center"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let file of listAttachment; let i = index">
+                            <td class="center">{{i + 1}}</td>
+                            <td>{{file.name}}</td>
+                            <td>{{file.sizeString}}</td>
+                            <td class="center">
+                                <button mat-raised-button color="primary" (click)="downloadAttachment(file)">
+                                    <i class="fa fa-cloud-download"></i>
+                                    Tải về
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button type="button" class="btn btn-default" nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

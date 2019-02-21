@@ -1,0 +1,130 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listApproverTitle">List approver.</span>
+    <small i18n="@@configModuleTitle">Configs</small>
+</h1>
+
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control"
+               i18n-placeholder="@@enterUserNameOrEmailOrPhoneNumberPlaceholder"
+               placeholder="Enter username or email or phone number."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+                i18n-title="@@pleaseSelectTypeTitle"
+                title="-- Please select type --"
+                [data]="approverConfigTypes"
+                (onSelectItem)="onSelectApproverConfigType($event, true)"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn blue" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn btn-light" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <!--<div class="form-group cm-mgl-5 pull-right">-->
+        <!--<button class="btn blue cm-mgr-5" *ngIf="permission.add"-->
+                <!--type="button" (click)="add()" i18n="@@add">-->
+            <!--Add-->
+        <!--</button>-->
+    <!--</div>-->
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">No</th>
+        <th class="middle" i18n="@@user">User</th>
+        <th class="middle center" i18n="@@type">Type</th>
+        <th class="middle center w50" i18n="@@actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listItems$ | async; let i = index">
+        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object avatar-md"
+                             ghmImage
+                             [src]="item.avatar" alt="{{ item.fullName }}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{ item.fullName }}</h4>
+                    <span>{{ item.userName }}</span>
+                </div>
+            </div>
+        </td>
+        <td class="center middle">
+            <span class="badge"
+                  [class.badge-primary]="item.type === 0"
+                  [class.badge-red]="item.type === 1"
+                  [class.badge-success]="item.type === 2">
+                {item.type, select, 0 {News} 1 {Event} 2 {Product}}
+            </span>
+        </td>
+        <td class="middle text-right">
+            <button type="button" class="btn red btn-outline"
+                    i18n-matTooltip="@@delete"
+                    matTooltip="Delete"
+                    [swal]="confirmDelete"
+                    (confirm)="delete(item.userId, item.type)">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td></td>
+        <td>
+            <ghm-user-suggestion
+                    (userSelected)="onUserSelected($event)"
+            ></ghm-user-suggestion>
+        </td>
+        <td>
+            <nh-select
+                    i18n-title="@@pleaseSelectTypeTitle"
+                    title="-- Please select type --"
+                    [data]="approverConfigTypes"
+                    (onSelectItem)="onSelectApproverConfigType($event)"></nh-select>
+        </td>
+        <td class="center">
+            <button type="button" class="btn blue"
+                    i18n-matTooltip="@@save"
+                    matTooltip="Save"
+                    (click)="save()">
+                <i class="fa fa-save"></i>
+            </button>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<ghm-paging [totalRows]="totalRows"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            [isDisabled]="isSearching"
+            [pageSize]="pageSize"
+            (pageClick)="search($event)"
+></ghm-paging>
+
+<swal
+        #confirmDelete
+        i18n-title="@@confirmDeleteApproveConfigTitle"
+        i18n-text="@@confirmDeleteApproveConfigText"
+        title="Are you sure for delete this approver?"
+        text="You can't recover this approver after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel">
+</swal>

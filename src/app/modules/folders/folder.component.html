@@ -1,0 +1,274 @@
+<div class="inbox">
+    <div class="row">
+        <div class="col-lg-2 col-sm-3">
+            <div class="inbox-sidebar">
+                <div class="home-dictionary">
+                    <a href="javascript://" (click)="showFolderInHome()"><i class="fa fa-home blue"></i> Home</a>
+                </div>
+                <nh-tree
+                        [height]="height + 70"
+                        [data]="folderTree"
+                        (nodeExpanded)="expandedFolder($event)"
+                        (nodeSelected)="onSelectNode($event)">
+                </nh-tree>
+            </div>
+        </div>
+        <div class="col-lg-10 col-sm-9 cm-pdl-0" [ngStyle]="{'height': height + 100 + 'px'}">
+            <div class="inbox-body">
+                <div class="form-inline">
+                    <div class="form-group cm-mgr-5">
+                        <button class="btn default" i18n="@@addFolder" (click)="addFolder()" type="button">
+                            <i class="fa fa-folder"></i> Add Folder
+                        </button>
+                    </div>
+                    <div class="form-group cm-mgr-5 cm-mgb-0">
+                        <ghm-file-upload [multiple]="true" [folderId]="folderId"
+                        ></ghm-file-upload>
+                    </div>
+                    <div class="form-group pull-right cm-mgr-5">
+                        <button class="btn default" (click)="onViewType()" type="button"
+                                [matTooltip]="'View type'"
+                                [matTooltipPosition]="'below'">
+                            <i class="fa fa-th-list" aria-hidden="true" *ngIf="type === viewType.list"></i>
+                            <i class="fa fa-th-large" aria-hidden="true" *ngIf="type === viewType.gird"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="page-bar">
+                    <form class="form-inline" (ngSubmit)="searchByName(1)">
+                        <ul class="page-breadcrumb cm-pdl-10">
+                            <li>
+                                <a href="javascript://" (click)="showFolderInHome()">Home</a>
+                                <i class="fa fa-angle-right" *ngIf="listBreadcrumb && listBreadcrumb.length >0"></i>
+                            </li>
+                            <li *ngFor="let breadcrumb of listBreadcrumb; let i = index">
+                                <a href="javascript://" (click)="showByBreadcrumb(breadcrumb.id)"
+                                   *ngIf="i < listBreadcrumb?.length - 1; else spanBreadcrumb">
+                                    {{breadcrumb.name}}
+                                </a>
+                                <i class="fa fa-angle-right" *ngIf="i < listBreadcrumb?.length - 1;"></i>
+                                <ng-template #spanBreadcrumb>
+                                    <span>{{breadcrumb.name}}</span>
+                                </ng-template>
+                            </li>
+                        </ul>
+                        <div class="page-toolbar">
+                            <div class="input-group input-medium">
+                                <input type="text" class="form-control" i18n-placeholder="@@fileSearch"
+                                       placeholder="Enter file name."
+                                       name="searchInput" [(ngModel)]="keyword">
+                                <span class="input-group-btn">
+                             <button type="submit" class="btn blue">
+                                 <i class="fa fa-search"></i>
+                             </button>
+                         </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="type === viewType.list; else viewGird">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="middle" i18n="@@name">Name</th>
+                            <th class="middle w150 visible-lg visible-md" i18n="@@createDate">Create Date</th>
+                            <th class="middle center w150" i18n="@@size">Size</th>
+                            <th class="middle w150" i18n="@@author">Author</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of listFolder; let i = index"
+                            nhContextMenuTrigger
+                            [nhContextMenuTriggerFor]="nhMenuFolder"
+                            [nhContextMenuData]="item">
+                            <td class="middle">
+                                <a *ngIf="!item.isEditName; else inputFolder" (click)="showFolderDetail(item)">
+                                    <i class="fa fa-folder color-folder"></i>
+                                    {{item.name}}
+                                </a>
+                                <ng-template #inputFolder>
+                                    <input class="form-control" [(ngModel)]="item.name" (blur)="updateFolderName(item)">
+                                </ng-template>
+                            </td>
+                            <td class="middle visible-lg visible-md">{{item.createTime | dateTimeFormat :
+                                'DD/MM/YYYY hh:mm'}}
+                            </td>
+                            <td class="middle center"><span></span></td>
+                            <td class="middle">
+                                <img ghmImage="" src="{{item.creatorAvatar}}"
+                                     class="avatar-sm visible-sm visible-xs">
+                                <span class="visible-lg visible-md">
+                                    {{item.creatorFullName}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr *ngFor="let item of listFile; let i = index"
+                            nhContextMenuTrigger
+                            [nhContextMenuTriggerFor]="nhMenuFile"
+                            [nhContextMenuData]="item">
+                            <td class="middle">
+                                <a *ngIf="!item.isEditName; else inputFolder ">
+                                    <img *ngIf="item.isImage" ghmImage [errorImageUrl]="'/assets/images/no-image.png'"
+                                         [nhImageViewer]="item.absoluteUrl"
+                                         class="w50" src="{{item.url}}"/>
+                                    <i [class]="'at-icon at-icon-' + item.extension.replace('.', '')"
+                                       *ngIf="!item.isImage"></i>
+                                    {{item.name}}
+                                </a>
+                                <ng-template #inputFolder>
+                                    <input class="form-control" [(ngModel)]="item.name" (blur)="updateFileName(item)">
+                                </ng-template>
+                            </td>
+                            <td class="middle visible-lg visible-md">{{item.createTime | dateTimeFormat : 'DD/MM/YYYY
+                                hh:mm'}}
+                            </td>
+                            <td class="middle center"><span>{{item.sizeString}}</span></td>
+                            <td class="middle">
+                                <img ghmImage="" src="{{item.creatorAvatar}}"
+                                     class="avatar-sm visible-sm visible-xs">
+                                <span class="visible-lg visible-md">
+                                    {{item.creatorFullName}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ghm-paging *ngIf="isSearchName" [totalRows]="totalRows" [pageSize]="pageSize"
+                            [currentPage]="currentPage" [pageShow]="6" (pageClick)="searchByName($event)"
+                            [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #viewGird>
+    <div class="title" i18n="folder" *ngIf="listFolder && listFolder.length > 0 && !isSearchName">Folder</div>
+    <div class="folder-gird-container" *ngIf="listFolder && listFolder.length > 0">
+        <div class="folder-gird-item" *ngFor="let item of listFolder; let i = index"
+             title="{{item.name}}"
+             nhContextMenuTrigger
+             [nhContextMenuTriggerFor]="nhMenuFolder"
+             [nhContextMenuData]="item">
+            <div class="media" (click)="clickFolder(item)">
+                <div class="media-left">
+                    <i class="fa fa-folder"></i>
+                </div>
+                <div class="media-body">
+                    <div class="name">
+                        <span *ngIf="!item.isEditName; else inputFolder">{{item.name}}</span>
+                        <ng-template #inputFolder>
+                            <input class="form-control" [(ngModel)]="item.name" (click)="clickInputFolder(item)"
+                                   (blur)="updateFolderName(item)">
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="title" i18n="@@file" *ngIf="listFile && listFile.length > 0 && !isSearchName">
+        File
+    </div>
+    <div class="file-grid-container" *ngIf="listFile && listFile.length > 0"
+         [class.no-item]="listFile?.length === 0">
+        <div class="file-grid-item"
+             *ngFor="let item of listFile; let i = index"
+             title="{{item.name}}"
+             nhContextMenuTrigger
+             [nhContextMenuTriggerFor]="nhMenuFile"
+             [nhContextMenuData]="item">
+            <div class="icon">
+                <i [class]="'at-icon at-icon-' + item.extension.replace('.', '')" *ngIf="!item.isImage"></i>
+                <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" src="{{item.url}}"
+                     [nhImageViewer]="item.absoluteUrl"
+                     *ngIf="item.isImage"/>
+            </div>
+            <div class="name">
+                <span *ngIf="!item.isEditName; else inputFolder">{{item.name}}</span>
+                <ng-template #inputFolder>
+                    <input class="form-control" [(ngModel)]="item.name" (blur)="updateFileName(item)">
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="listFile?.length === 0 && listFolder?.length === 0" class="alert alert-warning center font-size-14"
+         i18n="@@noFileOrFolder">No file or folder.
+        <a href="javascript://" (click)="addFolder()" i18n="@@addFolder">Add folder</a></div>
+</ng-template>
+
+<app-folder-form (saveSuccessful)="saveSuccessFolder($event)"></app-folder-form>
+<app-file-form (saveSuccessful)="search()"></app-file-form>
+
+<swal
+        #confirmDeleteFolder
+        i18n="@@confirmDeleteFolder"
+        i18n-title="@@confirmTitleDeleteFolder"
+        i18n-text="@@confirmTextDeleteFolder"
+        title="Are you sure for delete this folder?"
+        text="You can't recover this folder after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmDeleteFile
+        i18n="@@confirmDeleteFile"
+        i18n-title="@@confirmTitleDeleteFile"
+        i18n-text="@@confirmTextDeleteFile"
+        title="Are you sure for delete this file?"
+        text="You can't recover this file after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenuFolder>
+    <nh-menu-item (clicked)="showFolderDetail($event)">
+        <mat-icon class="menu-icon">visibility</mat-icon>
+        <span i18n="@@view">View</span>
+    </nh-menu-item>
+    <nh-menu-item (clicked)="edit($event, true)">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Edit</span>
+    </nh-menu-item>
+    <nh-menu-item (clicked)="$event.isEditName = true">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@rename">Rename</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="delete($event.id, true)">
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Delete</span>
+    </nh-menu-item>
+</nh-menu>
+
+<nh-menu #nhMenuFile>
+    <!--<nh-menu-item (clicked)="showFileDetail($event)">-->
+    <!--<mat-icon class="menu-icon">visibility</mat-icon>-->
+    <!--<span i18n="@@view">View</span>-->
+    <!--</nh-menu-item>-->
+    <nh-menu-item (clicked)="edit($event, false)">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Edit</span>
+    </nh-menu-item>
+    <nh-menu-item (clicked)="$event.isEditName = true">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@rename">Rename</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="delete($event.id, false)">
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Delete</span>
+    </nh-menu-item>
+</nh-menu>

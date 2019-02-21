@@ -1,0 +1,23 @@
+<div class="nh-wrapper-suggestion">
+    <ul class="list-tag-input">
+        <li class="tag" *ngFor="let tag of listTag">
+            {{tag.name}}
+            <a *ngIf="allowDelete" href="javascript://" class="remove-tag" (click)="remove(tag)">
+                <i class="fa fa-times"></i>
+            </a>
+        </li>
+        <li style="display: inline-block" *ngIf="allowEdit">
+            <input class="tag-input" (focus)="isHasFocus" type="text" #tagInput
+                   (keyup)="typing($event)"
+                   (keyPress)="$event.preventDefault()"
+                   [(ngModel)]="value"
+                   [attr.placeholder]="placeholder"/>
+            <i class="fa fa-circle-o-notch fa-pulse loading-icon" *ngIf="isSearching"></i>
+            <ul class="dropdown-menu" *ngIf="isShowMenu">
+                <li *ngFor="let item of listItems" [class.selected]="item.selected" (click)="selectItem(item)">
+                    <p> {{ item.name }}</p>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

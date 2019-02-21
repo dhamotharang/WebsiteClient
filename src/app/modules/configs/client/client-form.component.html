@@ -1,0 +1,175 @@
+<form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+    <div class="m-portlet">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="flaticon-computer"></i>
+							</span>
+                    <h3 class="m-portlet__head-text">
+                        {{isUpdate ? "Cập nhật thông tin Client" : "Thêm mới Client"}}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="m-portlet__body">
+            <pre>{{model.value|json}}</pre>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Client ID" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <div type="text" value=""
+                                 class="form-control disabled"
+                                 placeholder="Nhập mã trang">
+                                {{model.value.clientId}}
+                            </div>
+                        </div>
+                    </div><!-- END: clientId -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Client Name" class="col-3 col-form-label" [required]="true"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <input type="text" class="form-control" placeholder="Enter client name"
+                                   formControlName="clientName">
+                        </div>
+                    </div><!-- END: clientName -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Refresh token usage" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <nh-select
+                                title="-- Select refresh token usage --"
+                                [data]="[{id: 0, name: 'Reuse'}, {id: 1, name: 'One time only'}]"
+                                formControlName="refreshTokenUsage"
+                            ></nh-select>
+                        </div>
+                    </div><!-- END: Refresh token usage -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Refresh Token Expiration" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <nh-select
+                                title="-- Select refresh token expiration --"
+                                [data]="[{id: 0, name: 'Sliding'}, {id: 1, name: 'Absolute'}]"
+                                formControlName="refreshTokenExpiration"
+                            ></nh-select>
+                        </div>
+                    </div><!-- END: Refresh Token Expiration -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Allowed Grant Types" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <nh-select
+                                title="-- Select grant types --"
+                                [data]="listGrantTypes"
+                                formControlName="clientAllowedGrantTypes"
+                            ></nh-select>
+                        </div>
+                    </div><!-- END: Allowed Grant Types -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Allowed Scopes" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <textarea type="text" class="form-control" rows="3"
+                                      placeholder="Please enter allowed scope separate by comma."
+                                      formControlName="clientAllowedScopes"></textarea>
+                        </div>
+                    </div><!-- END: Allowed Scopes -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Allowed Cors Origins" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <textarea class="form-control"
+                                      rows="3"
+                                      placeholder="Please enter allowed cors origin separate by comma."
+                                      formControlName="clientAllowedCorsOrigins"></textarea>
+                        </div>
+                    </div><!-- END: Refresh Token Expiration -->
+                </div><!-- END: first-col -->
+                <div class="col-sm-6">
+                    <div class="form-group m-form__group">
+                        <div class="col-sm-12">
+                            <mat-slide-toggle formControlName="enabled"> Enabled</mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group">
+                        <div class="col-md-12 col-sm-12">
+                            <mat-slide-toggle formControlName="allowOfflineAccess"> Allowed Offline Access
+                            </mat-slide-toggle>
+                        </div>
+                    </div><!-- END: Allowed Offline Access -->
+                    <div class="form-group m-form__group">
+                        <div class="col-sm-12">
+                            <mat-slide-toggle formControlName="requireClientSecret"> Require Client Secret
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Client Secret" class="col-3 col-form-label"
+                               [required]="model.value.requireClientSecret"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="input-group">
+                                <input [attr.type]="isShowSecret ? 'text' : 'password'" class="form-control"
+                                       placeholder="Enter secret"
+                                       formControlName="clientSecret">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button" matTooltip="Show secret"
+                                            matTooltipPosition="above" (click)="toggleShowSecret()">
+                                        <!--<i class="flaticon-medical"></i>-->
+                                        <i class="fa fa-eye" *ngIf="isShowSecret"></i>
+                                        <i class="fa fa-eye-slash" *ngIf="!isShowSecret"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END: clientSecret -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Absolute Refresh Token Lifetime" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control"
+                                               placeholder="Enter absolute refresh token lifetime"
+                                               formControlName="absoluteRefreshTokenLifetime">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"
+                                                  id="absoluteRefreshTokenLifetime">seconds</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="m-form__help">
+                                Maximum lifetime of a refresh token in seconds. Defaults to 2592000 seconds / 30 days
+                            </span>
+                        </div>
+                    </div><!-- END: AbsoluteRefreshTokenLifetime -->
+                    <div class="form-group m-form__group">
+                        <label ghmLabel="Sliding Refresh Token Lifetime" class="col-3 col-form-label"></label>
+                        <div class="col-md-12 col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control"
+                                           placeholder="Enter sliding refresh token lifetime"
+                                           formControlName="slidingRefreshTokenLifetime">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="slidingRefreshTokenLifeTime">seconds</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="m-form__help">
+                                Sliding lifetime of a refresh token in seconds. Defaults to 1296000 seconds / 15 days
+                            </span>
+                        </div>
+                    </div><!-- END: SlidingRefreshTokenLifetime -->
+                </div><!-- END: second-col -->
+            </div>
+        </div><!-- END .m-portlet__body -->
+        <div class="m-portlet__foot m-portlet__foot--fit">
+            <div class="m-form__actions m-form__actions">
+                <button mat-raised-button color="primary">
+                    Lưu lại
+                </button>
+                <button type="button" mat-raised-button routerLink="/config/client">
+                    Hủy bỏ
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

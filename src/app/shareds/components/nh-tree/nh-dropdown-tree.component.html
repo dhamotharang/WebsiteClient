@@ -1,0 +1,30 @@
+﻿<div class="nh-tree-dropdown ">
+    <button class="nh-tree-label btn default text-ellipsis" type="button" (click)="dropdownButtonClick()">
+        {{ selectTitle }}
+        <span class="caret"></span>
+    </button>
+    <div class="nh-content-wrapper" [hidden]="!isShow"
+         [style.width]="width + 'px'">
+        <ul class="nh-tree-default-value">
+            <li class="center"><a href="javascript://" (click)="selectDefaultNode()">{{ title }}</a></li>
+        </ul>
+        <div class="nh-tree-content">
+            <nh-tree
+                [height]="250"
+                [data]="data"
+                [isMultiple]="isMultiple"
+                [selectedIds]="value"
+                (nodeSelected)="onNodeSelected($event)"
+                (nodeExpanded)="onNodeExpanded($event)"
+            ></nh-tree>
+        </div>
+        <div class="nh-tree-footer" *ngIf="isMultiple">
+            <button class="btn blue cm-mgr-5" type="button" (click)="acceptButtonClick()">
+                {{ acceptText }}
+            </button>
+            <button class="btn red" type="button" (click)="cancelButtonClick()">
+                {{ cancelText }}
+            </button>
+        </div>
+    </div>
+</div>

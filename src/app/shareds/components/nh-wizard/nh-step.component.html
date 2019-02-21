@@ -1,0 +1,32 @@
+<div *ngIf="isShow">
+    <div class="step-content-container">
+        <div class="spinner" *ngIf="isLoading">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <ng-content *ngIf="!isLoading"></ng-content>
+    </div><!-- END: .content-container -->
+    <div class="nh-wizard-step-footer" *ngIf="!isFinish">
+        <button type="button" class="back btn btn-default btn-circle" *ngIf="step > 1"
+                (click)="goBack()">
+            {{backLabel}}
+        </button>
+        <button type="button" class="next btn btn-default btn-circle"
+                *ngIf="!isLast; else lastStepButtonTemplate"
+                [disabled]="!isValid || isLoading"
+                (click)="goNext()">
+            <i class="fa fa-spinner fa-pulse" *ngIf="isLoading"></i>
+            {{nextLabel}}
+        </button>
+        <ng-template #lastStepButtonTemplate>
+            <button type="button" class="next btn btn-default btn-circle finish"
+                    [disabled]="!isValid"
+                    (click)="goFinish()">
+                {{finishLabel}}
+            </button>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,132 @@
+<nh-modal #pageFormModal size="md"
+          (show)="onModalShown()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        <h4 class="modal-title">
+            <i class="fa fa-file-text-o"></i>
+            {{isUpdate ? "Cập nhật trang" : "Thêm mới trang"}}
+        </h4>
+    </nh-modal-header>
+    <form class="horizontal-form" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content class="form-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tabbable-custom">
+                        <ul class="nav nav-tabs " *ngIf="languages.length > 0">
+                            <li [class.active]="item.id === currentLanguage"
+                                *ngFor="let item of languages; let i = index">
+                                <a href="javascript://" (click)="currentLanguage = item.id">
+                                    {{ item.name }}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group" [class.has-error]="formErrors.id">
+                                            <label ghmLabel="Mã trang" class="control-label" [required]="true"></label>
+                                            <input type="text" id="pageId" class="form-control"
+                                                   autocomplete="off"
+                                                   placeholder="Nhập mã trang"
+                                                   formControlName="id"
+                                                   [attr.disabled]="isUpdate ? '' : null"/>
+                                            <div class="help-block" *ngIf="formErrors.id">{{formErrors.id}}</div>
+                                        </div>
+                                        <span formArrayName="modelTranslations">
+                                            <div class="form-group"
+                                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                                 [formGroupName]="i"
+                                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                                <label ghmLabel="Tên trang"
+                                                       class="control-label"
+                                                       [required]="true"
+                                                ></label>
+                                                <input type="text" class="form-control" placeholder="Nhập tên trang"
+                                                       formControlName="name">
+                                            </div>
+                                        </span>
+                                        <div class="form-group" [class.has-error]="formErrors.url">
+                                            <label ghmLabel="Đường dẫn" class="control-label"></label>
+                                            <input type="text" class="form-control" placeholder="Nhập đường dẫn"
+                                                   formControlName="url">
+                                            <div class="help-block" *ngIf="formErrors.url">{{formErrors.url}}</div>
+                                        </div>
+                                        <span formArrayName="modelTranslations">
+                                            <div class="form-group"
+                                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                                 [formGroupName]="i"
+                                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                                                <label ghmLabel="Mô tả"
+                                                       class="control-label"
+                                                ></label>
+                                                <textarea class="form-control" rows="3"
+                                                          placeholder="Nhập nội dung mô tả"
+                                                          formControlName="description"
+                                                ></textarea>
+                                            </div>
+                                        </span>
+                                    </div><!-- END: left col -->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label ghmLabel="Trang cha" class="control-label"></label>
+                                            <nh-dropdown-tree
+                                                [title]="'-- Chọn trang cha --'"
+                                                [data]="pageTree"
+                                                [width]="350"
+                                                formControlName="parentId"
+                                            ></nh-dropdown-tree>
+                                            <div class="help-block"></div>
+                                        </div>
+                                        <div class="form-group" [class.has-error]="formErrors.icon">
+                                            <label ghmLabel="Icon" class="control-label"></label>
+                                            <input type="text" class="form-control" placeholder="Nhập icon"
+                                                   formControlName="icon">
+                                            <div class="help-block" *ngIf="formErrors.icon">{{formErrors.icon}}</div>
+                                        </div>
+                                        <div class="form-group" [class.has-error]="formErrors.bgColor">
+                                            <label ghmLabel="Màu nền" class="control-label"></label>
+                                            <input type="text" class="form-control" placeholder="Nhập màu nền"
+                                                   formControlName="bgColor">
+                                            <div class="help-block" *ngIf="formErrors.bgColor">{{formErrors.bgColor}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label ghmLabel="Thứ tự" class="control-label"></label>
+                                            <input type="text" class="form-control" placeholder="Nhập thứ tự"
+                                                   formControlName="order">
+                                            <div class="help-block"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <mat-slide-toggle color="primary" formControlName="isActive">Kích hoạt
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div><!-- END: right col -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer class="text-right">
+            <mat-checkbox
+                class="cm-mgr-5"
+                color="primary"
+                name="isCreateAnother"
+                *ngIf="!isUpdate"
+                [(checked)]="isCreateAnother"
+                (change)="isCreateAnother = !isCreateAnother"> Tiếp tục tạo
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary" [loading]="isSaving">
+                Lưu lại
+            </ghm-button>
+            <ghm-button type="button" icon="fa fa-times" classes="btn btn-light cm-mgl-5" [loading]="isSaving"
+                        nh-dismiss="true">
+                Hủy bỏ
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

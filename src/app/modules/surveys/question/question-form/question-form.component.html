@@ -1,0 +1,205 @@
+<nh-modal #questionFormModal size="md"
+          (shown)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        {isUpdate, select, 0 {Add new question} 1 {Update question} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save(1)" [formGroup]="model">
+        <nh-modal-content>
+            <div class="col-sm-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-green-sharp">
+                            <i class="icon-speech font-green-sharp"></i>
+                            <span class="caption-subject font-blue-madison bold uppercase"
+                                  i18n="@@job">
+                                    {isUpdate, select, 0 {Add new question group} 1 {Update question group} other {}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tab-content" formArrayName="modelTranslations">
+                            <div class="form-group" *ngIf="languages && languages.length > 1">
+                                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                                       class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9">
+                                    <nh-select [data]="languages"
+                                               i18n-title="@@pleaseSelectLanguage"
+                                               title="-- Please select language --"
+                                               name="language"
+                                               [(value)]="currentLanguage"
+                                               (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                <label i18n-ghmLabel="@@questionName" ghmLabel="Question Name"
+                                       class="col-sm-3 control-label" [required]="true"></label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control"
+                                           i18n-placeholder="@@enterQuestionNamePlaceHolder"
+                                           placeholder="Enter question name."
+                                           formControlName="name">
+                                    <span class="help-block">
+                                                    { translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Question name is required} maxlength {Question name
+                                                    name not allowed over 256 characters} }
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.content">
+                                <label i18n="@@questionContent" i18n-ghmLabel ghmLabel="Question content"
+                                       class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9">
+                                            <textarea type="text" class="form-control"
+                                                      i18n-placeholder="@@enterQuestionContentPlaceHolder"
+                                                      placeholder="Enter question content."
+                                                      formControlName="content">
+                                            </textarea>
+                                    <span class="help-block">
+                                                    { translationFormErrors[modelTranslation.value.languageId]?.content, select, maxlength {Question content
+                                                    name not allowed over 40000 characters} }
+                                            </span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5" [formGroup]="model"
+                                 [class.has-error]="formErrors?.questionGroupId">
+                                <label i18n="@@questionGroup" i18n-ghmLabel ghmLabel="Question group"
+                                       class="col-sm-3 control-label" [required]="true"></label>
+                                <div class="col-sm-9" [formGroup]="model">
+                                    <nh-dropdown-tree
+                                        [data]="questionGroupTree" i18n-title="@@selectQuestionGroup"
+                                        [width]="500"
+                                        [selectedText]="questionGroupName"
+                                        formControlName="questionGroupId">
+                                    </nh-dropdown-tree>
+                                    <span class="help-block">
+                                            {{formErrors.questionGroupId}}
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5" [class.has-error]="formErrors.questionType">
+                                <label i18n="@@questionType" i18n-ghmLabel ghmLabel="Question type"
+                                       class="col-sm-3 control-label" [required]="true"></label>
+                                <div class="col-sm-9" [formGroup]="model">
+                                    <nh-select
+                                        [data]="listQuestionType"
+                                        i18n-title="@@selectQuestionType"
+                                        title="-- Select question type --"
+                                        formControlName="questionType"
+                                        (onSelectItem)="selectQuestionType($event)">
+                                    </nh-select>
+                                    <span class="help-block">{{formErrors.questionType}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5" *ngIf="type !== questionType.selfResponded"
+                                 [class.has-error]="formErrors.score">
+                                <label i18n="@@questionType" i18n-ghmLabel ghmLabel="Score"
+                                       class="col-sm-3 control-label"></label>
+                                <div class="col-sm-3" [formGroup]="model">
+                                    <input type="text" class="form-control"
+                                           i18n-placeholder="@@enterScorePlaceHolder"
+                                           placeholder="Enter score." formControlName="score">
+                                    <span class="help-block">{{formErrors.score}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5" *ngIf="type === questionType.selfResponded"
+                                 [class.has-error]="formErrors.totalAnswer">
+                                <label i18n="@@questionType" i18n-ghmLabel ghmLabel="Total Answer"
+                                       class="col-sm-3 control-label" [required]="true"></label>
+                                <div class="col-sm-3" [formGroup]="model">
+                                    <input type="text" class="form-control"
+                                           i18n-placeholder="@@enterTotalAnswerPlaceHolder"
+                                           placeholder="Enter total answer." formControlName="totalAnswer">
+                                    <span class="help-block">{{formErrors.totalAnswer}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.explain">
+                                <label i18n="@@note" i18n-ghmLabel ghmLabel="Note"
+                                       class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9">
+                                        <textarea class="form-control" rows="3" formControlName="explain"
+                                                  i18n-placeholder="@@enterExplainPlaceholder"
+                                                  placeholder="Enter explain."></textarea>
+                                    <span class="help-block">
+                                                    { translationFormErrors[modelTranslation.value.languageId]?.explain, select, maxlength {Note not allowed
+                                                    over 4000 characters} }
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="form-group cm-mgb-5" [formGroup]="model">
+                                <div class="col-sm-9 col-sm-offset-3">
+                                    <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                        {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="type !== questionType.essay && type !== questionType.selfResponded"
+                     class="portlet-title tabbable-line">
+                    <div class="caption caption-md">
+                        <i class="icon-globe theme-font hide"></i>
+                        <span class="caption-subject font-blue-madison bold uppercase"
+                              i18n="@@answer">Answer</span>
+                    </div>
+                </div>
+                <div *ngIf="type !== questionType.essay && type !== questionType.selfResponded"
+                     class="portlet-body">
+                    <div class="form-group cm-mgb-0">
+                        <div class="col-sm-12">
+                            <app-survey-answer [type]="type"
+                                               [listLanguage]="languages"
+                                               [languageId]="currentLanguage"
+                                               [listAnswer]="listAnswer"
+                                               [isUpdate]="isUpdate"
+                                               [score]="model.value.score"
+                                               (onSelectAnswer)="selectAnswer($event)"></app-survey-answer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button *ngIf="isUpdate && (model.value.questionStatus === questionStatus.draft
+                         || model.value.questionStatus === questionStatus.decline)"
+                        classes="btn btn-primary cm-mgr-5" type="button"
+                        (clicked)="send()">
+                <span i18n="@@send">Send</span>
+            </ghm-button>
+            <ghm-button classes="btn btn-primary cm-mgr-5" type="button"
+                        [loading]="isSaving"
+                        (clicked)="save(2)">
+                <span i18n="@@saveAndSend">Save & Send</span>
+            </ghm-button>
+            <ghm-button classes="btn btn-primary cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Save</span>
+            </ghm-button>
+            <ghm-button classes="btn btn-default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Close</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

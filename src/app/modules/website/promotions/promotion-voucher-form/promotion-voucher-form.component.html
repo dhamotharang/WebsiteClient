@@ -1,0 +1,130 @@
+<nh-modal size="sm" #promotionVoucherGenerateModal>
+    <nh-modal-header>
+        <h4 class="title">
+            <mat-icon>done</mat-icon>
+            Tạo mã khuyến mại tự động.
+        </h4>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="generateVoucher()">
+        <nh-modal-content>
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="" class="col-sm-12">Mã khuyến mại <span class="color-red">*</span>:</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" placeholder="Nhập số lượng mã cần tạo."
+                               name="totalVoucher" [(ngModel)]="totalVoucher">
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <button mat-raised-button color="primary">
+                <mat-icon>done</mat-icon>
+                Tiến hành tạo
+            </button>
+            <button mat-raised-button color="default" type="button" nh-dismiss="true">
+                <mat-icon>close</mat-icon>
+                Đóng lại
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal><!-- END: selectServiceModal -->
+
+<nh-modal size="sm" #promotionGenerateVoucherForUserModal>
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-gift"></i>
+            Tạo mã khuyến mại cho người dùng
+        </h4>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group">
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Họ tên <span class="color-red">*</span>:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập tên người sử dụng"
+                               formControlName="fullName">
+                        <div class="alert alert-danger" *ngIf="formErrors.fullName">
+                            {{formErrors.fullName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Số điện thoại <span class="color-red">*</span>:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập số điện thoại người sử dụng."
+                               formControlName="phoneNumber"/>
+                        <div class="alert alert-danger" *ngIf="formErrors.phoneNumber">
+                            {{formErrors.phoneNumber}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập email người sử dụng."
+                               formControlName="email"/>
+                        <div class="alert alert-danger" *ngIf="formErrors.email">
+                            {{formErrors.email}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Mức giảm giá:</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Nhập mức giá sẽ giảm"
+                                   formControlName="discountNumber"/>
+                            <div class="input-group-btn">
+                                <nh-select title="-"
+                                           [data]="listDiscountType"
+                                           formControlName="discountType"
+                                ></nh-select>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger" *ngIf="formErrors.discountNumber">
+                            {{formErrors.discountNumber}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Áp dụng từ ngày:</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" placeholder="Áp dụng từ ngày"
+                               datetimepicker
+                               [value]="model.value.fromDate"
+                               (selected)="onSelectFromDate($event)"
+                        />
+                        <div class="alert alert-danger" *ngIf="formErrors.discountNumber">
+                            {{formErrors.discountNumber}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label">Áp dụng đến ngày:</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" placeholder="Áp dụng đến ngày"
+                               datetimepicker
+                               [value]="model.value.toDate"
+                               (selected)="onSelectToDate($event)"
+                        />
+                        <div class="alert alert-danger" *ngIf="formErrors.discountNumber">
+                            {{formErrors.discountNumber}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <button mat-raised-button color="primary">
+                <mat-icon>save</mat-icon>
+                Lưu lại
+            </button>
+            <button mat-raised-button color="default" type="button" nh-dismiss="true">
+                <mat-icon>close</mat-icon>
+                Đóng lại
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

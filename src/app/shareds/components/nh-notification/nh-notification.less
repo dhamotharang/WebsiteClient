@@ -1,0 +1,72 @@
+.nh-notification-container {
+    position: fixed;
+    z-index: 9999;
+    padding: 20px;
+    width: 350px;
+
+    &.top-left {
+        top: 0;
+        left: 0;
+    }
+
+    &.top-right {
+        top: 0;
+        right: 0;
+    }
+
+    &.bottom-left {
+        bottom: 0;
+        left: 0;
+    }
+
+    &.bottom-right {
+        bottom: 0;
+        right: 0;
+    }
+
+    .media {
+        background: white;
+        padding: 10px;
+        position: relative;
+        box-shadow: 3px 3px 5px #999;
+        margin-bottom: 10px;
+        font-size: 13.5px;
+        &.info {
+            border-left: 3px solid dodgerblue;
+        }
+        &.warning {
+            border-left: 3px solid darkorange;
+        }
+        &.danger {
+            border-left: 3px solid darkred;
+        }
+        &.success {
+            border-left: 3px solid forestgreen;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        button.nh-notification-close {
+            background: transparent;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 10px;
+            border: none;
+
+            &:active, &:focus, &:visited {
+                outline: none;
+            }
+        }
+
+        .times i {
+            margin-right: 5px;
+        }
+    }
+}

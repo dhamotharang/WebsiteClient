@@ -1,0 +1,91 @@
+<nh-modal #surveyUserReportByGroupModal>
+    <nh-modal-header>
+        <span i18n="@@surveyReport">Survey report</span>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="row">
+            <!--<div class="col-sm-12 cm-mgb-10">-->
+                <!--<div class="user-item">-->
+                    <!--<div class="avatar-wrapper">-->
+                        <!--<img class="avatar-sm rounded-avatar"-->
+                             <!--ghm-image-->
+                             <!--src="{{ reportDetail?.avatar }}"-->
+                             <!--alt="{{ reportDetail?.fullName }}">-->
+                    <!--</div>&lt;!&ndash; END: .avatar-wrapper &ndash;&gt;-->
+                    <!--<div class="user-info">-->
+                        <!--<span class="full-name">{{ reportDetail?.fullName }}</span>-->
+                        <!--<div class="description"> {{ reportDetail?.officeName }} - {{ reportDetail?.positionName }}</div>-->
+                    <!--</div>&lt;!&ndash; END: .info &ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="col-sm-12">
+                <div class="tabbable-custom">
+                    <ul class="nav nav-tabs ">
+                        <li [class.active]="tabType === 0">
+                            <a href="javascript://" i18n="@@surveyDetail" (click)="changeTab(0)"> Survey detail </a>
+                        </li>
+                        <li [class.active]="tabType === 1">
+                            <a href="javascript://" i18n="@@reportByQuestionGroup" (click)="changeTab(1)"> Report by
+                                question
+                                group </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div [class.active]="tabType === 0" class="tab-pane" id="tab_5_1">
+                            <app-survey-exam-detail></app-survey-exam-detail>
+                        </div>
+                        <div [class.active]="tabType === 1" class="tab-pane" id="tab_5_2">
+                            <!--<div class="text-right">-->
+                                <!--<div class="btn-group" role="group" aria-label="...">-->
+                                    <!--<button type="button" class="btn btn-default"-->
+                                            <!--[class.active]="viewType === 0"-->
+                                            <!--(click)="changeView(0)">-->
+                                        <!--<i class="fa fa-table"></i>-->
+                                    <!--</button>-->
+                                    <!--<button type="button" class="btn btn-default"-->
+                                            <!--[class.active]="viewType === 1"-->
+                                            <!--(click)="changeView(1)">-->
+                                        <!--<i class="fa fa-bar-chart"></i>-->
+                                    <!--</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <table class="table table-stripped table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="middle center" i18n="@@no">No</th>
+                                    <th i18n="@@questionGroup">Question group</th>
+                                    <th class="text-right" i18n="@@totalAnswers">Total answers</th>
+                                    <th class="text-right" i18n="@@totalCorrectAnswers">Total correct answers</th>
+                                    <th class="text-right" i18n="@@correctPercent">Correct percent</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let questionGroup of listQuestionGroups; let i = index">
+                                    <td class="center">{{ (i + 1) }}</td>
+                                    <td>{{ questionGroup.questionGroupName }}</td>
+                                    <td class="text-right">{{ questionGroup.totalAnswers }}/{{
+                                        questionGroup.totalQuestions }}
+                                    </td>
+                                    <td class="text-right">{{ questionGroup.totalCorrectAnswers }}/{{
+                                        questionGroup.totalQuestions }}
+                                    </td>
+                                    <td class="text-right">{{ questionGroup.correctPercent }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button type="button" class="btn btn-default" i18n="@@close" nh-dismiss="true">
+            Close
+        </button>
+    </nh-modal-footer>
+</nh-modal>
+
+<!--<ng-template #chartView>-->
+    <!--<div [chart]="groupChart"></div>-->
+<!--</ng-template>-->

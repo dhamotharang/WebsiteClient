@@ -1,0 +1,58 @@
+<div class="page-wrapper">
+    <div class="page-header navbar navbar-fixed-top" app-header #header></div>
+    <!-- BEGIN HEADER & CONTENT DIVIDER -->
+    <div class="clearfix"></div>
+    <!-- END HEADER & CONTENT DIVIDER -->
+    <div class="page-container" #container>
+        <div app-sidebar></div><!-- END: .page-sidebar-wrapper -->
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content" #pageContent>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-bar">
+                            <ul class="page-breadcrumb">
+                                <li>
+                                    <a href="index.html">Home</a>
+                                    <i class="fa fa-circle"></i>
+                                </li>
+                                <li>
+                                    <span>Dashboard</span>
+                                </li>
+                            </ul>
+                            <div class="page-toolbar">
+                                <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm"
+                                     data-container="body"
+                                     data-placement="bottom" data-original-title="Change dashboard date range">
+                                    <i class="icon-calendar"></i>&nbsp;
+                                    <span class="thin uppercase hidden-xs">April 9, 2018 - May 8, 2018</span>&nbsp;
+                                    <i class="fa fa-angle-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <router-outlet></router-outlet>
+            </div><!-- END: .page-content -->
+        </div><!-- END: .page-content-wrapper -->
+    </div><!-- END: .page-container -->
+</div><!-- END: .page-wrapper -->
+
+<!--&lt;!&ndash; BEGIN: Select themes &ndash;&gt;-->
+<!--<div class="theme-panel hidden-xs hidden-sm">-->
+<!--<div class="toggler" (click)="isShowChooseTheme = true"-->
+<!--*ngIf="!isShowChooseTheme; else showChooseThemeTemplate"></div>-->
+<!--<ng-template #showChooseThemeTemplate>-->
+<!--<div class="toggler-close" style="display: block;" (click)="isShowChooseTheme = false"></div>-->
+<!--<div class="theme-options" style="display: block;">-->
+<!--<div class="theme-option theme-colors clearfix">-->
+<!--<span> THAY ĐỔI CHỦ ĐỀ </span>-->
+<!--<ul>-->
+<!--<li class="color-{{theme}} tooltips current" *ngFor="let theme of themes"-->
+<!--(click)="chooseTheme(theme)"></li>-->
+<!--</ul>-->
+<!--</div>-->
+<!--</div>-->
+<!--</ng-template>-->
+<!--</div>-->
+<!--&lt;!&ndash; END: Select theme &ndash;&gt;-->

@@ -1,0 +1,115 @@
+<form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+    <div formArrayName="modelTranslations">
+        <div class="form-group" *ngIf="languages && languages.length > 1">
+            <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                   class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <nh-select [data]="languages"
+                           i18n-title="@@pleaseSelectLanguage"
+                           title="-- Please select language --"
+                           name="language"
+                           [(value)]="currentLanguage"
+                           (onSelectItem)="currentLanguage = $event.id"></nh-select>
+            </div>
+        </div>
+        <div class="form-group" [formGroup]="model"
+             [class.has-error]="formErrors?.logo">
+            <label i18n-ghmLabel="@@logo" ghmLabel="Logo" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <div class="fileinput fileinput-new">
+                    <div class="fileinput-new thumbnail">
+                        <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
+                             src="{{ model.value.logo}}" [isUrlAbsolute]="true">
+                        <ghm-file-explorer i18n-buttonText="@@selectImage" [buttonText]="'Select image'"
+                                           (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
+                    </div>
+                </div>
+                <span class="help-block">{ formErrors?.logo, select,  maxLength {Logo time not allowed
+                                                    over 500 characters} }</span>
+            </div>
+        </div>
+        <div class="form-group"
+             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+             [formGroupName]="i"
+             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+            <label i18n-ghmLabel="@@name" ghmLabel="Name" class="col-sm-3 control-label"
+                   [required]="true"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" i18n-placeholder="@@namePlaceHolder"
+                       id="{{'name ' + currentLanguage}}"
+                       placeholder="Please enter name "
+                       formControlName="name"/>
+                <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Name is required} maxLength {Name not allowed
+                                                    over 256 characters} }</span>
+            </div>
+        </div>
+        <div class="form-group" [hidden]="modelTranslation.value.languageId !== currentLanguage"
+             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+             [formGroupName]="i"
+             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.adsress">
+            <label i18n-ghmLabel="@@address" ghmLabel="Address" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" i18n-placeholder="@@address"
+                       placeholder="Please enter address"
+                       formControlName="address"/>
+                <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.address, select, maxLength {Address not allowed
+                                                    over 500 characters}}
+                 </span>
+            </div>
+        </div>
+        <div class="form-group" [formGroup]="model"
+             [class.has-error]="formErrors?.workTime">
+            <label i18n-ghmLabel="@@workTime" ghmLabel="Work Time" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" i18n-placeholder="@@workTimePlaceHolder"
+                       placeholder="Please enter work time"
+                       formControlName="workTime"/>
+                <span class="help-block">{ formErrors?.workTime, select,  maxLength {Work time not allowed
+                                                    over 256 characters} }</span>
+            </div>
+        </div>
+        <div class="form-group" [formGroup]="model"
+             [class.has-error]="formErrors?.googleMap">
+            <label i18n-ghmLabel="@@googleMap" ghmLabel="GoogleMap" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" i18n-placeholder="@@googleMapPlaceHolder"
+                       placeholder="Please enter link google map"
+                       formControlName="googleMap"/>
+                <span class="help-block">{ formErrors?.googleMap, select,  maxLength {Link google map not allowed
+                                                    over 500 characters}}</span>
+            </div>
+        </div>
+        <div class="form-group" [formGroup]="model"
+             [class.has-error]="formErrors?.website">
+            <label i18n-ghmLabel="@@website" ghmLabel="Website" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" i18n-placeholder="@@websitePlaceHolder"
+                       placeholder="Please enter website"
+                       formControlName="website"/>
+                <span class="help-block">{ formErrors?.website, select,  maxLength {Website not allowed
+                                                    over 500 characters} pattern {Website is invalid}}</span>
+            </div>
+        </div>
+        <div class="form-group cm-mg-0" [formGroup]="model">
+            <label i18n-ghmLabel="@@isOffice" ghmLabel="Is Office" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <mat-checkbox color="primary" formControlName="isOffice" i18n="@@isOffice">
+                    {model.value.isOffice, select, 0 {Not Office} 1 {Office} null {Not Office}}
+                </mat-checkbox>
+            </div>
+        </div>
+        <div class="form-group">
+            <label i18n-ghmLabel="@@contact" ghmLabel="Contact Infomation" class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <app-config-branch-item [listBranchItem]="listBranchItem"></app-config-branch-item>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <button class="btn blue cm-mgr-5" i18n="@@save">Save</button>
+                <button class="btn default" i18n="@@cancel" type="button" (click)="closeForm()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,146 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listBannerPageTitle">List banner</span>
+    <small i18n="@@bannerModuleTitle">Banner management</small>
+</h1>
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n-placeholder="@@searchPlaceHolder"
+               placeholder="Enter keyword for search please."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="bannerTypes"
+                   i18n-title="@@selectBannerType"
+                   [title]="'-- Banner type --'"
+                   [(ngModel)]="type"
+                   name="type"
+                   (onSelectItem)="search(1)"
+        ></nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-spinner fa-spin" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button type="button" class="btn blue" i18n="@@add" (click)="add()">
+            Add
+        </button>
+    </div>
+</form>
+<table class="table table-hover table-stripped">
+    <thead>
+    <tr>
+        <th class="center middle w50" i18n="@@image">Image</th>
+        <th class="middle" i18n="@@name">Name</th>
+        <th class="middle" i18n="@@url">Url</th>
+        <th class="middle w100" i18n="@@type">Type</th>
+        <th class="middle w100" i18n="@@position">Position</th>
+        <th class="middle" i18n="@@alt">ALt</th>
+        <th class="center middle w100" i18n="@@totalClick">Total Click</th>
+        <th class="center middle w50" i18n="@@status">Show Popup?</th>
+        <th class="center middle w100" i18n="@@action">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-template ngFor let-banner let-i="index" [ngForOf]="listBanner">
+        <tr class="bg-info">
+            <td class="middle bold cursor-pointer" colspan="8">
+                <button type="button" class="btn btn-sm btn-no-background btn-no-border"
+                        (click)="banner.isClick = !banner.isClick">
+                    <i *ngIf="!banner.isClick" class="fa fa-sort-desc"></i>
+                    <i *ngIf="banner.isClick" class="fa fa-sort-up"></i>
+                </button>
+                <span>{{banner.bannerName}}</span>
+            </td>
+            <td class="middle center">
+                <a *ngIf="permission.edit"
+                   type="button"
+                   class="btn blue btn-sm"
+                   (click)="edit(banner.bannerId)">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <a *ngIf="permission.delete"
+                   type="button"
+                   class="btn red btn-sm"
+                   [swal]="confirmDeleteBanner"
+                   (confirm)="delete(banner.bannerId)">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        <tr *ngFor="let bannerItem of banner.bannerItems; let i = index">
+            <td *ngIf="banner.isClick" class="middle center">
+                <a (click)="editBannerItem(item, banner)">
+                    <img ghmImage [src]="bannerItem.image" class="w50" [isUrlAbsolute]="true">
+                </a>
+            </td>
+            <td *ngIf="banner.isClick" class="middle">
+                <span>{{bannerItem.name}}</span>
+            </td>
+            <td *ngIf="banner.isClick" class="middle">
+                <a href="{{bannerItem.url}}">{{bannerItem.url}}</a>
+            </td>
+            <td *ngIf="banner.isClick" class="middle">
+                {banner.type, select , 0 {Normal} 1 {Advertising}}
+            </td>
+            <td *ngIf="banner.isClick" class="middle">
+                {banner.position , select, 0 {Top} 1 {Right} 2 {Bottom} 3 {Left} 4 {Middle}}
+            </td>
+            <td *ngIf="banner.isClick" class="middle">
+                <span>{{bannerItem.alt}}</span>
+            </td>
+            <td *ngIf="banner.isClick" class="middle center"><a (click)="viewHistory(bannerItem.id)">{{bannerItem.totalClick}}</a>
+            </td>
+            <td *ngIf="banner.isClick" class="center middle">
+                <i class="fa fa-check color-green" *ngIf="banner.isPopUp"></i>
+            </td>
+            <td *ngIf="banner.isClick" class="middle center">
+                <button *ngIf="permission.edit && bannerItem.id"
+                        type="button"
+                        class="btn blue btn-sm"
+                        (click)="editBannerItem(bannerItem, banner)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button *ngIf="permission.delete && !(bannerItem.isEdit && bannerItem.id)"
+                        type="button"
+                        class="btn red btn-sm"
+                        [swal]="confirmDeleteBanner"
+                        (confirm)="deleteBannerItem(banner, bannerItem.id)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </ng-template>
+    </tbody>
+</table>
+<ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+            (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n-pageName="@@banner" [pageName]="'Banner'"></ghm-paging>
+
+<app-banner-form (onSaveSuccess)="search(1)"></app-banner-form>
+<app-banner-item-form
+        [bannerId]="bannerId"
+        (onSaveSuccess)="saveSuccess($event)"></app-banner-item-form>
+<swal
+        #confirmDeleteBanner
+        i18n="@@confirmDeleteBanner"
+        i18n-title="@@confirmTitleDeleteBanner"
+        i18n-text="@@confirmTextDeleteBanner"
+        title="Are you sure for delete this Banner?"
+        text="You can't recover this banner after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+

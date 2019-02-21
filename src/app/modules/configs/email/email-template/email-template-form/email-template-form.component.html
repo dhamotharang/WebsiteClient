@@ -1,0 +1,127 @@
+<nh-modal #emailTemplateFormModal size="full-screen"
+          (show)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header [showCloseButton]="true" class="uppercase">
+        <i class="fa fa-email"></i> {isUpdate, select, 0 {Add new email template} 1 {Update email template} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="tab-content" formArrayName="modelTranslations">
+                <div class="form-group" *ngIf="languages && languages.length > 1">
+                    <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                           class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <nh-select [data]="languages"
+                                   i18n-title="@@pleaseSelectLanguage"
+                                   title="-- Please select language --"
+                                   name="language"
+                                   [(value)]="currentLanguage"
+                                   (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@mailGroup" class="col-sm-2 control-label" ghmLabel="Mail Group"
+                           [required]="true"></label>
+                    <div class="col-sm-10" [class.has-error]="formErrors.mailTempGroupId">
+                        <nh-select [data]="[]"
+                                   i18n-title="@@mailGroupTitle"
+                                   [title]="'-- Select mail group --'"></nh-select>
+                        <span class="help-block">{ formErrors?.mailTempGroupId, select, required {Mail Group is required} isValid {Mail Group is invalid} }</span>
+                    </div>
+                </div>
+                <div class="form-group" [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.title">
+                    <label i18n-ghmLabel="@@title" ghmLabel="Title" class="col-sm-2 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-10" [class.has-error]="formErrors.port">
+                        <input class="form-control" i18n-placeholder="@@titlePlaceholder"
+                               placeholder="Please enter title" formControlName="title">
+                        <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.title, select, required {Title is required} maxlength {Description not allowed
+                                                    over 500 characters}}</span>
+                    </div>
+                </div>
+                <div class="form-group cm-mg-0"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.contentMail">
+                    <label class="col-sm-2 control-label" i18n-ghmlabel="@@content" ghmLabel="Content"
+                           [required]="true"></label>
+                    <div class="col-sm-10">
+                        <tinymce [elementId]="'content'+ i" formControlName="contentMail"
+                                 [(ngModel)]="modelTranslation.value.contentMail" [height]="350"></tinymce>
+                        <span class="help-block">
+                                {translationFormErrors[modelTranslation.value.languageId]?.contentMail, select, required {Content is required}}
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group" [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                     [formGroupName]="i"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                    <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                    <textarea type="text" class="form-control" i18n-placeholder="@@description"
+                              placeholder="Please enter description"
+                              formControlName="description" rows="3"></textarea>
+                        <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.description, select, maxlength {Description not allowed
+                                                    over 500 characters} }
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                            {model.value.isActive, select, 0 {InActive} 1 {Active}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <mat-checkbox color="primary" formControlName="isDefault" i18n="@@isDefault">
+                            {model.value.isDefault, select, 0 {Not Default} 1 {Default}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@duration" class="col-sm-2 control-label" ghmLabel="Duration"></label>
+                    <div class="col-sm-4" [class.has-error]="formErrors.startTime">
+                        <nh-date formControlName="startTime"
+                                 [type]="'inputButton'"
+                                 [format]="'DD/MM/YYYY'"
+                                 [title]="'Start date'"></nh-date>
+                        <span class="help-block">{formErrors?.startTime, select, isValid {Start Time is invalid}}</span>
+                    </div>
+                    <div class="col-sm-4" [class.has-error]="formErrors.endTime">
+                        <nh-date formControlName="endTime"
+                                 [type]="'inputButton'"
+                                 [format]="'DD/MM/YYYY'"
+                                 [title]="'Start date'"></nh-date>
+                        <span class="help-block">{formErrors?.endTime, select, isValid {Start Time is invalid}}</span>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="submit"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@cancel">
+                    Cancel
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

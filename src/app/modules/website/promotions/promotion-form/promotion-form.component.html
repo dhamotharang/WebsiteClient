@@ -1,0 +1,188 @@
+<div class="row">
+    <div class="col-sm-12">
+        <nh-wizard [currentStep]="1">
+            <nh-step title="Bước 1:"
+                     description="Thông tin chương trình khuyến mại."
+                     [step]="1"
+                     (onNextClick)="savePromotion()">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift font-blue-hoki"></i>
+                            <span class="caption-subject bold font-blue-hoki uppercase"> Thông tin chương trình khuyến mại </span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <form class="form-horizontal"
+                              [formGroup]="promotionModel"
+                              (ngSubmit)="savePromotion()">
+                            <div class="form-group"
+                                 [class.has-error]="formErrors.name">
+                                <label class="col-sm-4 control-label">
+                                    Tên chương trình <span class="color-red">*</span>:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input class="form-control m-input" placeholder="Nhập tên chương trình"
+                                           type="text" formControlName="name"
+                                           [class.inputError]="formErrors.name">
+                                    <span class="help-block" *ngIf="formErrors.name">  {{formErrors.name}} </span>
+                                </div>
+                            </div>
+                            <div class="form-group m-form__group">
+                                <label class="col-sm-4 control-label">
+                                    Thời gian áp dụng:
+                                </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group" id="promotion-time">
+                                        <!--<input type="text" class="form-control" name="daterangeInput" daterangepicker-->
+                                               <!--placeholder="Chọn ngày áp dụng chương trình"-->
+                                               <!--[startDate]="promotionModel.value.fromDate"-->
+                                               <!--[endDate]="promotionModel.value.toDate"-->
+                                               <!--(onAppliedDate)="selectedDate($event)"-->
+                                        <!--/>-->
+                                        <span class="input-group-addon">
+                                                <i class="fa fa-calendar-check-o"></i>
+                                        </span>
+                                    </div>
+                                    <span class="cm-form-helper">
+                                        Thời gian áp dụng chương trình khuyến mại từ ngày - đến ngày.
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">
+                                    Nội dung chương trình:
+                                </label>
+                                <div class="col-sm-8">
+                                    <tinymce elementId="promotion-description" formControlName="description"></tinymce>
+                                </div>
+                            </div>
+                            <div class="m-form__group form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <mat-checkbox color="primary" formControlName="isActive">Kích hoạt</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="m-form__group form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <button type="button" mat-raised-button color="default"
+                                            *ngIf="isUpdate"
+                                            (click)="finishCreatePromotion()">
+                                        <mat-icon>close</mat-icon>
+                                        Hủy bỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- END: info portlet -->
+            </nh-step><!-- END: step 1 -->
+            <nh-step title="Bước 2:"
+                     description="Thêm dịch vụ áp dụng khuyến mại."
+                     [step]="2"
+                     (onNextClick)="savePromotionSubject()"
+            >
+                <!--<promotion-subject-list [promotionId]="promotion.id"-->
+                                        <!--(saveSuccess)="onSubjectSaveSuccess()"></promotion-subject-list>-->
+            </nh-step><!-- END: step 2 -->
+            <nh-step title="Bước 3"
+                     description="Thêm mã khuyến mại"
+                     [step]="3"
+                     (onFinishClick)="finishCreatePromotion()"
+            >
+                <!--<promotion-voucher-list [promotionId]="promotion.id"></promotion-voucher-list>-->
+            </nh-step>
+        </nh-wizard>
+    </div><!-- END: .portlet-form -->
+</div>
+
+<!--<nh-modal size="md" #promotionSubjectVoucher>-->
+<!--<nh-modal-header>-->
+<!--<h4 class="title">-->
+<!--<i class="la la-money"></i>-->
+<!--Danh sách mã giảm giá.-->
+<!--</h4>-->
+<!--</nh-modal-header>-->
+<!--<nh-modal-content>-->
+<!--<table class="table table-bordered table-stripped table-hover">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th>#</th>-->
+<!--<th>Mã giảm giá</th>-->
+<!--<th>Ngày tạo</th>-->
+<!--<th>Người tạo</th>-->
+<!--<th>Sử dụng</th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngFor="let item of listPromotionVoucher; let i = index">-->
+<!--<td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>-->
+<!--<td>{{ item.code }}</td>-->
+<!--<td>{{ item.createTime}}</td>-->
+<!--<td></td>-->
+<!--<td></td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<!--</nh-modal-content>-->
+<!--<nh-modal-footer>-->
+<!--<button mat-raised-button color="primary">-->
+<!--<i class="fa fa-check"></i>-->
+<!--Đồng ý-->
+<!--</button>-->
+<!--<button mat-raised-button color="default" type="button-->
+<!--" nh-dismiss="true">-->
+<!--<i class="fa fa-times"></i>-->
+<!--Đóng lại-->
+<!--</button>-->
+<!--</nh-modal-footer>-->
+<!--</nh-modal>&lt;!&ndash; END: selectServiceModal &ndash;&gt;-->
+
+<!--<nh-modal size="sm" #promotionGenerateVoucherModal>-->
+<!--<nh-modal-header>-->
+<!--<h4 class="title">-->
+<!--<i class="fa fa-key"></i>-->
+<!--Thêm mã giảm giá-->
+<!--</h4>-->
+<!--</nh-modal-header>-->
+<!--<form class="form-horizontal" (ngSubmit)="generateVoucher()">-->
+<!--<nh-modal-content>-->
+<!--<div class="form-group">-->
+<!--<div class="form-group">-->
+<!--<label for="" class="col-sm-12">Số lượng mã <span class="color-red">*</span>:</label>-->
+<!--<div class="col-sm-12">-->
+<!--<input type="text" class="form-control" placeholder="Nhập số lượng mã cần tạo."-->
+<!--name="totalVoucher" [(ngModel)]="totalVoucher">-->
+<!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;<mat-checkbox color="primary" [checked]="isGenForAll"&ndash;&gt;-->
+<!--&lt;!&ndash;(change)="isGenForAll = !isGenForAll">&ndash;&gt;-->
+<!--&lt;!&ndash;Tạo cho toàn bộ dịch vụ&ndash;&gt;-->
+<!--&lt;!&ndash;</mat-checkbox>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group" *ngIf="!isGenForAll">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="" class="col-sm-12">Chọn dịch vụ:</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;<nh-select&ndash;&gt;-->
+<!--&lt;!&ndash;title="&#45;&#45; Chọn dịch vụ tạo mã &#45;&#45;"&ndash;&gt;-->
+<!--&lt;!&ndash;[data]="listSelectedService"&ndash;&gt;-->
+<!--&lt;!&ndash;(onSelectItem)="selectServiceForGenerateVoucher()"&ndash;&gt;-->
+<!--&lt;!&ndash;&gt;</nh-select>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--</nh-modal-content>-->
+<!--<nh-modal-footer>-->
+<!--<button mat-raised-button color="primary">-->
+<!--<i class="fa fa-check"></i>-->
+<!--Tiến hành tạo-->
+<!--</button>-->
+<!--<button mat-raised-button color="default" type="button" nh-dismiss="true">-->
+<!--<i class="fa fa-times"></i>-->
+<!--Đóng lại-->
+<!--</button>-->
+<!--</nh-modal-footer>-->
+<!--</form>-->
+<!--</nh-modal>&lt;!&ndash; END: selectServiceModal &ndash;&gt;-->

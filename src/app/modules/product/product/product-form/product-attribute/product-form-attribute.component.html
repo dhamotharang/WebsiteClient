@@ -1,0 +1,133 @@
+<form action="" (ngSubmit)="save()">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="portlet">
+                <div class="portlet-title">
+                    <div class="caption">
+                     <span class="caption-subject bold caption font-red-sunglo uppercase">
+                                        <i class="fa fa-cube" aria-hidden="true"></i>
+                                         <span i18n="@@productInfo"> Product Attribute</span>
+                     </span>
+                    </div>
+                </div>
+                <div class="portlet-body bordered cm-pdt-0">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="middle w200" i18n="@@productAttribute">Product Attribute</th>
+                            <th class="middle" i18n="@@productAttributeValue">Product Attribute Value</th>
+                            <th class="middle w50" *ngIf="!isReadOnly"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of listAttribute">
+                            <td>{{item.attributeName}}</td>
+                            <td>
+                                <ng-container *ngIf="!isReadOnly; else readOnly">
+                                    <nh-suggestion *ngIf="!item.isSelfContent ; else formValue"
+                                                   [multiple]="item.isMultiple"
+                                                   [isShowSelected]="false"
+                                                   i18n-title="@@productAttributeValueTitle"
+                                                   title="Product attribute value"
+                                                   [sources]="productCategoryAttributeValueSuggestions"
+                                                   [selectedItem]="!item.isMultiple && item.productAttributeValueSuggestion? item.productAttributeValueSuggestion[0] : ''"
+                                                   [selectedItems]="item.productAttributeValueSuggestion"
+                                                   (searched)="searchProductAttributeValue(item.attributeId, $event)"
+                                                   (itemSelected)="onSelectedProductAttributeValue(item.attributeId, item.attributeName, item.isMultiple, $event)"
+                                                   (itemRemoved)="removeSelectProductAttributeValue($event, item)"
+                                    ></nh-suggestion>
+                                    <ng-template #formValue>
+                                        <input *ngIf="!isReadOnly;" class="form-control"
+                                               [value]="item.value ? item.value : ''"
+                                               (blur)="onBlur(item.attributeId, item.attributeName, $event.target.value)">
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #readOnly>
+                                    <ul *ngIf="!item.isSelfContent; else spanValue" class="list-style-none list-inline">
+                                        <li *ngFor="let attribute of item.productAttributeValueSuggestion"
+                                            class="product-attribute-value">
+                                            {{attribute.name}}
+                                            <span> ,</span>
+                                        </li>
+                                    </ul>
+                                    <ng-template #spanValue>
+                                        {{item.value ? item.value : ''}}
+                                    </ng-template>
+                                </ng-template>
+                            </td>
+                            <td class="middle center" *ngIf="!isReadOnly">
+                                <a class="btn red btn-sm" type="button"
+                                   [swal]="confirmDeleteProductValue"
+                                   (confirm)="remove(item)">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot *ngIf="!isReadOnly">
+                        <tr>
+                            <td class="middle">
+                                <nh-select
+                                    [liveSearch]="true"
+                                    [data]="productAttributeSuggestions"
+                                    [url]="urlProductAttributeSuggestion"
+                                    i18n-title="@@productAttributeTitle"
+                                    title="Product attribute"
+                                    (itemSelected)="onSelectedProductAttribute($event)"
+                                ></nh-select>
+                            </td>
+                            <td class="middle">
+                                <ng-container *ngIf="productAttributeSelect">
+                                    <nh-suggestion *ngIf="!productAttributeSelect?.isSelfContent; else formValueInsert"
+                                                   [multiple]="productAttributeSelect?.isMultiple"
+                                                   i18n-title="@@productAttributeValueTitle"
+                                                   title="Product attribute value"
+                                                   [sources]="productCategoryAttributeValueSuggestions"
+                                                   (searched)="searchProductAttributeValue(productAttributeSelect?.id, $event)"
+                                                   (itemSelected)="onSelectedProductAttributeValue(productAttributeSelect.id, productAttributeSelect.name, productAttributeSelect?.isMultiple, $event)"
+                                                   (itemRemoved)="removeSelectProductAttributeValue($event, productAttributeSelect)"
+                                    ></nh-suggestion>
+                                    <ng-template #formValueInsert>
+                                        <input class="form-control"
+                                               (blur)="onBlur(productAttributeSelect.id, productAttributeSelect.name, $event.target.value)">
+                                    </ng-template>
+                                </ng-container>
+                            </td>
+                            <td class="middle">
+                                <button class="btn btn-sm blue" (click)="addAttribute()"
+                                        *ngIf="productAttributeSelect">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 center">
+            <button *ngIf="!isReadOnly" class="btn blue cm-mgr-5" i18n="@@save">
+                Save
+            </button>
+            <a routerLink="/products" class="btn default" i18n="@@close">
+                Close
+            </a>
+        </div>
+    </div>
+</form>
+
+<swal
+    #confirmDeleteProductValue
+    i18n="@@confirmDeleteProductValue"
+    i18n-title="@@confirmTitleDeleteProductValue"
+    i18n-text="@@confirmTextDeleteProduct"
+    title="Are you sure for delete this product value?"
+    text="You can't recover this product value after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>

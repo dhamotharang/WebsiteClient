@@ -1,0 +1,168 @@
+<form class="form-horizontal" [formGroup]="model" (ngSubmit)="save()">
+    <div class="form-body" formArrayName="modelTranslations">
+        <div class="form-group cm-mg-0" *ngIf="languages && languages.length > 1">
+            <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                   class="control-label"></label>
+            <nh-select [data]="languages"
+                       i18n-title="@@pleaseSelectLanguage"
+                       title="-- Please select language --"
+                       name="language"
+                       [(value)]="currentLanguage"
+                       (onSelectItem)="currentLanguage = $event.id"></nh-select>
+        </div>
+        <div class="form-group cm-mg-0"
+             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+             [formGroupName]="i"
+             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+            <label i18n-ghmLabel="@@menuName" ghmLabel="Menu Name" class="control-label"
+                   [required]="true"></label>
+            <input type="text" class="form-control" i18n-placeholder="@@menuNamePlaceHolder"
+                   placeholder="Please enter menu name" formControlName="name"/>
+            <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Menu name is required} maxlength {Menu name not allowed
+                                                    over 256 characters}}</span>
+        </div>
+        <div class="form-group cm-mg-0"
+             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+             [formGroupName]="i"
+             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.namePath">
+            <label i18n-ghmLabel="@@seoLink" ghmLabel="SeoLink" class="control-label"></label>
+            <input type="text" class="form-control" i18n-placeholder="@@menuNamePathPlaceHolder"
+                   placeholder="Please enter seolink" formControlName="namePath"/>
+        </div>
+        <div class="form-group cm-mg-0" [formGroup]="model"
+             [class.has-error]="formErrors.parentId">
+            <label i18n-ghmLabel="@@parent" class="control-label" ghmLabel="Parent Menu"></label>
+            <nh-dropdown-tree [data]="menuItemTree"
+                              i18n-title="@@selectMenuItem"
+                              [title]="'-- Select menu item --'"
+                              formControlName="parentId"
+                              (accepted)="onAcceptSelectMenuParent($event)">
+            </nh-dropdown-tree>
+            <span class="help-block">{formErrors?.parentId, select, isValid {Parent  is inValid}}</span>
+        </div>
+        <div class="form-group cm-mg-0" [formGroup]="model"
+             [class.has-error]="formErrors.subjectType">
+            <label i18n-ghmLabel="@@subjectType" class="control-label" ghmLabel="Subject Type"
+                   [required]="true"></label>
+            <nh-select [data]="subjectTypes"
+                       i18n-title="@@subjectTypeTitle"
+                       [title]="'-- Select subject type --'"
+                       (onSelectItem)="selectSubjectType($event)"
+                       formControlName="subjectType">
+            </nh-select>
+            {{formErrors?.subjectType}}
+            <span class="help-block">{formErrors?.subjectType, select, required {SubjectType is required} isValid {Subject type in inValid}}</span>
+        </div>
+        <ng-container *ngIf="!listMenuItemSelect || listMenuItemSelect.length === 0 ; else tableMenuItem">
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors.url">
+                <label i18n-ghmlabel="@@url" ghmLabel="Url">
+                </label>
+                <input class="form-control" i18n-placeholder="@@urlPlaceHolder"
+                       placeholder="Please enter url" formControlName="url">
+                <span class="help-block">{formErrors?.url, select, maxLength {Url  not allowed over 500 characters} pattern {Url in inValid}}</span>
+            </div>
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors.order">
+                <label i18n-ghmlabel="@@order" ghmLabel="Order" [required]="true">
+                </label>
+                <input class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                       placeholder="Please enter order" formControlName="order">
+                <span class="help-block">{formErrors?.order, select, required {Order is required} isValid {Order is inValid} greaterThan {Order must greater than 0}}</span>
+            </div>
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors.icon">
+                <label i18n-ghmlabel="@@icon" ghmLabel="Icon"></label>
+                <input class="form-control" i18n-placeholder="@@iconPlaceHolder"
+                       placeholder="Please enter icon" formControlName="icon">
+                <span
+                        class="help-block">{formErrors?.icon, select, maxLength {Icon not allowed over 150 characters}}</span>
+            </div>
+            <div class="form-group cm-mg-0 display-block" [formGroup]="model"
+                 [class.has-error]="formErrors.image">
+                <div class="fileinput fileinput-new">
+                    <div class="fileinput-new thumbnail">
+                        <nh-image [errorImageUrl]="'/assets/images/no-image.png'"
+                                  [cssClass]="'w100 cm-mgb-5'"
+                                  [value]="model.value.image"></nh-image>
+                        <span class="help-block">{formErrors?.image, select, maxLength {Image  not allowed over 500 characters}}</span>
+                        <ghm-file-explorer [buttonText]="'Select image'"
+                                           (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group cm-mg-0"
+                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                 [formGroupName]="i"
+                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                <label i18n-ghmLabel="@@description" ghmLabel="Description" class="control-label"
+                       [required]="true"></label>
+                <textarea type="text" class="form-control" i18n-placeholder="@@descriptionPlaceHolder"
+                          placeholder="Please enter description" formControlName="description"></textarea>
+                <span class="help-block">{translationFormErrors[modelTranslation.value.languageId]?.description, select,  maxlength {Description not allowed
+                                                    over 500 characters}}</span>
+            </div>
+            <div class="form-group cm-mg-0" [formGroup]="model">
+                <mat-checkbox color="primary" formControlName="isActive">
+                    {model.value?.isActive, select, 0 {InActive} 1 {Active}}
+                </mat-checkbox>
+            </div>
+        </ng-container>
+    </div>
+    <div class="form-actions">
+        <button class="btn blue cm-mgr-5" i18n="@@save">
+            Save
+        </button>
+        <button class="btn default" i18n="@@cancel" (click)="closeForm()">
+            Cancel
+        </button>
+    </div>
+</form>
+
+<app-menu-choice-menu-item (acceptSelect)="selectMenuItem($event)"></app-menu-choice-menu-item>
+
+<ng-template #tableMenuItem>
+    <span class="caption-subject font-default-sharp bold uppercase"> List News Select </span>
+    <table class="table table-hover table-stripped">
+        <thead>
+        <tr>
+            <th class="middle" i18n="@@titleNews">Name</th>
+            <th class="center middle w100" i18n="@@isHot">Icon</th>
+            <th class="center middle w100" i18n="@@isHomePage">Order</th>
+            <th class="center middle w50">
+                <button class="btn btn-sm blue" (click)="addMenuItem()">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listMenuItemSelect; let i = index">
+            <td class="middle">
+                <div class="media cursor-pointer" title="{{item.name}}">
+                    <div class="media-left middle" *ngIf="item.image">
+                        <img ghmImage="" [src]="item.image" [isUrlAbsolute]="true" class="media-object w50"
+                             alt="{{item.name}}">
+                    </div>
+                    <div class="media-body middle">
+                        <h4 class="media-heading">{{ item.name }}</h4>
+                    </div>
+                </div>
+            </td>
+            <td class="middle center">
+                <input class="form-control" [(ngModel)]="item.icon">
+            </td>
+            <td class="middle center">
+                <input type="number" class="form-control center" [(ngModel)]="item.order">
+            </td>
+            <td class="middle center">
+                <button class="btn btn-sm btn-outline red" (click)="removeListMenuItem(i)"><i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</ng-template>

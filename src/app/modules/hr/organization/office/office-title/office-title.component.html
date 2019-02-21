@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-sm-12 cm-mgb-10">
+        <form class="form-inline">
+            <div class="form-group">
+                <!-- TODO: Check this -->
+                <!--<nh-suggestion-->
+                    <!--[url]="'office-title/search'"-->
+                    <!--[clearAfterSelect]="true"-->
+                    <!--[material]="false"-->
+                    <!--[placeholder]="'Nhập tên chức danh cần tìm'"-->
+                    <!--(onSelectItem)="onSelectTitle($event)"-->
+                <!--&gt;</nh-suggestion>-->
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-12">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th class="middle center w50">STT</th>
+                <th class="middle center">Tên chức danh</th>
+                <th class="middle center w100">Là trưởng đơn vị</th>
+                <th class="middle center w100">Cho phép chọn nhiều</th>
+                <th class="middle center w50">Xóa</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listTitle; let i = index">
+                <td class="center">{{i + 1}}</td>
+                <td>{{item.titleName}}</td>
+                <td class="center">
+                    <i class="fa fa-check color-green size-18" *ngIf="item.isLeader"></i>
+                </td>
+                <td class="center">
+                    <i class="fa fa-check color-green size-18" *ngIf="item.isMultiple"></i>
+                </td>
+                <td class="center">
+                    <button mat-mini-fab color="warn" type="button" (click)="delete(item)">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                [isDisabled]="isSearching" [pageName]="'chức danh'"></ghm-paging>
+    </div>
+</div>

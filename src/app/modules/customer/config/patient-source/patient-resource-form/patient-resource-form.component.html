@@ -1,0 +1,100 @@
+<nh-modal #patientSourceFormModal size="md"
+          (show)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        {isUpdate, select, 0 {Add new patient resource} 1 {Update patient resource} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div formArrayName="modelTranslations">
+                <div class="tab-pane active">
+                    <div class="form-group" *ngIf="languages.length > 1">
+                        <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                               class="col-sm-4 control-label"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <nh-select [data]="languages"
+                                       [(value)]="currentLanguage"></nh-select>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [formGroupName]="i"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                        <label i18n-ghmLabel="@@patientSource" ghmLabel="Patient source"
+                               class="col-sm-4 control-label" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control"
+                                   i18n-placeholder="@@enterPatientSourceNamePlaceHolder"
+                                   placeholder="Enter patient source."
+                                   formControlName="name">
+                            <span class="help-block">
+                                { translationFormErrors[modelTranslation.value.languageId]?.name, select, required {patient resource is required} maxlength {patient resource
+                                name not allowed over 256 characters} }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                         [formGroupName]="i"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                        <label i18n="@@description" i18n-ghmLabel ghmLabel="Description"
+                               class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                                                <textarea class="form-control" rows="3" formControlName="description"
+                                                          i18n="@@enterDescriptionPlaceholder" i18n-placeholder
+                                                          placeholder="Enter description."></textarea>
+                            <span class="help-block">
+                                { translationFormErrors[modelTranslation.value.languageId]?.description, select, maxlength {patient source description not allowed
+                                over 500 characters} }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" [formGroup]="model"
+                         [class.has-error]="formErrors.order">
+                        <label i18n-ghmLabel="@@order" ghmLabel="Order"
+                               class="col-sm-4 control-label"></label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control"
+                                   i18n-placeholder="@@enterOrder"
+                                   placeholder="Enter order."
+                                   formControlName="order">
+                            <span class="help-block">
+                                {{formErrors.order}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" [formGroup]="model">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <!-- END: .tab-pane -->
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Save</span>
+            </ghm-button>
+            <ghm-button classes="btn btn-default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Close</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

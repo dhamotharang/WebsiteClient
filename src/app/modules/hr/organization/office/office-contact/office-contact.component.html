@@ -1,0 +1,63 @@
+<h4 class="title caption-subject font-blue-madison bold uppercase" i18n="@@contactInfo"> Contact info </h4>
+<hr>
+<div class="row">
+    <div class="col-sm-12 text-right">
+        <button type="button" class="btn btn-primary" i18n="@@add" (click)="add()">
+            Add
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-stripped table-hover">
+                <thead>
+                <tr>
+                    <th class="center w50" i18n="@@no">No</th>
+                    <th class="w250" i18n="@@Contact">Contact</th>
+                    <th i18n="@@phoneNumber">Phone number</th>
+                    <th i18n="@@email">Email</th>
+                    <th i18n="@@fax">Fax</th>
+                    <th class="w150" i18n="@@actions">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let contact of officeContacts; index as i">
+                    <td class="center middle">{{ i + 1 }}</td>
+                    <td class="middle">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="javascript://">
+                                    <img ghmImage class="media-object avatar-md"
+                                         src="{{ contact.avatar }}"
+                                         alt="{{ contact.fullName }}">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{ contact.fullName }}</h4>
+                                <div class="description">{{ contact.officeName }} - {{ contact.positionName }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="middle">{{ contact.phoneNumber }}</td>
+                    <td class="middle">{{ contact.email }}</td>
+                    <td class="middle">{{ contact.fax }}</td>
+                    <td class="text-right middle w100">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="edit(contact)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="delete(contact.id)">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<app-office-contact-form
+    [officeId]="officeId"
+    (saveSuccessful)="onSaveSuccess($event)"
+></app-office-contact-form>

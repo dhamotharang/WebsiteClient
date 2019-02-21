@@ -1,0 +1,60 @@
+<nh-modal #fileFormModal size="lg"
+          (show)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header class="uppercase">
+        {isUpdate, select, 0 {Add new file} 1 {Update file} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label i18n-ghmLabel="@@fileName" ghmLabel="File Name" class="control-label"
+                           [required]="true"></label>
+                    <div [class.has-error]="formErrors?.name">
+                        <input type="text" class="form-control" i18n-placeholder="@@fileNamePlaceHolder"
+                               placeholder="Please enter file name"
+                               formControlName="name"/>
+                        <span class="help-block">{ formErrors?.name, select, required {Name is required} maxlength {Name not allowed
+                                                    over 256 characters} }</span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label i18n-ghmLabel="@@folder" class="control-label" ghmLabel="Folder"
+                           [required]="true"></label>
+                    <div [class.has-error]="formErrors?.folderId">
+                        <nh-dropdown-tree
+                            [width]="350"
+                            [data]="folderTree"
+                            i18n-title="@@folderTitle"
+                            title="-- Please select folder --"
+                            formControlName="folderId">
+                        </nh-dropdown-tree>
+                        <span class="help-block">{formErrors?.folderId, select, required {Folder is required}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <ghm-button classes="btn blue cm-mgr-5"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Save</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            nh-dismiss="true"
+                            [type]="'button'"
+                            [loading]="isSaving">
+                    <span i18n="@@cancel">Cancel</span>
+                </ghm-button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

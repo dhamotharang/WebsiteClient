@@ -1,0 +1,83 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listCategoryPageTitle">List category</span>
+    <small i18n="@@newsModuleTitle">News management</small>
+</h1>
+
+<form class="form-inline cm-mgb-10" (ngSubmit)="search()">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@enterKeyword" i18n-placeholder placeholder="Enter keyword."
+               name="keyword" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue" [disabled]="isSearching">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="button" class="btn btn-light" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button type="button" class="btn blue" (click)="add()" i18n="@@add"
+                *ngIf="permission.add">
+            Add
+        </button>
+    </div>
+</form>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <ul class="ghm-list-item-container">
+            <ng-template #recursiveTree let-listItems>
+                <li class="" *ngFor="let item of listItems">
+                    <div class="ghm-item">
+                        <div>
+                            <i class="fa fa-bars cm-mgr-5"></i>
+                            {{ item.text }}
+                        </div>
+
+                        <ul class="actions">
+                            <li>
+                                <a href="javascript://" class="btn blue btn-outline btn-sm"
+                                   *ngIf="permission.edit"
+                                   (click)="edit(item.id)">
+                                    <i class="fa fa-edit"></i>
+                                </a></li>
+                            <li>
+                                <a href="javascript://" class="btn red btn-outline btn-sm"
+                                   *ngIf="permission.delete"
+                                   [swal]="confirmDelete"
+                                   (confirm)="delete(item.id)">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="ghm-list-item-sub-container"
+                        ghmSortableList
+                        [sources]="item?.children">
+                        <ng-container
+                                *ngTemplateOutlet="recursiveTree; context:{ $implicit: item.children }"></ng-container>
+                    </ul>
+                </li>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: listItems }"></ng-container>
+        </ul>
+    </div>
+</div>
+<app-category-form (saveSuccessful)="search()"></app-category-form>
+<swal
+        #confirmDelete
+        i18n-title="@@confirmDeleteNewsCategoryTitle"
+        i18n-text="@@confirmDeleteNewsCategoryText"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        title="Are you sure for delete this category?"
+        text="Warning: You can't recover this category after delete."
+        type="question"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel">
+</swal>

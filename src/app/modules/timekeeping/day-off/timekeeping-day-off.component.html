@@ -1,0 +1,509 @@
+<div class="row">
+    <div class="col-sm-12">
+        <!--<div class="btn-group cm-mgb-10" role="group" *ngIf="currentUser?.isLeader">-->
+        <!--<button type="button" class="btn btn-default" (click)="search(1, 0)"-->
+        <!--[class.active]="searchType === 0">-->
+        <!--Bản đăng ký của tôi-->
+        <!--</button>-->
+        <!--<button type="button" class="btn btn-default" (click)="search(1, 1)"-->
+        <!--[class.active]="searchType === 1">-->
+        <!--Nhân viên do tôi quản lý-->
+        <!--</button>-->
+        <!--<button type="button" class="btn btn-default" (click)="search(1, 2)"-->
+        <!--[class.active]="searchType === 2">-->
+        <!--Nhân viên do tôi phê duyệt-->
+        <!--</button>-->
+        <!--</div>-->
+
+        <div class="row">
+            <form class="cm-mgb-10 form-inline" (ngSubmit)="search(1)">
+                <div class="form-group">
+                    <input class="form-control" placeholder="Nhập tên nhân viên cần tìm"
+                           (keypress)="keyword = keywordInput.value"
+                           #keywordInput>
+                </div>
+                <div class="form-group">
+                    <nh-date
+                        [type]="'inputButton'"
+                        [title]="'Lọc từ ngày'"
+                        (selectedDateEvent)="onSelectFromDate($event)"></nh-date>
+                </div>
+                <div class="form-group">
+                    <nh-date
+                        [type]="'inputButton'"
+                        [title]="'Lọc đến ngày ngày'"
+                        (selectedDateEvent)="onSelectToDate($event)"></nh-date>
+                </div>
+                <div class="form-group">
+                    <nh-select
+                        [data]="[
+                                    {id: 0, name: 'Mới'},
+                                    {id: 1, name: 'Chờ QLTT duyệt'},
+                                    {id: 2, name: 'QLTT duyệt chờ QLPD duyệt'},
+                                    {id: 3, name: 'QLTT không duyệt'},
+                                    {id: 4, name: 'QLPD duyệt'},
+                                    {id: 5, name: 'QLPD không duyệt'}
+                                ]"
+                        [title]="'-- Tất cả trạng thái --'"
+                        (onSelectItem)="onSelectStatus($event)"
+                    ></nh-select>
+                </div>
+                <div class="form-group">
+                    <button mat-raised-button color="primary">
+                        <i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>
+                        <i class="fa fa-search" *ngIf="!isSearching"></i>
+                        Tìm kiếm
+                    </button>
+                </div>
+
+                <div class="form-group pull-right" (click)="showRegisterModal()">
+                    <button mat-raised-button color="primary">
+                        <i class="fa fa-plus"></i>
+                        Đăng ký
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-main">
+                <thead>
+                <tr>
+                    <th class="center middle w50">#</th>
+                    <th class="center middle">Tên nhân viên</th>
+                    <th class="center middle">Từ ngày</th>
+                    <th class="center middle">Đến ngày</th>
+                    <th class="center middle">Số ngày</th>
+                    <th class="center middle">Ngày đăng ký</th>
+                    <th class="center middle">Trạng thái</th>
+                    <th class="center middle w150">Hành động</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="isSearching; else contentTemplate">
+                <tr>
+                    <td colspan="9">
+                        <div class="spinner">
+                            <div class="rect1"></div>
+                            <div class="rect2"></div>
+                            <div class="rect3"></div>
+                            <div class="rect4"></div>
+                            <div class="rect5"></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+                <ng-template #contentTemplate>
+                    <tbody>
+                    <tr *ngFor="let item of listDayOff; let i = index">
+                        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                        <td class="middle bold">
+                            <a href="javascript://" (click)="showDetail(item)">{{item.fullName}}</a>
+                        </td>
+                        <td class="middle">{{item.fromDate | dateTimeFormat:'DD/MM/YYYY':true}}</td>
+                        <td class="middle">{{item.toDate | dateTimeFormat:'DD/MM/YYYY':true}}</td>
+                        <td class="middle text-right bold">{{item.totalDays}}</td>
+                        <td class="middle">{{item.registerDate | dateTimeFormat:'DD/MM/YYYY'}}</td>
+                        <td class="middle"
+                            [class.color-blue]="item.status === 0 || item.status === 2"
+                            [class.color-green]="item.status === 1 || item.status=== 4"
+                            [class.color-red]="item.status === 3 || item.status === 5">
+                            {{item.statusText}}
+                        </td>
+                        <td class="center middle">
+                            <button type="button" mat-mini-fab color="primary"
+                                    *ngIf="(currentUser?.id === item.userId || currentUser?.id === item.creatorId)
+                                    && (item.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || item.status === DAYOFF_STATUS.MANAGER_DECLINE)"
+                                    matTooltip="Chỉnh sửa" matTooltipPosition="above"
+                                    (click)="edit(item)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button type="button" mat-mini-fab color="warn"
+                                    *ngIf="(currentUser?.id === item.userId || currentUser?.id === item.creatorId)
+                                    && (item.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || item.status === DAYOFF_STATUS.MANAGER_DECLINE)"
+                                    matTooltip="Xóa" matTooltipPosition="above"
+                                    (click)="delete(item)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                            <button type="button" mat-mini-fab color="default"
+                                    matTooltip="Chi tiết" matTooltipPosition="above"
+                                    (click)="showDetail(item)">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </ng-template>
+            </table>
+        </div>
+
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6"
+                    (pageClick)="search(1, searchType)"
+                    [isDisabled]="isSearching" [pageName]="'đơn xin nghỉ'"></ghm-paging>
+    </div>
+</div>
+
+<nh-modal #dayOffDetailModal size="lg">
+    <nh-modal-header [showCloseButton]="true">
+        <h4>
+            <i class="fa fa-check"></i>
+            Chi tiết đơn xin nghỉ
+        </h4>
+    </nh-modal-header>
+    <nh-modal-content >
+        <div class="form">
+            <div class="form-horizontal form-bordered">
+                <div class="form-body">
+                    <div class="col-sm-12">
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption font-green-sharp">
+                                    <i class="icon-share font-green-sharp"></i>
+                                    <span class="caption-subject bold uppercase"> Thông tin đơn xin nghỉ</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label label-color"
+                                           ghmLabel="Nhân viên"></label>
+                                    <div class="col-sm-8 col-md-9">
+                                        {{dayOffDetail?.fullName}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label label-color"
+                                           ghmLabel="Từ ngày" [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9">
+                                        {{dayOffDetail?.fromDate | dateTimeFormat:'DD/MM/YYYY':true}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label label-color"
+                                           ghmLabel="Đến ngày" [required]="true"></label>
+                                    <div class="col-sm-8 col-md-9">
+                                        {{dayOffDetail?.toDate | dateTimeFormat:'DD/MM/YYYY':true}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label label-color"
+                                           ghmLabel="Tổng số ngày"></label>
+                                    <div class="col-sm-8 col-md-9">
+                                        <div class="col-sm-8 col-md-9">
+                                            {{dayOffDetail?.totalDays}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="Tổng số ngày được duyệt"></label>
+                                        <div class="col-sm-8 col-md-9">
+                                            {{dayOffDetail?.totalApprovedDays}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="Trạng thái đơn"></label>
+                                        <div class="col-sm-8 col-md-9">
+                                            <div class="bold"
+                                                 [class.color-blue]="dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE"
+                                                 [class.color-green]="dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE || dayOffDetail?.status=== DAYOFF_STATUS.APPROVER_APPROVE"
+                                                 [class.color-red]="dayOffDetail?.status === DAYOFF_STATUS.MANAGER_DECLINE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE">
+                                                {{dayOffDetail?.statusText}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="QLTT ghi chú"></label>
+                                        <div class="col-sm-8 col-md-9">
+                                            <div
+                                                *ngIf="(searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE
+                                            || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_APPROVE
+                                            || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE
+                                            || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_DECLINE))
+                                            || ((searchType === 2 || searchType == 0) && dayOffDetail.managerNote)"
+                                            >{{dayOffDetail?.managerNote}}
+                                            </div>
+                                            <textarea
+                                                *ngIf="searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE
+                                            || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)"
+                                                name="managerNote" class="form-control" rows="3"
+                                                placeholder="Nhập nội dung ghi chú"
+                                                [(ngModel)]="dayOffDetail.managerNote"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="QLPD ghi chú"></label>
+                                        <div class="col-sm-8 col-md-9">
+                                            <div
+                                                *ngIf="dayOffDetail?.status === DAYOFF_STATUS.APPROVER_APPROVE
+                                            || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE">
+                                                {{dayOffDetail?.approverNote}}
+                                            </div>
+                                            <textarea
+                                                *ngIf="searchType === 2 && dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE"
+                                                name="approverNote" class="form-control" rows="3"
+                                                placeholder="Nhập nội dung ghi chú"
+                                                [(ngModel)]="dayOffDetail.approverNote"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="dayOffDetail?.managerDeclineReason">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="Lý do QLTT không duyệt" [required]="true"></label>
+                                        <div class="col-sm-8 col-md-9 color-red bold">
+                                            <div class="bold">{{dayOffDetail?.managerDeclineReason}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" *ngIf="dayOffDetail?.approverDeclineReason">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="Lý do QLPD không duyệt" [required]="true"></label>
+                                        <div class="col-sm-8 col-md-9 color-red bold">
+                                            <div class="bold">{{dayOffDetail?.approverDeclineReason}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label label-color"
+                                               ghmLabel="Lý do xin nghỉ" [required]="true"></label>
+                                        <div class="col-sm-8 col-md-9">
+                                            <div class="bold">
+                                                {{dayOffDetail?.reason ? dayOffDetail?.reason : 'Không có lý do'}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="portlet light bordered">
+                                <div class="portlet-title">
+                                    <div class="caption font-green-sharp">
+                                        <i class="icon-share font-green-sharp"></i>
+                                        <span class="caption-subject bold uppercase"> Chi tiết ca xin nghỉ</span>
+                                    </div>
+                                    <div class="actions"
+                                         *ngIf="
+                                        (currentUser?.id === dayOffDetail?.managerUserId && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE))
+                                        || (currentUser?.id === dayOffDetail?.approverUserId && (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE))
+                                    ">
+                                        <a href="javascript:;" class="btn btn-circle btn-success btn-sm"
+                                           (click)="approveAll(true)"
+                                           [class.disabled]="isSaving">
+                                            <i class="fa fa-check"></i>
+                                            Duyệt tất cả </a>
+                                        <a href="javascript:;" class="btn btn-circle btn-danger btn-sm"
+                                           (click)="declineAll()"
+                                           [class.disabled]="isSaving">
+                                            <i class="fa fa-times"></i> Không duyệt tất cả </a>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <ul>
+                                        <li *ngFor="let item of listStats">
+                                            {{item?.name}}: <b>{{item?.quantity}} Ngày</b>
+                                        </li>
+                                    </ul>
+                                    <div class="alert alert-warning">
+                                        <div class="bold">Lưu ý:</div>
+                                        <ul>
+                                            <li>Trường hợp không chọn mặc định sẽ là không duyệt.</li>
+                                            <li>Trong trường hợp không duyệt vui lòng nêu rõ lý
+                                                do vì sao không duyệt.
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-striped table-hover table-main">
+                                        <thead>
+                                        <tr>
+                                            <th class="center middle w70">Ngày</th>
+                                            <th class="center middle w100">Ca</th>
+                                            <th class="center middle">Hình thức nghỉ</th>
+                                            <th class="center middle w150">Trạng thái</th>
+                                            <th class="center middle w150">Ghi chú</th>
+                                            <th class="center middle w150">Lý do không duyệt</th>
+                                            <th class="center middle"
+                                                *ngIf="currentUser?.id === dayOffDetail?.managerUserId || currentUser?.id === dayOffDetail?.approverUserId">
+                                                Hành động
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <ng-container *ngFor="let date of listDates">
+                                            <tr *ngFor="let shift of date.shifts; let shiftIndex = index">
+                                                <td class="center middle" *ngIf="shiftIndex === 0"
+                                                    [attr.rowspan]="date.shifts?.length">
+                                                    <div class="bold">{{date.dateText}}</div>
+                                                    <label for="" class="label-color">({{date.dateName}})</label>
+                                                </td>
+                                                <td class="center middle">
+                                                    <div class="bold">{{shift.reportName}}</div>
+                                                </td>
+                                                <td class="center middle w100 bold">{{shift.methodName}}</td>
+                                                <td class="middle">
+                                                    <div [class.color-green]="shift?.isManagerApprove"
+                                                         [class.color-red]="shift?.isManagerApprove === false">{{
+                                                        dayOffDetail?.status == dayOffDetail?.status ===
+                                                        DAYOFF_STATUS.WAIT_MANAGER_APPROVE ? 'Chờ QLTT duyệt' :
+                                                        shift?.isManagerApprove === true ? 'QLTT đã duyệt' :
+                                                        shift?.isManagerApprove === false ? 'QLTT không duyệt' : ''}}
+                                                    </div>
+                                                    <div [class.color-green]="shift?.isApproverApprove"
+                                                         [class.color-red]="shift?.isApproverApprove === false">{{
+                                                        dayOffDetail?.status == dayOffDetail?.status ===
+                                                        DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE
+                                                        ? 'QLTT đã duyệt chờ QLPD duyệt' :
+                                                        shift?.isApproverApprove === true ? 'QLPD đã duyệt' :
+                                                        shift?.isApproverApprove === false ? 'QLPD không duyệt' : ''}}
+                                                    </div>
+                                                </td>
+                                                <td class="w150">
+                                                    <div *ngIf="shift.managerNote && (
+                                                    searchType === 0 || searchType === 2 || (
+                                                    searchType === 1 && shift.managerNote &&
+                                                    (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_DECLINE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE)))">
+                                                        QLTT:
+                                                        {{shift.managerNote}}
+                                                    </div>
+                                                    <div *ngIf="shift.approverNote && (
+                                                    searchType === 0 || searchType === 1 || (searchType === 2 && shift.approverNote &&
+                                                    (dayOffDetail?.status === DAYOFF_STATUS.APPROVER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)))">
+                                                        QLPD:
+                                                        {{shift.approverNote}}
+                                                    </div>
+                                                    <ng-container *ngIf="shift.method !== DAYOFF_METHOD.WEEK_LEAVE
+                                                && shift.method
+                                                && shift.method !== DAYOFF_METHOD.HOLIDAY_LEAVE
+                                                && shift.method !== DAYOFF_METHOD.UNAUTHORIZED_LEAVE
+&& ((searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE))
+|| (searchType === 2 && (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE)))">
+                                                    <textarea
+                                                        *ngIf="searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)"
+                                                        [attr.name]="'manager-note' + shiftIndex" class="form-control"
+                                                        placeholder="Nhập nội dung ghi chú"
+                                                        rows="3" [(ngModel)]="shift.managerNote"></textarea>
+                                                        <textarea
+                                                            *ngIf="searchType === 2 && dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE"
+                                                            [attr.name]="'approver-note' + shiftIndex"
+                                                            class="form-control"
+                                                            placeholder="Nhập nội dung ghi chú"
+                                                            rows="3" [(ngModel)]="shift.approverNote"></textarea>
+                                                    </ng-container>
+                                                </td>
+                                                <td class="w150 color-red">
+                                                    <div *ngIf="shift.managerDeclineReason && (
+                                                    searchType === 0 || searchType === 2 || (
+                                                    searchType === 1 &&
+                                                    (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_DECLINE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE)))">
+                                                        QLTT:
+                                                        {{shift.managerDeclineReason}}
+                                                    </div>
+                                                    <div *ngIf="shift.approverDeclineReason && (
+                                                    searchType === 0 || searchType === 1 || (searchType === 2 &&
+                                                    (dayOffDetail?.status === DAYOFF_STATUS.APPROVER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)))">
+                                                        QLPD:
+                                                        {{shift.approverDeclineReason}}
+                                                    </div>
+                                                    <ng-container *ngIf="shift.method !== DAYOFF_METHOD.WEEK_LEAVE
+                                                && shift.method
+                                                && shift.method !== DAYOFF_METHOD.HOLIDAY_LEAVE
+                                                && shift.method !== DAYOFF_METHOD.UNAUTHORIZED_LEAVE
+&& ((searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE))
+|| (searchType === 2 && (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE)))">
+                                                    <textarea
+                                                        *ngIf="searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE
+                                                    || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)"
+                                                        [attr.name]="'manager-decline-reason-' + shiftIndex"
+                                                        class="form-control"
+                                                        [attr.id]="'manager-decline-reason-' + shiftIndex"
+                                                        placeholder="Nhập nội dung ghi chú"
+                                                        rows="3" [(ngModel)]="shift.managerDeclineReason"
+                                                        [readonly]="shift.isManagerApprove"
+                                                    ></textarea>
+                                                        <textarea
+                                                            *ngIf="searchType === 2 && dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE"
+                                                            [attr.name]="'approver-decline-reason' + shiftIndex"
+                                                            [attr.id]="'approver-decline-reason-' + shiftIndex"
+                                                            class="form-control"
+                                                            placeholder="Nhập nội dung ghi chú"
+                                                            [readonly]="shift.isApproverApprove"
+                                                            rows="3"
+                                                            [(ngModel)]="shift.approverDeclineReason"></textarea>
+                                                    </ng-container>
+                                                </td>
+                                                <td class="center middle w100"
+                                                    *ngIf="currentUser?.id === dayOffDetail?.managerUserId || currentUser?.id === dayOffDetail?.approverUserId">
+                                                    <ng-container *ngIf="shift.method !== DAYOFF_METHOD.WEEK_LEAVE
+                                                && shift.method !== DAYOFF_METHOD.HOLIDAY_LEAVE
+                                                && shift.method !== DAYOFF_METHOD.UNAUTHORIZED_LEAVE
+&& ((searchType === 1 && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE))
+|| (searchType === 2 && (dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE)))">
+                                                        <button mat-mini-fab color="primary"
+                                                                matTooltip="Duyệt" matTooltipPosition="above"
+                                                                *ngIf="
+                                                            ((searchType === 1 && (shift.isManagerApprove == null || shift.isManagerApprove === false))
+                                                            || (searchType === 2 && (shift.isApproverApprove === null || shift.isApproverApprove === false)))
+                                                            && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE
+                                                            || dayOffDetail?.status === DAYOFF_STATUS.MANAGER_DECLINE
+                                                            || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE)"
+                                                                (click)="approve(shift, true, shiftIndex)">
+                                                            <i class="fa fa-check"></i>
+                                                        </button>
+                                                        <button mat-mini-fab color="warn"
+                                                                matTooltip="Không duyệt" matTooltipPosition="above"
+                                                                *ngIf="
+                                                            ((searchType === 1 && (shift.isManagerApprove == null || shift.isManagerApprove === true))
+                                                            || (searchType === 2 && (shift.isApproverApprove === null || shift.isApproverApprove === true)))
+                                                            && dayOffDetail?.method !== DAYOFF_METHOD.WEEK_LEAVE
+&& dayOffDetail?.method !== DAYOFF_METHOD.HOLIDAY_LEAVE && dayOffDetail?.method !== DAYOFF_METHOD.UNAUTHORIZED_LEAVE"
+                                                                (click)="approve(shift, false, shiftIndex)">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </ng-container>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                        </tbody>
+                                    </table><!-- END: table -->
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END: .form-body -->
+                </div><!-- END: .form-horizontal -->
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <button type=" button
+                            " class="btn btn-default disabled"
+                *ngIf="currentUser?.id === dayOffDetail?.managerUserId && dayOffDetail?.status ===
+                            DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE">
+            <i class="icon-clock"></i>
+            {{dayOffDetail?.statusText}}
+        </button>
+
+        <ng-container *ngIf="(currentUser?.id === dayOffDetail?.managerUserId || currentUser?.id === dayOffDetail?.approverUserId)
+            && ((dayOffDetail?.managerUserId === currentUser?.id && (dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status === DAYOFF_STATUS.APPROVER_DECLINE))
+            || (dayOffDetail?.approverUserId == currentUser?.id && dayOffDetail?.status === DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE))">
+            <button type="button" mat-raised-button color="primary" (click)="confirm()">
+                <i class="fa fa-check"></i>
+                {{(dayOffDetail?.status === DAYOFF_STATUS.WAIT_MANAGER_APPROVE || dayOffDetail?.status ===
+                DAYOFF_STATUS.MANAGER_APPROVE_WAIT_APPROVER_APPROVE
+                ? 'Xác nhận' : 'Gửi lại')}}
+            </button>
+        </ng-container>
+        <button type="button" nh-dismiss="true" mat-raised-button>
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>
+
+<!-- TODO: Check this -->
+<!--<timekeeping-day-off-register-->
+<!--(onSaveSuccess)="$event ? search(1) : search(currentPage)"-->
+<!--&gt;</timekeeping-day-off-register>-->

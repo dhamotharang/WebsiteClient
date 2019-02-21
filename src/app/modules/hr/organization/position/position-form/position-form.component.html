@@ -1,0 +1,211 @@
+<nh-modal #positionFormModal
+          size="md"
+          (show)="onModalShown()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        <i class="fa fa-graduation-cap"></i>
+        <span i18n="@@positionFormTitle">{isUpdate, select, 1 {Update position} 0 {Add new position}}</span>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="tabbable-custom">
+                <ul class="nav nav-tabs " *ngIf="languages.length > 1">
+                    <li [class.active]="item.id === currentLanguage"
+                        *ngFor="let item of languages; let i = index">
+                        <a href="javascript://" (click)="currentLanguage = item.id"> {{ item.name }} </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="form-group"
+                             [class.has-error]="formErrors.titleId">
+                            <label i18n="@@selectTitle" i18n-ghmLabel ghmLabel="Select title"
+                                   class="col-sm-4 control-label"
+                                   [required]="true"
+                            ></label>
+                            <div class="col-sm-2">
+                                <nh-select
+                                    i18n="@@selectTitlePlaceholder"
+                                    i18n-title
+                                    [data]="titles"
+                                    title="-- Select title --"
+                                    formControlName="titleId"></nh-select>
+                                <span class="help-block">
+                                        {
+                                        formErrors.titleId,
+                                        select, required {Please select title} other {}
+                                        }
+                                    </span>
+                            </div>
+                            <span formArrayName="modelTranslations">
+                                <span
+                                    *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                    [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                    [formGroupName]="i"
+                                    [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                    <label i18n="@@shortName" i18n-ghmLabel ghmLabel="Short name"
+                                           class="col-sm-2 control-label"
+                                           [required]="true"
+                                    ></label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control"
+                                               i18n="@@enterTitleShortNamePlaceHolder" i18n-placeholder
+                                               placeholder="Enter title short name."
+                                               formControlName="shortName">
+                                        <span class="help-block">
+                                            {
+                                            translationFormErrors[modelTranslation.value.languageId]?.shortName,
+                                            select, required {Position short name is required} maxlength {Position short name not allowed over 20 characters}
+                                            }
+                                        </span>
+                                    </div>
+                                </span>
+                            </span>
+                        </div>
+                        <div formArrayName="modelTranslations">
+                            <div class="form-group"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                <label i18n="@@positionName" i18n-ghmLabel
+                                       ghmLabel="Position name" for="" class="col-sm-4 control-label"
+                                       [required]="true"></label>
+                                <div class="col-sm-8">
+                                    <input type="text" i18n="@@enterPositionName" i18n-placeholder
+                                           placeholder="Enter position name" class="form-control" id="name"
+                                           formControlName="name" #name>
+                                    <span class="help-block">
+                                        {
+                                        translationFormErrors[modelTranslation.value.languageId]?.name,
+                                        select, required {Position name is required} maxlength {Position name not allowed over 256 characters}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                    {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox color="primary" formControlName="isManager" i18n="@@isManager">
+                                    Is manager
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox color="primary" formControlName="isMultiple" i18n="@@isMultiple">
+                                    Is multiple
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Use for office"
+                                   class="col-sm-4 control-label"
+                            ></label>
+                            <div class="col-sm-8">
+                                <nh-suggestion
+                                    i18n-placeholder="@@officeSuggestionPlaceholder"
+                                    placeholder="Type office name for suggestion"
+                                    [multiple]="true"
+                                    [sources]="offices"
+                                    [loading]="isSearchingOffice"
+                                    [selectedItems]="selectedOffices"
+                                    (searched)="onSearched($event)"
+                                    (itemSelected)="onSelectedOffice($event)"
+                                ></nh-suggestion>
+                            </div>
+                        </div>
+                        <div formArrayName="modelTranslations">
+                            <div class="form-group"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                                <label i18n="@@description" i18n-ghmLabel ghmLabel="Description"
+                                       class="col-sm-4 control-label"
+                                ></label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="2" formControlName="description"
+                                              i18n="@@enterDescriptionPlaceholder" i18n-placeholder
+                                              placeholder="Enter description."></textarea>
+                                    <span class="help-block">
+                                        {
+                                        translationFormErrors[modelTranslation.value.languageId]?.description,
+                                        select, maxlength {Title description not allowed over 500 characters}
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.purpose">
+                                <label i18n="@@purposse" i18n-ghmLabel ghmLabel="Purpose"
+                                       class="col-sm-4 control-label"
+                                ></label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="2" formControlName="purpose"
+                                              i18n="@@enterPurposePlaceholder" i18n-placeholder
+                                              placeholder="Enter purpose."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.otherRequire">
+                                <label i18n="@@otherRequire" i18n-ghmLabel ghmLabel="Other require"
+                                       class="col-sm-4 control-label"
+                                ></label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="2" formControlName="otherRequire"
+                                              i18n="@@enterOtherRequirePlaceholder" i18n-placeholder
+                                              placeholder="Enter other require."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                 *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                 [formGroupName]="i"
+                                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.responsibility">
+                                <label i18n="@@responsibility" i18n-ghmLabel ghmLabel="Responsibility"
+                                       class="col-sm-4 control-label"
+                                ></label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="2" formControlName="responsibility"
+                                              i18n="@@enterResponsibilityPlaceholder" i18n-placeholder
+                                              placeholder="Enter responsibility."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <!--<button type="button" (click)=""></button>-->
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                Save
+            </ghm-button>
+            <ghm-button classes="btn btn-default" i18n="@@cancel"
+                        type="button" nh-dismiss="true">
+                Cancel
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

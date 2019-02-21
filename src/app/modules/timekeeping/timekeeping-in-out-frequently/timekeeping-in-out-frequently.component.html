@@ -1,0 +1,364 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm."
+                       name="searchInputKeyword" [(ngModel)]="keyword">
+            </div>
+            <div class="form-group">
+                <nh-date
+                    name="fromDateSearch"
+                    [type]="'inputButton'"
+                    [placeholder]="'chọn từ ngày'"
+                    [allowRemove]="true"
+                    [mask]="true"
+                    [(ngModel)]="fromDate"
+                    (selectedDateEvent)="search(1)"
+                    (removedDateEvent)="search(1)"
+                ></nh-date>
+            </div>
+            <div class="form-group">
+                <nh-date
+                    name="toDateSearch"
+                    [type]="'inputButton'"
+                    [placeholder]="'Chọn đến ngày'"
+                    [allowRemove]="true"
+                    [mask]="true"
+                    [(ngModel)]="toDate"
+                    (selectedDateEvent)="search(1)"
+                    (removedDateEvent)="search(1)"
+                ></nh-date>
+            </div>
+            <div class="form-group">
+                <button mat-raised-button color="primary">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </div>
+            <!--<div class="form-group pull-right" (click)="addNew()" *ngIf="isHasInsertPermission">-->
+                <!--<button type="button" mat-raised-button color="primary">-->
+                    <!--<mat-icon>add</mat-icon>-->
+                    <!--Thêm mới-->
+                <!--</button>-->
+            <!--</div>-->
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-main">
+                <thead>
+                <tr>
+                    <th class="center middle w50">#</th>
+                    <th class="center middle w250">Nhân viên</th>
+                    <th class="center middle w100">Ngày áp dụng</th>
+                    <th class="center middle w100">Thời gian áp dụng</th>
+                    <th class="center middle">Lý do</th>
+                    <th class="center middle w50">Sử dụng</th>
+                    <th class="center middle w100"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of listInOutFrequently; let i = index">
+                    <td class="center w50">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                    <td>
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="javascript://">
+                                    <nh-image
+                                        [cssClass]="'avatar-sm rounded-avatar'"
+                                        [value]="item.avatar"
+                                        [alt]="item.fullName" [width]="39" [height]="39"></nh-image>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{item.fullName}}</h4>
+                                <p>{{item.titleName}} - {{item.officeName}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{item.fromDate | dateTimeFormat:'DD/MM/YYYY'}}</td>
+                    <td>{{item.toDate | dateTimeFormat:'DD/MM/YYYY'}}</td>
+                    <td>{{item.reason}}</td>
+                    <td class="center">
+                        <mat-icon *ngIf="item.isActive" class="color-green">done</mat-icon>
+                    </td>
+                    <td class="center w100">
+                        <button type="button" mat-mini-fab color="primary" matTooltip="Chỉnh sửa"
+                                matTooltipPosition="below" (click)="edit(item)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button type="button" mat-mini-fab color="warn" matTooltip="Xóa" matTooltipPosition="below"
+                                (click)="delete(item)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                [isDisabled]="isSearching" [pageName]="'đi muộn về sớm'"></ghm-paging>
+    </div>
+</div>
+
+<nh-modal #fromModal>
+    <!--<nh-modal-header [showCloseButton]="true">-->
+    <!--<i class="fa fa-suitcase"></i>-->
+    <!--{{isUpdate ? 'Chỉnh sửa đăng ký đi muộn về sớm dài hạn' : 'Thêm mới đăng ký đi muộn về sớm dài hạn'}}-->
+    <!--</nh-modal-header>-->
+    <form class="form-horizontal form-bordered" [formGroup]="model" (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-speech font-green-sharp"></i>
+                                <!--<span class="caption-subject bold uppercase"> {{isUpdate ? 'Cập nhật thông tin đăng ký' : 'Thêm mới thông tin đăng ký'}} </span>-->
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                <label for="" class="col-sm-4 control-label">Nhân viên <span
+                                    class="color-red">*</span>:</label>
+                                <div class="col-sm-8">
+                                    <!--<ghm-user-suggestion-->
+                                        <!--*ngIf="!isUpdate; else userReadonlyTemplate"-->
+                                        <!--[sources]="listUserSuggestion"-->
+                                        <!--[selectedUsers]="selectedUser"-->
+                                        <!--[isLoading]="isSearchingUser"-->
+                                        <!--(onSelectUser)="onSelectUser($event)"-->
+                                        <!--(onRemoveUser)="onRemoveUser()"-->
+                                        <!--(onKeyUp)="onUserSuggestionKeyUp($event)"-->
+                                        <!--placeholder="Nhập tên nhân viên"-->
+                                    <!--&gt;</ghm-user-suggestion>-->
+                                    <ng-template #userReadonlyTemplate>
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <a href="#">
+                                                    <!--<img class="media-object" src="" alt="...">-->
+                                                    <nh-image
+                                                        [cssClass]="'avatar-sm rounded-avatar'"
+                                                        [alt]="model.value.fullName"
+                                                        [value]="model.value.avatar"></nh-image>
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">{{model.value.fullName}}</h4>
+                                                {{ model.value?.titleName }} - {{ model.value?.officeName }}
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <!--<div class="alert alert-danger" *ngIf="formErrors.userId">-->
+                                        <!--{{formErrors.userId}}-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-4 control-label">Ngày bắt đầu:</label>
+                                <div class="col-sm-8">
+                                    <nh-date
+                                        formControlName="fromDate"
+                                        [type]="'inputButton'"
+                                        [placeholder]="'Chọn ngày bắt đầu'"
+                                        [allowRemove]="true"
+                                        [mask]="true"
+                                        (removedDateEvent)="onRemoveFromDate()"
+                                    ></nh-date>
+                                    <!--<div class="alert alert-danger" *ngIf="formErrors.fromDate">-->
+                                        <!--{{formErrors.fromDate}}-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-4 control-label">Ngày kết thúc:</label>
+                                <div class="col-sm-8">
+                                    <nh-date
+                                        formControlName="toDate"
+                                        [type]="'inputButton'"
+                                        [placeholder]="'Chọn ngày kết thúc'"
+                                        [allowRemove]="true"
+                                        [mask]="true"
+                                        (removedDateEvent)="onRemoveToDate()"
+                                    ></nh-date>
+                                    <!--<div class="alert alert-danger" *ngIf="formErrors.toDate">-->
+                                        <!--{{formErrors.toDate}}-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-4 control-label">Lý do <span
+                                    class="color-red">*</span>:</label>
+                                <div class="col-sm-8">
+                    <textarea class="form-control" rows="3" placeholder="Nhập lý do xin đi muộn về sớm."
+                              formControlName="reason"></textarea>
+                                    <!--<div class="alert alert-danger" *ngIf="formErrors.reason">-->
+                                        <!--{{formErrors.reason}}-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-4 control-label">Ghi chú:</label>
+                                <div class="col-sm-8">
+                    <textarea class="form-control" rows="3" placeholder="Nhập nội dung ghi chú."
+                              formControlName="note"></textarea>
+                                    <!--<div class="alert alert-danger" *ngIf="formErrors.note">-->
+                                        <!--{{formErrors.note}}-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-4">
+                                    <mat-checkbox color="primary" formControlName="isActive">Kích hoạt</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- END: infomation -->
+                <div class="col-sm-6">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-speech font-green-sharp"></i>
+                                <span class="caption-subject bold uppercase"> Chi tiết ca xin nghỉ</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="cm-mgb-10 text-right">
+                                <button type="button" mat-raised-button color="primary" (click)="addDetail()">
+                                    <mat-icon>add</mat-icon>
+                                    Thêm ca xin nghỉ
+                                </button>
+                            </div>
+                            <div class="note" *ngIf="listInOutFrequentlyDetail.length === 0; else tableContentTemplate">
+                                Vui lòng chọn thêm mới ca xin nghỉ.
+                            </div>
+                            <ng-template #tableContentTemplate>
+                                <table class="table table-hover table-bordered table-striped">
+                                    <tbody>
+                                    <tr *ngFor="let item of listInOutFrequentlyDetail; let i = index">
+                                        <td class="center middle">{{item.dayOfWeekName}}</td>
+                                        <td class="middle">{{item.shiftReportName}}</td>
+                                        <td class="middle">{{item.isInLate ? 'Đi muộn' : 'Về sớm'}}</td>
+                                        <td class="middle">{{item.totalMinutes}} phút</td>
+                                        <td class="center middle w100">
+                                            <button type="button" mat-mini-fab color="primary"
+                                                    (click)="editDetail(item, i)">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                            <button type="button" mat-mini-fab color="warn"
+                                                    (click)="deleteDetail(item)">
+                                                <mat-icon>delete</mat-icon>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <button mat-raised-button color="primary">
+                <!--<i class="fa fa-save"></i>-->
+                <mat-icon>save</mat-icon>
+                Lưu lại
+            </button>
+            <button type="button" nh-dismiss="true" mat-raised-button color="default">
+                <!--<i class="fa fa-times"></i>-->
+                <mat-icon>close</mat-icon>
+                Đóng lại
+            </button>
+        </nh-modal-footer>
+    </form><!-- END: form -->
+</nh-modal>
+
+
+<nh-modal #fromDetailModal size="sm">
+    <form class="form-horizontal form-bordered" (ngSubmit)="saveDetail()" [formGroup]="detailModel">
+        <nh-modal-content>
+            <div class="row">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption font-green-sharp">
+                            <i class="icon-speech font-green-sharp"></i>
+                            <span class="caption-subject bold uppercase"> {{isUpdateDetail ? 'Chỉnh sửa chi tiết ca xin nghỉ' : 'Thêm mới ca xin nghỉ'}}</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label">Ngày xin nghỉ
+                                <span class="color-red">*</span></label>
+                            <div class="col-sm-8">
+                                <nh-select
+                                    title="-- Chọn ngày xin nghỉ --"
+                                    formControlName="dayOfWeek"
+                                    [data]="dayOfWeeks"></nh-select>
+                                <div class="alert alert-danger" *ngIf="detailFormErrors.dayOfWeek">
+                                    {{detailFormErrors.dayOfWeek}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label">Chọn ca làm việc
+                                <span class="color-red">*</span>:</label>
+                            <div class="col-sm-8">
+                                <nh-select
+                                    title="-- Chọn ca làm việc --"
+                                    formControlName="shiftId"
+                                    [data]="shifts"
+                                    (onSelectItem)="onSelectShift($event)"
+                                ></nh-select>
+                                <div class="alert alert-danger" *ngIf="detailFormErrors.shiftId">
+                                    {{detailFormErrors.shiftId}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label">Số phút:</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control"
+                                           placeholder="Nhập số phút {{detailModel.value.isInLate ? 'đi muộn' : 'về sớm'}}"
+                                           formControlName="totalMinutes">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {{detailModel.value.isInLate ? 'Đi muộn' : 'Về sớm'}}<span
+                                            class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="javascript://" (click)="onChangeIsInLateValue(true)">Đi
+                                                muộn</a></li>
+                                            <li><a href="javascript://" (click)="onChangeIsInLateValue(false)">Về
+                                                sớm</a></li>
+                                        </ul>
+                                    </div><!-- /btn-group -->
+                                </div>
+                                <div class="alert alert-danger" *ngIf="detailFormErrors.totalMinutes">
+                                    {{detailFormErrors.totalMinutes}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <button mat-raised-button color="primary">
+                <!--<i class="fa fa-save"></i>-->
+                <mat-icon *ngIf="!isUpdateDetail">add</mat-icon>
+                <mat-icon *ngIf="isUpdateDetail">save</mat-icon>
+                {{isUpdateDetail ? 'Lưu lại' : 'Thêm'}}
+            </button>
+            <button type="button" nh-dismiss="true" mat-raised-button color="default">
+                <!--<i class="fa fa-times"></i>-->
+                <mat-icon>close</mat-icon>
+                Đóng lại
+            </button>
+        </nh-modal-footer>
+    </form><!-- END: form -->
+</nh-modal>

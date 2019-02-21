@@ -1,0 +1,129 @@
+<nh-modal #menuFormModal size="sm"
+          (show)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header [showCloseButton]="true">
+        <i class="fas fa-bars"></i> {{ isUpdate ? 'Cập nhật thông tin menu' : 'Thêm mới menu'}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group">
+                <label ghmLabel="Loại menu" class="col-sm-4 control-label" [required]="true"></label>
+                <div class="col-sm-8">
+                    <nh-select
+                        title="-- Chọn loại menu --"
+                        [data]="referenceTypes"
+                        formControlName="referenceType"
+                    ></nh-select>
+                    <div class="alert alert-danger" *ngIf="formErrors.referenceType">{{ formErrors.referenceType }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Menu cấp trên" class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    <nh-dropdown-tree
+                        title="-- Chọn menu cấp trên --"
+                        [data]="menuTree"
+                        formControlName="parentId"></nh-dropdown-tree>
+                </div>
+            </div>
+            <ng-container *ngIf="model.value.referenceType === referenceType.CUSTOM; else menuFormTemplate">
+                <div class="form-group">
+                    <label ghmLabel="Tên menu" class="col-sm-4 control-label" [required]="true"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập đường dẫn video"
+                               formControlName="name"
+                               id="name"/>
+                        <div class="alert alert-danger" *ngIf="formErrors.name">{{ formErrors.name }}</div>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="model.value.referenceType === referenceType.CUSTOM">
+                    <label ghmLabel="Đường dẫn" class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập đường dẫn menu"
+                               formControlName="url"/>
+                        <div class="alert alert-danger" *ngIf="formErrors.url">{{ formErrors.url }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Thứ tự" class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Nhập đường dẫn video"
+                               formControlName="order"/>
+                        <div class="alert alert-danger" *ngIf="formErrors.order">{{ formErrors.order }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Trạng thái" class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                    <span class="cm-pdt-5"><mat-checkbox formControlName="isActive" color="primary">{{model.value.isActive ? 'Hủy kích hoạt' :
+                        'Kích hoạt'}}
+                    </mat-checkbox></span>
+                    </div>
+                </div>
+            </ng-container><!-- END: custom menu -->
+        </nh-modal-content>
+        <nh-modal-footer>
+            <button class="btn btn-primary" [disabled]="isSaving">
+                <i class="fas fa-save" *ngIf="!isSaving"></i>
+                <i class="fas fa-spinner fa-spin" *ngIf="isSaving"></i>
+                Lưu lại
+            </button>
+            <button type="button" class="btn btn-default" nh-dismiss="true">
+                <i class="fas fa-times"></i>
+                Hủy bỏ
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
+
+<ng-template #menuFormTemplate>
+    <div class="form-group">
+        <label ghmLabel="Danh sách {{model.value.referenceType === referenceType.CATEGORY ? 'chuyên mục' : 'bài viết'}}"
+               class="col-sm-4 control-label" [required]="true"></label>
+        <div class="col-sm-8">
+            <button type="button" class="btn btn-primary" (click)="showSelectReference()">
+                <i class="fas fa-check"></i>
+                Chọn {{model.value.referenceType === referenceType.CATEGORY ? 'chuyên mục' : 'bài viết'}}
+            </button>
+            <hr>
+            <ul *ngIf="model.value.referenceType === referenceType.CATEGORY; else listNewsTemplate">
+                <li *ngFor="let item of listCategories">
+                    {{item.name}}
+                    <a href="javascript://" class="btn btn-xs btn-danger" (click)="removeReference(item)">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</ng-template>
+
+<!--<app-category-picker (onAccept)="onAcceptSelectReference($event)"></app-category-picker>-->
+<app-news-picker (onAccept)="onAcceptSelectReference($event)"></app-news-picker>
+
+<ghm-multi-select
+    #categoryPicker
+    titleIcon="fas fa-folder-open"
+    title="Chọn chuyên mục"
+    [url]="appConfig.WEBSITE_API_URL + 'category/search-picker'"
+    (onAccept)="onAcceptSelectReference($event)"
+></ghm-multi-select>
+<ghm-multi-select
+    #newsPicker
+    titleIcon="fas fa-file-alt"
+    title="Chọn tin tức"
+    [url]="appConfig.WEBSITE_API_URL + 'news/search-picker'"
+    (onAccept)="onAcceptSelectReference($event)"
+></ghm-multi-select>
+
+<ng-template #listNewsTemplate>
+    <ul>
+        <li *ngFor="let item of listNews">
+            {{item.name}}
+            <a href="javascript://" class="btn btn-xs btn-danger" (click)="removeReference(item)">
+                <i class="fas fa-trash-alt"></i>
+            </a>
+        </li>
+    </ul>
+</ng-template>

@@ -1,0 +1,63 @@
+<div class="container survey-over-view">
+    <div class="row" *ngIf="errorMessage">
+        <div class="col-sm-12 cm-mgt-10">
+            <div class="alert alert-danger">
+                {{ errorMessage }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="regulate-survey">
+                <h4 class="star-title fontSize18" i18n="@@regulatedSurvey">Regulated survey</h4>
+                <hr>
+                <div class="content">
+                    <span [innerHtml]="examOverviewInfo?.surveyDescription"></span>
+                </div>
+            </div>
+            <div class="survey-information">
+                <h3 class="survey-name" i18n="@@surveyInfo">Survey Information</h3>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="@@surveyName" class="item-label">Survey name: </span>{{examOverviewInfo.surveyName}}
+                    </div>
+                </div>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="@@totalQuestion" class="item-label">Total question: </span>{{examOverviewInfo.totalQuestion}}
+                    </div>
+                </div>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="@@startTime" class="item-label">Start time: </span>{{examOverviewInfo.startDate |
+                        dateTimeFormat:'DD/MM/YYYY'}}
+                    </div>
+                </div>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="@@endTime" class="item-label">End time: </span>{{examOverviewInfo.endDate |
+                        dateTimeFormat:'DD/MM/YYYY'}}
+                    </div>
+                </div>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="@@totalTime" class="item-label">Total time: </span>{{transform(examOverviewInfo?.limitedTime
+                        * 60)}}
+                    </div>
+                </div>
+                <div class="survey-item-info">
+                    <div class="survey-item-label">
+                        <span i18n="examIsRequired" class="item-label">Bài thì bắt buộc:  </span>
+                        <mat-checkbox disabled="true" [(ngModel)]="examOverviewInfo.isRequired"></mat-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 cm-mgb-20 cm-mgt-20 center" *ngIf="!errorMessage">
+            <a routerLink="/surveys/start/{{examOverviewInfo.surveyId}}" class="btn btn-primary"
+               i18n="@@startExam">
+                Start Exam
+            </a>
+        </div>
+    </div>
+</div>

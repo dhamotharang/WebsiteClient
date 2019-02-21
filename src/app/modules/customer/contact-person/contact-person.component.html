@@ -1,0 +1,59 @@
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="middle center w50" i18n="@@no">No</th>
+            <th class="middle center " i18n="@@contactPerson">Contact Person</th>
+            <th class="middle center w200" i18n="@@phoneNumber">Phone Number</th>
+            <th class="middle center w200" i18n="@@action" *ngIf="permission.add && !isDetail">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let person of listContactPerson ; let i = index">
+            <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="middle">
+                <input class="form-control" [(ngModel)]="person.fullName" [disabled]="isDetail">
+            </td>
+            <td class="middle right">
+                <div class="input-group" [class.has-error]="phoneNumber.invalid">
+                    <input class="form-control" [(ngModel)]="person.phoneNumber"
+                           [disabled]="isDetail"
+                           [pattern]="'^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'"
+                           #phoneNumber="ngModel">
+                    <span class="input-group-addon" *ngIf="phoneNumber.invalid" class="help-block">
+                        {{'Số điện thoại không đúng định dạng'}}
+                    </span>
+                </div>
+            </td>
+            <td class="center middle">
+                <ghm-button type="button"
+                            *ngIf="permission.delete && i>0"
+                            icon="fa fa-trash-o" classes="btn btn-danger btn-sm"
+                            (clicked)="delete(person.id)"></ghm-button>
+                <ghm-button type="button" *ngIf="permission.edit && customerId"
+                            icon="fa fa-save" classes="btn btn-primary btn-sm"
+                            (clicked)="edit(person)"></ghm-button>
+                <ghm-button type="button"
+                            *ngIf="permission.add && !isDetail"
+                            icon="fa fa-plus" classes="btn btn-primary btn-sm"
+                            (clicked)="add(person)"></ghm-button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<swal
+    #confirmDeleteContactPerson
+    i18n-title="@@confirmDeleteContactPerson"
+    i18n-text="@@confirmDeleteText"
+    title="Are you sure for delete this contactPerson?"
+    text="You can't recover this title after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>
+
+

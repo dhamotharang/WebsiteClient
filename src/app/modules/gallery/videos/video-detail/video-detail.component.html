@@ -1,0 +1,19 @@
+<nh-modal #videoDetailModal [size]="'lg'"
+(hidden)="onHiddenModal()">
+    <nh-modal-header class="uppercase">
+        <span i18n="@@videoDetail">Video detail</span>
+    </nh-modal-header>
+    <nh-modal-content class="cm-pd-0">
+        <div class="middle center ">
+        <iframe id="iFrame_video" (load)="onLoadFunc()" width="100%" height="450" [src]="url | safe"
+                frameborder="0" allowfullscreen=""></iframe>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <div class="pull-right cm-mgb-10">
+            <button class="btn default" type="button" (click)="closeModal()" i18n="@@close">
+                Close
+            </button>
+        </div>
+    </nh-modal-footer>
+</nh-modal>

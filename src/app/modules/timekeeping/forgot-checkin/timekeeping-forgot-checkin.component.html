@@ -1,0 +1,285 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" [class.active]="type === 0" (click)="changeType(0)">
+                Đơn của tôi
+            </button>
+            <!--<button type="button" class="btn btn-default"-->
+                    <!--*ngIf="currentUser?.isLeader"-->
+                    <!--[class.active]="type === 1" (click)="changeType(1)">-->
+                <!--Duyệt đăng ký-->
+            <!--</button>-->
+        </div>
+    </div>
+</div>
+
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form action="" class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Vui lòng nhập tên nhân viên cần tìm"
+                       (keyup)="keyword = keywordInput.value" #keywordInput/>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Chọn tháng"
+                    [data]="listMonth"
+                    [(value)]="month"
+                    (onSelectItem)="onSelectMonth($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Chọn năm --"
+                    [data]="listYear"
+                    [(value)]="year"
+                    (onSelectItem)="onSelectYear($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select
+                    title="-- Trạng thái --"
+                    [data]="[{id: 0, name: 'Mới'},{id: 1, name: 'QLTT đã duyệt'},{id: 2, name: 'QLTT không duyệt'}]"
+                    (onSelectItem)="onSelectStatus($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <button mat-raised-button color="primary">
+                    <i class="fa fa-spinner fa-pulse" *ngIf="isSearching"></i>
+                    <i class="fa fa-search" *ngIf="!isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" mat-raised-button color="primary" (click)="showRegisterModal()">
+                    <i class="fa fa-plus"></i>
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped table-main">
+                <thead>
+                <tr>
+                    <th class="center w50">#</th>
+                    <th class="center">Nhân viên</th>
+                    <th class="center">Ngày đăng ký</th>
+                    <th class="center">Hình thức</th>
+                    <th class="center w150">Trạng thái</th>
+                    <th class="center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of listForgotCheckIn$ | async; let i = index">
+                    <td class="center middle">{{(currentPage - 1) * pageSize + i + 1}}</td>
+                    <td class="middle">
+                        <a href="javascript://" (click)="detail(item)">{{item.fullName}}</a>
+                    </td>
+                    <td class="middle">{{item.registerDate | dateTimeFormat:'DD/MM/YYYY'}}</td>
+                    <td class="middle">{{item.isCheckIn ? 'Quên chấm công vào' : 'Quên chấm công ra'}}</td>
+                    <td class="middle"
+                        [class.color-red]="item.status === STATUS.MANAGER_DECLINE"
+                        [class.color-green]="item.status === STATUS.MANAGER_APPROVE"
+                    >{{item.statusText}}
+                    </td>
+                    <td class="center middle w150">
+                        <button type="button" mat-mini-fab color="default" (click)="detail(item)"><i
+                            class="fa fa-eye"></i></button>
+
+                        <!--<ng-container-->
+                            <!--*ngIf="currentUser?.id === item.managerUserId && item.status === STATUS.WAITING_MANAGER_APPROVE">-->
+                            <!--<button type="button" mat-mini-fab color="primary"-->
+                                    <!--(click)="approve(item, true)">-->
+                                <!--<i class="fa fa-check"></i>-->
+                            <!--</button>-->
+                            <!--<button type="button" mat-mini-fab color="warn"-->
+                                    <!--(click)="approve(item, false)">-->
+                                <!--<i class="fa fa-times"></i>-->
+                            <!--</button>-->
+                        <!--</ng-container>-->
+
+                        <ng-container
+                            *ngIf="currentUser?.id === item.userId && item.status === STATUS.WAITING_MANAGER_APPROVE">
+                            <button type="button" mat-mini-fab color="primary" (click)="edit(item)">
+                                <i class="fa fa-edit"></i></button>
+                            <button type="button" mat-mini-fab color="warn" (click)="delete(item)"><i
+                                class="fa fa-trash-o"></i></button>
+                        </ng-container>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ghm-paging [totalRows]="totalRows$ | async" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" [pageName]="'đăng ký làm thêm giờ'"></ghm-paging>
+</div>
+
+<nh-modal #registerFormModal size="md">
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-calendar-times-o"></i>
+            Đăng ký quên chấm công.
+        </h4>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <!--<div class="form-group" *ngIf="isHasApprovePermission">-->
+                <!--<label ghmLabel="Nhân viên" class="col-md-2 col-sm-3 control-label"></label>-->
+                <!--<div class="col-sm-8">-->
+                    <!--&lt;!&ndash; TODO: Check this &ndash;&gt;-->
+                    <!--&lt;!&ndash;<nh-suggestion&ndash;&gt;-->
+                        <!--&lt;!&ndash;url="/forgot-checkin/search-user"&ndash;&gt;-->
+                        <!--&lt;!&ndash;placeholder="Chọn nhân viên."&ndash;&gt;-->
+                        <!--&lt;!&ndash;formControlName="userId"&ndash;&gt;-->
+                    <!--&lt;!&ndash;&gt;</nh-suggestion>&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="form-group">
+                <label ghmLabel="Ngày" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <nh-date
+                        title="Chọn thời gian"
+                        formControlName="registerDate"
+                        [type]="'inputButton'"></nh-date>
+                    <!--<div class="alert alert-danger"-->
+                         <!--*ngIf="formErrors.registerDate">-->
+                        <!--{{ formErrors.registerDate}}-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Ca làm việc" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <div class="btn-group" role="group" *ngFor="let shift of listShift$ | async">
+                        <button type="button" class="btn btn-default"
+                                [class.active]="model.value.shiftId === shift.id"
+                                (click)="model.patchValue({shiftId: shift.id})">{{shift.reportName}}
+                        </button>
+                    </div>
+                    <!--<div class="alert alert-danger"-->
+                         <!--*ngIf="formErrors.shiftId">-->
+                        <!--{{ formErrors.shiftId}}-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Hình thức" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" [class.active]="model.value.isCheckIn"
+                                (click)="model.patchValue({isCheckIn: true})"> Quên chấm công vào
+                        </button>
+                        <button type="button" class="btn btn-default" [class.active]="!model.value.isCheckIn"
+                                (click)="model.patchValue({isCheckIn: false})"> Quên chấm công ra
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Ghi chú" class="col-md-2 col-sm-3 control-label"></label>
+                <div class="col-md-10 col-sm-9">
+                    <textarea class="form-control" rows="3" placeholder="Nội dung ghi chú"
+                              formControlName="note"></textarea>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <!--<button mat-raised-button color="primary">-->
+                <!--<i class="fa fa-spinner fa-pulse" *ngIf="isSaving"></i>-->
+                <!--<i class="fa fa-save" *ngIf="!isSaving"></i>-->
+                <!--Đăng ký-->
+            <!--</button>-->
+            <button mat-raised-button type="button" nh-dismiss="true">
+                <i class="fa fa-times"></i>
+                Đóng lại
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
+
+<nh-modal #detailModal size="md">
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-register"></i>
+            Chi tiết đăng ký quên chấm công nhân viên: "{{forgotCheckIn?.fullName}}" ngày {{forgotCheckIn?.registerDate
+            | dateTimeFormat:'DD/MM/YYYY'}}
+        </h4>
+    </nh-modal-header>
+
+    <nh-modal-content class="form">
+        <div class="form-horizontal form-bordered">
+            <div class="form-body">
+                <div class="form-group">
+                    <label ghmLabel="Ngày" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{forgotCheckIn?.registerDate | dateTimeFormat:'DD/MM/YYYY'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Ca làm việc" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{forgotCheckIn?.shiftReportName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Hình thức" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold">
+                            {{forgotCheckIn?.isCheckIn ? 'Quên chấm công vào' : 'Quên chấm công ra'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Ghi chú" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold height-auto">
+                            {{forgotCheckIn?.note}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label ghmLabel="Trạng thái" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold"
+                             [class.color-green]="forgotCheckIn?.status === STATUS.MANAGER_APPROVE"
+                             [class.color-red]="forgotCheckIn?.status === STATUS.MANAGER_DECLINE">
+                            {{forgotCheckIn?.statusText}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="forgotCheckIn.status === STATUS.MANAGER_DECLINE">
+                    <label ghmLabel="Lý do" class="col-md-2 col-sm-3 control-label"></label>
+                    <div class="col-md-10 col-sm-9">
+                        <div class="bold auto-height">
+                            {{forgotCheckIn?.declineReason}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <!--<button mat-raised-button color="primary"-->
+                <!--*ngIf="currentUser?.id === forgotCheckIn?.managerUserId && forgotCheckIn?.status === STATUS.WAITING_MANAGER_APPROVE"-->
+                <!--(click)="approve(forgotCheckIn, true, true)">-->
+            <!--<i class="fa fa-check"></i>-->
+            <!--Duyệt-->
+        <!--</button>-->
+        <!--<button mat-raised-button color="warn"-->
+                <!--*ngIf="currentUser?.id === forgotCheckIn?.managerUserId && forgotCheckIn?.status === STATUS.WAITING_MANAGER_APPROVE"-->
+                <!--(click)="approve(forgotCheckIn, false, true)">-->
+            <!--<i class="fa fa-times"></i>-->
+            <!--Không duyệt-->
+        <!--</button>-->
+        <button type="button" mat-raised-button color="default" nh-dismiss="true">
+            <i class="fa fa-times"></i>
+            Đóng lại
+        </button>
+    </nh-modal-footer>
+</nh-modal>

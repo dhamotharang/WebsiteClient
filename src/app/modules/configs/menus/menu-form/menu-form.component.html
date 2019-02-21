@@ -1,0 +1,135 @@
+<h1 class="page-title">
+   <span class="uppercase">
+        {isUpdate, select, 0 {Add menu} 1 {Update menu} other {}}
+    </span>
+</h1>
+<div class="col-sm-6 cm-pdl-0">
+    <div class="portlet light bordered cm-pd-15">
+        <div class="portlet-title cm-mgb-0">
+            <div class="caption">
+                  <span class="caption-subject bold uppercase" i18n="@@menuGroup">
+                        Menu group
+                  </span>
+            </div>
+            <div class="actions cm-pdb-0">
+                <a class="btn btn-circle btn-icon-only btn-no-border btn-no-background"
+                   (click)="isShowMenuGroup = !isShowMenuGroup"
+                   href="javascript:;">
+                    <i class="fa fa-chevron-down" *ngIf="!isShowMenuGroup"></i>
+                    <i class="fa fa-chevron-up" *ngIf="isShowMenuGroup"></i>
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body cm-pdt-0" *ngIf="isShowMenuGroup">
+            <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+                <div class="form-body">
+                    <div class="form-group cm-mg-0"
+                         [class.has-error]="formErrors?.name">
+                        <label i18n-ghmLabel="@@menuGroupName" ghmLabel="Menu group name" class="control-label"
+                               [required]="true"></label>
+                        <input type="text" class="form-control" i18n-placeholder="@@bannerMenuGroupPlaceHolder"
+                               placeholder="Please enter menu group name"
+                               formControlName="name"/>
+                        <span class="help-block">{ formErrors?.name, select, required {Menu group name is required} maxLength {Menu name not allowed
+                                                    over 256 characters}}</span>
+                    </div>
+                    <div class="form-group cm-mg-0"
+                         [class.has-error]="formErrors?.position">
+                        <label i18n-ghmLabel="@@position" class="control-label" ghmLabel="Position"
+                               [required]="true"></label>
+                        <nh-select
+                                i18n-title="@@position"
+                                title="-- Please select position --"
+                                [data]="positions"
+                                formControlName="position"></nh-select>
+                        <span class="help-block">{formErrors?.position, select, required {Position is required} isValid {Position is invalid}}</span>
+                    </div>
+                    <div class="form-group cm-mg-0"
+                         [class.has-error]="formErrors?.icon">
+                        <label i18n-ghmLabel="@@icon" ghmLabel="Icon" class="control-label"
+                               [required]="true"></label>
+                        <input type="text" class="form-control" i18n-placeholder="@@iconPlaceHolder"
+                               placeholder="Please enter icon"
+                               formControlName="icon"/>
+                        <span class="help-block">{formErrors?.icon, select, maxLength {Icon not allowed
+                                                    over 100 characters}}</span>
+                    </div>
+                    <div class="form-group cm-mg-0"
+                         [class.has-error]="formErrors?.effectType">
+                        <label i18n-ghmLabel="@@effect" class="control-label" ghmLabel="Effect"></label>
+                        <nh-select
+                            i18n-title="@@effectType"
+                            title="-- Please select effect type --"
+                            [data]="effectTypes"
+                            formControlName="effectType"></nh-select>
+                        <span class="help-block">{ formErrors?.effectType, select, isValid {Effect type is invalid}}</span>
+                    </div>
+                    <div class="form-group cm-mg-0"
+                         [class.has-error]="formErrors?.description">
+                        <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                               class="control-label"></label>
+                        <textarea type="text" class="form-control" i18n-placeholder="@@description"
+                                  placeholder="Please enter description"
+                                  formControlName="description" rows="3"></textarea>
+                        <span class="help-block">{ formErrors?.description, select, maxlength {Description not allowed
+                                                        over 500 characters}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group cm-mg-0">
+                    <mat-checkbox formControlName="isActive" color="primary">
+                        {model.value?.isActive, select, 0 {InActive} 1 {Active}}
+                    </mat-checkbox>
+                </div>
+                <div class="form-actions">
+                    <button class="btn blue cm-mgr-5" type="submit"
+                            [disabled]="isSaving" i18n="@@save">
+                        Save
+                    </button>
+                    <button class="btn default" type="button" routerLink="/config/menus"
+                            [disabled]="isSaving || formErrors.length > 0" i18n="@@cancel">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="portlet-title cm-mgt-10">
+            <div class="caption">
+                  <span class="caption-subject bold uppercase" i18n="@@menuItem">
+                       Menu item
+                   </span>
+            </div>
+            <div class="actions cm-pdb-0">
+                <a class="btn btn-circle btn-icon-only btn-no-border btn-no-background"
+                   (click)="isShowMenuItem = !isShowMenuItem">
+                    <i class="fa fa-chevron-down" *ngIf="!isShowMenuItem"></i>
+                    <i class="fa fa-chevron-up" *ngIf="isShowMenuItem"></i>
+                </a>
+            </div>
+        </div>
+        <div class="portlet-body cm-pd-0" *ngIf="isShowMenuItem">
+            <app-config-menu-item-form
+                [menuId]="id"
+                [menuItemTree]="listMenuItem"
+                (onSaveSuccess)="renderMenuTree()"
+                (onCloseForm)="isShowMenuItem = false"></app-config-menu-item-form>
+        </div>
+    </div>
+</div>
+<div class="col-sm-6 cm-pdr-0">
+    <div class="portlet light bordered cm-pd-15">
+        <div class="portlet-title cm-mgb-0">
+            <div class="caption">
+                  <span class="caption-subject bold uppercase" i18n="@@menuPreview">
+                        Menu Preview
+                  </span>
+            </div>
+            <div class="actions cm-pdb-0"></div>
+        </div>
+        <div class="portlet-body">
+            <app-menu-item [listMenuItem]="listMenuItem"
+                           (onEditItem)="editMenuItem($event)"
+                           (onDelete)="deleteMenuItem($event)"></app-menu-item>
+        </div>
+    </div>
+</div>

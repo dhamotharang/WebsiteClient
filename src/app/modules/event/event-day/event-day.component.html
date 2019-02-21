@@ -1,0 +1,79 @@
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-calendar"></i>
+            <span i18n="@@eventDaysTitle" class="caption-subject bold uppercase"> Event days </span>
+        </div>
+        <div class="actions" *ngIf="!readonly">
+            <button class="btn blue btn btn-circle" i18n="@@add" (click)="add()">
+                Add
+            </button>
+        </div>
+    </div>
+    <div class="portlet-body" style="display: block;">
+        <table class="table table-hover table-stripped">
+            <thead>
+            <tr>
+                <th class="center" i18n="@@no">No</th>
+                <th i18n="@@eventDayName">Event day name</th>
+                <th i18n="@@eventDate">Event date</th>
+                <th class="text-right" i18n="@@from">From</th>
+                <th class="text-right" i18n="@@to">To</th>
+                <th i18n="@@activate">Activate</th>
+                <th class="text-right" i18n="@@limitedUsers">Limited users</th>
+                <th class="text-right" i18n="@@actions">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listItems; let i = index">
+                <td class="middle">{{ (i + 1) }}</td>
+                <td class="middle">{{ item.name }}</td>
+                <td class="middle">{{ item.eventDate | dateTimeFormat:'DD/MM/YYYY' }}</td>
+                <td class="middle text-right">{{ item.startHour }}:{{ item.startMinute }}</td>
+                <td class="middle text-right">{{ item.endHour }}:{{ item.endMinute }}</td>
+                <td class="middle center">
+                    <i class="fa fa-check color-green"></i>
+                </td>
+                <td class="middle text-right">{{ item.limitedUsers }}</td>
+                <td class="middle text-right">
+                    <ng-container *ngIf="!readonly">
+                        <button type="button" class="btn blue btn-outline btn-sm cm-mgr-5"
+                                (click)="edit(item.id)">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn red btn-outline btn-sm"
+                                *ngIf="permission.delete"
+                                [swal]="confirmDelelete"
+                                (confirm)="delete(item.id)">
+                            <i class="fa fa-trash-o"></i>
+                        </button>
+                    </ng-container>
+                    <ng-container *ngIf="readonly">
+                        <button class="btn btn-default btn-sm btn-outline" (click)="detail(item.id)">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </ng-container>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-event-day-form [eventId]="eventId" (saveSuccessful)="onSaveSuccessful($event)"></app-event-day-form>
+<app-event-day-detail [eventId]="eventId"></app-event-day-detail>
+
+
+<swal
+    #confirmDelelete
+    i18n-title="@@confirmDeleteEventDayTitle"
+    i18n-text="@@confirmDeleteEventDayText"
+    title="Are you sure for delete this event day?"
+    text="You can't recover this event day after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>
+

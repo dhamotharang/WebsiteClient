@@ -1,0 +1,57 @@
+<nh-modal #feedbackDetailModal size="lg">
+    <nh-modal-header class="uppercase">
+        <ng-container i18n="@@feedbackDetail">Feedback Detail</ng-container>
+    </nh-modal-header>
+    <nh-modal-content>
+        <div class="form-horizontal" *ngIf="feedbackDetail">
+            <div class="form-group">
+                <div class="col-sm-3 control-label" i18n="@@customerName"><span></span>Customer Name</div>
+                <div class="col-sm-9">
+                    <div class="form-control">
+                        {{feedbackDetail.fullName}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label" i18n="@@phoneNumber"><span></span>Phone number</div>
+                <div class="col-sm-9">
+                    <div class="form-control">
+                        {{feedbackDetail.phoneNumber}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label" i18n="@@email"><span></span>Email</div>
+                <div class="col-sm-9">
+                    <div class="form-control">
+                        {{feedbackDetail.email}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label" i18n="@@sendDate">Send date</div>
+                <div class="col-sm-9">
+                    <div class="form-control">
+                        {{feedbackDetail.createTime|dateTimeFormat:"DD/MM/YYYY hh:mm"}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3 control-label" i18n="@@content">Content</div>
+                <div class="col-sm-9">
+                    <div class="form-control height-auto">
+                        {{feedbackDetail.content}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <div class="form-group pull-right">
+            <button class="btn default" type="button" (click)="closeModal()" i18n="@@close">
+                <i class="fa fa-times"></i>
+                Close
+            </button>
+        </div>
+    </nh-modal-footer>
+</nh-modal>

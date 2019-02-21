@@ -1,0 +1,263 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listNewPageTitle">List new</span>
+    <small i18n="@@newModuleTitle">New management</small>
+</h1>
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" placeholder="Nhập tiêu đề tin cần tìm."
+               [(ngModel)]="keyword" name="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-dropdown-tree [data]="categoryTree"
+                          i18n-title="@@selectCategoryNews"
+                          [title]="'--Select category --'"
+                          [width]="350"
+                          [value]="categoryId"
+                          (nodeSelected)="selectCategory($event)"></nh-dropdown-tree>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <ghm-user-suggestion
+                [isShowSelected]="false"
+                (userSelected)="onSelectUser($event)"
+                (userRemoved)="onRemoveUser()"
+        ></ghm-user-suggestion>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listNewStatus"
+                   i18n="@@selectStatus"
+                   i18n-title
+                   [title]="'-- Select status --'"
+                   [(ngModel)]="status"
+                   name="status"
+                   (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <ghm-button [loading]="isSearching"
+                    [classes]="'btn blue'"
+                    icon="fa fa-search"></ghm-button>
+        <button class="btn default cm-mgl-5" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <a href="javascript:;" class="btn blue cm-mgr-5" *ngIf="listNewsIdForApprove && listNewsIdForApprove.length > 0"
+           [swal]="confirmApproveNews"
+           (confirm)="approveNews()" i18n="@@approve">
+            Approve </a>
+        <a href="javascript:;" class="btn red cm-mgr-5" *ngIf="listNewsIdForApprove && listNewsIdForApprove.length > 0"
+           [swal]="confirmDeclineNews"
+           (confirm)="declineNew($event)" i18n="@@decline">
+            Decline
+        </a>
+        <a href="javascript:;" class="btn blue cm-mgr-5" *ngIf="listNewsIdForSend && listNewsIdForSend.length > 0"
+           [swal]="confirmSendListNews"
+           (confirm)="sendNews()" i18n="@@decline">
+            Send
+        </a>
+        <a href="javascript:;" class="btn red cm-mgr-5" *ngIf="listNewsIdForSend && listNewsIdForSend.length > 0"
+           [swal]="confirmDeleteNews"
+           (confirm)="deleteNews()" i18n="@@delete">
+            Delete
+        </a>
+        <button type="button" class="btn blue" routerLink="/news/add" i18n="@@add">
+            Add
+        </button>
+    </div>
+</form>
+
+<table class="table table-hover table-stripped">
+    <thead>
+    <tr>
+        <th class="center middle w50">
+            <mat-checkbox color="primary" [(ngModel)]="isCheckAll" (change)="selectAll()"></mat-checkbox>
+        </th>
+        <th class="middle" i18n="@@titleNews">Title</th>
+        <th class="middle w200" i18n="@@categoryNews">Category</th>
+        <th class="right middle w150" i18n="@@createDate">Create Date</th>
+        <th class="center middle w50" i18n="@@viewCount">View count</th>
+        <th class="middle center w100" i18n="@@statusApprove">Status approve</th>
+        <th class="middle center " i18n="@@approve" *ngIf="isApprove">Approve</th>
+        <th class="middle center" i18n="@@decline" *ngIf="isApprove">Decline</th>
+        <th class="middle w150" i18n="@@userCreate">User Create</th>
+        <th class="center middle w50" i18n="@@status">Active?</th>
+        <th class="center middle w50" i18n="@@isHot">Hot?</th>
+        <th class="center middle w50" i18n="@@isHomePage">Home Page?</th>
+        <th class="center middle w100" i18n="@@action">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listNews; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <td class="center middle">
+            <mat-checkbox [disabled]="!(((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && item?.creatorId === currentUser.id)
+                                   || (item?.status === newsStatus.pending && isApprove))"
+                          color="primary" [(ngModel)]="item.isCheck" (change)="selectNew(item)"></mat-checkbox>
+        </td>
+        <td class="middle">
+            <div class="media" [class.cursor-pointer]="permission.view" (click)="permission.view ? detail(item) : ''"
+                 title="{{item.title}}">
+                <div class="media-left middle">
+                    <img ghmImage="" [src]="item.featureImage" [isUrlAbsolute]="true" class="media-object w50"
+                         alt="{{item.altImage}}">
+                </div>
+                <div class="media-body middle">
+                    <h4 class="media-heading">{{ item.title }}</h4>
+                </div>
+            </div>
+        </td>
+        <td class="middle">{{item.categoryNews}}</td>
+        <td class="middle right">{{ item.createTime | dateTimeFormat: 'DD/MM/YYYY HH:mm' }}</td>
+        <td class="middle center">
+            <a href="javascript://" (click)="viewHistory(item.id)">
+                {{ item.viewCount }}
+            </a>
+        </td>
+        <td class="center middle">
+                         <span class="badge" [class.badge-danger]="item.status === newStatus.decline"
+                               [class.badge-success]="item.status === newStatus.approved"
+                               [class.badge-warning]="item.status === newStatus.pending">
+                             {item.status, select, 0 {Draft} 1 {Pending} 2 {Approved} 3 {Decline}}
+                </span>
+        </td>
+        <td class="middle center" *ngIf="isApprove">
+            <ghm-button
+                    *ngIf="item.status === newStatus.pending"
+                    icon="fa fa-check" classes="btn blue btn-sm"
+                    [swal]="confirmApproveNews"
+                    (confirm)="updateStatus(item, newStatus.approved, $event)"></ghm-button>
+            <button
+                    *ngIf="item.status !== newStatus.pending"
+                    class="btn default btn-sm" disabled><i class="fa fa-check"></i></button>
+        </td>
+        <td class="middle center" *ngIf="isApprove">
+            <button *ngIf="item.status === newsStatus.pending" class="btn red btn-sm"
+                    [swal]="confirmDeclineNews"
+                    (confirm)="updateStatus(item, newStatus.decline, $event)">
+                <i class="fa fa-times" ></i>
+            </button>
+            <button *ngIf="item.status !== newStatus.pending" class="btn default btn-sm"
+                    disabled>
+                <i class="fa fa-times"></i>
+            </button>
+        </td>
+        <td class="middle">
+            {{item.creatorFullName}}
+        </td>
+        <td class="center middle">
+                        <span class="badge" [class.badge-danger]="!item.isActive"
+                              [class.badge-success]="item.isActive">
+                              {item.isActive, select, 1 {Activated} 0 {InActive}}</span>
+        </td>
+        <td class="middle center">
+            <mat-checkbox color="primary" [checked]="item.isHot" [disabled]="item.status === 2" (change)="updateIsHot(item)"></mat-checkbox>
+        </td>
+        <td class="middle center">
+            <mat-checkbox color="primary" [checked]="item.isHomePage" [disabled]="item.status === 2" (change)="updateIsHomePage(item)"></mat-checkbox>
+        </td>
+        <td class="center middle">
+            <nh-dropdown *ngIf="permission.view || permission.edit || permission.delete">
+                <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <ul class="nh-dropdown-menu right" role="menu">
+                    <li>
+                        <a *ngIf="permission.view"
+                           (click)="detail(item)" i18n="@@view">
+                            <i class="fa fa-eye"></i>
+                            View
+                        </a>
+                    </li>
+                    <li>
+                        <a *ngIf="permission.edit && ((item?.status !== newsStatus.pending) && item?.creatorId === currentUser.id)
+                                   || (item?.status === newsStatus.pending && isApprove)"
+                           (click)="edit(item)"
+                           i18n="@@edit">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                    </li>
+                    <li>
+                        <a *ngIf="permission.delete && ((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && item?.creatorId === currentUser.id)"
+                           (click)="confirm(item)" i18n="@@delete">
+                            <i class="fa fa-trash"></i>
+                            Delete
+                        </a>
+                    </li>
+                </ul>
+            </nh-dropdown>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+            (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
+<swal
+        #confirmDeleteNews
+        i18n="@@confirmDeleteListNews"
+        i18n-title="@@confirmTitleDeleteListNews"
+        i18n-text="@@confirmTextDeleteListNew"
+        title="Are you sure for delete this list news?"
+        text="You can't recover this list news after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmApproveNews
+        i18n="@@confirmApproveListNews"
+        i18n-title="@@titleConfirmApproveListNews"
+        i18n-text="@@textConfirmApproveListNews"
+        title="Are you sure for approve this list news?"
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal #confirmDeclineNews
+      i18n="@@confirmDeclineListNews"
+      i18n-title="@@titleConfirmDeclineListNews"
+      i18n-text="@@textConfirmDeclineListNews"
+      title="Decline Reason"
+      input="textarea"
+      type="warning"
+      size="lage"
+      customClass="w500"
+      inputPlaceholder="Please enter decline reason"
+      [showCancelButton]="true"
+      [focusCancel]="true">>
+</swal>
+
+<swal
+        #confirmSendListNews
+        i18n="@@confirmSendListNews"
+        i18n-title="@@titleConfirmSendListNews"
+        i18n-text="@@textConfitmSendListNews"
+        title="Are you sure for send this list news?"
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="detail($event)">
+        <i class="fa fa-eye"></i>
+        <span i18n="@@view">View</span>
+    </nh-menu-item>
+    <nh-menu-item (clicked)="edit($event)">
+        <i class="fa fa-edit"></i>
+        <span i18n="@@edit">Edit</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <i class="fa fa-edit"></i>
+        <span i18n="@@edit">Delete</span>
+    </nh-menu-item>
+</nh-menu>

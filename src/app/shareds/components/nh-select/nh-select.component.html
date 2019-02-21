@@ -1,0 +1,42 @@
+<button class="btn default nh-select-button" type="button" (click)="buttonClick()" [disabled]="!isEnable">
+    {{ !label ? title : label }}
+    <span class="caret"></span>
+</button>
+
+<ng-template #dropdownTemplate>
+    <div class="nh-select-menu">
+        <div class="search-box" *ngIf="liveSearch">
+            <input [id]="inputId" type="text" class="form-control w100pc"
+                   placeholder="Enter keyword"
+                   i18n-placeholder="@@enterKeyword"
+                   (keydown.enter)="$event.preventDefault()"
+                   (keyup)="searchKeyUp($event, searchBox.value)"
+                   #searchBox/>
+        </div>
+        <hr *ngIf="liveSearch"/>
+        <ul class="wrapper-list-menu">
+            <li *ngIf="data?.length > 0" (click)="selectItem({id: null, name: title})">
+                {{title}}
+            </li>
+            <li *ngIf="isSearching" class="center">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </li>
+            <li class="nh-select-item" *ngFor="let item of source"
+                [class.selected]="item.selected"
+                [class.active]="item.active"
+                (click)="selectItem(item)">
+                <img src="{{item.image}}" *ngIf="item.image">
+                <i *ngIf="item.icon" [ngClass]="item.icon"></i>
+                {{item.name }}
+                <i class="fa fa-check nh-selected-icon color-green"
+                   *ngIf="item.selected && multiple"></i>
+            </li>
+            <li *ngIf="source?.length === 0 && isInsertValue" class="background-none">
+                <button class="btn btn-primary btn-block" type="button" (click)="insertValue()"><i
+                    class="fa fa-plus"></i>Thêm mới
+                </button>
+            </li>
+            <li *ngIf="source?.length === 0 && !isInsertValue" class="no-data">Không có dữ liệu</li>
+        </ul>
+    </div>
+</ng-template>

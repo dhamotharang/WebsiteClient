@@ -1,0 +1,77 @@
+<nh-modal #newsFormModal size="full" (show)="onNewsFormModalShown()" (hidden)="onNewsFormModalHidden()">
+    <nh-modal-header>
+        <i class="fas fa-newspaper"></i>
+        {{isUpdate ? 'Cập nhật tin tức' : 'Thêm mới tin tức'}}
+    </nh-modal-header>
+    <div class="form">
+        <form action="" class="horizontal-form" (ngSubmit)="save()" [formGroup]="model">
+            <nh-modal-content>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label ghmLabel="Tiêu đề" [required]="true"></label>
+                            <input type="text" id="title" class="form-control" placeholder="Nhập tiêu đề tin."
+                                   formControlName="title"/>
+                            <div class="alert alert-danger" *ngIf="formErrors.title">{{ formErrors.title }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label ghmLabel="Nội dung tóm tắt" [required]="true"></label>
+                            <textarea rows="3" class="form-control" placeholder="Nhập nội dung tóm tắt."
+                                      formControlName="description"></textarea>
+                            <div class="alert alert-danger" *ngIf="formErrors.description">{{ formErrors.description
+                                }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label ghmLabel="Nội dung" [required]="true"></label>
+                            <tinymce [elementId]="'newsContentEditor'" formControlName="content"
+                                     #newsContentEditor></tinymce>
+                            <div class="alert alert-danger" *ngIf="formErrors.content">{{ formErrors.content }}</div>
+                        </div>
+                        <div class="form-group">
+                            <label ghmLabel="Nguồn bài viết"></label>
+                            <input type="text" class="form-control" placeholder="Nhập nguồn bài viết."
+                                   formControlName="source"/>
+                            <div class="alert alert-danger" *ngIf="formErrors.source">{{ formErrors.source }}</div>
+                        </div>
+                    </div><!-- END col-8 -->
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label ghmLabel="Chuyên mục"></label>
+                            <nh-dropdown-tree
+                                title="-- Chọn chuyên mục --"
+                                [data]="categoryTree"
+                                [isMultiple]="true"
+                                (onAccept)="onAcceptSelectCategory($event)"
+                                formControlName="categoryIds"></nh-dropdown-tree>
+                            <div class="alert alert-danger" *ngIf="formErrors.categoryIds">{{ formErrors.categoryIds
+                                }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox color="primary" formControlName="isActive">Kích hoạt</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox color="primary" formControlName="isHot">Nổi bật</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <mat-checkbox color="primary" formControlName="isHomePage">Hiển thị trang chủ</mat-checkbox>
+                        </div>
+                        <div class="form-group">
+                            <label ghmLabel="Ảnh bài viết" [required]="true"></label>
+                            <input type="text" class="form-control" placeholder="Nhập đường dẫn ảnh."
+                                   formControlName="image">
+                            <div class="alert alert-danger" *ngIf="formErrors.image">{{ formErrors.image }}</div>
+                        </div>
+                    </div><!-- END: col-4 -->
+                </div>
+            </nh-modal-content>
+            <nh-modal-footer>
+                <ghm-button [loading]="isSaving">Lưu lại</ghm-button>
+                <ghm-button [loading]="isSaving" [type]="'button'" classes="btn btn-default" icon="fas fa-times"
+                            nh-dismiss="true">Đóng lại
+                </ghm-button>
+            </nh-modal-footer>
+        </form>
+    </div>
+</nh-modal>

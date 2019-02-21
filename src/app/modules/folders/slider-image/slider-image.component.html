@@ -1,0 +1,30 @@
+<nh-modal #sliderImageModal [size]="'lg'">
+    <nh-modal-header class="uppercase">
+        <i class="fa fa-picture-o" aria-hidden="true"></i>
+        <span>{{imageSelect?.name}}</span>
+    </nh-modal-header>
+    <nh-modal-content class="center">
+        <div class="w100pc middle img-slide" [ngStyle]="{'height': height+ 'px'}">
+            <img ghmImage width="100%" class="img-reponsive" [src]="imageSelect?.url"/>
+        </div>
+    </nh-modal-content>
+    <nh-modal-footer>
+        <div class="center cm-mgb-10">
+            <button [disabled]="!isEnablePrevious" clas type="button"
+                    class="btn blue cm-mgr-5"
+                    title="Previous" (click)="previousImage()">
+                <i class="fa fa-step-backward" aria-hidden="true"></i>
+            </button>
+            <button class="cm-mgl-5" [disabled]="!isEnableNex" type="button"
+                    class="btn blue"
+                    title="Next" (click)="nextImage()">
+                <i class="fa fa-step-forward" aria-hidden="true"></i>
+            </button>
+            <!--<ghm-button classes="btn default"-->
+                        <!--nh-dismiss="true"-->
+                        <!--[type]="'button'">-->
+                <!--<span i18n="@@closr">Close</span>-->
+            <!--</ghm-button>-->
+        </div>
+    </nh-modal-footer>
+</nh-modal>

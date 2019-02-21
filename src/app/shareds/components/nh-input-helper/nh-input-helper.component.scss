@@ -1,0 +1,356 @@
+$default-border-color: #ddd;
+$success: #28a745;
+$success-color: #155724;
+$success-bg-color: #d4edda;
+$success-border-color: #c3e6cb;
+$info: #17a2b8;
+$info-color: #004085;
+$info-border-color: #b8daff;
+$info-bg-color: #cce5ff;
+$warning: #ffc107;
+$warning-color: #856404;
+$warning-bg-color: #fff3cd;
+$warning-border-color: #ffeeba;
+$danger: #dc3545;
+$danger-color: #721c24;
+$danger-bg-color: #f8d7da;
+$danger-border-color: #f5c6cb;
+$border-width: 1px;
+$default-arrow-border-width: 10px;
+
+@mixin render-border-top($borderWidth, $color) {
+    border-top: $borderWidth solid $color;
+}
+
+@mixin render-border-bottom($borderWidth, $color) {
+    border-bottom: $borderWidth solid $color;
+}
+
+@mixin render-border-left($borderWidth, $color) {
+    border-left: $borderWidth solid $color;
+}
+
+@mixin render-border-right($borderWidth, $color) {
+    border-right: $borderWidth solid $color;
+}
+
+@mixin render-border($borderWidth, $color) {
+    border: $borderWidth solid $color;
+}
+
+.nh-input-helper-container {
+    position: absolute;
+    min-width: 150px;
+    display: none;
+    z-index: 9999;
+
+    &.show {
+        display: block;
+    }
+
+    .nh-input-helper-item {
+        position: relative;
+        border: 1px solid $default-border-color;
+        background: white;
+
+        &.success {
+            background: $success-bg-color;
+            color: $success-color;
+            @include render-border($border-width, $success-border-color);
+        }
+
+        &.info {
+            background: $info-bg-color;
+            color: $info-color;
+            @include render-border($border-width, $info-border-color);
+        }
+
+        &.warning {
+            background: $warning-bg-color;
+            color: $warning-color;
+            @include render-border($border-width, $warning-border-color);
+        }
+
+        &.danger {
+            background: $danger-bg-color;
+            color: $danger-color;
+            @include render-border($border-width, $danger-border-color);
+        }
+
+        .arrow {
+            &:before, &:after {
+                content: "";
+                position: absolute;
+                width: 0;
+                height: 0;
+                z-index: 9999;
+            }
+            &.arrow-up {
+                &:before, &:after {
+                    top: -10px;
+                    left: 10px;
+                }
+
+                &:before {
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    @include render-border-bottom($default-arrow-border-width, $default-border-color);
+                    //border-bottom: 10px solid $default-border-color;
+                }
+
+                &:after {
+                    border-left: 8px solid transparent;
+                    border-right: 8px solid transparent;
+                    border-bottom: 8px solid white;
+                    top: -9px;
+                    left: 12px;
+                }
+
+                &.success {
+                    &:before {
+                        @include render-border-bottom($default-arrow-border-width, $success-border-color);
+                    }
+                    &:after {
+                        @include render-border-bottom($default-arrow-border-width, $success-bg-color);
+                    }
+                }
+                &.info {
+                    &:before {
+                        //border-bottom: 10px solid $info;
+                        @include render-border-bottom($default-arrow-border-width, $info-border-color);
+                    }
+                    &:after {
+                        @include render-border-bottom($default-arrow-border-width, $info-bg-color);
+                    }
+                }
+                &.warning {
+                    &:before {
+                        //border-bottom: 10px solid $warning;
+                        @include render-border-bottom($default-arrow-border-width, $warning-border-color);
+                    }
+                    &:after {
+                        @include render-border-bottom($default-arrow-border-width, $warning-bg-color);
+                    }
+                }
+                &.danger {
+                    &:before {
+                        //border-bottom: 10px solid $danger;
+                        @include render-border-bottom($default-arrow-border-width, $danger-border-color);
+                    }
+                    &:after {
+                        @include render-border-bottom($default-arrow-border-width, $danger-bg-color);
+                    }
+                }
+            }
+            &.arrow-down {
+                &:before, &:after {
+                    bottom: -10px;
+                    left: 10px;
+                }
+
+                &:before {
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    //border-top: 10px solid $default-border-color;
+                    @include render-border-top($default-arrow-border-width, $default-border-color);
+                }
+
+                &:after {
+                    border-left: 8px solid transparent;
+                    border-right: 8px solid transparent;
+                    border-top: 8px solid white;
+                    bottom: -9px;
+                    left: 12px;
+                }
+
+                &.success {
+                    &:before {
+                        //border-bottom: 10px solid $success;
+                        @include render-border-top($default-arrow-border-width, $success-border-color);
+                    }
+                    &:after {
+                        @include render-border-top($default-arrow-border-width, $success-bg-color);
+                    }
+                }
+                &.info {
+                    &:before {
+                        //border-bottom: 10px solid $info;
+                        @include render-border-top($default-arrow-border-width, $info-border-color);
+                    }
+                    &:after {
+                        @include render-border-top($default-arrow-border-width, $info-bg-color);
+                    }
+                }
+                &.warning {
+                    &:before {
+                        //border-bottom: 10px solid $warning;
+                        @include render-border-top($default-arrow-border-width, $warning-border-color);
+                    }
+                    &:after {
+                        @include render-border-top($default-arrow-border-width, $warning-bg-color);
+                    }
+                }
+                &.danger {
+                    &:before {
+                        //border-bottom: 10px solid $danger;
+                        @include render-border-top($default-arrow-border-width, $danger-border-color);
+                    }
+                    &:after {
+                        @include render-border-top($default-arrow-border-width, $danger-bg-color);
+                    }
+                }
+            }
+            &.arrow-left {
+                &:before, &:after {
+                    top: 10px;
+                    left: -10px;
+                }
+
+                &:before {
+                    border-top: 10px solid transparent;
+                    border-bottom: 10px solid transparent;
+                    //border-right: 10px solid $default-border-color;
+                    @include render-border-right($default-arrow-border-width, $default-border-color);
+                }
+
+                &:after {
+                    border-top: 8px solid transparent;
+                    border-bottom: 8px solid transparent;
+                    border-right: 8px solid white;
+                    left: -9px;
+                    top: 12px;
+                }
+
+                &.success {
+                    &:before {
+                        //border-bottom: 10px solid $success;
+                        @include render-border-right($default-arrow-border-width, $success-border-color);
+                    }
+                    &:after {
+                        @include render-border-right($default-arrow-border-width, $success-bg-color);
+                    }
+                }
+                &.info {
+                    &:before {
+                        //border-bottom: 10px solid $info;
+                        @include render-border-right($default-arrow-border-width, $info-border-color);
+                    }
+                    &:after {
+                        @include render-border-right($default-arrow-border-width, $info-bg-color);
+                    }
+                }
+                &.warning {
+                    &:before {
+                        //border-bottom: 10px solid $warning;
+                        @include render-border-right($default-arrow-border-width, $warning-border-color);
+                    }
+                    &:after {
+                        @include render-border-right($default-arrow-border-width, $warning-bg-color);
+                    }
+                }
+                &.danger {
+                    &:before {
+                        //border-bottom: 10px solid $danger;
+                        @include render-border-right($default-arrow-border-width, $danger-border-color);
+                    }
+                    &:after {
+                        @include render-border-right($default-arrow-border-width, $danger-bg-color);
+                    }
+                }
+            }
+
+            &.arrow-right {
+                &:before, &:after {
+                    top: 10px;
+                    right: -10px;
+                }
+
+                &:before {
+                    border-top: 10px solid transparent;
+                    border-bottom: 10px solid transparent;
+                    //border-left: 10px solid $default-border-color;
+                    @include render-border-left($default-arrow-border-width, $default-border-color);
+                }
+
+                &:after {
+                    border-top: 8px solid transparent;
+                    border-bottom: 8px solid transparent;
+                    border-left: 8px solid white;
+                    right: -9px;
+                    top: 12px;
+                }
+
+                &.success {
+                    &:before {
+                        //border-bottom: 10px solid $success;
+                        @include render-border-left($default-arrow-border-width, $success-border-color);
+                    }
+                    &:after {
+                        @include render-border-left($default-arrow-border-width, $success-bg-color);
+                    }
+                }
+                &.info {
+                    &:before {
+                        //border-bottom: 10px solid $info;
+                        @include render-border-left($default-arrow-border-width, $info-border-color);
+                    }
+                    &:after {
+                        @include render-border-left($default-arrow-border-width, $info-bg-color);
+                    }
+                }
+                &.warning {
+                    &:before {
+                        //border-bottom: 10px solid $warning;
+                        @include render-border-left($default-arrow-border-width, $warning-border-color);
+                    }
+                    &:after {
+                        @include render-border-left($default-arrow-border-width, $warning-bg-color);
+                    }
+                }
+                &.danger {
+                    &:before {
+                        //border-bottom: 10px solid $danger;
+                        @include render-border-left($default-arrow-border-width, $danger-border-color);
+                    }
+                    &:after {
+                        @include render-border-left($default-arrow-border-width, $danger-bg-color);
+                    }
+                }
+            }
+        }
+
+        .nh-input-helper-message {
+            padding: 5px 7px;
+            min-height: 34px;
+        }
+    }
+}
+
+.nh-input-helper-wrapper {
+    .nh-input-helper-icon {
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: block;
+        position: absolute;
+        top: 35%;
+        right: 10px;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.icon-info {
+
+        }
+        &.icon-success {
+            content: "\f00c";
+        }
+        &.icon-danger {
+
+        }
+        &.icon-warning {
+
+        }
+    }
+}

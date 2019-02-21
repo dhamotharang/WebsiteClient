@@ -1,0 +1,106 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listMenuPageTitle">Menu</span>
+    <small i18n="@@menuModuleTitle">Menu management</small>
+</h1>
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n-placeholder="@@searchPlaceHolder"
+               placeholder="Enter keyword for search please."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+                [data]="[{id: false, name: 'inActive'},{id: true, name: 'Active'}]"
+                i18n="@@selectStatus"
+                i18n-title
+                [title]="'-- Select status --'"
+                [(ngModel)]="isActive"
+                name="isActive"
+                (onSelectItem)="search(1)"></nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-spinner fa-spin" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button type="button" class="btn blue" routerLink="/config/menus/add" i18n="@@add">
+            Add
+        </button>
+    </div>
+</form>
+
+<table class="table table-hover table-stripped">
+    <thead>
+    <tr>
+        <th class="center middle w50 visible-lg" i18n="@@no">No</th>
+        <th class="middle" i18n="@@name">Name</th>
+        <th class="middle" i18n="@@position">Position</th>
+        <th class="middle visible-lg" i18n="@@description">Description</th>
+        <th class="center middle w50" i18n="@@status">Status</th>
+        <th class="center middle w50" i18n="@@action">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listItems$ | async; let i = index">
+        <td class="center middle visible-lg">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">
+            <a href="javascript://" (click)="edit(item.id)">{{item.name}}</a>
+        </td>
+        <td class="middle">
+            <b> {item.position, select, 0 {Top} 1 {Right} 2 {Bottom} 3 {Left} 4 {Middle}} </b>
+        </td>
+        <td class="middle visible-lg">{{ item.description }}</td>
+        <td class="center middle">
+                  <span class="badge" [class.badge-danger]="!item.isActive"
+                        [class.badge-success]="item.isActive">
+                    {item.isActive, select, 1 {Activated} 0 {InActive}}
+                </span>
+        </td>
+        <td class="middle center">
+            <nh-dropdown>
+                <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <ul class="nh-dropdown-menu right" role="menu">
+                    <li>
+                        <a *ngIf="permission.edit"
+                           (click)="edit(item.id)" i18n="@@edit">
+                            <i class="fa fa-edit"></i>
+                            Edit
+                        </a>
+                    </li>
+                    <li>
+                        <a *ngIf="permission.delete"
+                           [swal]="confirmDeleteMenu"
+                           (confirm)="delete(item.id)" i18n="@@delete">
+                            <i class="fa fa-trash"></i>
+                            Delete
+                        </a>
+                    </li>
+                </ul>
+            </nh-dropdown>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n-pageName="@@menu" [pageName]="'Menu'"></ghm-paging>
+<swal
+        #confirmDeleteMenu
+        i18n="@@confirmDeleteMenu"
+        i18n-title
+        i18n-text
+        title="Are you sure for delete this menu?"
+        text="You can't recover this menu after delete."
+        type="question"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+

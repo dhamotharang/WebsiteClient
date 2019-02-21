@@ -1,0 +1,158 @@
+<div class="row">
+    <div class="col-sm-12">
+        <form action="" class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <!--<input type="text" class="form-control" placeholder="Vui lòng nhập tên nhân viên cần tìm"-->
+                       <!--(keyup)="keyword = keywordInput.value" #keywordInput/>-->
+            </div>
+            <div class="form-group">
+                <nh-select [data]="listMonth" [title]="'-- Chọn tháng'"
+                           (onSelectItem)="onSelectMonth($event)"></nh-select>
+            </div>
+            <div class="form-group">
+                <nh-select [data]="listYear" [title]="'-- Chọn năm --'"
+                           (onSelectItem)="onSelectYear($event)"></nh-select>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<button class="btn blue">-->
+                    <!--<i class="fa-spinner fa-pulse" *ngIf="isSearching"></i>-->
+                    <!--<i class="fa fa-search" *ngIf="!isSearching"></i>-->
+                <!--</button>-->
+            <!--</div>-->
+            <div class="form-group">
+                <button class="btn blue" (click)="showRegisterFormModal()">
+                    <i class="fa fa-plus"></i>
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <th class="center w50">#</th>
+                    <th class="center">Nhân viên</th>
+                    <th class="center">Ngày đăng ký</th>
+                    <th class="center">Thời gian thêm giờ</th>
+                    <th class="center w100">Trạng thái</th>
+                    <th class="center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--<tr *ngFor="let item of listOvertimeRegisters">-->
+                    <!--<td class="center">{{(currentPage - 1) * pageSize + i + 1}}</td>-->
+                    <!--<td>{{item.fullName}}</td>-->
+                    <!--<td>{{item.registerTime | dateTimeFormat:'DD/MM/YYYY HH:mm'}}</td>-->
+                    <!--<td>{{item.totalMinutes}}</td>-->
+                    <!--<td>{{item.statusText}}</td>-->
+                    <!--<td>-->
+                        <!--<div class="btn-group btn-group-circle btn-group-solid"-->
+                             <!--*ngIf="currentUser?.id === item.managerUserId && item.status === STATUS.WAITING_FOR_MANAGER_APRPOVE; else readOnlyTemplate">-->
+                            <!--<button type="button" class="btn red btn-outline"-->
+                                    <!--(click)="approve(item, false)">-->
+                                <!--<i class="fa fa-times"></i>-->
+                            <!--</button>-->
+                            <!--<button type="button" class="btn green btn-outline"-->
+                                    <!--(click)="approve(item, true)">-->
+                                <!--<i class="fa fa-check"></i>-->
+                            <!--</button>-->
+                            <!--<button type="button" class="btn blue btn-outline" (click)="detail(item)"><i-->
+                                <!--class="fa fa-eye"></i></button>-->
+                        <!--</div>-->
+
+                        <!--<ng-template #readOnlyTemplate>-->
+                            <!--<button type="button" class="btn blue outline" (click)="showDetail(item)"><i-->
+                                <!--class="fa fa-eye"></i></button>-->
+                        <!--</ng-template>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<nh-modal #registerFormModal>
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-calendar"></i>
+            {{isUpdate ? 'Cập nhật thông tin đăng ký làm thêm giờ.' : 'Thêm mới ca làm thêm giờ.'}}
+        </h4>
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="form-group">
+                <label ghmLabel="Chọn nhân viên" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Chọn ca làm việc" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Số giờ làm thêm" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label ghmLabel="Ghi chú" class="col-md-2 col-sm-3 control-label" [required]="true"></label>
+                <div class="col-md-10 col-sm-9">
+                    <textarea class="form-control" rows="3" placeholder="Nội dung ghi chú"></textarea>
+                </div>
+            </div>
+        </nh-modal-content>
+    </form>
+    <nh-modal-footer></nh-modal-footer>
+</nh-modal>
+
+<nh-modal #detailModal>
+    <nh-modal-header>
+        <h4 class="title">
+            <i class="fa fa-register"></i>
+            Chi tiết đăng ký làm thêm giờ của nhân viên: "{{overtimeRegister?.fullName}}"
+        </h4>
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="form-group">
+                <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                       ghmLabel="Chọn nhân viên"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                       ghmLabel="Chọn ca làm việc"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                       ghmLabel="Số giờ làm thêm"></label>
+                <div class="col-md-10 col-sm-9">
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 col-sm-3 control-label" [required]="true"
+                       ghmLabel="Ghi chú"></label>
+                <div class="col-md-10 col-sm-9">
+                    <textarea class="form-control" rows="3" placeholder="Nội dung ghi chú"></textarea>
+                </div>
+            </div>
+        </nh-modal-content>
+    </form>
+    <nh-modal-footer></nh-modal-footer>
+</nh-modal>

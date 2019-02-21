@@ -1,0 +1,207 @@
+﻿<nh-modal #officeFormModal size="full"
+          (shown)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        {isUpdate, select, 0 {Add new office} 1 {Update office} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-speech font-green-sharp"></i>
+                                <span class="caption-subject font-blue-madison bold uppercase"
+                                      i18n="@@officeOrganizationTitle">Office organization</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <nh-tree [data]="officeTree">
+                            </nh-tree>
+                        </div>
+                    </div>
+                </div>
+                <!-- END: .col-sm-4 -->
+                <div class="col-sm-8">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption font-green-sharp">
+                                <i class="icon-speech font-green-sharp"></i>
+                                <span class="caption-subject font-blue-madison bold uppercase"
+                                      i18n="@@officeOrganizationFormTitle">
+                                    {isUpdate, select, 0 {Add new office} 1 {Update office} other {}}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="tabbable-custom">
+                                <ul class="nav nav-tabs ">
+                                    <li [class.active]="item.id === currentLanguage"
+                                        *ngFor="let item of languages; let i = index">
+                                        <a href="javascript://" (click)="currentLanguage = item.id">
+                                            {{ item.name }}
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" formArrayName="modelTranslations">
+                                    <div class="tab-pane active">
+                                        <div class="form-group">
+                                            <label i18n-ghmLabel="@@parentOffice" ghmLabel="Parent office"
+                                                   class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-3" [formGroup]="model">
+                                                <nh-dropdown-tree
+                                                    [data]="officeTree" i18n-title="@@selectParentOffice"
+                                                    title="-- Select parent office --"
+                                                    formControlName="parentId">
+                                                </nh-dropdown-tree>
+                                            </div>
+                                            <span
+                                                [class.has-error]="formErrors?.code">
+                                                <label i18n-ghmLabel="@@officeCode" ghmLabel="Office code"
+                                                       class="col-sm-3 control-label" [required]="true"></label>
+                                                <div class="col-sm-3" [formGroup]="model">
+                                                    <input type="text" class="form-control"
+                                                           i18n-placeholder="@@enterOfficeCodePlaceHolder"
+                                                           placeholder="Enter office code please."
+                                                           formControlName="code">
+                                                    <span class="help-block">
+                                                        {
+                                                            formErrors?.code, select,
+                                                            required {Office code is required}
+                                                            maxlength {Office code not allowed over 50 characters}
+                                                            pattern {Office code just only contain characters a-z, A-Z, 0-9}
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="form-group"
+                                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                             [formGroupName]="i">
+                                            <span
+                                                [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                                                <label i18n-ghmLabel="@@officeName" ghmLabel="Office name"
+                                                       class="col-sm-3 control-label" [required]="true"></label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control"
+                                                           i18n-placeholder="@@enterOfficeNamePlaceHolder"
+                                                           placeholder="Enter office name."
+                                                           formControlName="name">
+                                                    <span class="help-block">
+                                                        { translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Office name is required} maxlength {Office
+                                                        name not allowed over 256 characters} }
+                                                    </span>
+                                                </div>
+                                            </span>
+                                            <span
+                                                [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.shortName">
+                                                <label i18n-ghmLabel="@@shortName" ghmLabel="Short name"
+                                                       class="col-sm-3 control-label" [required]="true"></label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control"
+                                                           i18n-placeholder="@@enterShortNamePlaceHolder"
+                                                           placeholder="Enter short name please."
+                                                           formControlName="shortName">
+                                                    <span class="help-block">
+                                                        { translationFormErrors[modelTranslation.value.languageId]?.shortName, select, required {Short name is required} maxlength
+                                                        {Short name not allowed over 50 characters} }
+                                                    </span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="form-group" [formGroup]="model">
+                                            <label i18n-ghmLabel="@@officeType" ghmLabel="Office type"
+                                                   class="col-sm-3 control-label" [required]="true"></label>
+                                            <div class="col-sm-3">
+                                                <nh-select [data]="officeTypes" i18n-title="@@selectOfficeType"
+                                                           title="-- Select office type --"
+                                                           formControlName="officeType"></nh-select>
+                                                <span class="help-block">
+                                                    { formErrors?.officeType, select, required {Please select office type} }
+                                                </span>
+                                            </div>
+                                            <label i18n-ghmLabel="@@status" ghmLabel="Status"
+                                                   class="col-sm-3 control-label" [required]="true"></label>
+                                            <div class="col-sm-3">
+                                                <mat-slide-toggle color="primary" formControlName="isActive"
+                                                                  i18n="@@isActive">
+                                                    {model.value.isActive, select, 0 {Inactive} 1 {Active}}
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"
+                                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                             [formGroupName]="i"
+                                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                                            <label i18n="@@description" i18n-ghmLabel ghmLabel="Description"
+                                                   class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" rows="3" formControlName="description"
+                                                          i18n="@@enterDescriptionPlaceholder" i18n-placeholder
+                                                          placeholder="Enter description."></textarea>
+                                                <span class="help-block">
+                                                    { translationFormErrors[modelTranslation.value.languageId]?.description, select, maxlength {Title description not allowed
+                                                    over 500 characters} }
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group"
+                                             [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                             *ngFor="let modelTranslation of modelTranslations.controls; index as i"
+                                             [formGroupName]="i"
+                                             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
+                                            <label i18n="@@address" i18n-ghmLabel ghmLabel="Address"
+                                                   class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" rows="3" formControlName="address"
+                                                          i18n="@@enterAddressPlaceholder" i18n-placeholder
+                                                          placeholder="Enter address."></textarea>
+                                                <span class="help-block">
+                                                    { translationFormErrors[modelTranslation.value.languageId]?.description, select, maxlength {Title description not allowed
+                                                    over 500 characters} }
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <app-office-contact
+                                                    #officeFormContact
+                                                    [officeId]="id"
+                                                    [officeContacts]="contacts">
+                                                </app-office-contact>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END: .tab-pane -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END: .col-sm-8 -->
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+                Create another
+            </mat-checkbox>
+            <ghm-button classes="btn btn-primary cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Save</span>
+            </ghm-button>
+            <ghm-button classes="btn btn-default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Close</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

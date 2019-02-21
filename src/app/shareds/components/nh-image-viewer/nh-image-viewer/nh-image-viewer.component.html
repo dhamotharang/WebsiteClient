@@ -1,0 +1,61 @@
+<div class="nh-image-viewer-container">
+    <div class="nh-image-viewer-header">
+        <div class="close-viewer" (click)="closeViewer()">
+            <svg
+                width="24" height="24" viewBox="0 0 24 24" focusable="false"
+                role="presentation">
+                <path
+                    d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1
+0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
+                    fill="currentColor">
+                </path>
+            </svg>
+        </div>
+        <div class="nh-image-viewer-name">
+
+        </div>
+        <!--<ul class="nh-image-viewer-actions">-->
+            <!--<li>-->
+                <!--<button type="button" (click)="print()">-->
+                    <!--<mat-icon>print</mat-icon>-->
+                <!--</button>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<button type="button" (click)="download()">-->
+                    <!--<mat-icon>vertical_align_bottom</mat-icon>-->
+                <!--</button>-->
+            <!--</li>-->
+        <!--</ul>-->
+    </div><!-- END: .nh-image-viewer-header -->
+    <div class="nh-image-viewer-content">
+        <button type="button" class="navigation back" (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <img
+            #imageViewport
+            draggable="false"
+            src="{{ image?.src }}"
+            alt="{{ image?.name }}">
+
+        <ul class="nh-image-viewer-actions">
+            <li>
+                <button type="button" (click)="zoomOut()">
+                    <mat-icon>minimize</mat-icon>
+                </button>
+            </li>
+            <li>
+                <button type="button" (click)="reset()">
+                    <mat-icon>replay</mat-icon>
+                </button>
+            </li>
+            <li>
+                <button type="button" (click)="zoomIn()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </li>
+        </ul>
+        <button type="button" class="navigation next" (click)="next()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div><!-- END: .nh-image-viewer-content -->
+</div><!-- END: .nh-image-viewer-container -->

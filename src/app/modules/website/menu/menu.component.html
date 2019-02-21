@@ -1,0 +1,77 @@
+<div class="row cm-mgb-10">
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search()">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Nhập tên menu cần tìm" [(ngModel)]="keyword"
+                       name="keyword">
+            </div>
+            <div class="form-group">
+                <ghm-button [loading]="isSearching" icon="fas fa-search"></ghm-button>
+            </div>
+            <div class="form-group pull-right">
+                <button type="button" class="btn btn-primary" (click)="menuFormComponent.add()">
+                    <i class="fas fa-plus"></i>
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-stripped table-hover">
+                <thead>
+                <tr>
+                    <th class="center middle">Tên menu</th>
+                    <th class="center middle w100">Loại</th>
+                    <th class="center middle w100">Trạng thái</th>
+                    <th class="center middle w100">Thứ tự</th>
+                    <th class="center middle w100">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of listItems$ | async">
+                    <td class="middle">
+                        <span [innerHtml]="item.namePrefix"></span> {{ item.name }}
+                    </td>
+                    <td class="center middle">
+                        <span class="badge "
+                              [class.badge-danger]="item.referenceType === 0"
+                              [class.badge-success]="item.referenceType === 1"
+                              [class.badge-info]="item.referenceType === 2"
+                        >
+                            {{ item.referenceType === 0 ? 'Tự nhập' : item.referenceType === 1 ? 'Chuyên mục' : item.referenceType === 2 ? 'Tin tức' : ''}}
+                        </span>
+
+                    </td>
+                    <td class="center middle">
+                        <span class="badge "
+                              [class.badge-danger]="!item.isActive"
+                              [class.badge-success]="item.isActive"
+                        >{{ item.isActive ? 'Đã kích hoạt' : 'chưa kích hoạt' }}</span>
+                    </td>
+                    <td class="center middle">
+                        {{ item.order }}
+                    </td>
+                    <td>
+                        <ghm-button type="button"
+                                    classes="btn btn-sm btn-primary"
+                                    icon="fas fa-pencil-alt" matTooltip="Sửa"
+                                    [matTooltipPosition]="'above'"
+                                    (clicked)="menuFormComponent.edit(item)"></ghm-button>
+                        <ghm-button type="button"
+                                    classes="btn btn-sm btn-danger"
+                                    icon="fas fa-trash-alt" matTooltip="Xóa"
+                                    [matTooltipPosition]="'above'"
+                                    [swal]="{ title: 'Bạn có chắc chắn muốn xóa khóa học', type: 'warning' }"
+                                    (confirm)="delete(item.id)"></ghm-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<app-menu-form (onSaveSuccess)="search()"></app-menu-form>

@@ -1,0 +1,143 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listEventRegisterTitle">List event register</span>
+    <small i18n="@@eventModuleTitle">Events management</small>
+</h1>
+
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@enterKeyword" i18n-placeholder placeholder="Enter keyword."
+               name="keyword" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="button" class="btn btn-light" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <a href="javascript://" class="btn blue" i18n="@@add"
+           *ngIf="permission.add"
+           (click)="register()">
+            Add
+        </a>
+    </div>
+</form>
+
+<table class="table table-hover table-stripped">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">No</th>
+        <th class="middle" i18n="@@fullName">Fullname</th>
+        <th class="middle w100" i18n="@@phoneNumber">Phone number</th>
+        <th class="middle w70 middle" i18n="@@email">Email</th>
+        <th class="middle" i18n="@@address">Address</th>
+        <th class="middle" i18n="@@role">Role</th>
+        <th class="middle" i18n="@@eventDays">Event days</th>
+        <th class="middle w70" i18n="@@joined">Joined</th>
+        <th class="middle w70" i18n="@@canceled">Canceled</th>
+        <th class="middle w50" i18n="@@actions" *ngIf="permission.edit || permission.delete">Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-template ngFor let-item [ngForOf]="listItems" let-currentIndex="index">
+        <tr *ngFor="let eventDay of item.eventDayRegisters; let eventDayIndex = index">
+            <td class="center middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">
+                {{ (currentPage - 1) * pageSize + currentIndex + 1 }}
+            </td>
+            <td class="middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">{{
+                item.fullName }}
+            </td>
+            <td class="middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">{{
+                item.phoneNumber }}
+            </td>
+            <td class="middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">{{ item.email
+                }}
+            </td>
+            <td class="middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">{{
+                item.address }}
+            </td>
+            <td class="middle" *ngIf="eventDayIndex === 0" [attr.rowspan]="item.eventDayRegisters.length">
+                <span>
+                    {item.role, select, 0 {Walk In Guest} 1 {Customer} 2 {Invitation} 3 {Professional} 4 {Employee}}
+                </span>
+            </td>
+            <td class="middle">{{ eventDay.name }}</td>
+            <td class="center middle">
+                <mat-slide-toggle
+                        color="primary"
+                        [checked]="eventDay.status === status.joined"
+                        (change)="changeStatus(eventDay, status.joined)"></mat-slide-toggle>
+            </td>
+            <td class="center middle">
+                <mat-slide-toggle
+                        color="primary"
+                        [checked]="eventDay.status === status.canceled"
+                        (change)="changeStatus(eventDay, status.canceled)"></mat-slide-toggle>
+            </td>
+            <td *ngIf="eventDayIndex === 0 && (permission.edit || permission.delete)"
+                [attr.rowspan]="item.eventDayRegisters.length"
+                class="center">
+                <nh-dropdown>
+                    <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                    <ul class="nh-dropdown-menu right">
+                        <li *ngIf="permission.view">
+                            <a href="javascript://" (click)="showDetail(item.id)">
+                                <i class="fa fa-eye"></i>
+                                <span class="cm-mgl-5" i18n="@@detail">Detail</span>
+                            </a>
+                        </li>
+                        <li *ngIf="permission.edit">
+                            <a href="javascript://" (click)="edit(item.id)">
+                                <i class="fa fa-edit"></i>
+                                <span class="cm-mgl-5" i18n="@@edit">Edit</span>
+                            </a>
+                        </li>
+                        <li *ngIf="permission.edit">
+                            <a href="javascript://"
+                               [swal]="confirmDelete"
+                               (confirm)="delete(item)">
+                                <i class="fa fa-trash"></i>
+                                <span class="cm-mgl-5" i18n="@@edit">Delete</span>
+                            </a>
+                        </li>
+                    </ul><!-- END: nh-dropdown-menu -->
+                </nh-dropdown>
+            </td>
+        </tr>
+    </ng-template>
+    </tbody>
+</table>
+
+<ghm-paging [totalRows]="totalRows"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            [isDisabled]="isSearching"
+            [pageSize]="pageSize"
+            (pageClick)="search($event)"
+></ghm-paging>
+
+<app-event-register (saveSuccessful)="onSaveSuccessful()"></app-event-register>
+<app-event-register-detail></app-event-register-detail>
+
+<swal
+        #confirmDelete
+        i18n-title="@@confirmTitleDeleteRegister"
+        i18n-text="@@confirmTextDeleteRegister"
+        title="Are you sure for delete this register?"
+        text="You can't recover this register after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>

@@ -1,0 +1,99 @@
+<nh-modal #bannerItemFormModal size="md"
+          (show)="onFormModalShown()"
+          (hidden)="onFormModalHidden()">
+    <nh-modal-header [showCloseButton]="false" class="uppercase">
+        {isUpdate, select, 0 {Add new banner item} 1 {Update banner item} other {}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" [class.has-error]="formErrors?.image">
+                <label i18n-ghmLabel="@@image" ghmLabel="Image" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <ghm-file-explorer buttonText="Select image"
+                                       i18n-buttonText="@@selectImage"
+
+                                       (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                    <br>
+                    <img ghmImage [src]="model.value.image" class="w150" [isUrlAbsolute]="true">
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.name">
+                <label i18n-ghmLabel="@@bannerName" ghmLabel="Banner Name" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@bannerNamePlaceHolder"
+                           id="banner-item-name"
+                           placeholder="Please enter banner group"
+                           formControlName="name"/>
+                    <span class="help-block">{ formErrors?.name, select, maxLength {Banner Name not allowed
+                                                    over 256 characters}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.url">
+                <label i18n-ghmLabel="@@Url" ghmLabel="Url" class="col-sm-3 control-label" [required]="true"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@urlPlaceHolder"
+                           placeholder="Please enter url"
+                           formControlName="url"/>
+                    <span class="help-block">{ formErrors?.url, select, required {Url is required}  maxLength {Url not allowed
+                                                    over 500 characters} pattern {Url is invalid}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.alt">
+                <label i18n-ghmLabel="@@alt" ghmLabel="Alt" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@altPlaceHolder"
+                           placeholder="Please enter alt"
+                           formControlName="alt"/>
+                    <span class="help-block">{ formErrors?.alt, select, maxLength {Alt not allowed
+                                                    over 256 characters}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.order">
+                <label i18n-ghmLabel="@@order" ghmLabel="Order" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                           placeholder="Please enter order"
+                           formControlName="order"/>
+                    <span class="help-block">{ formErrors?.order, select, isValid {Order must is number}
+                                                lessThan {Order must less than 10000}
+                                                  greaterThan {Order must greaterThan -1}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.description">
+                <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <textarea type="text" class="form-control" i18n-placeholder="@@description"
+                              placeholder="Please enter description"
+                              formControlName="description" rows="3"></textarea>
+                    <span class="help-block">{ formErrors?.description, select, maxlength {Description not allowed
+                                                    over 500 characters}}
+                    </span>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="submit"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@close">
+                    Close
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

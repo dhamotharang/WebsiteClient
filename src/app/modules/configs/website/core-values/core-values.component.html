@@ -1,0 +1,95 @@
+
+<div class="portlet light">
+    <div class="portlet-title cm-mgb-0">
+        <div class="caption">
+             <span class="caption-subject bold uppercase" i18n="@@coreValues">
+                  <i class="fa fa-compress" aria-hidden="true"></i>
+                 Core Values
+             </span>
+        </div>
+        <div class="actions">
+            <button class="btn blue btn-circle" *ngIf="!isShowForm" type="button" (click)="isShowForm = !isShowForm">
+                <span i18n="@@add"><i class="fa fa-plus"></i> Add</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <div class="col-sm-12" *ngIf="isShowForm">
+            <app-config-website-core-values-form (onSaveSuccess)="search(1)"
+                                                 (onCloseForm)="isShowForm = false"></app-config-website-core-values-form>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+                <th class="center middle w50" i18n="@@no">No</th>
+                <th class="middle w300" i18n="@@name">Name</th>
+                <th class="middle" i18n="@@address">Description</th>
+                <th class="middle w50 center" i18n="@@isOffice"> IsActive</th>
+                <th class="middle w100 center" i18n="@@order"> Order</th>
+                <th class="middle center w100" i18n="@@action">
+                    Action
+                </th>
+            </tr>
+            </thead>
+            <tbody cdkDropList [cdkDropListData]="listCoreValue"
+                   (cdkDropListDropped)="drop($event)" style="width: 30%">
+            <tr *ngFor="let item of listCoreValue; let i = index" cdkDrag class="drag-and-drop">
+                <td class="middle center">{{i + 1}}</td>
+                <td class="middle">
+                    {{item.name}}
+                </td>
+                <td class="middle">{{item.description}}</td>
+                <td class="middle center"><i class="fa fa-check color-green" *ngIf="item.isActive"></i></td>
+                <td class="middle center">{{item.order}}</td>
+                <td class="center middle">
+                    <nh-dropdown>
+                        <button type="button" class="btn btn-sm btn-light btn-no-background no-border"
+                                matTooltip="Menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <ul class="nh-dropdown-menu right" role="menu">
+                            <li>
+                                <a *ngIf="permission.edit"
+                                   (click)="edit(item.id)"
+                                   i18n="@@edit">
+                                    <i class="fa fa-edit"></i>
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a [swal]="confirmDeleteCoreValue"
+                                   (confirm)="delete(item.id)" i18n="@@delete">
+                                    <i class="fa fa-trash"></i>
+                                    Delete
+                                </a>
+                            </li>
+                        </ul>
+                    </nh-dropdown>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                    (pageClick)="search($event)"
+                    [isDisabled]="isSearching" i18n-pageName="@@branch" pageName="Branch"></ghm-paging>
+    </div>
+</div>
+
+
+<swal #confirmDeleteCoreValue
+      i18n="@@confirmDeleteCoreValue"
+      i18n-title="@@confirmTitleDeleteCoreValue"
+      i18n-text="@@confirmTextDeleteCoreValue"
+      title="Are you sure for delete this core value?"
+      text="You can't recover this core value after delete."
+      type="question"
+      i18n-confirmButtonText="@@accept"
+      i18n-cancelButtonText="@@cancel"
+      confirmButtonText="Accept"
+      cancelButtonText="Cancel"
+      [showCancelButton]="true"
+      [focusCancel]="true">
+</swal>

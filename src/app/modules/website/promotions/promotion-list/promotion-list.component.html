@@ -1,0 +1,99 @@
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm" name="keyword"
+               [(ngModel)]="keyword"/>
+    </div>
+    <div class="form-group">
+        <button type="submit" mat-raised-button color="primary">
+            <mat-icon>search</mat-icon>
+            Tìm kiếm
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button type="button" routerLink="/website/promotion/add" mat-raised-button color="primary"
+                matTooltip="Thêm mới chương trình khuyến mại" matTooltipPosition="left">
+            <mat-icon>add</mat-icon>
+            Thêm mới
+        </button>
+    </div>
+</form><!-- END .form-inline -->
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered table-stripped table-hover">
+            <thead>
+            <tr>
+                <th class="center middle w50">#</th>
+                <th class="center middle">Tên chương trình</th>
+                <th class="center middle w200">Thời gian áp dụng</th>
+                <th class="center middle w100">Sử dụng</th>
+                <th class="center middle w50"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let promotion of listItems; let i = index">
+                <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td class=" middle">
+                    <a [routerLink]="['/website/promotion/detail']" [queryParams]="{id: promotion.id}"
+                       *ngIf="isHasViewPermission; else readOnlyTemplate">{{promotion.name}}</a>
+                    <ng-template #readOnlyTemplate>
+                        {{promotion.name}}
+                    </ng-template>
+                </td>
+                <td class=" middle">
+                    <span *ngIf="promotion.fromDate">{{promotion.fromDate | dateTimeFormat:'DD/MM/YYYY'}}</span>
+                    <span *ngIf="promotion.toDate">- {{promotion.toDate | dateTimeFormat:'DD/MM/YYYY'}}</span>
+                </td>
+                <td class="center middle">
+                    <mat-icon *ngIf="promotion.isActive">done</mat-icon>
+                </td>
+                <td class="center middle w50">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item
+                                clipboard="http://thaithinhmedic.vn/khuyen-mai/{{promotion.seoLink}}.html"
+                                (copyEvent)="getLinkCopied()"
+                        >
+                            <mat-icon>content_copy</mat-icon>
+                            <span>Get Link</span>
+                        </button>
+                        <button mat-menu-item
+                                (click)="showAddNewVoucherModal(promotion.id)"
+                        >
+                            <mat-icon>add</mat-icon>
+                            <span>Thêm mã khuyến mại</span>
+                        </button>
+                        <button mat-menu-item
+                                [routerLink]="['/website/promotion/detail/']"
+                                [queryParams]="{id: promotion.id}"
+                        >
+                            <mat-icon>visibility</mat-icon>
+                            <span>Chi tiết</span>
+                        </button>
+                        <button mat-menu-item
+                                [routerLink]="['/website/promotion/edit/']"
+                                [queryParams]="{id: promotion.id}">
+                            <mat-icon>edit</mat-icon>
+                            <span>Chỉnh sửa</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger" matTooltip="Xóa"
+                                [matTooltipPosition]="'above'"
+                                [swal]="{ title: 'Bạn có chắc chắn muốn xóa khóa học', type: 'warning' }"
+                                (confirm)="delete(promotion)">
+                            <mat-icon>delete_forever</mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+                    [isDisabled]="isSearching" pageName="chương trình khuyến mại"></ghm-paging>
+    </div>
+</div>
+
+<!--<promotion-voucher-form #promotionVoucherFormComponent-->
+                        <!--[promotionId]="promotionId"-->
+<!--&gt;</promotion-voucher-form>-->

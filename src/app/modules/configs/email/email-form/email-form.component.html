@@ -1,0 +1,84 @@
+<nh-modal #emailFormModal size="lg">
+    <nh-modal-header [showCloseButton]="true" class="uppercase">
+        <i class="fa fa-email"></i> {isUpdate, select, 0 {Add new email} 1 {Update email} other {}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="form-group" [formGroup]="model"
+                 [class.has-error]="formErrors?.mailTypeId">
+                <label i18n-ghmLabel="@@mailType" ghmLabel="Email type" class="col-sm-3 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-9">
+                    <nh-select [data]="listEmailType"
+                               i18n-title="@@pleaseSelectEmailType"
+                               title="-- Please select email type --"
+                               formControlName="mailTypeId"
+                               (onSelectItem)="selectEmailType($event)"></nh-select>
+                    <span class="help-block">{ formErrors?.mailTypeId, select,
+                        required {Email type is required}
+                        maxLength {Email is over 256 character}
+                        pattern {Email is invalid} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model"
+                 [class.has-error]="formErrors?.owner">
+                <label i18n-ghmLabel="@@owner" ghmLabel="Account Name" class="col-sm-3 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@accountNamePlaceHolder"
+                           id="name"
+                           placeholder="Please enter account name"
+                           formControlName="owner"/>
+                    <span class="help-block">{ formErrors?.owner, select, required {Account name is required} maxlength {Account name not allowed
+                                                    over 256 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <label i18n-ghmLabel="@@email" class="col-sm-3 control-label" ghmLabel="Email"
+                       [required]="true"></label>
+                <div class="col-sm-9" [class.has-error]="formErrors.email">
+                    <input type="text" class="form-control" i18n-placeholder="@@emailPlaceHolder"
+                           placeholder="Please enter email address"
+                           formControlName="email"/>
+                    <span class="help-block">{ formErrors?.email, select, required {Email is required} maxlength {Email not allowed
+                                                    over 50 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <label i18n-ghmLabel="@@password" class="col-sm-3 control-label" ghmLabel="Password"></label>
+                <div class="col-sm-9" [class.has-error]="formErrors.password">
+                    <input type="password" class="form-control" i18n-placeholder="@@passwordPlaceHolder"
+                           formControlName="password"/>
+                    <span class="help-block">{ formErrors?.password, select, required {Password is required} maxlength {Password not allowed
+                                                    over 50 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [formGroup]="model">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                        {model.value.isActive, select, 0 {InActive} 1 {Active}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                              *ngIf="!isUpdate"
+                              i18n="@@isCreateAnother"
+                              class="cm-mgr-5"
+                              color="primary">
+                    Create another
+                </mat-checkbox>
+                <button class="btn blue cm-mgr-5" type="submit"
+                        [disabled]="isSaving" i18n="@@save">
+                    Save
+                </button>
+                <button class="btn default" type="button" (click)="closeModal()"
+                        [disabled]="isSaving || formErrors.length > 0" i18n="@@cancel">
+                    Cancel
+                </button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

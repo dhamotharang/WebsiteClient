@@ -1,0 +1,85 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5">{{bannerTitle}}</span>
+    <small i18n="@@bannerModuleTitle">Banner management</small>
+</h1>
+
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <nh-date [mask]="true"
+                 [(ngModel)]="fromDate"
+                 name="fromDate"
+                 (selectedDateEvent)="search(1)"></nh-date>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-date [mask]="true"
+                 [(ngModel)]="toDate"
+                 name="toDate"
+                 (selectedDateEvent)="search(1)"></nh-date>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listBrowser"
+                   [(ngModel)]="browser"
+                   name="browser"
+                   i18n="@@titleSelectBrowser"
+                   [title]="'-- Please slect browser --'"
+                   (onSelectItem)="search(1)">
+        </nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select [data]="listLanguage"
+                   [(ngModel)]="language"
+                   name="language"
+                   i18n="@@titleSelectLanguage"
+                   [title]="'-- Please slect language --'"
+                   (onSelectItem)="search(1)">
+        </nh-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <ghm-button [loading]="isSearching"
+                    [classes]="'btn blue'"
+                    icon="fa fa-search"></ghm-button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-hover table-stripped">
+        <thead>
+        <tr>
+            <th class="center middle w50 visible-lg" i18n="@@no">No</th>
+            <th class="center middle w100" i18n="@@date">Date</th>
+            <th class="center middle w100 hidden-sm hidden-xs" i18n="userName">User Name</th>
+            <th class="center middle w150" i18n="@@ip">IP</th>
+            <th class="center middle visible-lg" i18n="@@browser">Browser</th>
+            <th class="center middle w100" i18n="@@language">Language</th>
+            <th class="center middle w100" i18n="@@national">National</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listItems$ | async; let i = index">
+            <td class="center middle visible-lg">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="middle">
+                {{item.createTime | dateTimeFormat : 'DD/MM/YYYY hh:mm'}}
+            </td>
+            <td class="middle hidden-sm hidden-xs">
+                {{ item.userName}}
+            </td>
+            <td class="middle">{{ item.userName}}</td>
+            <td class="middle">{{item.ip}}</td>
+            <td class="middle center">{{item.browser}}</td>
+            <td class="center middle">
+                <i class="fa fa-check green" *ngIf="item.language"></i>
+            </td>
+            <td class="middle">
+                {{item.national}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
+            [isDisabled]="isSearching" i18n-pageName="@@banner" [pageName]="'Banner'"></ghm-paging>

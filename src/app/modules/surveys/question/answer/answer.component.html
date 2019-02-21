@@ -1,0 +1,47 @@
+<div class="table-responsive cm-mgb-0">
+    <table class="table no-border cm-mgb-0">
+        <tr>
+            <th class="middle center w100" *ngIf="type === questionType.multiChoice || type === questionType.singleChoice" i18n="@@choiceTrueAnswer">Choice true answer</th>
+            <th class="middle center w150" *ngIf="type === questionType.vote" i18n="@@scoreVote">Score Vote</th>
+            <th class="middle center" *ngIf="type === questionType.multiChoice || type === questionType.singleChoice" i18n="@@answerContent"> Answer content</th>
+            <th class="middle center" *ngIf="type === questionType.vote" i18n="@@answerContentCorrespondToPoint"> Answer content correspond to point</th>
+            <th class="middle center w50" i18n="@@action">Action</th>
+        </tr>
+        <tbody>
+        <tr *ngFor="let answer of listAnswer; let i= index">
+            <td class="center middle">
+                <span *ngIf="type === questionType.vote" [innerHTML]="renderAnswerVote(answer.order)">
+                </span>
+                <mat-radio-button color="primary" *ngIf="type === questionType.singleChoice"
+                                  [checked]="answer.isCorrect"
+                                  (change)="changeIsCorrectStatus(answer)"></mat-radio-button>
+                <mat-checkbox *ngIf="type === questionType.multiChoice" color="primary"
+                              [checked]="answer.isCorrect"
+                              (change)="changeIsCorrectStatus(answer)"></mat-checkbox>
+            </td>
+            <td class="middle">
+                <div class="answer-item"
+                     [hidden]="translations.languageId !== languageId"
+                     *ngFor="let translations of answer.answerTranslations; index as i">
+                    <input class="form-control" i18n-placeholder="@@answerContentPlaceholder"  placeholder="Please answer content"
+                           [(ngModel)]="translations.name"
+                           (keyup)="answerButtonTitleKeyup(answer, $event)">
+                </div>
+            </td>
+            <td class="middle center">
+                <button class="btn btn-danger" type="button" (click)="removeAnswer(answer, i)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td class="middle center" colspan="3">
+                <button type="button" class="btn btn-primary" (click)="addNewAnswer()" i18n="@@addAnswer">
+                    Add answer
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
