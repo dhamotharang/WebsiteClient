@@ -9,6 +9,7 @@ import { AppService } from '../../../shareds/services/app.service';
 import { SpinnerService } from '../../../core/spinner/spinner.service';
 import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable()
 export class TenantService {
@@ -32,7 +33,12 @@ export class TenantService {
     }
 
     insert(tenant: Tenant): Observable<IResponseResult> {
-        return this.http.post(this.url, tenant) as Observable<IResponseResult>;
+        this.spinnerService.show();
+        return this.http.post(this.url, tenant).pipe(finalize(() => this.spinnerService.hide()),
+            map((result: ActionResultViewModel) => {
+                this.appService.showActionResultMessage(result);
+                return result;
+        })) as Observable<IResponseResult>;
     }
 
     update(tenant: Tenant): Observable<IResponseResult> {

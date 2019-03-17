@@ -1,3 +1,6 @@
+import {Page} from '../page/models/page.model';
+import {TenantPage} from '../page/models/teanant-page.viewmodel';
+
 export interface TenantLanguage {
     languageId: string;
     name: string;
@@ -15,7 +18,8 @@ export class Tenant {
     note: string;
     isActive: boolean;
     languages: TenantLanguage[];
-
+    pages: TenantPage[];
+    userId: string;
     constructor() {
         this.isActive = true;
     }

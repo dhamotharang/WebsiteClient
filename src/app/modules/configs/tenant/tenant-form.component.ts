@@ -1,30 +1,37 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Tenant, TenantLanguage } from './tenant.model';
-import { TenantService } from './tenant.service';
-import { BaseFormComponent } from '../../../base-form.component';
-import { UtilService } from '../../../shareds/services/util.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Page } from '../page/models/page.model';
-import { IResponseResult } from '../../../interfaces/iresponse-result';
-import { NhModalComponent } from '../../../shareds/components/nh-modal/nh-modal.component';
-import { finalize } from 'rxjs/operators';
-import { LanguageService } from '../../../shareds/services/language.service';
-import { LanguageSearchViewModel } from '../../../shareds/models/language.viewmodel';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Tenant, TenantLanguage} from './tenant.model';
+import {TenantService} from './tenant.service';
+import {BaseFormComponent} from '../../../base-form.component';
+import {UtilService} from '../../../shareds/services/util.service';
+import {FormBuilder, Validators} from '@angular/forms';
+import {Page} from '../page/models/page.model';
+import {IResponseResult} from '../../../interfaces/iresponse-result';
+import {NhModalComponent} from '../../../shareds/components/nh-modal/nh-modal.component';
+import {finalize} from 'rxjs/operators';
+import {LanguageService} from '../../../shareds/services/language.service';
+import {LanguageSearchViewModel} from '../../../shareds/models/language.viewmodel';
 import * as _ from 'lodash';
-import { NhSelectData } from '../../../shareds/components/nh-select/nh-select.component';
-import { ToastrService } from 'ngx-toastr';
-import { IActionResultResponse } from '../../../interfaces/iaction-result-response.result';
-import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
-import { MatTabChangeEvent } from '@angular/material';
-import { LanguageComponent } from '../website/language/language.component';
-import { SuggestionViewModel } from '../../../shareds/view-models/SuggestionViewModel';
-import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
-import { Pattern } from '../../../shareds/constants/pattern.const';
+import {NhSelect, NhSelectData} from '../../../shareds/components/nh-select/nh-select.component';
+import {ToastrService} from 'ngx-toastr';
+import {IActionResultResponse} from '../../../interfaces/iaction-result-response.result';
+import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
+import {MatTabChangeEvent} from '@angular/material';
+import {LanguageComponent} from '../website/language/language.component';
+import {SuggestionViewModel} from '../../../shareds/view-models/SuggestionViewModel';
+import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
+import {Pattern} from '../../../shareds/constants/pattern.const';
+import {AppService} from '../../../shareds/services/app.service';
+import {PageService} from '../page/page.service';
+import {PageSearchViewModel} from '../page/models/page-search.viewmodel';
+import {TenantPage} from '../page/models/teanant-page.viewmodel';
+import {AccountService} from '../account/account.service';
+import {AccountViewModel} from '../account/view-models/account.viewmodel';
+import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggestion.component';
 
 @Component({
     selector: 'app-tenant-form',
     templateUrl: './tenant-form.component.html',
-    providers: [LanguageService]
+    providers: [LanguageService, AccountService]
 })
 
 export class TenantFormComponent extends BaseFormComponent implements OnInit {
@@ -38,17 +45,38 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
     languageId: string;
     isActive = false;
     isDefault = false;
-
+    listPageView: PageSearchViewModel[] = [];
+    listPage: PageSearchViewModel[] = [];
+    listUserAccount: NhSuggestion[] = [];
     constructor(private fb: FormBuilder,
                 private utilService: UtilService,
                 private toastr: ToastrService,
                 private tenantService: TenantService,
+                private pageService: PageService,
+                private accountService: AccountService,
                 private languageService: LanguageService) {
         super();
     }
 
     ngOnInit() {
         this.buildForm();
+        this.pageService.search('', true).subscribe((result: PageSearchViewModel[]) => {
+            this.listPageView = _.filter(result, (item: PageSearchViewModel) => {
+               return item.parentId === null;
+            });
+            _.each(this.listPageView, (item: PageSearchViewModel) => {
+               item.isSelected = true;
+            });
+            this.listPage = result;
+        });
+        this.accountService.search('',).subscribe((result: SearchResultViewModel<AccountViewModel>) => {
+           _.each(result.items, (item: AccountViewModel) => {
+               const nhSuggestion = new NhSuggestion();
+               nhSuggestion.id = item.id;
+               nhSuggestion.name = item.userName;
+               this.listUserAccount.push(nhSuggestion);
+           });
+        });
     }
 
     onItemSelected(language: NhSelectData) {
@@ -79,7 +107,9 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
 
     onTabChange(event: MatTabChangeEvent) {
         if (event.index === 1) {
+
         }
+
     }
 
     onSearchLanguage(event) {
@@ -92,12 +122,12 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
     onLanguageSelected(event) {
         if (event) {
             const selectedLanguage = _.find(this.selectedLanguages, (language: any) => {
-                return language.id === event.id;
+                return language.id === event[0].id;
             });
             if (!selectedLanguage) {
                 this.selectedLanguages.push({
-                    languageId: event.id,
-                    name: event.name,
+                    languageId: event[0].id,
+                    name: '',
                     isDefault: false,
                     isActive: true
                 });
@@ -108,7 +138,7 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
     onLanguageRemoved(event) {
         if (event) {
             _.remove(this.selectedLanguages, (language: any) => {
-                return language.languageId === event.id;
+                return language.languageId === event[0].id;
             });
         }
     }
@@ -226,10 +256,23 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
         //     this.toastr.error('Vui lòng chọn ít nhất 1 ngôn ngữ mặc định.');
         //     return;
         // }
-
+        console.log(this.model.value);
         if (isValid) {
             this.tenant = this.model.value;
+            this.tenant.pages = [];
+            _.each(this.listPageView, (tenantPage: PageSearchViewModel) => {
+               if(tenantPage.isSelected) {
+                   _.each(this.listPage, (pages: PageSearchViewModel) => {
+                       if ((pages.id === tenantPage.id || pages.parentId === tenantPage.id) && pages.id !== 5) {
+                           const page = new TenantPage();
+                           page.pageId = pages.id;
+                           this.tenant.pages.push(page);
+                       }
+                   });
+               }
+            });
             this.tenant.languages = this.selectedLanguages.map((selectedLanguage: LanguageSearchViewModel) => {
+                console.log(selectedLanguage);
                 return {
                     languageId: selectedLanguage.languageId,
                     isActive: selectedLanguage.isActive,
@@ -245,7 +288,6 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
                         this.isUpdate = false;
                         this.isModified = true;
                         this.tenantFormModal.dismiss();
-                        return;
                     });
             } else {
                 this.tenantService.insert(this.tenant)
@@ -255,6 +297,7 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
                         this.isModified = true;
                         this.model.reset(new Tenant());
                         this.utilService.focusElement('name');
+                        this.tenantFormModal.dismiss();
                         return;
                     });
             }
@@ -262,7 +305,7 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['name', 'email', 'phoneNumber', 'address', 'note']);
+        this.formErrors = this.utilService.renderFormError(['name', 'email', 'phoneNumber', 'address', 'note', 'userId']);
         this.validationMessages = {
             'name': {
                 'required': 'Tên trang không được để trống',
@@ -285,6 +328,9 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
             'note': {
                 'maxLength': 'Nội dung mô tả không được phép vượt quá 500 ký tự..',
             },
+            'userId': {
+                'required': 'Vui long chọn tài khoản'
+            }
         };
 
         this.model = this.fb.group({
@@ -311,6 +357,9 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
                 Validators.maxLength(500)
             ]],
             'isActive': [this.tenant.isActive],
+            'userId': [this.tenant.userId, [
+                Validators.required
+            ]]
         });
         this.model.valueChanges.subscribe(data =>
             this.utilService.onValueChanged(this.model, this.formErrors, this.validationMessages, false));
@@ -325,5 +374,8 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
     private resetForm() {
         this.model.reset(new Tenant());
         this.selectedLanguages = [];
+    }
+    onUserSeleceted(value: any) {
+        this.model.patchValue({'userId': value.id});
     }
 }

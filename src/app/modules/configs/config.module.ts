@@ -65,6 +65,7 @@ import {EmailTypeComponent} from './email/email-type/email-type.component';
 import {CoreValuesComponent} from './website/core-values/core-values.component';
 import {CoreValuesFormComponent} from './website/core-values/core-values-form/core-values-form.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {AppService} from '../../shareds/services/app.service';
 
 @NgModule({
     imports: [

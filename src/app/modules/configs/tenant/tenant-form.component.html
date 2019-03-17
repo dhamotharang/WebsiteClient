@@ -11,6 +11,19 @@
                            (selectedTabChange)="onTabChange($event)">
                 <mat-tab i18n-label="@@tenantInfo" label="Tenant info">
                     <div class="col-sm-12 cm-mgt-10">
+                        <div class="form-group" [class.has-error]="formErrors.userId">
+                            <label ghmLabel="Tài khoản" class="col-sm-3
+                            control-label" [required]=true>
+                            </label>
+                            <div class="col-sm-9">
+                                <nh-suggestion
+                                        [loading]="isSearching"
+                                        [sources]="listUserAccount"
+                                        (itemSelected)="onUserSeleceted($event)"
+                                ></nh-suggestion>
+                                <span class="help-block" *ngIf="formErrors.userId"> {{formErrors.userId}} </span>
+                            </div>
+                        </div>
                         <div class="form-group" [class.has-error]="formErrors.name">
                             <label ghmLabel="Tên khách hàng"
                                    class="col-sm-3 control-label"
@@ -99,7 +112,14 @@
                     </div>
                 </mat-tab><!-- END: tenant info -->
                 <mat-tab i18n-label="@@pages" label="Pages">
+                    <div class="cm-mgt-15 cm-mgr-20">
+                        <div class="item" *ngFor="let item of listPageView">
+                            <mat-checkbox [checked]="item.isSelected">
 
+                            </mat-checkbox>
+                            <label class="cm-mgl-10">{{item.name}}</label>
+                        </div>
+                    </div>
                 </mat-tab><!-- END: Tenant pages -->
             </mat-tab-group>
         </nh-modal-content>

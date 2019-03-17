@@ -32,7 +32,7 @@ export class AppService implements Resolve<any> {
     pageId$ = new BehaviorSubject<number>(0);
     modelStateMessages$ = new Subject<string[]>();
     // moduleTitle$ = new Subject<string>();
-    // pageTitle$ = new Subject<string>();
+    // pageTitle$ = new Subject<string>();sidebarItems$
     isCloseSidebar$ = new BehaviorSubject<boolean>(false);
     locale = 'vi';
     momentDateTimeLocalFormat = {
