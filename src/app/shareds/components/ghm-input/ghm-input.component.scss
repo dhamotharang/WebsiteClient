@@ -1,0 +1,44 @@
+.ghm-input {
+    width: 100%;
+    position: relative;
+
+    .icon-prepend {
+        left: 7px;
+        border-right: 1px solid #c2c2c2;
+        padding-right: 6px;
+        color: #0072BC;
+        position: absolute;
+        top: 6px;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center;
+        font-weight: normal !important;
+    }
+
+    input {
+        padding-left: 32px;
+        padding-right: 32px;
+    }
+
+    .remove-value {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        display: block;
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        background: url('../../../../assets/images/icon/icon-remove.png') center no-repeat;
+    }
+}
+
+.disabled {
+    cursor: no-drop;
+    input {
+        background-color: #eef1f5 !important;
+    }
+
+    .icon-prepend {
+        color: #686868;
+    }
+}

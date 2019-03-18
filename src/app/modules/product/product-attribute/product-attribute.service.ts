@@ -49,15 +49,15 @@ export class ProductAttributeService implements Resolve<any> {
     }
 
     updateMultiple(id: string, isMultiple: boolean): Observable<ActionResultViewModel> {
-        return this.http.get(`${this.url}/${id}/multiple/${isMultiple}`) as Observable<ActionResultViewModel>;
+        return this.http.post(`${this.url}/${id}/multiple/${isMultiple}`, null) as Observable<ActionResultViewModel>;
     }
 
     updateRequire(id: string, isRequire: boolean): Observable<ActionResultViewModel> {
-        return this.http.get(`${this.url}/${id}/require/${isRequire}`) as Observable<ActionResultViewModel>;
+        return this.http.post(`${this.url}/${id}/require/${isRequire}`, null) as Observable<ActionResultViewModel>;
     }
 
     updateSelfContent(id: string, isSelfContent: boolean): Observable<ActionResultViewModel> {
-        return this.http.get(`${this.url}/${id}/self-content/${isSelfContent}`) as Observable<ActionResultViewModel>;
+        return this.http.post(`${this.url}/${id}/self-content/${isSelfContent}`, {}) as Observable<ActionResultViewModel>;
     }
 
     getDetail(id: string): Observable<ProductAttribute> {

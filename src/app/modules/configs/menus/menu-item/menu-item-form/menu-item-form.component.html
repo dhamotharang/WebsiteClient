@@ -46,12 +46,12 @@
              [class.has-error]="formErrors.subjectType">
             <label i18n-ghmLabel="@@subjectType" class="control-label" ghmLabel="Subject Type"
                    [required]="true"></label>
-            <nh-select [data]="subjectTypes"
+            <ghm-select [data]="subjectTypes"
                        i18n-title="@@subjectTypeTitle"
                        [title]="'-- Select subject type --'"
-                       (onSelectItem)="selectSubjectType($event)"
+                       (itemSelected)="selectSubjectType($event)"
                        formControlName="subjectType">
-            </nh-select>
+            </ghm-select>
             {{formErrors?.subjectType}}
             <span class="help-block">{formErrors?.subjectType, select, required {SubjectType is required} isValid {Subject type in inValid}}</span>
         </div>

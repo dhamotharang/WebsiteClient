@@ -38,13 +38,14 @@ import {FormatNumberModule} from '../../shareds/pipe/format-number/format-number
 import {NhTagModule} from '../../shareds/components/nh-tags/nh-tag.module';
 import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
 import {NhSafeHtmlModeule} from '../../shareds/components/nh-safe-html/nh-safe-html.module';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 
 @NgModule({
     imports: [
         CommonModule, ProductRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
         NHTreeModule, NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule, NhDropdownModule,
         DatetimeFormatModule, NhWizardModule, NhTabModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
-        MatRadioModule, FormatNumberModule, NhTagModule, TinymceModule, NhSafeHtmlModeule,
+        MatRadioModule, FormatNumberModule, NhTagModule, TinymceModule, NhSafeHtmlModeule, GhmSelectModule,
         MatRadioModule, NhSuggestionModule,
         NhImageViewerModule,
         SweetAlert2Module.forRoot({

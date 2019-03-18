@@ -1,0 +1,205 @@
+@import "../../../../assets/styles/config";
+
+ghm-select {
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+    &.ghm-multiple {
+        li.ghm-select-item {
+            position: relative;
+
+            &.selected {
+                background: none;
+            }
+
+            ghm-selected-icon {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                color: white;
+            }
+        }
+    }
+
+    &.no-border > button {
+        background: white !important;
+        border: none !important;
+    }
+
+    &.has-error > button.ghm-select-button {
+        border: 1px solid $danger !important;
+    }
+
+    button.ghm-select-button {
+        width: 100%;
+        min-width: 150px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 0 !important;
+        min-height: 33px;
+        border: 1px solid $borderColor;
+        border-radius: 4px !important;
+        //background: white;
+        text-align: left;
+        padding: 7px 5px 7px 5px;
+
+        &:focus {
+            border-radius: $borderRadius !important;
+            border: 1px solid $borderActiveColor;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+        }
+
+        span {
+            float: right;
+            margin-top: 8px;
+            color: $dark-blue;
+        }
+
+        .icon-prepend {
+            border-right: 1px solid #c2c2c2;
+            padding-right: 6px;
+            color: $dark-blue;
+            top: 6px;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            font-weight: normal !important;
+        }
+    }
+}
+
+.ghm-select-menu {
+    display: block;
+    //border: 1px solid $borderColor;
+    background: white;
+    position: relative;
+    border: 1px solid $borderColor;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+
+    &:before, &:after {
+        content: '';
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+    &.ghm-menu-top {
+        margin-bottom: 10px;
+
+        &:before {
+            width: 0;
+            height: 0;
+            bottom: -8px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid $borderColor;
+        }
+        &:after {
+            bottom: -7px;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 7px solid white;
+        }
+    }
+    &.ghm-menu-bottom {
+        margin-top: 10px;
+
+        &:before {
+            top: -8px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid $borderColor;
+        }
+
+        &:after {
+            top: -7px;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid white;
+        }
+    }
+    &.ghm-menu-left {
+        &:before {
+            left: 30px;
+        }
+        &:after {
+            left: 31px;
+        }
+    }
+    &.ghm-menu-right {
+        &:before {
+            right: 30px;
+        }
+        &:after {
+            right: 31px;
+        }
+    }
+
+    .search-box {
+        padding: 5px;
+    }
+
+    hr {
+        margin: 0 !important;
+    }
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        max-height: 300px;
+        overflow-y: auto;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 0 1px 0 rgba(0, 0, 0, .3);
+        li {
+            padding: 8px 8px 8px 12px;
+            display: block;
+            width: 100%;
+            border-bottom: none !important;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            user-select: none;
+            border-bottom: 1px solid #eaeaea !important;
+            &:last-child {
+                border-bottom: none !important;
+            }
+            &:hover, &.active, &.selected {
+                cursor: pointer;
+                //color: white;
+                background: $bright-blue;
+            }
+
+            a {
+                user-select: none;
+                text-decoration: none;
+
+                &:hover, &:active, &:visited, &:focus {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .background-none {
+            background: none !important;
+        }
+
+        li.ghm-select-item a:visited, li.ghm-select-item a:active, li.ghm-select-item a:focus {
+            outline: none;
+            text-decoration: none;
+        }
+
+        li.ghm-select-item.selected {
+            //color: white;
+            background: $bright-blue;
+        }
+    }
+}
+
+.disabled{
+    opacity: 0.6;
+    cursor:no-drop;
+}

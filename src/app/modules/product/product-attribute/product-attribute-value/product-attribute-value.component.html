@@ -4,10 +4,10 @@
                name="keyword" [(ngModel)]="keyword">
     </div>
     <div class="form-group cm-mgr-5">
-        <nh-select [data]="[{id: false, name: 'InActive'},{id: true, name: 'Activated'}]"
+        <ghm-select [data]="[{id: false, name: 'InActive'},{id: true, name: 'Activated'}]"
                    title="-- All active status --"
                    i18n-title="@@allActiveStatus"
-                   (itemSelected)="onActiveStatusSelected($event)"></nh-select>
+                   (itemSelected)="onActiveStatusSelected($event)"></ghm-select>
     </div>
     <div class="form-group cm-mgr-5">
         <button class="btn blue" [disabled]="isSearching">
@@ -21,11 +21,11 @@
         </button>
     </div>
     <div class="form-group pull-right">
-        <a href="javascript://" type="button" class="btn blue" i18n="@@add"
+        <button type="button" class="btn blue" i18n="@@add"
            *ngIf="permission.add && !readOnly"
            (click)="productAttributeValueFormComponent.add()">
             Add
-        </a>
+        </button>
     </div>
 </form><!-- END: search form -->
 <table class="table table-hover table-stripped">

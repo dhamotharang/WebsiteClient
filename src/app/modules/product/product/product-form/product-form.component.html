@@ -26,12 +26,12 @@
                                 <div class="form-group" *ngIf="languages && languages.length > 1">
                                     <label i18n-ghmLabel="@@language" ghmLabel="Language"
                                            class="control-label"></label>
-                                    <nh-select [data]="languages"
+                                    <ghm-select [data]="languages"
                                                i18n-title="@@pleaseSelectLanguage"
                                                title="-- Please select language --"
                                                name="language"
                                                [(value)]="currentLanguage"
-                                               (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                                               (onSelectItem)="currentLanguage = $event.id"></ghm-select>
                                 </div>
                                 <div class="form-group"
                                      *ngFor="let modelTranslation of translations.controls; index as i"

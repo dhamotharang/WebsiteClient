@@ -37,11 +37,11 @@
                          [class.has-error]="formErrors?.position">
                         <label i18n-ghmLabel="@@position" class="control-label" ghmLabel="Position"
                                [required]="true"></label>
-                        <nh-select
+                        <ghm-select
                                 i18n-title="@@position"
                                 title="-- Please select position --"
                                 [data]="positions"
-                                formControlName="position"></nh-select>
+                                formControlName="position"></ghm-select>
                         <span class="help-block">{formErrors?.position, select, required {Position is required} isValid {Position is invalid}}</span>
                     </div>
                     <div class="form-group cm-mg-0"
@@ -57,11 +57,11 @@
                     <div class="form-group cm-mg-0"
                          [class.has-error]="formErrors?.effectType">
                         <label i18n-ghmLabel="@@effect" class="control-label" ghmLabel="Effect"></label>
-                        <nh-select
+                        <ghm-select
                             i18n-title="@@effectType"
                             title="-- Please select effect type --"
                             [data]="effectTypes"
-                            formControlName="effectType"></nh-select>
+                            formControlName="effectType"></ghm-select>
                         <span class="help-block">{ formErrors?.effectType, select, isValid {Effect type is invalid}}</span>
                     </div>
                     <div class="form-group cm-mg-0"

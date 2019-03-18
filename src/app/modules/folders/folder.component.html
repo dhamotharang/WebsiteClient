@@ -121,8 +121,7 @@
                                     <input class="form-control" [(ngModel)]="item.name" (blur)="updateFileName(item)">
                                 </ng-template>
                             </td>
-                            <td class="middle visible-lg visible-md">{{item.createTime | dateTimeFormat : 'DD/MM/YYYY
-                                hh:mm'}}
+                            <td class="middle visible-lg visible-md">{{item.createTime | dateTimeFormat : 'DD/MM/YYYY:hh:mm'}}
                             </td>
                             <td class="middle center"><span>{{item.sizeString}}</span></td>
                             <td class="middle">

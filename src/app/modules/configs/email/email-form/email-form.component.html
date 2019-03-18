@@ -9,11 +9,11 @@
                 <label i18n-ghmLabel="@@mailType" ghmLabel="Email type" class="col-sm-3 control-label"
                        [required]="true"></label>
                 <div class="col-sm-9">
-                    <nh-select [data]="listEmailType"
+                    <ghm-select [data]="listEmailType"
                                i18n-title="@@pleaseSelectEmailType"
                                title="-- Please select email type --"
                                formControlName="mailTypeId"
-                               (onSelectItem)="selectEmailType($event)"></nh-select>
+                               (onSelectItem)="selectEmailType($event)"></ghm-select>
                     <span class="help-block">{ formErrors?.mailTypeId, select,
                         required {Email type is required}
                         maxLength {Email is over 256 character}

@@ -14,13 +14,12 @@
                        [(ngModel)]="keyword" name="keyword">
             </div>
             <div class="form-group cm-mgr-5">
-                <nh-select [data]="listStatus"
-                           i18n="@@selectStatus"
-                           i18n-title
+                <ghm-select [data]="listStatus"
+                           i18n-title="@@selectStatus"
                            [title]="'-- Select status --'"
                            [(ngModel)]="status"
                            name="status"
-                           (onSelectItem)="search(1)"></nh-select>
+                           (onSelectItem)="search(1)"></ghm-select>
             </div>
             <div class="form-group cm-mgr-5">
                 <ghm-button [loading]="isSearching"

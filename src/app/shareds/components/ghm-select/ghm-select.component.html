@@ -1,59 +1,47 @@
-<div id="m_dropdown_api_1" class="m-dropdown m-dropdown--inline m-dropdown--arrow" data-dropdown-toggle="hover">
-    <a href="#" class="m-dropdown__toggle btn btn-primary dropdown-toggle">
-        Dropdown 1
-    </a>
-    <div class="m-dropdown__wrapper">
-        <span class="m-dropdown__arrow m-dropdown__arrow--left"></span>
-        <div class="m-dropdown__inner">
-            <div class="m-dropdown__body">
-                <div class="m-dropdown__content">
-                    <ul class="m-nav">
-                        <li class="m-nav__section m-nav__section--first">
-											<span class="m-nav__section-text">
-												Section
-											</span>
-                        </li>
-                        <li class="m-nav__item">
-                            <a href="" class="m-nav__link">
-                                <i class="m-nav__link-icon flaticon-share"></i>
-                                <span class="m-nav__link-text">
-													Activity
-												</span>
-                            </a>
-                        </li>
-                        <li class="m-nav__item">
-                            <a href="" class="m-nav__link">
-                                <i class="m-nav__link-icon flaticon-chat-1"></i>
-                                <span class="m-nav__link-text">
-													Messages
-												</span>
-                            </a>
-                        </li>
-                        <li class="m-nav__item">
-                            <a href="" class="m-nav__link">
-                                <i class="m-nav__link-icon flaticon-info"></i>
-                                <span class="m-nav__link-text">
-													FAQ
-												</span>
-                            </a>
-                        </li>
-                        <li class="m-nav__item">
-                            <a href="" class="m-nav__link">
-                                <i class="m-nav__link-icon flaticon-lifebuoy"></i>
-                                <span class="m-nav__link-text">
-													Support
-												</span>
-                            </a>
-                        </li>
-                        <li class="m-nav__separator m-nav__separator--fit"></li>
-                        <li class="m-nav__item">
-                            <a href="#" class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide btn-sm" routerLink="/logout">
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+<button class="ghm-select-button" type="button" (click)="buttonClick()" [disabled]="readonly" [id]="elementId"
+        [ngClass]="classColor"
+        [class.disabled]="readonly"
+        [ngStyle]="{color: classColor? 'white': '', 'background': classColor ? '' :'white'}">
+    <i *ngIf="icon" class="icon-prepend {{icon}}"></i>
+    {{ !label ? title : label }}
+    <span class="caret" [ngStyle]="{color: classColor? 'white': ''}"></span>
+</button>
+
+<ng-template #dropdownTemplate>
+    <div class="ghm-select-menu">
+        <div class="search-box" *ngIf="liveSearch">
+            <input [id]="inputId" type="text" class="form-control w100pc"
+                   placeholder="Enter keyword"
+                   i18n-placeholder="@@enterKeyword"
+                   (keydown.enter)="$event.preventDefault()"
+                   (keyup)="searchKeyUp($event, searchBox.value)"
+                   #searchBox/>
         </div>
+        <hr *ngIf="liveSearch"/>
+        <ul class="wrapper-list-menu" *ngIf="!readonly">
+            <li *ngIf="data?.length > 0 && title" (click)="selectItem({id: null, name: title})">
+                {{title}}
+            </li>
+            <li *ngIf="isSearching" class="center">
+                <i class="fa fa-spinner fa-pulse"></i>
+            </li>
+            <li class="ghm-select-item" *ngFor="let item of source"
+                [class.selected]="item.selected"
+                [class.active]="item.active"
+                (click)="selectItem(item)">
+                <img [src]="item.image" ghmImage="" class="avatar-sm rounded-avatar" *ngIf="item.image">
+                <i *ngIf="item.icon" [ngClass]="item.icon"></i>
+                {{item.name}}
+                <i class="fa fa-check nh-selected-icon color-green"
+                   *ngIf="item.selected && multiple"></i>
+            </li>
+            <li *ngIf="source?.length === 0 && isInsertValue" class="background-none">
+                <button class="btn btn-primary btn-block" type="button" (click)="insertValue()"><i
+                    class="fa fa-plus"></i>Thêm mới
+                </button>
+            </li>
+            <li *ngIf="source?.length === 0 && !isInsertValue" class="no-data">Không có dữ liệu</li>
+        </ul>
     </div>
-</div>
+</ng-template>
+

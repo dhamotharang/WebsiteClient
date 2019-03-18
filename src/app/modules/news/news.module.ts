@@ -30,11 +30,12 @@ import { NhDropdownModule } from '../../shareds/directives/nh-dropdown/nh-dropdo
 import {SelectNewComponent} from './new/select-new/select-new.component';
 import {SelectCategoryComponent} from './category/select-category/select-category.component';
 import {NhContextMenuModule} from '../../shareds/components/nh-context-menu/nh-context-menu.module';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 
 @NgModule({
     imports: [CommonModule, CoreModule, LayoutModule, NewsRoutingModule, GhmPagingModule, FormsModule, ReactiveFormsModule,
         NHTreeModule, NhModalModule, GhmUserSuggestionModule, NhTagModule, TinymceModule, NhSafeHtmlModeule, GhmFileExplorerModule,
-        NhSelectModule, CoreModule, MatCheckboxModule, GhmDraggableModule, NhDateModule, MatTooltipModule,
+        NhSelectModule, CoreModule, MatCheckboxModule, GhmDraggableModule, NhDateModule, MatTooltipModule, GhmSelectModule,
         DatetimeFormatModule, NhDropdownModule, MatIconModule, NhContextMenuModule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,

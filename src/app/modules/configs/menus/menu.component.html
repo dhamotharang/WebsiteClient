@@ -9,14 +9,13 @@
                name="searchInput" [(ngModel)]="keyword">
     </div>
     <div class="form-group cm-mgr-5">
-        <nh-select
+        <ghm-select
                 [data]="[{id: false, name: 'inActive'},{id: true, name: 'Active'}]"
-                i18n="@@selectStatus"
-                i18n-title
+                i18n-title="@@selectStatus"
                 [title]="'-- Select status --'"
                 [(ngModel)]="isActive"
                 name="isActive"
-                (onSelectItem)="search(1)"></nh-select>
+                (itemSelected)="search(1)"></ghm-select>
     </div>
     <div class="form-group cm-mgr-5">
         <button class="btn blue">

@@ -29,10 +29,14 @@ $dark: #343a40;
 $label-color: #666;
 $background-color: #ECF0F1;
 $borderActiveColor: #00b894;
-
+$borderColor: #ddd;
+$borderRadius: 0;
+$dark-blue: #0072BC;
+$bright-blue: #dff0fd;
 $max-width-mobile: 768px;
 $max-width-tablet: 992px;
 $max-width-desktop: 1280px;
+
 // BEGIN: Margin
 @mixin nh-mg($pixel){
     margin: $pixel !important;
