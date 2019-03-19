@@ -18,6 +18,7 @@ export interface IAppConfig {
     RELATIONSHIP_API_URL: string;
     EVENT_API_URL: string;
     FILE_URL: string;
+    FILE_LOCAL_URL;
     API_GATEWAY_URL: string;
 }
 //
@@ -40,6 +41,7 @@ export const APP_CONFIG_DI: IAppConfig = {
     SURVEY_API_URL: 'http://localhost:5011/api/v1/',
     EVENT_API_URL: 'http://localhost:50003/api/v1/',
     FILE_URL: 'https://testfilemanager.ghmsoft.vn/',
+    FILE_LOCAL_URL: 'http://localhost:50005/',
     API_GATEWAY_URL: 'http://localhost:50008/'
 };
 
