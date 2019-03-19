@@ -45,9 +45,10 @@ const routes: Routes = [
             {path: 'folders', loadChildren: './modules/folders/folder.module#FolderModule'},
             {path: 'banners', loadChildren: './modules/banners/banner.module#BannerModule'},
             {path: 'news', loadChildren: './modules/news/news.module#NewsModule'},
+            {path: 'products', loadChildren: './modules/warehouse/product/product.module#ProductModule'},
+            {path: 'warehouses', loadChildren: './modules/warehouse/warehouse.module#WarehouseModule'},
             {path: 'event', loadChildren: './modules/event/event.module#EventModule'},
             {path: 'brand', loadChildren: './modules/brand/brand.module#BrandModule'},
-            {path: 'products', loadChildren: './modules/product/product.module#ProductModule'},
         ]
     },
     {path: '', redirectTo: 'titles', pathMatch: 'full'},

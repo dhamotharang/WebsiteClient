@@ -19,7 +19,7 @@
                 <div class="fileinput fileinput-new">
                     <div class="fileinput-new thumbnail">
                         <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
-                             src="{{ model.value.logo}}" [isUrlAbsolute]="true">
+                             [src]="model.value.logo" [isUrlAbsolute]="true">
                         <ghm-file-explorer i18n-buttonText="@@selectImage" [buttonText]="'Select image'"
                                            (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
                     </div>

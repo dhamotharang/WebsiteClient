@@ -1,0 +1,11 @@
+<nh-suggestion
+    placeholder="Chọn nhà cung cấp"
+    i18n-placeholder="@@selectSupplier"
+    [class.receipt]="isReceipt"
+    [loading]="isSearching"
+    [sources]="listItems"
+    [selectedItem]="selectedItem"
+    (itemSelected)="onItemSelected($event)"
+    (itemRemoved)="itemRemoved.emit()"
+    (searched)="onSearchKeyPress($event)"
+></nh-suggestion>

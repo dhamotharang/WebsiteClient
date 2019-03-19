@@ -1,0 +1,111 @@
+<form class="horizontal-form" (ngSubmit)="save(false)" [formGroup]="model">
+    <div class="row">
+        <div class="col-sm-8">
+            <app-inventory-product [inventoryId]="id"
+                                   [warehouseId]="model.value.warehouseId"
+                                   [totalRows]="inventoryDetail?.totalProduct"
+                                   [status]="inventoryDetail?.status"
+                                   [details]="listInventoryDetail"
+                                   [date]="date"
+                                   [isUpdate]="isUpdate"
+                                   [readonly]="true"
+                                   (onBalanced)="balanced()"
+                                   (warehouseSelected)="onWarehouseSelected($event)"
+            ></app-inventory-product>
+        </div>
+        <div class="col-sm-4">
+            <div class="portlet light">
+                <div class="portlet-title">
+                    <div class="caption font-green-sharp">
+                        <i class="icon-share font-green-sharp"></i>
+                        <span class="caption-subject bold uppercase"
+                              i18n="@@inventoryInfo"> Thông tin phiếu kiểm kê</span>
+                        <!--<span class="caption-helper">monthly stats...</span>-->
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="" ghmLabel="Ngày kiểm kê"
+                                           i18n-ghmLabel="@@inventoryDate"></label>
+                                    <div class="form-control">
+                                        {{ model.value.inventoryDate | dateTimeFormat:'DD/MM/YYYY HH:mm' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" [class.has-error]="formErrors?.status">
+                                    <label class="" ghmLabel="Trạng thái"
+                                           i18n-ghmLabel="@@status"></label>
+                                    <div>
+                                        <div class="form-control" i18n="@@inventoryStatus">
+                                            {model.value.status, select, 0 {Tạm thời} 1 {Đã cân bằng} other {}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="" ghmLabel="Kiểm kê tại kho"
+                                           i18n-ghmLabel="@@inventoryWarehouse"></label>
+                                    <div class="form-control">
+                                        {{ model.value.warehouseName }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="" ghmLabel="Thành viên tham gia"
+                                           i18n-ghmLabel="@@inventoryMember"></label>
+                                    <ul class="media-list">
+                                        <li class="media" *ngFor="let user of selectedMembers">
+                                            <div class="media-left">
+                                                <a href="#" class="w50">
+                                                    <img class="media-object" src="{{ user.avatar }}"
+                                                         alt="{{ user.fullName }}">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h4 class="media-heading">{{ user.fullName }}</h4>
+                                                {{ user.positionName }} - {{ user.officeName }}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" [class.has-error]="formErrors?.note">
+                                    <label class="" ghmLabel="Ghi chú" i18n-ghmLabel="@@description"></label>
+                                    <div class="form-control height-auto">
+                                        {{ model.value.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row cm-mgt-10">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <a class="btn default"
+                                   [routerLink]="['/goods/inventories']"
+                                   [queryParams]="{warehouseId: model.value.warehouseId, warehouseName: model.value.warehouseName}">
+                                    <span i18n="@@back">Trở về</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

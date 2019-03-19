@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="title bold center uppercase" i18n="@@warehouseCard">Thẻ kho</h4>
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label ghmLabel="Tên kho" i18n-ghmLabel="@@warehouseName" class="col-sm-3"></label>
+                        <div class="col-sm-9 bold">
+                            {{ warehouseCard?.warehouseName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label ghmLabel="Từ ngày" i18n-ghmLabel="@@fromDate" class="col-sm-3"></label>
+                        <div class="col-sm-9 bold">
+                            {{ fromDate | dateTimeFormat:'DD/MM/YYYY HH:mm:ss' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label ghmLabel="Đến ngày" i18n-ghmLabel="@@toDate" class="col-sm-3"></label>
+                        <div class="col-sm-9 bold">
+                            {{ toDate | dateTimeFormat:'DD/MM/YYYY HH:mm:ss' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label ghmLabel="Tên sản phẩm" i18n-ghmLabel="@@productName" class="col-sm-3"></label>
+                        <div class="col-sm-9 bold">
+                            {{ warehouseCard?.productName }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label ghmLabel="Đơn vị tính" i18n-ghmLabel="@@unitName" class="col-sm-3"></label>
+                        <div class="col-sm-9 bold">
+                            {{ warehouseCard?.unitName }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- END: product info -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th class="center middle" rowspan="2" i18n="@@no">STT</th>
+                            <th class="center middle" rowspan="2" i18n="@@receiptDate">Ngày chứng từ</th>
+                            <th class="center middle" colspan="2" i18n="@@receiptNo">Số chứng từ</th>
+                            <th class="center middle" rowspan="2" i18n="@@note">Ghi chú</th>
+                            <th class="center middle" rowspan="2" i18n="@@receivingDeliveringDate">Ngày nhập/xuất</th>
+                            <th class="center" colspan="3" i18n="@@quantity">Số lượng</th>
+                        </tr>
+                        <tr>
+                            <th class="center w100" i18n="@@receiving">Nhập</th>
+                            <th class="center w100" i18n="@@delivering">Xuất</th>
+                            <th class="center w100" i18n="@@receiving">Nhập</th>
+                            <th class="center w100" i18n="@@delivering">Xuất</th>
+                            <th class="center w100" i18n="@@delivering">Tồn</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5" class="text-right bold" i18n="@@openingStockQuantity">Tồn đầu kỳ</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right bold">{{ warehouseCard?.openingStockQuantity | ghmCurrency:2 }}</td>
+                        </tr>
+                        <tr *ngFor="let item of warehouseCard?.warehouseCardItems; let i = index"
+                            class="cursor-pointer"
+                            (click)="detail(item.id, item.isReceiving)">
+                            <td class="center">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                            <td>{{ item.invoiceDate | dateTimeFormat:'DD/MM/YYYY HH:mm:ss' }}</td>
+                            <td class="text-right">{{ item.isReceiving ? item.receiptNo : '' }}</td>
+                            <td class="text-right">{{ !item.isReceiving ? item.receiptNo : '' }}</td>
+                            <td>{{ item.note }}</td>
+                            <td>{{ item.date | dateTimeFormat:'DD/MM/YYYY HH:mm:ss' }}</td>
+                            <td class="text-right">{{ item.isReceiving ? item.quantity : '' }}</td>
+                            <td class="text-right">{{ !item.isReceiving ? item.quantity : '' }}</td>
+                            <td class="text-right" [class.color-red]="item.inventory < 0">
+                                {{ item.inventory }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- END: .table-responsive -->
+                <ghm-paging [totalRows]="totalRows"
+                            [currentPage]="currentPage"
+                            [pageShow]="6"
+                            [isDisabled]="isSearching"
+                            [pageSize]="pageSize"
+                            (pageClick)="search($event)"
+                ></ghm-paging>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div dynamic-component-host></div>

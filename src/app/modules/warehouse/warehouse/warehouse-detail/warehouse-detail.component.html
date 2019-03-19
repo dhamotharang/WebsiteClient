@@ -1,0 +1,74 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@wareFormPageTitle">
+        {{warehouseDetail?.name}}
+    </span>
+    <small i18n="@@warehouseModuleTitle">Quản lý kho</small>
+</h1>
+<nh-tab>
+    <nh-tab-pane [active]="true"
+                 title="Thông tin kho"
+                 i18n-title="@@warehouseInfo"
+                 id="warehouseInfo">
+        <form action="" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" ghmLabel="Tên kho"
+                               i18n-ghmLabel="@@warehouseName"></label>
+                        <div class="col-sm-8">
+                            <div class="form-control height-auto">{{warehouseDetail?.name}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" ghmLabel="Địa chỉ"
+                               i18n-ghmLabel="@@address"></label>
+                        <div class="col-sm-8">
+                            <div class="form-control height-auto">{{warehouseDetail?.address}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" ghmLabel="Mô tả"
+                               i18n-ghmLabel="@@description"></label>
+                        <div class="col-sm-8">
+                            <div class="form-control height-auto">{{warehouseDetail?.description}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <mat-checkbox color="primary"
+                                          [checked]="warehouseDetail?.isActive"
+                                          [disabled]="true">
+                                 <span i18n="@@isActive">
+                                      {warehouseDetail?.isActive, select, 0 {Chưa kích hoạt} 1 {Đã kích hoạt}}
+                                 </span>
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <a routerLink="/warehouses" class="btn default" i18n="@@close">
+                                Đóng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nh-tab-pane>
+    <nh-tab-pane title="Người quản lý"
+                 i18n-title="@@warehouseManager"
+                 id="warehouseManager">
+        <app-warehouse-manager-config [isUpdate]="isUpdate"
+                                      [warehouseId]="warehouseDetail?.id"
+                                      [isReadOnly]="true"
+                                      [listManagerConfig]="warehouseDetail?.warehouseManagerConfigs"></app-warehouse-manager-config>
+    </nh-tab-pane>
+    <nh-tab-pane title="Sản phẩm tới hạn"
+                 i18n-title="@@limitQuantityProduct"
+                 id="limitQuantityProduct"
+                 (tabSelected)="getWarehouseLimit($event)">
+        <app-warehouse-limit
+            [warehouseId]="warehouseDetail?.id"
+            [isReadOnly]="true"></app-warehouse-limit>
+    </nh-tab-pane>
+</nh-tab>

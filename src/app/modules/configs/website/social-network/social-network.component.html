@@ -85,7 +85,7 @@
             <div class="fileinput-new thumbnail" [formGroup]="model">
                 <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
                      [isUrlAbsolute]="true" *ngIf="model.value.image"
-                     src="{{model.value.image}}">
+                     [src]="model.value.image">
                 <ghm-file-explorer [buttonText]="'Select image'"
                                    (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
                 <span class="help-block">{formErrors?.image, select, maxLength {Image is over 500 character}}</span>

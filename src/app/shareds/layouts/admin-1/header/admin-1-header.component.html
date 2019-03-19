@@ -60,7 +60,7 @@
             <li class="dropdown dropdown-user" ghmDropdown>
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                    data-close-others="true">
-                    <img alt="" ghmImage class="img-circle" src="{{ currentUser?.avatar }}"/>
+                    <img alt="" ghmImage class="img-circle" [src]="currentUser?.avatar"/>
                     <span class="username username-hide-on-mobile"> {{ currentUser?.fullName }} </span>
                     <i class="fa fa-angle-down"></i>
                 </a>

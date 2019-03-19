@@ -1,0 +1,141 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@wareFormPageTitle">
+        {isUpdate, select, 0 {Thêm kho} 1 {Cập nhật kho}}
+    </span>
+    <small i18n="@@warehouseModuleTitle">Quản lý kho</small>
+</h1>
+<nh-tab>
+    <nh-tab-pane [active]="true"
+                 title="Thông tin kho"
+                 i18n-title="@@warehouseInfo"
+                 id="warehouseInfo">
+        <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group"
+                         [class.has-error]="formErrors?.name">
+                        <label class="col-sm-4 control-label" ghmLabel="Tên kho"
+                               i18n-ghmLabel="@@warehouseName"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control"
+                                   id="name"
+                                   formControlName="name"
+                                   placeholder="Nhập tên kho"
+                                   i18n-placeholder="@@enterWarehouseName">
+                            <span class="help-block" i18n="@@warehouseNameErrorMessage">
+                                {
+                                formErrors?.name,
+                                select, required {Vui lòng nhập tên kho}
+                                maxlength {Tên kho không được phép vượt quá 256 ký tự}
+                                pattern {Tên kho phải là ký tự a-z A-Z}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [class.has-error]="formErrors?.inventoryCalculatorMethod">
+                        <label class="col-sm-4 control-label" ghmLabel="Phương pháp tính tồn"
+                               i18n-ghmLabel="@@inventoryCalculatorMethod"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <nh-select
+                                [data]="inventoryCalculatorMethods"
+                                title="-- Chọn phương pháp tính tồn --"
+                                i18n-title="@@selectInventoryMethod"
+                                formControlName="inventoryCalculatorMethod"></nh-select>
+                            <span class="help-block" i18n="@@warehouseInventoryCalculatorErrorMessage">
+                                {
+                                formErrors?.inventoryCalculatorMethod,
+                                select, required {Vui lòng chọn phương pháp tính tồn} other {}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [class.has-error]="formErrors?.address">
+                        <label class="col-sm-4 control-label" ghmLabel="Địa chỉ"
+                               i18n-ghmLabel="@@address"></label>
+                        <div class="col-sm-8">
+                            <textarea name="" class="form-control" rows="3"
+                                      formControlName="address"
+                                      placeholder="Nhập địa chỉ"
+                                      i18n-placeholder="@@enterAddress"></textarea>
+                            <span class="help-block" i18n="@@warehouseAddressErrorMessage">
+                                {
+                                formErrors?.address,
+                                select, maxlength {Địa chỉ kho không được phép vượt quá 500 ký tự}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [class.has-error]="formErrors?.description">
+                        <label class="col-sm-4 control-label" ghmLabel="Mô tả"
+                               i18n-ghmLabel="@@description"></label>
+                        <div class="col-sm-8">
+                            <textarea name="" class="form-control" rows="3"
+                                      formControlName="description"
+                                      placeholder="Nhập mô tả"
+                                      i18n-placeholder="@@enterDescription"></textarea>
+                            <span class="help-block" i18n="@@warehouseDescriptionErrorMessage">
+                                {
+                                formErrors?.description,
+                                select, maxlength {Mô tả kho khôn được phép vượt quá 500 ký tự}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [class.has-error]="formErrors?.isActive">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <mat-checkbox formControlName="isActive" color="primary">
+                                <span i18n="@@isActive">
+                                      {model.value.isActive, select, 0 {Chưa kích hoạt} 1 {Đã kích hoạt}}
+                                 </span>
+                            </mat-checkbox>
+                            <span class="help-block" i18n="@@warehouseIsActiveErrorMessage">
+                                            {
+                                            formErrors?.isActive,
+                                            select, required {Vui lòng chọn trạng thái kích hoạt}
+                                            }</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <mat-checkbox
+                                class="cm-mgr-5"
+                                color="primary"
+                                name="isCreateAnother"
+                                i18n="@@isCreateAnother"
+                                *ngIf="!isUpdate"
+                                [(checked)]="isCreateAnother"
+                                (change)="isCreateAnother = !isCreateAnother"> Tiếp tục tạo
+                            </mat-checkbox>
+                            <button class="btn blue cm-mgr-5" i18n="@@save">
+                                Lưu
+                            </button>
+                            <a routerLink="/warehouses" class="btn default" i18n="@@cancel">
+                                Hủy bỏ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nh-tab-pane>
+    <nh-tab-pane title="Người quản lý"
+                 i18n-title="@@warehouseManager"
+                 id="warehouseManager">
+        <app-warehouse-manager-config [warehouseId]="id"
+                                      [isUpdate]="isUpdate"
+                                      [listManagerConfig]="listWarehouseManagerConfig"
+                                      (selectListManager)="selectListManger($event)"></app-warehouse-manager-config>
+    </nh-tab-pane>
+    <nh-tab-pane title="Sản phẩm tới hạn" *ngIf="id"
+                 i18n-title="@@limitQuantityProduct"
+                 id="limitQuantityProduct"
+                 (tabSelected)="getWarehouseLimit($event)">
+        <app-warehouse-limit [warehouseId]="id"></app-warehouse-limit>
+    </nh-tab-pane>
+</nh-tab>

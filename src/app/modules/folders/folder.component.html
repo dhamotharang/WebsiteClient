@@ -125,7 +125,7 @@
                             </td>
                             <td class="middle center"><span>{{item.sizeString}}</span></td>
                             <td class="middle">
-                                <img ghmImage="" src="{{item.creatorAvatar}}"
+                                <img ghmImage="" [src]="item.creatorAvatar"
                                      class="avatar-sm visible-sm visible-xs">
                                 <span class="visible-lg visible-md">
                                     {{item.creatorFullName}}
@@ -180,7 +180,7 @@
              [nhContextMenuData]="item">
             <div class="icon">
                 <i [class]="'at-icon at-icon-' + item.extension.replace('.', '')" *ngIf="!item.isImage"></i>
-                <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" src="{{item.url}}"
+                <img ghmImage [errorImageUrl]="'/assets/images/no-image.png'" [src]="item.url"
                      [nhImageViewer]="item.absoluteUrl"
                      *ngIf="item.isImage"/>
             </div>

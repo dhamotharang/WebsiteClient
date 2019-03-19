@@ -8,6 +8,7 @@ export class GhmImageDirective {
 
     @Input()
     set src(value: string) {
+        console.log(value);
         this.renderer.setAttribute(this.el.nativeElement, 'src', `${!this.isUrlAbsolute ? this.appConfig.FILE_LOCAL_URL : '' }${value}`);
     }
 

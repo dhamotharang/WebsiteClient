@@ -5,16 +5,19 @@ import { Observable } from 'rxjs';
 import { UserSuggestion } from './ghm-user-suggestion.component';
 import { map } from 'rxjs/operators';
 import { SearchResultViewModel } from '../../view-models/search-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class GhmUserSuggestionService {
+    url = 'api/v1/hr/users/suggestions';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private http: HttpClient) {
+        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
     }
 
     search(keyword: string): Observable<UserSuggestion[]> {
-        const url = `${this.appConfig.API_GATEWAY_URL}api/v1/core/accounts/suggestions`;
-        return this.http.get(url, {
+        // const url = `${this.appConfig.HR_API_URL}users/suggestions`;
+        return this.http.get(this.url, {
             params: new HttpParams().set('keyword', keyword ? keyword : '')
         }).pipe(map((result: SearchResultViewModel<UserSuggestion>) => {
             return result.items;

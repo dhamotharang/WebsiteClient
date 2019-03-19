@@ -142,12 +142,26 @@ export interface IPageId {
     BRAND: number;
 
     // ---- PRODUCT ---
-    PRODUCT_MANAGER: number;
+    // PRODUCT_MANAGER: number;
+    // PRODUCT: number;
+    // PRODUCT_ATTRIBUTE: number;
+    // PRODUCT_CATEGORY: number;
+    // SUPPLIER: number;
+    // UNIT: number;
+    // ----- WAREHOUSE: 100000 -----
+    WAREHOUSE: number;
     PRODUCT: number;
     PRODUCT_ATTRIBUTE: number;
     PRODUCT_CATEGORY: number;
     SUPPLIER: number;
+    BRANDS: number;
     UNIT: number;
+    WAREHOUSE_MANAGEMENT: number;
+    GOODS_RECEIPT_NOTE: number;
+    GOODS_DELIVERY_NOTE: number;
+    WAREHOUSE_CONFIG: number;
+    INVENTORY: number;
+    INVENTORY_REPORT: number;
 }
 
 export const PAGE_ID_DI: IPageId = {
@@ -289,12 +303,26 @@ export const PAGE_ID_DI: IPageId = {
     BRAND: 20000,
 
     // ----- PRODUCT ----
-    PRODUCT_MANAGER: 30000,
-    PRODUCT: 30001,
-    PRODUCT_ATTRIBUTE: 30002,
-    PRODUCT_CATEGORY: 30003,
-    SUPPLIER: 30004,
-    UNIT: 30007,
+    // PRODUCT_MANAGER: 30000,
+    // PRODUCT: 30001,
+    // PRODUCT_ATTRIBUTE: 30002,
+    // PRODUCT_CATEGORY: 30003,
+    // SUPPLIER: 30004,
+    // UNIT: 30007,
+    // ----- WAREHOUSE: 100000 -----
+    WAREHOUSE: 100000,
+    PRODUCT: 100001,
+    PRODUCT_ATTRIBUTE: 100002,
+    PRODUCT_CATEGORY: 100003,
+    SUPPLIER: 100004,
+    BRANDS: 100006,
+    UNIT: 100007,
+    WAREHOUSE_MANAGEMENT: 100009,
+    GOODS_RECEIPT_NOTE: 100010,
+    GOODS_DELIVERY_NOTE: 100011,
+    WAREHOUSE_CONFIG: 100012,
+    INVENTORY: 100015,
+    INVENTORY_REPORT: 100013
 };
 
 // Injection Tokens

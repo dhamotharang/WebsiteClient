@@ -1,6 +1,6 @@
-$bgColor: #F4F5F7;
+$bgColor: white;
 $borderColor: #ddd;
-$borderActiveColor: rgba(76, 154, 255, 1);
+$borderActiveColor: #007bff;
 
 .rounded-avatar {
     -webkit-border-radius: 50%;
@@ -22,6 +22,19 @@ $borderActiveColor: rgba(76, 154, 255, 1);
     height: 32px;
 }
 
+.hus-selected-wrapper {
+    .hus-item-selected .avatar-wrapper {
+        width: 20px;
+        height: auto;
+        padding-left: 0 !important;
+
+        img {
+            width: 100%;
+            border-radius: 50% !important;
+        }
+    }
+}
+
 .hus-container {
     border: 1px solid $borderColor;
     background: $bgColor;
@@ -33,14 +46,21 @@ $borderActiveColor: rgba(76, 154, 255, 1);
     }
 
     &.active {
-        border: 2px solid $borderActiveColor;
+        border: 1px solid $borderActiveColor;
         background: white;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 
         .hus-search-wrapper .hus-search-content {
             .hus-search-input input {
                 background: white;
                 border: none;
                 outline: none;
+
+                &:focus, &:active, &:visited {
+                    border: none;
+                    outline: none;
+                    box-shadow: none !important;
+                }
             }
 
             .hus-item .user-info {
@@ -73,7 +93,6 @@ $borderActiveColor: rgba(76, 154, 255, 1);
                 width: 100%;
                 flex: 1 1 auto;
                 margin: 3px 8px;
-                border: none !important;
 
                 input {
                     border: none;
@@ -81,9 +100,10 @@ $borderActiveColor: rgba(76, 154, 255, 1);
                     width: 100%;
                     background: $bgColor;
 
-                    &:focus, &:visited, &:active {
-                        outline: none;
+                    &:focus, &:active, &:visited {
                         border: none !important;
+                        outline: none !important;
+                        box-shadow: none !important;
                     }
                 }
             }
@@ -98,9 +118,12 @@ $borderActiveColor: rgba(76, 154, 255, 1);
                 li.hus-item-selected {
                     box-sizing: border-box;
                     display: inline-block;
+                    background-color: rgb(244, 245, 247);
+                    margin-top: 5px;
+                    border-radius: 5px !important;
+                    margin-left: 5px;
 
                     div.hus-item {
-                        background-color: rgb(244, 245, 247);
                         color: rgb(37, 56, 88);
                         cursor: default;
                         display: flex;
@@ -117,7 +140,6 @@ $borderActiveColor: rgba(76, 154, 255, 1);
                             display: flex;
                             -webkit-box-pack: center;
                             justify-content: center;
-                            padding-left: 4px;
                         }
 
                         .user-info {
@@ -151,6 +173,14 @@ $borderActiveColor: rgba(76, 154, 255, 1);
             flex: 0 0 24px;
             margin: 0px 8px;
             color: #222;
+        }
+
+        .avatar-wrapper {
+            width: 30px;
+
+            img {
+                width: 100%;
+            }
         }
     }
 
@@ -201,6 +231,15 @@ $borderActiveColor: rgba(76, 154, 255, 1);
                         margin-left: 5px;
                     }
                 }
+
+                div.avatar-wrapper {
+                    width: 32px;
+                    height: 32px;
+
+                    img {
+                        width: 100%;
+                    }
+                }
             }
         }
     }
@@ -223,9 +262,8 @@ $borderActiveColor: rgba(76, 154, 255, 1);
             color: rgb(9, 30, 66);
             display: flex;
             flex-direction: column;
-            height: auto;
             max-height: calc(100% - 1px);
-            outline: 0px;
+            outline: 0;
             align-self: flex-start;
             -webkit-border-radius: 50% !important;
             -moz-border-radius: 50% !important;

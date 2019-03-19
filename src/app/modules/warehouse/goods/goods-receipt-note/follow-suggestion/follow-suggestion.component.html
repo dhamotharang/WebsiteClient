@@ -1,0 +1,10 @@
+<nh-suggestion
+    [class.receipt]="isReceipt"
+    [loading]="isSearching"
+    [sources]="listItems"
+    [selectedItem]="selectedItem"
+    [allowAdd]="true"
+    (itemSelected)="onItemSelected($event)"
+    (itemRemoved)="itemRemoved.emit($event)"
+    (searched)="onSearchKeyPress($event)"
+></nh-suggestion>

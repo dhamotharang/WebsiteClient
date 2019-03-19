@@ -1,0 +1,113 @@
+<div style="display: none;" #printArea>
+    <div class="print-page">
+        <header>
+            <img src="{{imageUrl}}/assets/images/print/print-header.jpg" alt="">
+        </header>
+        <table class="w100pc">
+            <tr style="margin-bottom: 20px;">
+                <td colspan="3">
+                    <h4 class="receipt-title">Phiếu Xuất</h4>
+                    <div class="center">
+                        Ngày {{ day < 10 ? '0' + day : day }}
+                        tháng {{ month < 10 ? '0' + month : month
+                        }} năm {{ year }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="control-group">
+                        <label for="">Lý do xuất:</label>
+                        <div class="dotted-control">{{ goodsDeliveryNoteDetail?.reason }}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="control-group">
+                        <label for="">Xuất tại kho:</label>
+                        <div class="dotted-control">{{ goodsDeliveryNoteDetail?.warehouseName }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="w100pc bordered">
+            <thead>
+            <tr>
+                <th rowspan="2" class="center w50">STT</th>
+                <th rowspan="2" class="center">Sản phẩm</th>
+                <th rowspan="2" class="center w70">Mã sản phẩm</th>
+                <th rowspan="2" class="center w70">Lô SX</th>
+                <th rowspan="2" class="center w100">Hạn SD</th>
+                <th rowspan="2" class="center w70">Đơn vị tính</th>
+                <th colspan="2" class="center">Số lượng</th>
+                <th rowspan="2" class="center w70">Đơn giá (đồng)</th>
+                <th rowspan="2" class="center w70">Tổng tiền</th>
+            </tr>
+            <tr>
+                <th class="center w70">Đề xuất</th>
+                <th class="center w70">Thực tế</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of listGoodsDeliveryNoteDetail; let i = index">
+                <td>{{ (i + 1) }}</td>
+                <td>{{ item.productName }}</td>
+                <td>{{ item.productId }}</td>
+                <td>{{ item.lotId }}</td>
+                <td>{{ item.expiryDate | dateTimeFormat:'DD/MM/YYYY' }}</td>
+                <td>{{ item.unitName }}</td>
+                <td>{{ item.realQuantity | ghmCurrency:0 }}</td>
+                <td>{{ item.quantity | ghmCurrency:0 }}</td>
+                <td>{{ item.price | ghmCurrency:0 }}</td>
+                <td>{{ item.totalAmounts | ghmCurrency:0 }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="8" i18n="@@totalAmounts">Tổng số</td>
+                <td class="text-right bold" colspan="2">{{ totalQuantity | formatNumber:0 }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="8" i18n="@@totalAmounts">Total amounts</td>
+                <td class="text-right bold" colspan="2">{{ goodsDeliveryNoteDetail?.totalAmounts | ghmCurrency:0 }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="w100pc">
+            <tr>
+                <td>
+                    <div class="control-group">
+                        <label for="">Tổng số tiền (Viết bằng chữ):</label>
+                        <div class="dotted-control">{{ goodsDeliveryNoteDetail?.totalAmounts | ghmAmountToWord }}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="w100pc" style="margin-top: 10px;">
+            <tr>
+                <td class="center">Người lập bảng</td>
+                <td class="center">Người giao hàng</td>
+                <td class="center">Thủ kho</td>
+                <td class="center">Kế toán trưởng</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="min-height: 100px; height: 100px;"></td>
+                <td style="min-height: 100px; height: 100px;"></td>
+                <td style="min-height: 100px; height: 100px;"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="center">{{ currentUser?.fullName }}</td>
+                <td class="center">{{ goodsDeliveryNoteDetail?.receiverFullName }}</td>
+                <td class="center"></td>
+                <td class="center"></td>
+            </tr>
+            </tfoot>
+        </table>
+        <div class="page-break"></div>
+        <footer>
+            <img src="{{imageUrl}}/assets/images/print/print-footer.jpg" alt="">
+        </footer>
+    </div>
+</div>

@@ -1,0 +1,229 @@
+<nh-modal #goodsReceiptNoteFormModal size="full"
+          (hidden)="onModalHidden()">
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content class="form-body">
+            <h3 class="form-section bold" i18n="@@goodsReceiptNoteInfo">Thông tin phiếu nhập</h3>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.entryDate">
+                        <label ghmLabel="Ngày nhập"
+                               class="col-sm-3 control-label"
+                               i18n-ghmLabel="@@entryDate"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <nh-date
+                                [mask]="true"
+                                [showTime]="true"
+                                [format]="'DD/MM/YYYY HH:mm:ss'"
+                                [outputFormat]="'YYYY/MM/DD HH:mm:ss'"
+                                formControlName="entryDate"></nh-date>
+                            <span class="help-block" *ngIf="formErrors.entryDate"
+                                  i18n="@@goodsReceiptNoteEntryDateErrorMessage">
+                                {formErrors.entryDate, select, required {Vui lòng nhập ngày nhập}}
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.supplierId">
+                        <label class="col-sm-3 control-label"
+                               ghmLabel="Nhà cung cấp"
+                               i18n-ghmLabel="@@supplier"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <app-supplier-suggestion
+                                (keyPressed)="onSupplierKeyPressed($event)"
+                                (itemSelected)="onSupplierSelected($event)"></app-supplier-suggestion>
+                            <span class="help-block" *ngIf="formErrors.supplierId"
+                                  i18n="@@goodsReceiptNoteSupplierErrorMessage">
+                            {formErrors.supplierId, select, required {Vui lòng chọn nhà cung cấp}}
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div><!-- END: .row -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.deliverFullName">
+                        <label class="col-sm-3 control-label" ghmLabel="Người giao hàng" i18n-ghmLabel="@@deliver"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <app-deliver-suggestion
+                                [supplierId]="model.value.supplierId"
+                                (keyPressed)="onDeliverKeyPressed($event)"
+                                (itemSelected)="onDeliverSelected($event)"></app-deliver-suggestion>
+                            <span class="help-block" *ngIf="formErrors.deliverFullName"
+                                  i18n="@@goodsReceiptNoteDeliverFullNameErrorMessage">
+                            {formErrors.deliverFullName, select, required {Vui lòng chọn người giao hàng.} maxlength {Tên người gia hàng không được phép vượt quá 50 ký tự.}}
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.deliverPhoneNumber">
+                        <label class="col-sm-3 control-label"
+                               ghmLabel="Số điện thoại"
+                               i18n-ghmLabel="@@deliverPhoneNumber" [required]="true"></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control"
+                                   formControlName="deliverPhoneNumber">
+                            <span class="help-block" *ngIf="formErrors.deliverPhoneNumber"
+                                  i18n="@@goodsReceiptNoteDeliverPhoneNumberErrorMessage">
+                                {formErrors.deliverPhoneNumber, select, required {Vui lòng nhập số điện thoại người giao hàng.} maxlength {Số điện thoại người giao hàng không được phép vượt quá 50 ký tự.}}
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div><!-- END: .row -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.warehouseId">
+                        <label class="col-sm-3 control-label" ghmLabel="Nhập tại kho" i18n-ghmLabel="@@warehouse"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <app-warehouse-suggestion
+                                (itemSelected)="onWarehouseSelected($event)"></app-warehouse-suggestion>
+                            <span class="help-block" *ngIf="formErrors.warehouseId"
+                                  i18n="@@goodsReceiptNoteWarehouseErrorMessage">
+                                    {formErrors.warehouseId, select, required {Vui lòng chọn kho.}}
+                                </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.follow">
+                        <label class="col-sm-3 control-label" ghmLabel="Theo" i18n-ghmLabel="@@follow"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <app-follow-suggestion
+                                (itemSelected)="onFollowSelected($event)"
+                                (keyPressed)="onFollowKeyPress($event)"
+                            ></app-follow-suggestion>
+                            <span class="help-block" *ngIf="formErrors.follow"
+                                  i18n="@@goodsReceiptNoteFollowErrorMessage">
+                            {formErrors.follow, select, required {Vui lòng chọn phiếu nhập theo} maxlength {Phiếu nhập theo không được phép vượt quá 256 ký tự.}}
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div><!-- END: .row -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.invoiceNo">
+                        <label class="col-sm-3 control-label" ghmLabel="Số" i18n-ghmLabel="@@invoiceNo"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="invoiceNo">
+                            <span class="help-block" *ngIf="formErrors.invoiceNo"
+                                  i18n="@@goodsReceiptNoteInvoiceNoErrorMessage">
+                                {formErrors.invoiceNo, select, required {Vui lòng nhập số hóa đơn.} maxlength {Số hóa đơn không được phép vượt quá 50 ký tự.}}
+                            </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.invoiceDate">
+                        <label class="col-sm-3 control-label" ghmLabel="Ngày" i18n-ghmLabel="@@invoiceDate"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <nh-date formControlName="invoiceDate"
+                                     [showTime]="true"
+                                     [mask]="true"></nh-date>
+                            <span class="help-block" *ngIf="formErrors.invoiceDate"
+                                  i18n="@@goodsReceiptNoteInvoiceDateErrorMessage">
+                            {formErrors.invoiceDate, select, required {Vui lòng chọn ngày hóa đơn}}
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div><!-- END: .row -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.note">
+                        <label ghmLabel="Ghi chú" i18n-ghmLabel="@@note"
+                               class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="" rows="3"
+                                      formControlName="note"></textarea>
+                            <span class="help-block" *ngIf="formErrors.note" i18n="@@goodsReceiptNoteNoteErrorMessage">
+                            {formErrors.note, select, maxlength {Ghi chú không được phép vượt quá 500 ký tự}}
+                        </span>
+                        </div>
+                    </div>
+                </div><!-- END: .col-sm-6 -->
+            </div><!-- END: .row -->
+            <h3 class="form-section bold" i18n="@@goodsReceiptNoteDetailInfo">Chi tiết phiếu nhập</h3>
+            <div class="row">
+                <div class="col-sm-12">
+                    <app-goods-receipt-note-form-product
+                        [receiptId]="id"
+                        [listItems]="goodsReceiptNoteDetails"></app-goods-receipt-note-form-product>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 cm-mgt-10">
+                    <div class="form-group">
+                        <label ghmLabel="Thành tiền (viết bằng chữ)"
+                               i18n-ghmLabel="@@totalAmountsInWord"
+                               class="col-sm-3"
+                        ></label>
+                        <div class="col-sm-9">
+                            <div class="dotted-form-control">
+                                {{ totalAmounts | ghmAmountToWord }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox
+                class="cm-mgr-5"
+                color="primary"
+                name="isCreateAnother"
+                i18n="@@isCreateAnother"
+                *ngIf="!isUpdate"
+                [(checked)]="isCreateAnother"
+                (change)="isCreateAnother = !isCreateAnother"> Tiếp tục thêm
+            </mat-checkbox>
+            <button class="btn blue cm-mgr-5" i18n="@@save">
+                Lưu
+            </button>
+            <button type="button" class="btn blue cm-mgr-5" i18n="@@saveAndPrint" (click)="save(true)">
+                Lưu và in
+            </button>
+            <button type="button" nh-dismiss class="btn default" i18n="@@close">
+                Đóng
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
+
+<swal
+    #confirmDelete
+    i18n-title="@@areYouSureForDeleteThisItem"
+    i18n-text="@@cantRecoverItemAfterDeleteMessage"
+    title="Are you sure for delete this item?"
+    text="You can't recover this item after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <i class="fa fa-edit menu-icon"></i>
+        <span i18n="@@edit">Chỉnh sửa</span>
+    </nh-menu-item>
+</nh-menu>

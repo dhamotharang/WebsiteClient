@@ -1,28 +1,25 @@
-import {
-    Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnDestroy, OnInit, Output, Renderer2
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
 import * as _ from 'lodash';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { GhmUserSuggestionService } from './ghm-user-suggestion.service';
 import { Subject } from 'rxjs';
-import {
-    debounceTime, distinctUntilChanged, switchMap, finalize, tap
-} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs/operators';
 
 export class UserSuggestion {
     id: string;
-    name: string;
-    userName: string;
-    email: string;
+    fullName: string;
+    officeName: string;
+    positionName: string;
     avatar: string;
+    userName: string;
     isSelected: boolean;
     isActive: boolean;
-
-    constructor(id?: string, name?: string, userName?: string, email?: string, avatar?: string, isSelected?: boolean) {
+    name: string;
+    constructor(id?: string, fullName?: string, officeName?: string, positionName?: string, avatar?: string, isSelected?: boolean) {
         this.id = id;
-        this.name = name;
-        this.userName = name;
-        this.email = email;
+        this.fullName = fullName;
+        this.officeName = officeName;
+        this.positionName = positionName;
         this.avatar = avatar;
         this.isSelected = isSelected;
         this.isActive = false;
@@ -45,14 +42,20 @@ export class UserSuggestion {
 
 export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlValueAccessor {
     @Input() type = 'input';
-    @Input() isMultiple = false;
+    @Input() multiple = false;
     @Input() isShowSelected = true;
     @Input() placeholder = 'Vui lòng nhập tên nhân viên cần tìm';
     @Input() noImageFallback = '/assets/images/noavatar.png';
+    @Input() isReceipt = false;
+    @Input() isShowImage = true;
 
     @Input()
-    set selectedUser(value: UserSuggestion) {
-        this._selectedUser = value;
+    set selectedUser(value: UserSuggestion | UserSuggestion[]) {
+        if (value instanceof Array) {
+            this.selectedUsers = value;
+        } else {
+            this._selectedUser = value;
+        }
     }
 
     @Input()
@@ -82,14 +85,13 @@ export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlVal
     selectedUsers: UserSuggestion[] = [];
     searchTerms = new Subject<string>();
     listUsers: UserSuggestion[] = [];
-
     constructor(private el: ElementRef,
                 private renderer: Renderer2,
                 private userSuggestionService: GhmUserSuggestionService) {
     }
 
     propagateChange: any = () => {
-    }
+    };
 
     get selectedUser() {
         return this._selectedUser;
@@ -117,7 +119,12 @@ export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlVal
                     finalize(() => this.isLoading = false)
                 )),
         ).subscribe((result: UserSuggestion[]) => {
-            this.listUsers = result;
+            this.listUsers = result.map((user: UserSuggestion) => {
+                user.isSelected = _.countBy(this.selectedUsers, (selectedUser: UserSuggestion) => {
+                    return selectedUser.id === user.id;
+                }).true;
+                return user;
+            });
         });
     }
 
@@ -166,7 +173,7 @@ export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlVal
     }
 
     selectUser(user: UserSuggestion) {
-        if (!this.isMultiple) {
+        if (!this.multiple) {
             this.isActive = false;
             this.keyword = '';
             this.selectedUser = user;
@@ -174,18 +181,18 @@ export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlVal
             this.userSelected.emit(user);
         } else {
             user.isSelected = !user.isSelected;
-            const listSelectedUsers = _.filter(this.listUsers, (userItem: UserSuggestion) => userItem.isSelected);
-            this.selectedUsers = listSelectedUsers;
+            const selectedUsers = _.filter(this.listUsers, (userItem: UserSuggestion) => userItem.isSelected);
+            this.selectedUsers = selectedUsers;
             this.keyword = '';
-            this.userSelected.emit(listSelectedUsers);
+            this.userSelected.emit(selectedUsers);
         }
     }
 
     removeSelectedUser(user: UserSuggestion) {
-        if (this.isMultiple && this.selectedUsers instanceof Array) {
+        if (this.multiple && this.selectedUsers instanceof Array) {
             _.remove(this.selectedUsers, (userItem: UserSuggestion) => userItem.id === user.id);
         } else {
-            this.selectedUser = null;
+            this.selectedUsers = null;
         }
         this.resetActiveStatus();
         this.userRemoved.emit(user);
@@ -193,6 +200,10 @@ export class GhmUserSuggestionComponent implements OnInit, OnDestroy, ControlVal
 
     writeValue(value) {
         this.userId = value;
+    }
+
+    clear() {
+        this.selectedUser = null;
     }
 
     private navigate(key) {

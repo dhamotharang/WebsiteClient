@@ -3,18 +3,18 @@
     <div class="hus-search-wrapper"
          (click)="activeSuggestion()">
         <div class="hus-search-content">
-            <ng-container *ngIf="isMultiple; else singleTemplate">
+            <ng-container *ngIf="multiple; else singleTemplate">
                 <ul class="hus-selected-wrapper" *ngIf="selectedUsers.length > 0">
                     <li class="hus-item-selected" *ngFor="let user of selectedUsers">
                         <div class="hus-item">
                             <div class="avatar-wrapper">
-                                <img class="avatar-xs rounded-avatar"
-                                     src="{{ user.avatar }}"
-                                     alt="{{ user.name }}"
-                                     (error)="onImageError(user)">
+                                <img class="rounded-avatar" ghmImage
+                                     [src]=" user.avatar"
+                                     [errorImageUrl]="'/assets/images/no-image.png'"
+                                     alt="{{ user.fullName }}">
                             </div><!-- END: .avatar-wrapper -->
                             <div class="user-info">
-                                <span class="full-name">{{ user.name }}</span>
+                                <span class="full-name">{{ user.fullName }}</span>
                             </div><!-- END: .info -->
                             <span class="remove" (click)="removeSelectedUser(user)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
@@ -64,38 +64,31 @@
         [class.active]="user.isActive"
         (click)="selectUser(user)">
         <div class="avatar-wrapper">
-            <img class="avatar-sm rounded-avatar"
+            <img class="rounded-avatar"
                  src="{{ user.avatar }}"
-                 alt="{{ user.name }}"
+                 alt="{{ user.fullName }}"
                  (error)="onImageError(user)">
         </div><!-- END: .avatar-wrapper -->
         <div class="user-info">
-            <div class="full-name">{{ user.name }}</div>
-            <div class="description" *ngIf="user.email">{{ user.email }}</div>
+            <div class="full-name">{{ user.fullName }}</div>
+            <div class="description" *ngIf="user.officeName && user.positionName">
+                {{ user.officeName }} - {{ user.positionName }}
+            </div>
         </div><!-- END: .info -->
     </li><!-- END: .hus-item -->
 </ng-template><!-- END: search result template -->
 
 <ng-template #singleTemplate>
     <div class="hus-item" *ngIf="selectedUser">
-        <div class="avatar-wrapper">
-            <img class="avatar-sm rounded-avatar"
+        <div class="avatar-wrapper" *ngIf="isShowImage">
+            <img class="rounded-avatar"
                  src="{{ selectedUser?.avatar }}"
-                 alt="{{ selectedUser?.name }}"
+                 alt="{{ selectedUser?.fullName }}"
                  (error)="onImageError(selectedUser)">
         </div><!-- END: .avatar-wrapper -->
         <div class="user-info">
-            <span class="full-name">{{ selectedUser?.name }}</span>
-            <span class="description">{{ selectedUser?.email }}</span>
+            <span class="full-name">{{ selectedUser?.fullName }}</span>
+            <span class="description" *ngIf="selectedUser.officeName && selectedUser.positionName">{{ selectedUser?.officeName }} - {{ selectedUser?.positionName }}</span>
         </div><!-- END: .info -->
-        <span class="remove" (click)="removeSelectedUser(selectedUser)">
-            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
-                 role="presentation">
-                <path
-                    d="M12 10.586L6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 0 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 1 0-1.414-1.414L12 10.586z"
-                    fill="currentColor">
-                </path>
-            </svg>
-        </span><!-- END: .remove -->
     </div><!-- END: .hus-item -->
 </ng-template><!-- END: single selected template -->

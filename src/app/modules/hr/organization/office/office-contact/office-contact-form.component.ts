@@ -41,7 +41,7 @@ export class OfficeContactFormComponent extends BaseFormComponent implements OnI
         if (user) {
             this.model.patchValue({
                 userId: user.id,
-                fullName: user.name,
+                fullName: user.fullName,
                 avatar: user.avatar,
                 officeName: '',
                 positionName: ''

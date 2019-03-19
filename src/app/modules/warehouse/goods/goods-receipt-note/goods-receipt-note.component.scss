@@ -1,0 +1,43 @@
+.goods-receipt-note-container {
+    .title {
+        font-size: 25px;
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+
+    .form-group {
+        div {
+            display: flex;
+            align-items: center;
+
+            app-follow-suggestion, app-deliver-suggestion, app-warehouse-suggestion {
+                width: 100%;
+            }
+        }
+
+        label {
+            color: #666;
+        }
+    }
+
+    .entry-date-wrapper {
+        text-align: center;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        div {
+            width: 90px;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .amountsInWord {
+        width: 200px;
+    }
+}

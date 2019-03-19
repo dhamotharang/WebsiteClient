@@ -1,0 +1,95 @@
+<nh-modal #supplierFormModal size="lg"
+          (show)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase bold">
+        {isUpdate, select, 0 {Thêm mới nhà cung cấp} 1 {Cập nhật nhà cung cấp} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form">
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.name">
+                            <label i18n-ghmLabel="@@supplierName" ghmLabel="Tên Nhà Cung Cấp"
+                                   class="col-sm-4 control-label" [required]="true"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <input class="form-control" formControlName="name" id="name"
+                                       i18n-placeholder="@@enterSupplierPlaceHolder"
+                                       placeholder="Enter supplier">
+                                <span class="help-block">{ formErrors?.name, select,
+                                                        required {Tên nhà cung cấp không được để trống}
+                                                        maxLength {Tên nhà cung cấp không được vượt quá 256 ký tự}
+                                                        pattern {Tên nhà cung cấp phải là ký tự}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.address">
+                            <label i18n-ghmLabel="@@address" ghmLabel="Địa chỉ"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control"
+                                          i18n-placeholder="@@enterAddressPlaceHolder"
+                                          placeholder="Nhập địa chỉ"
+                                          formControlName="address"></textarea>
+                                <span class="help-block">{ formErrors?.address, select, maxLength
+                                    {Địa chỉ không được vượt quá 500 ký tự}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.description">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Mô tả"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control"
+                                          i18n-placeholder="@@enterDescriptionPlaceHolder"
+                                          placeholder="Enter description"
+                                          formControlName="description"></textarea>
+                                <span class="help-block">{ formErrors?.description, select, maxLength {Mô tả không dược vượt quá 500 ký tự}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group" [formGroup]="model">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                                    {model.value.isActive, select, 0 {Chưa Kich hoạt} 1 {Kích hoạt}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 portlet-title">
+                    <span class="caption-subject bold uppercase">Thông tin liên hệ nhà cung cấp</span>
+                </div>
+                <div class="col-sm-12">
+                    <app-product-contact [listContact]="listContact"
+                                         [type]="contactType.supplier"
+                                         [isUpdate]="isUpdate"
+                                         [subjectId]="id"
+                                         (saveSuccess)="listContact = $event"
+                    ></app-product-contact>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox [checked]="isCreateAnother" (change)="isCreateAnother = !isCreateAnother"
+                          *ngIf="!isUpdate"
+                          i18n="@@isCreateAnother"
+                          class="cm-mgr-5"
+                          color="primary">
+               Tiếp tục thêm
+            </mat-checkbox>
+            <ghm-button classes="btn blue cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Lưu</span>
+            </ghm-button>
+            <ghm-button classes="btn default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Đóng</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

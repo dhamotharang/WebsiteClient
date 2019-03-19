@@ -1,0 +1,142 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listWarehousePageTitle">Danh sách kho</span>
+    <small i18n="@@productModuleTitle">Quản lý kho</small>
+</h1>
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@enterWarehouseNameForSearching" i18n-placeholder
+               placeholder="Nhập tên kho cần tìm."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+            [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Đã kích hoạt'}]"
+            i18n="@@selectAll"
+            i18n-title
+            [title]="'-- Tất cả  --'"
+            [(value)]="isActive"
+            (onSelectItem)="selectIsActive($event)"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn blue" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <a class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add" routerLink="/warehouses/add"
+           type="button">
+            Thêm
+        </a>
+    </div>
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">STT</th>
+        <th class="middle" i18n="@@warehouse">Tên kho</th>
+        <th class="middle" i18n="@@warehouseManager">Người quản lý</th>
+        <th class="middle" i18n="@@address">Địa chỉ</th>
+        <th class="middle" i18n="@@description">Mô tả</th>
+        <th class="middle center" i18n="@@status">Trạng thái</th>
+        <th class="middle text-right w150" i18n="@@action" *ngIf="permission.edit || permission.delete">Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listWarehouse; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">{{item.name}}</td>
+        <td class="middle">{{item.managerWarehouses}}</td>
+        <td class="middle">{{item.address}}</td>
+        <td class="middle">{{item.description}}</td>
+        <td class="middle center">
+            <mat-checkbox color="primary" [checked]="item.isActive" (change)="updateStatus(item)"></mat-checkbox>
+        </td>
+        <td class="text-right middle" *ngIf="permission.edit || permission.delete">
+            <nh-dropdown>
+                <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <ul class="nh-dropdown-menu right" role="menu">
+                    <li>
+                        <a *ngIf="permission.view"
+                           routerLink="/warehouses/detail/{{item.id}}"
+                           i18n="@@view">
+                            <mat-icon class="menu-icon">info</mat-icon>
+                            Chi tiết
+                        </a>
+                    </li>
+                    <li>
+                        <a *ngIf="permission.edit"
+                           routerLink="/warehouses/edit/{{item.id}}"
+                           i18n="@@edit">
+                            <mat-icon class="menu-icon">edit</mat-icon>
+                            Sửa
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="confirm(item)" i18n="@@delete">
+                            <mat-icon class="menu-icon">delete</mat-icon>
+                            Xóa
+                        </a>
+                    </li>
+                </ul>
+            </nh-dropdown>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<ghm-paging
+    class="pull-right"
+    [totalRows]="totalRows"
+    [currentPage]="currentPage"
+    [pageShow]="6"
+    [pageSize]="pageSize"
+    (pageClick)="search($event)"
+    i18n="@@warehouse" i18n-pageName
+    [pageName]="'Warehouse'">
+</ghm-paging>
+
+<swal
+    #confirmDelete
+    i18n="@@confirmDeleteWarehouse"
+    i18n-title="@@confirmTitleDeleteWarehouse"
+    i18n-text="@@confirmTextDeleteWarehouse"
+    title="Bạn có chắc chắn muốn xóa kho này không?"
+    text="Bạn không thể lấy lại kho này sau khi xóa."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng ý"
+    cancelButtonText="Hủy bỏ"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="detail($event)">
+        <!--<i class="fa fa-eye menu-icon"></i>-->
+        <mat-icon class="menu-icon">info</mat-icon>
+        <span i18n="@@view">Chi tiết</span>
+    </nh-menu-item>
+    <nh-menu-item (clicked)="edit($event)">
+        <!--<i class="fa fa-edit menu-icon"></i>-->
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Sửa</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <!--<i class="fa fa-trash menu-icon"></i>-->
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Xóa</span>
+    </nh-menu-item>
+</nh-menu>

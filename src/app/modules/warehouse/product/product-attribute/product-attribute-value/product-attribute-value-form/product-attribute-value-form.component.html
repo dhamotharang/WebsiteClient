@@ -1,0 +1,70 @@
+<nh-modal #productAttributeValueFormModal
+          (shown)="onModalShown()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase bold">
+        <span i18n="@@updateProductAttributeTitle">
+            {isUpdate, select, 0 {Add new attribute value} 1 {Update attribute value}}
+        </span>
+    </nh-modal-header>
+    <form (ngSubmit)="save()" [formGroup]="model" class="form" *ngIf="model">
+        <nh-modal-content class="form-body">
+            <ng-container formArrayName="translations">
+                <ng-container *ngFor="let modelTranslation of translations.controls; index as i" [formGroupName]="i">
+                    <div class="form-group"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                        <label class="control-label" ghmLabel="Attribute value name"
+                               i18n-ghmLabel="@@attributeValueName"
+                               [required]="true"></label>
+                        <input type="text" class="form-control" formControlName="name"
+                               placeholder="Enter attribute name"
+                               i18n-placeholder="@@enterAttributeName"
+                               id="name-{{currentLanguage}}">
+                        <span class="help-block" i18n="@@productAttributeNameValidateMessage">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.name,
+                            select, required {Please enter attribute value name} maxlength {Attribute value name can not exceed 256 characters}
+                            }
+                        </span>
+                    </div>
+                    <div class="form-group"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                        <label class="control-label" ghmLabel="Description"
+                               i18n-ghmLabel="@@description"></label>
+                        <textarea name="" id="" class="form-control" rows="3"
+                                  formControlName="description"
+                                  placeholder="Enter description"
+                                  i18n-placeholder="@@enterDescription"></textarea>
+                        <span class="help-block" i18n="@@productAttributeDescriptionValidateMessage">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.name,
+                            select, maxlength {Attribute description can not exceed 500 characters}
+                            }
+                        </span>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div class="form-group">
+                <mat-checkbox color="primary" formControlName="isActive" i18n="@@active">Active</mat-checkbox>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox
+                class="cm-mgr-5"
+                color="primary"
+                name="isCreateAnother"
+                i18n="@@isCreateAnother"
+                *ngIf="!isUpdate"
+                [(checked)]="isCreateAnother"
+                (change)="isCreateAnother = !isCreateAnother"> Create another
+            </mat-checkbox>
+            <button class="btn blue cm-mgr-5" i18n="@@save">
+                Save
+            </button>
+            <button type="button" class="btn btn-light" i18n="@@cancel" nh-dismiss>
+                Cancel
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

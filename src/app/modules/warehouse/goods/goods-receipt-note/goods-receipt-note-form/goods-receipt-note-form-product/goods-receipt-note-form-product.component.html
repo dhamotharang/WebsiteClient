@@ -1,0 +1,116 @@
+<div class="row cm-mgb-10" *ngIf="!readOnly">
+    <div class="col-sm-12 text-right">
+        <button type="button" class="btn blue" (click)="addDetail()" i18n="@@add">Thêm</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-stripped">
+        <thead>
+        <tr>
+            <th rowspan="2" class="center middle w50" i18n="@@no">STT</th>
+            <th rowspan="2" class="center middle w100" i18n="@@code">Mã sản phẩm</th>
+            <th rowspan="2" class="center middle w250" i18n="@@product">Tên sản phẩm</th>
+            <th rowspan="2" class="center middle w100" i18n="@@lot">Số lô</th>
+            <th rowspan="2" class="center middle w150" i18n="@@expireDate">Ngày hết hạn</th>
+            <th rowspan="2" class="center middle w100" i18n="@@unit">Đơn vị</th>
+            <th colspan="2" class="center middle" i18n="@@quantity">Số lượng</th>
+            <th rowspan="2" class="center middle w100" i18n="@@price">Đơn giá</th>
+            <th rowspan="2" class="center middle w100" i18n="@@totalBeforeTaxes">Tổng tiền trước thuế</th>
+            <th rowspan="2" class="center middle w100" i18n="@@taxPercent">Thuế(%)</th>
+            <th rowspan="2" class="center middle w100" i18n="@@taxes">Tổng tiền thuế</th>
+            <th rowspan="2" class="center middle w100" i18n="@@totalAmounts">Thành tiền</th>
+            <th rowspan="2" class="w100" *ngIf="!readOnly"></th>
+        </tr>
+        <tr>
+            <th class="center w70" i18n="@@invoice">Hóa đơn</th>
+            <th class="center w70" i18n="@@real">Thực tế</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of listItems; let i = index"
+            nhContextMenuTrigger
+            [nhContextMenuTriggerFor]="nhMenu"
+            [nhContextMenuData]="item">
+            <td class="center middle">{{ (i + 1) }}</td>
+            <td class="middle text-ellipsis w100">
+                <a href="javascript://" title="{{ item.productId }}">{{ item.productId }}</a>
+            </td>
+            <td class="middle">
+                <a href="javascript://" title="{{ item.productName }}">{{ item.productName }}</a>
+            </td>
+            <td class="middle">{{ item.lotId }}</td>
+            <td class="middle">{{ item.expiryDate | dateTimeFormat:'DD/MM/YYYY' }}</td>
+            <td class="middle">{{ item.unitName }}</td>
+            <td class="text-right middle">{{ item.invoiceQuantity }}</td>
+            <td class="text-right middle">{{ item.quantity }}</td>
+            <td class="text-right middle">{{ item.price | ghmCurrency }}</td>
+            <td class="text-right middle">{{ item.totalBeforeTaxes | ghmCurrency }}</td>
+            <td class="text-right middle">{{ item.tax | ghmCurrency }}</td>
+            <td class="text-right middle">{{ item.taxes | ghmCurrency }}</td>
+            <td class="text-right middle">{{ item.totalAmounts | ghmCurrency }}</td>
+            <td class="center middle" *ngIf="!readOnly">
+                <button type="button" class="btn btn-sm blue" (click)="edit(item)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button type="button" class="btn btn-sm red"
+                        [swal]="confirmDelete"
+                        (click)="confirm(item)">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!readOnly"
+            goods-receipt-note-item-form
+            (saveSuccessful)="onSaveItemSuccess($event)"></tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="text-right" colspan="10" i18n="@@total">Tổng tiền</td>
+            <td class="text-right bold cm-pd-5" [attr.colspan]="readOnly ? 3 : 4">{{ totalBeforeTaxes | ghmCurrency }}
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right" colspan="10" i18n="@@taxes">Tổng tiền thuế</td>
+            <td class="text-right bold" [attr.colspan]="readOnly ? 3 : 4">{{ taxes | ghmCurrency }}</td>
+        </tr>
+        <tr>
+            <td class="text-right" colspan="10" i18n="@@totalAmounts">Thành tiền</td>
+            <td class="text-right bold" [attr.colspan]="readOnly ? 3 : 4">{{ totalAmounts | ghmCurrency }}</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<swal
+    #confirmDelete
+    i18n-title="@@areYouSureForDeleteThisItem"
+    i18n-text="@@cantRecoverItemAfterDeleteMessage"
+    title="Bạn có chắc chắn muốn xóa sản phẩm này không?"
+    text="Sau khi xóa bạn không thể lấy lại sản phẩm này."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng ý"
+    cancelButtonText="Hủy bỏ">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <!--<i class="fa fa-edit menu-icon"></i>-->
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Chỉnh sửa</span>
+    </nh-menu-item>
+    <nh-menu-item
+        (clicked)="confirm($event)">
+        <!--<i class="menu-icon fa fa-trash-o"></i>-->
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Xóa</span>
+    </nh-menu-item>
+</nh-menu>
+
+<app-goods-receipt-note-item-form
+    [receiptId]="receiptId"
+    (saveSuccessful)="onSaveItemSuccess($event)"
+></app-goods-receipt-note-item-form>
+

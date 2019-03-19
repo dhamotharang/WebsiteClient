@@ -1,0 +1,183 @@
+<form class="form-inline" (ngSubmit)="search(1)">
+    <div class="form-group">
+        <div class="form-group cm-mgr-5">
+            <input type="text" class="form-control" i18n="@@keywordSearch" i18n-placeholder
+                   placeholder="Vui lòng nhập từ khóa tìm kiếm."
+                   name="searchInput" [(ngModel)]="keyword">
+        </div>
+        <div class="form-group">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-search" *ngIf="!isSearching"></i>
+                <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+            </button>
+        </div>
+        <div class="form-group cm-mgl-5">
+            <button class="btn default" type="button" (click)="resetFormSearch()">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </div>
+    </div>
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">STT</th>
+        <th class="middle" i18n="@@product">Sản phẩm</th>
+        <th class="middle" i18n="@@unit">Đơn vị</th>
+        <th class="middle w150 text-right" i18n="@@limitQuantity">Số lượng tới hạn</th>
+        <th class="middle text-right w150" i18n="@@action"
+            *ngIf="(permission.edit || permission.delete) && !isReadOnly  ">
+            <!--<button class="btn btn-sm btn-outline blue" type="button" (click)="add()">-->
+            <!--<i class="fa fa-plus"></i>-->
+            <!--</button>-->
+            <span i18n="@@actions">Hành động</span>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listWarehouseLimit; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <ng-container *ngIf="!item.isEdit; else formInput">
+            <td class="center middle">{{(currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="middle">
+                {{item.productName}}
+            </td>
+            <td class="middle">{{item.unitName}}</td>
+            <td class="middle text-right">{{item.quantity | formatNumber}}</td>
+            <td class="text-right middle" *ngIf="(permission.edit || permission.delete) && !isReadOnly">
+                <button class="btn btn-sm blue" type="button" (click)="edit(item)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button *ngIf="item.quantity > 0" class="btn btn-sm red" type="button" (click)="confirm(item)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
+        </ng-container>
+    </tr>
+    </tbody>
+    <tfoot *ngIf="!isReadOnly && !isUpdate">
+    <tr>
+        <td></td>
+        <td class="middle" [class.has-error]="formErrors?.productId" [formGroup]="model">
+            <app-product-suggestion #productSuggestion
+                                    (itemSelected)="selectProduct($event)"></app-product-suggestion>
+            <span class="help-block"> {formErrors?.productId,
+                select, required {Vui lòng chọn sản phẩm}
+                maxlength {Sản phẩm không được vượt quá 50 ký tự}}
+         </span>
+        </td>
+        <td class="middle" [class.has-error]="formErrors?.unitId" [formGroup]="model">
+            <nh-select [data]="listProductUnit"
+                       [title]="'Select unit'"
+                       i18n-title="@@selectUnitTitle"
+                       formControlName="unitId"
+            ></nh-select>
+            <span class="help-block"> {formErrors?.unitId,
+                select, required {Vui lòng chọn sản phẩm}
+                maxlength {Mã sản phẩm không được phép vượt quá 50 ký tự}}
+         </span>
+        </td>
+        <td class="middle" [class.has-error]="formErrors?.quantity" [formGroup]="model">
+            <input class="form-control"
+                   id="quantity"
+                   placeholder="Enter quantity"
+                   i18n-placeholder="@@entityPlaceholder"
+                   formControlName="quantity">
+            <span class="help-block"> {formErrors?.quantity,
+                select, required {Vui lòng nhập số lượng}
+                isValid {Số lượng phải là số}
+                lessThan {Số lượng phải nhỏ hơn 2147483647}
+                greaterThan {Số lượng phải lớn hơn 0}}
+         </span>
+        </td>
+        <td class="middle text-right">
+            <button class="btn btn-sm blue" type="button" (click)="save()">
+                <i class="fa fa-save"></i>
+            </button>
+            <button class="btn btn-sm red" type="button" (click)="cancel()">
+                <i class="fa fa-ban"></i>
+            </button>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<ng-template #formInput>
+    <td></td>
+    <td class="middle" [class.has-error]="formErrors?.productId" [formGroup]="model">
+       {{model.value.productName}}
+    </td>
+    <td class="middle" [class.has-error]="formErrors?.unitId" [formGroup]="model">
+        <nh-select [data]="listProductUnit"
+                   [title]="'-- Chọn đơn vị --'"
+                   i18n-title="@@selectUnitTitle"
+                   formControlName="unitId"
+        ></nh-select>
+        <span class="help-block"> {formErrors?.unitId,
+                select, required {Vui lòng chọn đơn vị}
+                maxlength {Mã đơn vị không được vượt quá 50 ký tự}}
+         </span>
+    </td>
+    <td class="middle" [class.has-error]="formErrors?.quantity" [formGroup]="model">
+        <input class="form-control"
+               id="quantityUpdate"
+               placeholder="Nhập số lượng tới hạn"
+               i18n-placeholder="@@entityPlaceholder"
+               formControlName="quantity">
+        <span class="help-block"> {formErrors?.quantity,
+                select, required {Vui lòng nhập số lượng}
+                isValid {Số lượng phải là số}
+                lessThan {Số lượng phải nhỏ hơn 2147483647}
+                greaterThan {Số lượng phải lớn hơn 0}}
+         </span>
+    </td>
+    <td class="middle text-right">
+        <button class="btn btn-sm blue" type="button" (click)="save()">
+            <i class="fa fa-save"></i>
+        </button>
+        <button class="btn btn-sm red" type="button" (click)="cancel()">
+            <i class="fa fa-ban"></i>
+        </button>
+    </td>
+</ng-template>
+
+<ghm-paging
+    class="pull-right"
+    [totalRows]="totalRows"
+    [currentPage]="currentPage"
+    [pageShow]="6"
+    [pageSize]="pageSize"
+    (pageClick)="search($event)"
+    i18n="@@warehouse" i18n-pageName
+    [pageName]="'Warehouse'">
+</ghm-paging>
+
+<swal
+    #confirmDeleteWarehouseLimit
+    i18n="@@confirmDeleteLimitQuantityProduct"
+    i18n-title="@@confirmTitleDeleteLimitQuantityProduct"
+    i18n-text="@@confirmTextDeleteLimitQuantityProduct"
+    title="Bạn có chắc chán muốn xóa cấu hình số lượng tới hạn này không?"
+    text="Lưu ý bạn không thể lấy lại cấu hình này sau khi xóa."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng ý"
+    cancelButtonText="Hủy bỏ"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Sửa</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Xóa</span>
+    </nh-menu-item>
+</nh-menu>

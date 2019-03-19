@@ -99,7 +99,7 @@
             <div class="media" [class.cursor-pointer]="permission.view" (click)="permission.view ? detail(item) : ''"
                  title="{{item.title}}">
                 <div class="media-left middle">
-                    <img ghmImage="" [src]="item.featureImage" [isUrlAbsolute]="true" class="media-object w50"
+                    <img ghmImage src="{{item.featureImage}}" [isUrlAbsolute]="true" class="media-object w50"
                          alt="{{item.altImage}}">
                 </div>
                 <div class="media-body middle">

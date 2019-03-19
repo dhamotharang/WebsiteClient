@@ -1,0 +1,173 @@
+<table class="table table-bordered table-stripped table-hover">
+    <thead>
+    <tr>
+        <th rowspan="2" class="middle center w50" i18n="@@no">STT</th>
+        <th rowspan="2" class="middle center w100" i18n="@@code">Mã</th>
+        <th rowspan="2" class="middle center" i18n="@@productName">Tên sản phẩm</th>
+        <th rowspan="2" class="middle center w100" i18n="@@unit">Đơn vị</th>
+        <th rowspan="2" class="middle center w100" i18n="@@lot">Số lô</th>
+        <!--<th rowspan="2" class="middle center w100" i18n="@@expiredDate">ExpiredDate</th>-->
+        <th colspan="3" class="middle center" i18n="@@quantity">Số lượng</th>
+        <th rowspan="2" class="middle center w100" i18n="@@price">Đơn giá</th>
+        <!--<td rowspan="2" class="middle center w100" i18n="@@discount">Discount</td>-->
+        <th rowspan="2" class="middle center w100" i18n="@@totalAmount">Thành tiền</th>
+        <th class="center middle w50" rowspan="2" *ngIf="!readonly"></th>
+    </tr>
+    <tr>
+        <th class="middle center w100" i18n="@@inventory">Tồn kho</th>
+        <th class="middle center w100" i18n="@@recommendedQuantity">Yêu cầu</th>
+        <th class="middle center w100" i18n="@@realQuantity">Thực xuất</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="!readonly">
+        <ng-container [formGroup]="model">
+            <td colspan="2" class="text-right middle">
+                <span i18n="@@product">Sản phẩm:</span>
+            </td>
+            <td class="middle center" [class.has-error]="formErrors?.goodsReceiptNoteDetailCode">
+                <!--<app-product-suggestion *ngIf="!isUpdate"-->
+                <!--#productSuggestion-->
+                <!--(itemSelected)="selectProductInForm($event)"></app-product-suggestion>-->
+                <input type="text" class="form-control" formControlName="goodsReceiptNoteDetailCode"
+                       id="goodsReceiptNoteDetailCode"
+                       ghm-text-selection
+                       (keydown.enter)="$event.preventDefault()">
+                <span class="help-block" i18n="@@productCodeErrorMessage"> {formErrors?.code,
+                select, required {Vui lòng nhập mã hàng hóa}
+                maxlength {Mã hàng hóa không được phép lơn hơn 50 ký tự}}
+                </span>
+            </td>
+            <!--<td class="middle">-->
+            <!--{{ model.value.productName }}-->
+            <!--</td>-->
+            <td class="middle center" [class.has-error]="formErrors?.unitId" [formGroup]="model">
+                {{ model.value.unitName }}
+            </td>
+            <td class="middle center">
+                {{ model.value.lotId }}
+            </td>
+            <td class="middle text-right">
+                {{ model.value.inventoryQuantity }}
+            </td>
+            <!--<td class="middle" [formGroup]="model">-->
+            <!--<span>{{model.value.expiredDate | dateTimeFormat :'DD/MM/YYYY'}}</span>-->
+            <!--</td>-->
+            <td class="middle" [class.has-error]="formErrors.quantity" [formGroup]="model">
+                <!--<input class="form-control text-right" formControlName="recommendedQuantity" id="recommendQuantity">-->
+                <!--<span class="help-block">-->
+                <!--{-->
+                <!--formErrors?.recommendedQuantity,-->
+                <!--select,-->
+                <!--isValid {Quantity must is number}-->
+                <!--lessThan {Quantity must less than 2147483647}-->
+                <!--greaterThan {Quantity must greater than 0}-->
+                <!--}-->
+                <!--</span>-->
+
+            </td>
+            <td class="middle" [class.has-error]="formErrors?.recommendedQuantity" [formGroup]="model">
+                <!--<input class="form-control text-right" formControlName="quantity" id="quantity">-->
+                <!--<span class="help-block">-->
+                <!--{-->
+                <!--formErrors?.quantity,-->
+                <!--select, required {Please enter quantity}-->
+                <!--isValid {Quantity must is number}-->
+                <!--lessThan {Quantity must less than 2147483647}-->
+                <!--greaterThan {Quantity must greater than 0}-->
+                <!--}-->
+                <!--</span>-->
+            </td>
+            <td></td>
+            <td></td>
+            <td *ngIf="!readonly"></td>
+        </ng-container>
+    </tr>
+    <tr *ngFor="let item of listGoodsDeliveryNoteDetail; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <td class="middle center">{{(currentPage - 1 )*pageSize + i + 1}}</td>
+        <td class="middle">{{ item.goodsReceiptNoteDetailCode }}</td>
+        <td class="middle"><span class="media-heading">{{ item.productName }}</span></td>
+        <td class="middle center w150">
+            <!--{{item.unitName}}-->
+            <span *ngIf="readonly; else unitEditableTemmplate">{{ item.unitName }}</span>
+            <ng-template #unitEditableTemmplate>
+                <nh-select [data]="item.units"
+                           [title]="'-- Chọn đơn vị --'"
+                           [selectedItem]="item.unitId ? {id: item.unitId, name: item.unitName} : null"
+                           (itemSelected)="onUnitSelected(item, $event)"
+                ></nh-select>
+            </ng-template>
+        </td>
+        <td class="middle center w150">{{ item.lotId }}</td>
+        <td class="middle text-right">{{ item.conversionInventory | formatNumber:2 }}</td>
+        <td class="middle text-right">
+            <input type="text" class="form-control text-right" [(ngModel)]="item.recommendedQuantity"
+                   name="recommended-quantity-{{i}}"
+                   ghm-text-selection
+                   (focus)="oldRecommendedQuantity = item.recommendedQuantity"
+                   (blur)="updateRecommendedQuantity(item)"
+                   *ngIf="!readonly; else recommendedQuantityReadOnlyTemplate"/>
+
+            <ng-template #recommendedQuantityReadOnlyTemplate>
+                {{ item.recommendedQuantity }}
+            </ng-template>
+        </td>
+        <td class="middle text-right">
+            <input type="text" class="form-control text-right" [(ngModel)]="item.quantity"
+                   name="quantity={{i}}"
+                   ghm-text-selection
+                   id="quantity-{{i}}"
+                   (focus)="oldQuantity = item.quantity"
+                   (blur)="updateQuantity(item)" *ngIf="!readonly; else quantityReadOnlyTemplate"/>
+            <ng-template #quantityReadOnlyTemplate>
+                {{ item.quantity }}
+            </ng-template>
+        </td>
+        <td class="middle text-right">{{ item.conversionPrice | ghmCurrency:2 }}</td>
+        <td class="middle text-right"><span>{{ item.totalAmounts | ghmCurrency:2 }}</span></td>
+        <td class="middle text-right" *ngIf="!readonly">
+            <button class="btn red btn-sm" type="button" (click)="remove(item)">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="9" class="middle text-right " i18n="@@total">Tổng cộng:</td>
+        <td class="text-right">{{ totalAmounts | ghmCurrency:2 }}</td>
+        <td *ngIf="!readonly"></td>
+    </tr>
+    </tfoot>
+</table>
+
+<swal
+    #confirmDeleteGoodsDeliveryNotesDetail
+    i18n="@@confirmDeleteGoodsDeliveryNotesDetail"
+    i18n-title="@@confirmTitleDeleteGoodsDeliveryNotesDetail"
+    i18n-text="@@confirmTextDeleteGoodsDeliveryNotesDetail"
+    title="Bạn có chắc chắn muốn xóa chi tiết phiếu xuất này không?"
+    text="Lưu ý: bạn không thể khôi phục sau khi thực hiện xóa."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng ý"
+    cancelButtonText="Hủy bỏ"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Edit</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Delete</span>
+    </nh-menu-item>
+</nh-menu>

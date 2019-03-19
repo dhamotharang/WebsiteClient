@@ -1,10 +1,11 @@
 import { Observable, Subscriber } from 'rxjs';
-import { OnDestroy } from '@angular/core';
+import {ComponentFactoryResolver, OnDestroy, Type, ViewContainerRef} from '@angular/core';
 import { AppInjector } from './shareds/helpers/app-injector';
 import { AppService } from './shareds/services/app.service';
 import { BriefUser } from './shareds/models/brief-user.viewmodel';
 import { PermissionViewModel } from './shareds/view-models/permission.viewmodel';
-import {IAppConfig} from './configs/app.config';
+import {APP_CONFIG, IAppConfig} from './configs/app.config';
+import {IPageId, PAGE_ID} from './configs/page-id.config';
 
 export class BaseListComponent<TEntity> implements OnDestroy {
     currentUser: BriefUser;
@@ -58,4 +59,13 @@ export class BaseListComponent<TEntity> implements OnDestroy {
     //     this.permission.approve = appService.checkPermission(pageId, Permission.approve);
     //     this.permission.report = appService.checkPermission(pageId, Permission.report);
     // }
+    loadComponent<T>(viewContainerRef: ViewContainerRef,
+                    component: Type<T>) {
+        const {injector} = viewContainerRef;
+        const componentFactoryResolver = injector.get(ComponentFactoryResolver);
+        const componentFactory = componentFactoryResolver.resolveComponentFactory(component);
+        viewContainerRef.clear();
+        const componentRef = viewContainerRef.createComponent(componentFactory);
+        return (<T>componentRef.instance);
+    }
 }

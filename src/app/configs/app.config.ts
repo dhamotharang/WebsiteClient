@@ -20,6 +20,7 @@ export interface IAppConfig {
     FILE_URL: string;
     FILE_LOCAL_URL;
     API_GATEWAY_URL: string;
+    WAREHOUSE_API_URL: string;
 }
 //
 export const APP_CONFIG_DI: IAppConfig = {
@@ -42,7 +43,8 @@ export const APP_CONFIG_DI: IAppConfig = {
     EVENT_API_URL: 'http://localhost:50003/api/v1/',
     FILE_URL: 'https://testfilemanager.ghmsoft.vn/',
     FILE_LOCAL_URL: 'http://localhost:50005/',
-    API_GATEWAY_URL: 'http://localhost:50008/'
+    API_GATEWAY_URL: 'http://localhost:50008/',
+    WAREHOUSE_API_URL: 'http://localhost:50009/api/v1/'
 };
 
 // export const APP_CONFIG_DI: IAppConfig = {

@@ -36,12 +36,12 @@ export class ManagerConfigService {
                     item.isSelect = false;
                     if (item.approveId) {
                         item.approveUserSelect = new UserSuggestion();
-                        item.approveUserSelect.name = item.approveName;
+                        item.approveUserSelect.fullName = item.approveName;
                         item.approveUserSelect.id = item.approveId;
                     }
                     if (item.managerId) {
                         item.managerUserSelect = new UserSuggestion();
-                        item.managerUserSelect.name = item.managerName;
+                        item.managerUserSelect.fullName = item.managerName;
                         item.managerUserSelect.id = item.managerId;
                     }
                 });

@@ -1,0 +1,179 @@
+<nh-modal #formGoodsDeliveryNote [size]="'full'">
+    <form class="form-horizontal">
+        <nh-modal-content class="form-body">
+            <h3 class="form-section bold" i18n="@@goodsDeliveryNoteInfo">Thông tin phiếu xuất</h3>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Ngày xuất" i18n-ghmLabel="@@deliveryDate"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.deliveryDate | dateTimeFormat:'DD/MM/YYYY HH:mm' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Hình thức xuất"
+                               i18n-ghmLabel="@@deliveryType" [required]="true"></label>
+                        <div class="col-sm-9">
+                                <span class="badge cm-mgt-10"
+                                      [class.badge-success]="goodsDeliveryNoteDetail?.type === deliveryType.retail"
+                                      [class.badge-info]="goodsDeliveryNoteDetail?.type === deliveryType.selfConsumer"
+                                      [class.badge-warning]="goodsDeliveryNoteDetail?.type === deliveryType.return"
+                                      [class.badge-danger]="goodsDeliveryNoteDetail?.type === deliveryType.voided"
+                                      [class.badge-defaut]="goodsDeliveryNoteDetail?.type === deliveryType.transfer"
+                                      [class.badge-defaut]="goodsDeliveryNoteDetail?.type === deliveryType.inventory"
+                                      i18n="@@goodsDeliveryNoteTypeValue">
+                {goodsDeliveryNoteDetail?.type, select, 0 {Bán} 1 {Sử dụng} 2 {Trả nhà cung cấp} 3 {Hủy} 4 {Điều chuyển} 5 {Kiểm kê} other {}}
+            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="goodsDeliveryNoteDetail?.type === deliveryType.selfConsumer">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Phòng ban"
+                               i18n-ghmLabel="@@officeName"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.officeName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Người nhận" [required]="true"
+                               i18n-ghmLabel="@@receiver"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">{{ goodsDeliveryNoteDetail?.receiverFullName }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="goodsDeliveryNoteDetail?.type === deliveryType.retail">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Người nhận"
+                               i18n-ghmLabel="@@receiverFullName"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.receiverFullName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Số điện thoại"
+                               i18n-ghmLabel="@@receiverPhoneNumber"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.receiverPhoneNumber }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group" [class.has-error]="formErrors?.warehouseId">
+                        <label class="col-sm-3 control-label" ghmLabel="Xuất tại kho"
+                               i18n-ghmLabel="@@deliveringWarehouse"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.warehouseName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group"
+                         [class.has-error]="formErrors.receptionWarehouseId"
+                         *ngIf="goodsDeliveryNoteDetail?.type === deliveryType.transfer">
+                        <label class="col-sm-3 control-label" ghmLabel="Nhập tại kho"
+                               i18n-ghmLabel="@@receptionWarehouse"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.receptionWarehouseName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="goodsDeliveryNoteDetail?.type === deliveryType.transfer">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Người nhận"
+                               i18n-ghmLabel="@@receiver"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">{{ goodsDeliveryNoteDetail?.receiverFullName }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="goodsDeliveryNoteDetail?.type === deliveryType.return">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Nhà cung cấp"
+                               i18n-ghmLabel="@@supplier"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control">
+                                {{ goodsDeliveryNoteDetail?.supplierName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" ghmLabel="Lý do"
+                               i18n-ghmLabel="@@reason"
+                               [required]="goodsDeliveryNoteDetail?.type === deliveryType.voided || goodsDeliveryNoteDetail?.type === deliveryType.return"></label>
+                        <div class="col-sm-9">
+                            <div class="form-control height-auto">
+                                {{ goodsDeliveryNoteDetail?.reason }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="form-section bold" i18n="@@goodsDeliveryNoteDetailInfo">Chi tiết phiếu xuất</h3>
+            <div class="row">
+                <div class="col-sm-12">
+                    <app-goods-delivery-note-product [goodsDeliveryNoteId]="id"
+                                                     [readonly]="true"
+                                                     [warehouseId]="goodsDeliveryNoteDetail?.warehouseId"
+                                                     [deliveryDate]="goodsDeliveryNoteDetail?.deliveryDate"
+                                                     [totalAmounts]="goodsDeliveryNoteDetail?.totalAmounts"
+                                                     [listGoodsDeliveryNoteDetail]="listGoodsDeliveryNoteDetail"
+                                                     [deliveryType]="goodsDeliveryNoteDetail?.type"
+                    ></app-goods-delivery-note-product>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-2" ghmLabel="Tổng số tiền (viết bằng chữ)"
+                           i18n-ghmLabel="@@totalAmountsWords"></label>
+                    <div class="bold col-sm-10">
+                        <div class="dotted-form-control">{{ goodsDeliveryNoteDetail?.totalAmounts | ghmAmountToWord }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <ghm-button classes="btn default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Đóng</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

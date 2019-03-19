@@ -69,7 +69,7 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
             });
             this.listPage = result;
         });
-        this.accountService.search('',).subscribe((result: SearchResultViewModel<AccountViewModel>) => {
+        this.accountService.search('').subscribe((result: SearchResultViewModel<AccountViewModel>) => {
            _.each(result.items, (item: AccountViewModel) => {
                const nhSuggestion = new NhSuggestion();
                nhSuggestion.id = item.id;
@@ -256,14 +256,13 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
         //     this.toastr.error('Vui lòng chọn ít nhất 1 ngôn ngữ mặc định.');
         //     return;
         // }
-        console.log(this.model.value);
         if (isValid) {
             this.tenant = this.model.value;
             this.tenant.pages = [];
             _.each(this.listPageView, (tenantPage: PageSearchViewModel) => {
-               if(tenantPage.isSelected) {
+               if (tenantPage.isSelected) {
                    _.each(this.listPage, (pages: PageSearchViewModel) => {
-                       if ((pages.id === tenantPage.id || pages.parentId === tenantPage.id) && pages.id !== 5) {
+                       if ((pages.id === tenantPage.id || pages.parentId === tenantPage.id) && pages.id !== 5 && pages.id !== 2) {
                            const page = new TenantPage();
                            page.pageId = pages.id;
                            this.tenant.pages.push(page);

@@ -1,0 +1,65 @@
+<nh-modal #supplierFormModal size="lg"
+          (show)="onModalShow()">
+    <nh-modal-header class="uppercase bold">
+        {{supplierDetail?.name}}
+    </nh-modal-header>
+    <form class="form-horizontal">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form">
+                        <div class="form-group cm-mgb-10 form-md-line-input">
+                            <label i18n-ghmLabel="@@supplierName" ghmLabel="Supplier Name"
+                                   class="col-sm-4 control-label" [required]="true"></label>
+                            <div class="col-sm-8">
+                                <div class="form-control height-auto">{{supplierDetail?.name}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10 form-md-line-input">
+                            <label i18n-ghmLabel="@@address" ghmLabel="Address"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <div class="form-control height-auto">{{supplierDetail?.address}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10 form-md-line-input">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Description"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <div class="form-control height-auto">{{supplierDetail?.description}}</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <mat-checkbox [checked]="supplierDetail?.isActive" [disabled]="true"
+                                              color="primary"><span
+                                    i18n="@@isActive"></span>
+                                    Active
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 portlet-title">
+                    <span class="caption-subject bold uppercase">Contact supplier</span>
+                </div>
+                <div class="col-sm-12">
+                    <app-product-contact [listContact]="supplierDetail?.contacts"
+                                         [isReadOnly]="true"
+                                         [type]="contactType.supplier"
+                                         [isUpdate]="isUpdate"
+                                         [subjectId]="supplierDetail?.id"
+                    ></app-product-contact>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <ghm-button classes="btn default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Close</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

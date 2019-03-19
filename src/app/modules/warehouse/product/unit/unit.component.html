@@ -1,0 +1,129 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listUnitPageTitle">Danh sách đơn vị</span>
+    <small i18n="@@productModuleTitle">Quản lý sản phẩm</small>
+</h1>
+<form class="form-inline cm-mgb-10" (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@keywordSearch" i18n-placeholder
+               placeholder="Nhập từ khóa tìm kiếm."
+               name="searchInput" [(ngModel)]="keyword">
+    </div>
+    <div class="form-group cm-mgr-5">
+        <nh-select
+            [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Đã kích hoạt'}]"
+            i18n="@@selectStatus"
+            i18n-title
+            [title]="'-- Tất cả --'"
+            [(value)]="isActive"
+            (onSelectItem)="selectIsActive($event)"></nh-select>
+    </div>
+    <div class="form-group">
+        <button class="btn blue" type="submit">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgl-5">
+        <button class="btn default" type="button" (click)="resetFormSearch()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                type="button">
+            Thêm
+        </button>
+    </div>
+</form>
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">STT</th>
+        <th class="middle" i18n="@@supplier">Viết Tắt</th>
+        <th class="middle" i18n="@@address">Tên</th>
+        <th class="middle center" i18n="@@status">Trạng Thái</th>
+        <th class="middle text-right w150" i18n="@@action" *ngIf="permission.edit || permission.delete">Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listUnit; let i = index"
+        nhContextMenuTrigger
+        [nhContextMenuTriggerFor]="nhMenu"
+        [nhContextMenuData]="item">
+        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">{{ item.abbreviation }}</td>
+        <td class="middle">
+            {{item.name}}
+        </td>
+        <td class="middle center">
+            <mat-checkbox color="primary" [checked]="item.isActive" (change)="updateStatus(item)"></mat-checkbox>
+        </td>
+        <td class="text-right middle" *ngIf="permission.edit || permission.delete">
+            <nh-dropdown>
+                <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+                    <mat-icon>more_horiz</mat-icon>
+                </button>
+                <ul class="nh-dropdown-menu right" role="menu">
+                    <li>
+                        <a *ngIf="permission.edit"
+                           (click)="edit(item)">
+                            <!--<i class="fa fa-edit"></i>-->
+                            <mat-icon>edit</mat-icon>
+                            <span i18n="@@edit">Sửa</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="confirm(item)" i18n="@@delete">
+                            <!--<i class="fa fa-trash"></i>-->
+                            <mat-icon>delete</mat-icon>
+                            <span i18n="@@delete">Xóa</span>
+                        </a>
+                    </li>
+                </ul>
+            </nh-dropdown>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<ghm-paging
+    class="pull-right"
+    [totalRows]="totalRows"
+    [currentPage]="currentPage"
+    [pageShow]="6"
+    [pageSize]="pageSize"
+    (pageClick)="search($event)"
+    i18n="@@unit" i18n-pageName
+    [pageName]="'Đơn vị'">
+</ghm-paging>
+<app-product-unit-form (saveSuccessful)="search(1)"></app-product-unit-form>
+
+<swal
+    #confirmDeleteUnit
+    i18n="@@confirmDeleteUnit"
+    i18n-title="@@confirmTitleDeleteUnit"
+    i18n-text="@@confirmTextDeleteUnit"
+    title="Bạn có chắc chắn muốn xóa đơn vị này?"
+    text="Lưu ý: bạn không thể khôi phục lại đơn vị sau khi xóa."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng ý"
+    cancelButtonText="Hủy bỏ"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+    <nh-menu-item (clicked)="edit($event)">
+        <!--<i class="fa fa-edit"></i>-->
+        <mat-icon class="menu-icon">edit</mat-icon>
+        <span i18n="@@edit">Sửa</span>
+    </nh-menu-item>
+    <nh-menu-item *ngIf="permission.delete"
+                  (clicked)="confirm($event)">
+        <!--<i class="fa fa-trash"></i>-->
+        <mat-icon class="menu-icon">delete</mat-icon>
+        <span i18n="@@edit">Xóa</span>
+    </nh-menu-item>
+</nh-menu>

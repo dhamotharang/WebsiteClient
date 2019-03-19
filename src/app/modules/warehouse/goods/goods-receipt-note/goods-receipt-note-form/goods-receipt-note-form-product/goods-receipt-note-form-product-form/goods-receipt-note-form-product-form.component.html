@@ -1,0 +1,139 @@
+<nh-modal size="md" #goodsReipcetNoteProductModal
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase font-green-sharp bold">
+        {isUpdate, select, 0 {Thêm sản phẩm} 1 {Cập nhật phiếu nhập}}
+    </nh-modal-header>
+    <form action="" class="form-horizontal" [formGroup]="model" (ngSubmit)="save()">
+        <nh-modal-content>
+            <div class="form-group"
+                 [class.has-error]="formErrors.productId">
+                <label class="col-sm-3 control-label control-label" for="" ghmLabel="Sản phẩm"
+                       i18n-ghmLabel="@@product" [required]="true"></label>
+                <div class="col-sm-9">
+                    <app-product-suggestion
+                        class="no-border"
+                        [hasError]="formErrors.productId"
+                        #productSuggestion
+                        (itemRemoved)="onProductRemoved($event)"
+                        (itemSelected)="onProductSelected($event)"></app-product-suggestion>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.lotId">
+                <label class="col-sm-3 control-label" for="" ghmLabel="Lô sản xuất" i18n-ghmLabel="@@lot"
+                       [required]="isManageByLot"></label>
+                <div class="col-sm-9">
+                    <app-lot-suggestion
+                        class="no-border"
+                        [hasError]="formErrors.lotId"
+                        #lotSuggestion
+                        (keyPressed)="onLotKeyPressed($event)"
+                        (itemSelected)="onLotSelected($event)"
+                    ></app-lot-suggestion>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.unitId">
+                <label class="col-sm-3 control-label" for="" ghmLabel="Ngày hết hạn"
+                       i18n-ghmLabel="@@expiryDate"></label>
+                <div class="col-sm-9">
+                    <nh-date formControlName="expiryDate"
+                             [mask]="true"
+                             [type]="'input'"></nh-date>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.expiryDate">
+                <label class="col-sm-3 control-label" for="" ghmLabel="Đơn vị" i18n-ghmLabel="@@unit"
+                       [required]="true"></label>
+                <div class="col-sm-9">
+                    <nh-select
+                        [class.has-error]="formErrors.unitId"
+                        [loading]="isGettingUnit"
+                        [data]="units"
+                        title="-- Chọn đơn vị --"
+                        i18n-title="@@selectUnit"
+                        (itemSelected)="onUnitSelected($event)"
+                        formControlName="unitId"
+                    ></nh-select>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.quantity || formErrors.price">
+                <label class="col-sm-3 control-label" for="" ghmLabel="Số lượng" i18n-ghmLabel="@@quantity"
+                       [required]="true"></label>
+                <div class="col-sm-3">
+                    <input type="text"
+                           ghm-text-selection
+                           [class.has-error]="formErrors.quantity"
+                           class="form-control text-right" formControlName="quantity">
+                </div>
+                <label class="col-sm-3 control-label" for="" ghmLabel="Giá nhập" i18n-ghmLabel="@@price"
+                       [required]="true"></label>
+                <div class="col-sm-3">
+                    <input type="text"
+                           ghm-text-selection
+                           [class.has-error]="formErrors.price"
+                           class="form-control text-right" formControlName="price">
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors.tax || formErrors.invoiceQuantity">
+                <label class="col-sm-3 control-label" for="" ghmLabel="Thuế" i18n-ghmLabel="@@tax"></label>
+                <div class="col-sm-3">
+                    <input type="text"
+                           [class.has-error]="formErrors.tax"
+                           ghm-text-selection
+                           class="form-control text-right" formControlName="tax">
+                </div>
+                <label class="col-sm-3 control-label" for="" ghmLabel="Số lượng hóa đơn"
+                       i18n-ghmLabel="@@invoiceQuantity"></label>
+                <div class="col-sm-3">
+                    <input type="text"
+                           ghm-text-selection
+                           [class.has-error]="formErrors.invoiceQuantity"
+                           class="form-control text-right" formControlName="invoiceQuantity">
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <label class="col-sm-9 control-label bold" for="" ghmLabel="Tổng tiền trước thuế"
+                       i18n-ghmLabel="@@totalBeforeTaxes"></label>
+                <div class="col-sm-3 cm-pdt-10">
+                    {{ model.value.totalBeforeTaxes | ghmCurrency:'2' }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-9 control-label bold" for="" ghmLabel="Tổng tiền thuế"
+                       i18n-ghmLabel="@@taxes"></label>
+                <div class="col-sm-3 cm-pdt-10">
+                    {{ model.value.taxes | ghmCurrency:'2' }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-9 control-label bold" for="" ghmLabel="Thành tiền"
+                       i18n-ghmLabel="@@totalAmounts"></label>
+                <div class="col-sm-3 cm-pdt-10">
+                    {{ model.value.totalAmounts | ghmCurrency:'2' }}
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox
+                class="cm-mgr-5"
+                color="primary"
+                name="isCreateAnother"
+                i18n="@@isCreateAnother"
+                *ngIf="!isUpdate"
+                [(checked)]="isCreateAnother"
+                (change)="isCreateAnother = !isCreateAnother"> Tiếp tục thêm
+            </mat-checkbox>
+            <button class="btn blue cm-mgr-5" i18n="@@save">
+                Lưu
+            </button>
+            <button type="button" nh-dismiss class="btn default" i18n="@@close">
+                Đóng
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
