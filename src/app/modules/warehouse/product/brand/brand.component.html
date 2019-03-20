@@ -11,8 +11,7 @@
     <div class="form-group cm-mgr-5">
         <nh-select
             [data]="[{id: false, name: 'inActive'},{id: true, name: 'Active'}]"
-            i18n="@@selectStatus"
-            i18n-title
+            i18n-title="@@selectStatus"
             [title]="'-- Chọn trạng thái --'"
             [value]="isActive"
             (onSelectItem)="selectIsActive($event)"></nh-select>

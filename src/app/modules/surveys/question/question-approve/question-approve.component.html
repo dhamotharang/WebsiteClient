@@ -11,8 +11,8 @@
     <div class="form-group cm-mgr-5">
         <nh-select
             [data]="listQuestionType"
-            i18n="@@selectQuestionType"
-            i18n-title
+            i18n-title="@@selectQuestionType"
+
             [title]="'-- Select question type --'"
             [(ngModel)]="type"
             name="type"
@@ -22,8 +22,8 @@
         <nh-dropdown-tree [data]="questionGroupTree"
                           [width]="350"
                           [selectedText]="questionGroupName"
-                          i18n="@@selectQuestionGroup"
-                          i18n-title
+                          i18n-title="@@selectQuestionGroup"
+
                           title="-- Select question group --"
                           [value]="questionGroupId"
                           name="questionGroupId"
@@ -37,8 +37,8 @@
     </div>
     <div class="form-group cm-mgr-5">
         <nh-select [data]="listQuestionStatus"
-                   i18n="@@selectStatus"
-                   i18n-title
+                   i18n-title="@@selectStatus"
+
                    [title]="'-- Select status --'"
                    [(ngModel)]="status"
                    name="status"

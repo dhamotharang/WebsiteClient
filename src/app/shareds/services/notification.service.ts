@@ -1,16 +1,16 @@
-import { Inject, Injectable } from '@angular/core';
-import { APP_CONFIG, IAppConfig } from '../../configs/app.config';
-import { AuthService } from './auth.service';
-import { Observable, Subject } from 'rxjs';
-import { Notification } from '../models/notification.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, finalize } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
+import {AuthService} from './auth.service';
+import {Observable, Subject} from 'rxjs';
+import {Notification} from '../models/notification.model';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {map, finalize} from 'rxjs/operators';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { SearchResultViewModel } from '../view-models/search-result.viewmodel';
-import { ActionResultViewModel } from '../view-models/action-result.viewmodel';
-import { ToastrService } from 'ngx-toastr';
-import { SpinnerService } from '../../core/spinner/spinner.service';
+import {SearchResultViewModel} from '../view-models/search-result.viewmodel';
+import {ActionResultViewModel} from '../view-models/action-result.viewmodel';
+import {ToastrService} from 'ngx-toastr';
+import {SpinnerService} from '../../core/spinner/spinner.service';
 
 declare var signalR: any;
 

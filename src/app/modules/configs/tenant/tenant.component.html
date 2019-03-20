@@ -33,7 +33,8 @@
             <thead>
             <tr>
                 <th class="center middle w50" i18n="@@no">No</th>
-                <th class="center middle" i18n="@@tenantName">Tenant name</th>
+                <th class="center middle w250" i18n="@@email">Tenant Id</th>
+                <th class="center middle w350"  i18n="@@tenantName">Tenant name</th>
                 <th class="center middle w150" i18n="@@email">Email</th>
                 <th class="center middle w100" i18n="@@phoneNumber">Phone number</th>
                 <th class="center middle w100" i18n="@@status">Status</th>
@@ -43,6 +44,7 @@
             <tbody>
             <tr *ngFor="let item of listItems$ | async; let i = index">
                 <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td class="center middle">{{item.id}}</td>
                 <td class="middle">{{ item.name }}</td>
                 <td class="middle">{{ item.email }}</td>
                 <td class="middle">{{ item.phoneNumber }}</td>

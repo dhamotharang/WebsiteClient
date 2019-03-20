@@ -116,22 +116,27 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
         this.isSearching = true;
         this.subscribers.suggestions = this.languageService.suggestion(event)
             .pipe(finalize(() => this.isSearching = false))
-            .subscribe((result: SuggestionViewModel<string>[]) => this.languageSuggestions = result);
+            .subscribe((result: SuggestionViewModel<string>[]) => {
+                this.languageSuggestions = result;
+            });
     }
 
     onLanguageSelected(event) {
         if (event) {
-            const selectedLanguage = _.find(this.selectedLanguages, (language: any) => {
-                return language.id === event[0].id;
-            });
-            if (!selectedLanguage) {
-                this.selectedLanguages.push({
-                    languageId: event[0].id,
-                    name: '',
-                    isDefault: false,
-                    isActive: true
+            _.each(event, (item: any) => {
+                const selectedLanguage = _.find(this.selectedLanguages, (language: any) => {
+                    return language.languageId === item.id;
                 });
-            }
+                if (!selectedLanguage) {
+                    this.selectedLanguages.push({
+                        languageId: item.id,
+                        name: item.name,
+                        isDefault: false,
+                        isActive: true
+                    });
+                }
+            });
+
         }
     }
 
@@ -248,10 +253,9 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
             return;
         }
 
-        const defaultLanguage = _.find(this.selectedLanguages, (selectedLanguage: LanguageSearchViewModel) => {
-            return selectedLanguage.isDefault;
-        });
-
+        // const defaultLanguage = _.find(this.selectedLanguages, (selectedLanguage: LanguageSearchViewModel) => {
+        //     return selectedLanguage.isDefault;
+        // });
         // if (!defaultLanguage) {
         //     this.toastr.error('Vui lòng chọn ít nhất 1 ngôn ngữ mặc định.');
         //     return;
@@ -270,14 +274,8 @@ export class TenantFormComponent extends BaseFormComponent implements OnInit {
                    });
                }
             });
-            this.tenant.languages = this.selectedLanguages.map((selectedLanguage: LanguageSearchViewModel) => {
-                console.log(selectedLanguage);
-                return {
-                    languageId: selectedLanguage.languageId,
-                    isActive: selectedLanguage.isActive,
-                    isDefault: selectedLanguage.isDefault
-                } as TenantLanguage;
-            });
+            this.selectedLanguages[0].isDefault = true;
+            this.tenant.languages = this.selectedLanguages;
             this.isSaving = true;
             if (this.isUpdate) {
                 this.tenantService.update(this.tenant)

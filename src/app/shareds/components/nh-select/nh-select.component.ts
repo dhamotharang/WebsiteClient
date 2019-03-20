@@ -195,17 +195,17 @@ export class NhSelectComponent implements OnChanges, OnInit, AfterViewInit, OnDe
                 private http: HttpClient,
                 private el: ElementRef, private renderer: Renderer2) {
         this.inputId = `nh-select-${new Date().getTime() + Math.floor((Math.random() * 10) + 1)}`;
-        this.searchTerm$
-            .pipe(
-                debounceTime(500),
-                distinctUntilChanged(),
-                // switchMap((term: string) => this.search(term))
-            )
-            .subscribe((term: string) => {
-                if (this.liveSearch && this.url) {
-                    this.search(term);
-                }
-            });
+        // this.searchTerm$
+        //     .pipe(
+        //         debounceTime(500),
+        //         distinctUntilChanged(),
+        //         // switchMap((term: string) => this.search(term))
+        //     )
+        //     .subscribe((term: string) => {
+        //         if (this.liveSearch && this.url) {
+        //             this.search(term);
+        //         }
+        //     });
     }
 
     ngOnInit() {

@@ -35,8 +35,8 @@ export const APP_CONFIG_DI: IAppConfig = {
     MAIL_API_URL: 'http://localhost:5006/api/v1/',
     WEBSITE_API_URL: 'http://localhost:50002/api/v1/',
     NOTIFICATION_URL: 'http://localhost:50004/',
-    SCOPES: 'offline_access GHM_Core_Api GHM_Notification_Api GHM_File_Management_Api GHM_Website_Api GHM_Event_Api' +
-    ' GHM_Customer_Api GHM_Internal_Api_Gateway GHM_Product_Api',
+    SCOPES: 'offline_access GHM_Core_Api GHM_Notification_Api GHM_File_Management_Api GHM_Website_Api GHM_Event_Api GHM_Warehouse_Api' +
+    ' GHM_Customer_Api GHM_Internal_Api_Gateway',
     PATIENT_API_URL: 'http://localhost:50007/api/v1/',
     RELATIONSHIP_API_URL: 'http://localhost:5009/api/v1/',
     SURVEY_API_URL: 'http://localhost:5011/api/v1/',

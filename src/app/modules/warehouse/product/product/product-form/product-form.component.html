@@ -123,16 +123,17 @@
             </div>
 
             <mat-accordion class="example-headers-align">
-                <mat-expansion-panel hideToggle>
-                    <mat-expansion-panel-header>
+                <mat-expansion-panel hideToggle class="cm-mgt-10">
+                    <mat-expansion-panel-header class="cm-mgb-10">
                         <mat-panel-title>
-                            <span i18n="@@unitConversion">Hình ảnh sản phẩm</span>
+                            <span i18n="@@unitConversion" class="color-white">Hình ảnh sản phẩm</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <ghm-file-explorer i18n-buttonText="@@selectImage"
                                        [multiple]="true"
                                        i18n-buttonText="@@selectProductImage"
                                        [buttonText]="'Chọn ảnh sản phẩm'"
+                                       [buttonClass]="'center'"
                                        (acceptSelected)="uploadImageProduct($event)"></ghm-file-explorer>
                     <div class="product-images">
                         <div class="image-content" *ngFor="let item of productImages"
@@ -157,10 +158,10 @@
                     </div>
                 </mat-expansion-panel><!-- END: Product images -->
 
-                <mat-expansion-panel hideToggle>
+                <mat-expansion-panel hideToggle class="cm-mgt-10">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <span i18n="@@unitConversion">Đơn vị chuyển đổi</span>
+                            <span i18n="@@unitConversion" class="color-white">Đơn vị chuyển đổi</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
                     <table class="table table-stripped table-hover"
@@ -207,10 +208,10 @@
                     </ng-template>
                 </mat-expansion-panel><!-- END: Product unit conversion -->
 
-                <mat-expansion-panel hideToggle>
+                <mat-expansion-panel hideToggle class="cm-mgt-10">
                     <mat-expansion-panel-header>
                         <mat-panel-title>
-                            <span i18n="@@productAttribute">Thuộc tính sản phẩm</span>
+                            <span i18n="@@productAttribute" class="color-white">Thuộc tính sản phẩm</span>
                         </mat-panel-title>
                     </mat-expansion-panel-header>
 

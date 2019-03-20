@@ -7,6 +7,7 @@ import { GhmButtonComponent } from './components/ghm-button.component';
 import { GhmImageDirective } from './directives/ghm-image.directive';
 import { GhmDropdownDirective } from './directives/ghm-dropdown.directive';
 import { SafePipe } from './pipes/safe.pipe';
+import {DynamicComponentHostDirective} from './directives/dynamic-component-host.directive';
 
 // Layouts
 @NgModule({
@@ -17,6 +18,7 @@ import { SafePipe } from './pipes/safe.pipe';
         GhmLabelDirective,
         GhmButtonComponent,
         GhmImageDirective,
+        DynamicComponentHostDirective,
         GhmDropdownDirective,
         SafePipe
     ],
@@ -25,6 +27,7 @@ import { SafePipe } from './pipes/safe.pipe';
         GhmAlertComponent,
         GhmLabelDirective,
         GhmButtonComponent,
+        DynamicComponentHostDirective,
         GhmImageDirective,
         GhmDropdownDirective,
         SafePipe

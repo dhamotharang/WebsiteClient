@@ -141,8 +141,8 @@
                                                 <div class="col-md-4 col-sm-3" [class.has-error]="formErrors.gender">
                                                     <nh-select
                                                         [data]="[{id: gender.female, name: 'Nữ'},{id: gender.male, name: 'Nam'}, {id: gender.other, name: 'Giới tính khác'}]"
-                                                        i18n="@@selectGender"
-                                                        i18n-title
+                                                        i18n-title="@@selectGender"
+
                                                         [title]="'-- Select Gender --'"
                                                         formControlName="gender"></nh-select>
                                                     <span class="help-block">

@@ -20,8 +20,7 @@
     <div class="form-group cm-mgr-5">
         <nh-select
             [data]="[{id: false, name: 'Không quản lý theo lô'},{id: true, name: 'Quản lý theo lô'}]"
-            i18n="@@selectStatus"
-            i18n-title
+            i18n-title="@@selectStatus"
             [title]="'-- Tất cả --'"
             [(value)]="isManagementByLot"
             (onSelectItem)="selectIsManagementByLot($event)"></nh-select>
@@ -29,8 +28,7 @@
     <div class="form-group cm-mgr-5">
         <nh-select
             [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Đã kích hoạt'}]"
-            i18n="@@selectStatus"
-            i18n-title
+            i18n-title="@@selectStatus"
             [title]="'-- Tất cả --'"
             [(value)]="isActive"
             (onSelectItem)="selectIsActive($event)"></nh-select>
