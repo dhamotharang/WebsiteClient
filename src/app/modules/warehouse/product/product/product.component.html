@@ -60,6 +60,7 @@
         <th class="middle w200" i18n="@@productCategory">Nhóm sản phẩm</th>
         <th class="middle center w100" i18n="@@unitDefault">Đơn vị tính</th>
         <th class="middle w150  center" i18n="@@consignmentManagement">Theo lô</th>
+        <th class="middle w150  center" i18n="@@consignmentManagement">Trạng thái duyệt</th>
         <th class="middle center w100" i18n="@@status">Kích hoạt</th>
         <th class="middle text-right w150" i18n="@@action" *ngIf="permission.edit || permission.delete">Hành động</th>
     </tr>
@@ -91,6 +92,13 @@
         <td class="middle center">
             <mat-checkbox color="primary" [checked]="item.isManagementByLot"
                           (change)="updateManagementByLot(item)"></mat-checkbox>
+        </td>
+        <td class="middle center">
+            <span *ngIf="item.status === productStatus.Approve" class="badge badge-success">Approved</span>
+            <span *ngIf="item.status === productStatus.Decline" class="badge badge-dark">Decline</span>
+            <span *ngIf="item.status === productStatus.pending && permission.approve" [swal]="confirmApprove" (confirm)="updateApprove(item.id)" class="badge badge-warning cursor-pointer">Pending</span>
+            <span *ngIf="item.status === productStatus.pending && !permission.approve" class="badge badge-secondary">Pending</span>
+            <span *ngIf="item.status === productStatus.draft" class="badge badge-default">Draft</span>
         </td>
         <td class="middle center">
             <mat-checkbox color="primary" [checked]="item.isActive" (change)="updateStatus(item)"></mat-checkbox>
@@ -160,6 +168,20 @@
     [focusCancel]="true">
 </swal>
 
+<swal
+    #confirmApprove
+    i18n="@@confirmApprove"
+    i18n-title="@@confirmApprove"
+    i18n-text="@@confirmApprove"
+    title="Are you want approve this product?"
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
 <nh-menu #nhMenu>
     <nh-menu-item (clicked)="detail($event)">
         <!--<i class="fa fa-eye menu-icon"></i>-->

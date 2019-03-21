@@ -11,6 +11,10 @@ export class Product {
     concurrencyStamp: string;
     unitId: string;
     unitName: string;
+    isHot: boolean;
+    isHomePage: boolean;
+    source: string;
+    status: number;
     categories?: number[];
     images: ProductImage[];
     translations: ProductTranslation[];
@@ -33,6 +37,8 @@ export class Product {
         this.attributes = [];
         this.isChangeAttribute = false;
         this.isChangeConversionUnit = false;
+        this.isHomePage = false;
+        this.isHot = true;
         this.salePrice = null;
         this.unitId = null;
         this.unitName = null;

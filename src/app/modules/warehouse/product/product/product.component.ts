@@ -22,6 +22,7 @@ import { DynamicComponentHostDirective } from '../../../../core/directives/dynam
 import { ProductFormComponent } from './product-form/product-form.component';
 import { AppInjector } from '../../../../shareds/helpers/app-injector';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import {ProductStatus} from './contants/product-status.const';
 
 @Component({
     selector: 'app-product',
@@ -40,6 +41,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
     listProduct: ProductResultViewModel[];
     productId: string;
     categorySelectText;
+    productStatus = ProductStatus;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -212,6 +214,15 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
         this.swalConfirmDelete.show();
     }
 
+    updateApprove(id: string) {
+        this.productService.updateApprove(id, this.productStatus.Approve).subscribe((result: any) => {
+            const product = _.find(this.listProduct, (item: any) => {
+                return item.id === id;
+            });
+            product.status = this.productStatus.Approve;
+        });
+    }
+
     private rendResult(list: ProductSearchViewModel[]) {
         this.listProduct = [];
         if (list && list.length > 0) {
@@ -219,7 +230,8 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
                 const productCategoryName = _.join(item.categoryNames, ', ');
 
                 this.listProduct.push(new ProductResultViewModel(item.id, item.thumbnail, productCategoryName,
-                    item.name, item.defaultUnit, item.isManagementByLot, item.isActive));
+                    item.name, item.defaultUnit, item.isManagementByLot,
+                    item.isActive, item.isHot, item.isHomePage, item.source, item.status));
             });
         }
     }

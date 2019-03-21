@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import { BaseFormComponent } from '../../../../../base-form.component';
 import { IPageId, PAGE_ID } from '../../../../../configs/page-id.config';
 import { APP_CONFIG, IAppConfig } from '../../../../../configs/app.config';
@@ -27,6 +27,8 @@ import { NhModalComponent } from '../../../../../shareds/components/nh-modal/nh-
 import { NhSuggestion } from '../../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 import { NumberValidator } from '../../../../../validators/number.validator';
 import { ProductCategoryViewModel } from '../viewmodel/product-category.viewmodel';
+import {TinymceComponent} from '../../../../../shareds/components/tinymce/tinymce.component';
+import {ProductStatus} from '../contants/product-status.const';
 
 @Component({
     selector: 'app-product-form',
@@ -39,11 +41,13 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     @ViewChild(ProductUnitComponent) productUnitComponent: ProductUnitComponent;
     @ViewChild(ProductFormAttributeComponent) productAttributeComponent: ProductFormAttributeComponent;
     @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
+    @ViewChild(TinymceComponent) contentEditor: TinymceComponent;
     @ViewChild('productFormModal') productFormModal: NhModalComponent;
     product = new Product();
     categoryTree: TreeData[];
     categoryText;
     categories: number[];
+    productStatus = ProductStatus;
     productImages: ProductImage[] = [];
     modelTranslation = new ProductTranslation();
     listProductValue: ProductAttribute[] = [];
@@ -155,8 +159,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     ngAfterViewInit() {
         this.reloadTree();
+        this.contentEditor.initEditor();
     }
-
     onModalShown() {
         this.isModified = false;
     }
@@ -326,6 +330,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         const isLanguageValid = this.validateLanguage();
         if (isValid && isLanguageValid) {
             this.product = this.model.value;
+            this.product.status = this.productStatus.pending;
             this.product.conversionUnits = _.filter(this.product.conversionUnits, (productConversionUnit: ProductConversionUnit) => {
                 return productConversionUnit.unitId;
             });
@@ -452,13 +457,14 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['unitId', 'thumbnail', 'isManagementByLot', 'isActive', 'categories']);
+        this.formErrors = this.utilService.renderFormError(['unitId', 'thumbnail', 'isManagementByLot', 'isActive', 'categories', 'source']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'unitId': ['required', 'maxLength']},
             {'thumbnail': ['maxLength']},
             {'categories': ['required']},
             {'isManagementByLot': ['required']},
             {'isActive': ['required']},
+            {'source': ['maxLength']}
         ]);
 
         this.model = this.fb.group({
@@ -471,8 +477,14 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             thumbnail: [this.product.thumbnail, [Validators.maxLength(500)]],
             isManagementByLot: [this.product.isManagementByLot, [Validators.required]],
             isActive: [this.product.isActive, [Validators.required]],
+            isHot: [this.product.isHot, [Validators.required]],
+            isHomePage: [this.product.isHomePage, [Validators.required]],
             categories: [this.categories, [Validators.required]],
             images: [this.productImages],
+            source: [
+                this.product.source,
+                [Validators.maxLength(500)]
+            ],
             concurrencyStamp: [this.product.concurrencyStamp],
             translations: this.fb.array([]),
             conversionUnits: this.fb.array([]),
@@ -483,13 +495,17 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     private buildFormLanguage = (language: string) => {
         this.translationFormErrors[language] = this.utilService.renderFormError(
-            ['name', 'description']
+            ['name', 'description', 'metaKeyword', 'metaDescription', 'seoLink', 'content']
         );
         this.translationValidationMessage[
             language
             ] = this.utilService.renderFormErrorMessage([
             {name: ['required', 'maxlength', 'pattern']},
             {description: ['maxlength']},
+            {metaKeyword: ['maxLength']},
+            {metaDescription: ['maxLength']},
+            {seoLink: ['maxLength']},
+            {content: ['maxLength']}
         ]);
         const translationModel = this.fb.group({
             languageId: [language],
@@ -500,6 +516,22 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             description: [
                 this.modelTranslation.description,
                 [Validators.maxLength(500)]
+            ],
+            metaKeyword: [
+                this.modelTranslation.metaKeyword,
+                [Validators.maxLength(500)]
+            ],
+            metaDescription: [
+                this.modelTranslation.metaDescription,
+                [Validators.maxLength(500)]
+            ],
+            seoLink: [
+                this.modelTranslation.seoLink,
+                [Validators.maxLength(500)]
+            ],
+            content: [
+                this.modelTranslation.content,
+                [Validators.maxLength(4000)]
             ]
         });
         translationModel.valueChanges.subscribe((data: any) =>

@@ -1,0 +1,26 @@
+$color-selected: #007455;
+
+.select-category-container {
+  list-style-type: none;
+  li {
+    padding: 5px;
+    h4 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  }
+
+  .media {
+    margin-top: 10px;
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
+  .selected {
+    border-left: 3px solid $color-selected;
+  }
+}
+
+.list-items {
+  border: none !important;
+}

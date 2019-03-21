@@ -10,7 +10,7 @@
             <div formArrayName="translations">
                 <div class="form-group" *ngIf="languages && languages.length > 1">
                     <label i18n-ghmLabel="@@language" ghmLabel="Language"
-                           class="col-sm-4 control-label"
+                           class="col-sm-2 control-label"
                            [required]="true"></label>
                     <div class="col-sm-8">
                         <nh-select [data]="languages"
@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group" [formGroup]="model"
                      [class.has-error]="formErrors?.categories">
-                    <label class="control-label col-sm-4" i18n-ghmLabel="@@productCategory"
+                    <label class="control-label col-sm-2" i18n-ghmLabel="@@productCategory"
                            ghmLabel="Nhóm sản phẩm"
                            [required]="true"></label>
                     <div class="col-sm-8">
@@ -41,7 +41,7 @@
                      [formGroupName]="i"
                      [hidden]="modelTranslation.value.languageId !== currentLanguage"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
-                    <label class="col-sm-4 control-label" ghmLabel="Tên sản phẩm"
+                    <label class="col-sm-2 control-label" ghmLabel="Tên sản phẩm"
                            i18n-ghmLabel="@@productName"
                            [required]="true"></label>
                     <div class="col-sm-8">
@@ -63,8 +63,28 @@
                      *ngFor="let modelTranslation of translations.controls; index as i"
                      [formGroupName]="i"
                      [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaKeyword">
+                    <label class="col-sm-2 control-label" ghmLabel="Từ khóa"
+                           i18n-ghmLabel="@@metakeyword"></label>
+                    <div class="col-sm-8">
+                                    <input name="" class="form-control" rows="3"
+                                              formControlName="metaKeyword"
+                                              placeholder="Nhập nội dung tổng hợp khóa"
+                                              i18n-placeholder="@@enterMetaKeyword"/>
+                        <span class="help-block">
+                            {
+                                translationFormErrors[modelTranslation.value.languageId]?.metaKeyword,
+                                    select, maxlength {Thông tin keyword sản phẩm không được phép vượt quá 500 ký tự.}
+                                    }
+                        </span>
+                    </div>
+                </div><!-- END: Product meta keyword -->
+                <div class="form-group"
+                     *ngFor="let modelTranslation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
-                    <label class="col-sm-4 control-label" ghmLabel="Mô tả"
+                    <label class="col-sm-2 control-label" ghmLabel="Mô tả"
                            i18n-ghmLabel="@@description"></label>
                     <div class="col-sm-8">
                                     <textarea name="" class="form-control" rows="3"
@@ -79,10 +99,69 @@
                         </span>
                     </div>
                 </div><!-- END: Product description -->
+                <div class="form-group"
+                     *ngFor="let modelTranslation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
+                    <label class="col-sm-2 control-label" ghmLabel="Tổng hợp mô tả"
+                           i18n-ghmLabel="@@metaDescription"></label>
+                    <div class="col-sm-8">
+                                    <textarea name="" class="form-control" rows="3"
+                                              formControlName="metaDescription"
+                                              placeholder="Nhập nội dung tổng hợp mô tả"
+                                              i18n-placeholder="@@enterMetaDescription"></textarea>
+                        <span class="help-block">
+                            {
+                                translationFormErrors[modelTranslation.value.languageId]?.metaDescription,
+                                    select, maxlength {Thông tin mô tả sản phẩm không được phép vượt quá 500 ký tự.}
+                                    }
+                        </span>
+                    </div>
+                </div><!-- END: Product meta description -->
+                <div class="form-group"
+                     *ngFor="let modelTranslation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
+                    <label class="col-sm-2 control-label" ghmLabel="Seo Link"
+                           i18n-ghmLabel="@@seoLink"></label>
+                    <div class="col-sm-8">
+                                    <input name="" class="form-control" rows="3"
+                                              formControlName="seoLink"
+                                              placeholder="Nhập nội Seo Link"
+                                              i18n-placeholder="@@enterSeoLink"/>
+                        <span class="help-block">
+                            {
+                                translationFormErrors[modelTranslation.value.languageId]?.seoLink,
+                                    select, maxlength {Thông tin seoLink sản phẩm không được phép vượt quá 500 ký tự.}
+                                    }
+                        </span>
+                    </div>
+                </div><!-- END: Product seo Link -->
+
+                <div class="form-group"
+                     *ngFor="let modelTranslation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8">
+                        <label ghmLabel="Nội dung"
+                               i18n-ghmLabel="@@seoLink"></label>
+                        <tinymce [elementId]="'content'+ i" formControlName="content" [height]="300"></tinymce>
+                        <span class="help-block">
+                            {
+                                translationFormErrors[modelTranslation.value.languageId]?.content,
+                                    select, maxlength {Thông tin seoLink sản phẩm không được phép vượt quá 500 ký tự.}
+                                    }
+                        </span>
+                    </div>
+                </div><!-- END: Product seo Link -->
             </div>
             <div class="form-group"
                  [class.has-error]="formErrors?.unitId">
-                <label class="col-sm-4 control-label" ghmLabel="Đơn vị tính"
+                <label class="col-sm-2 control-label" ghmLabel="Đơn vị tính"
                        i18n-ghmLabel="@@productUnit"
                        [required]="true"></label>
                 <div class="col-sm-8">
@@ -95,12 +174,21 @@
             </div>
             <div class="form-group"
                  [class.has-error]="formErrors?.salePrice">
-                <label class="col-sm-4 control-label" ghmLabel="Giá bán"
+                <label class="col-sm-2 control-label" ghmLabel="Giá bán"
                        i18n-ghmLabel="@@salePrice"
                        [required]="true"></label>
                 <div class="col-sm-8">
                     <input type="text" class="form-control" formControlName="salePrice">
                     <span class="help-block">{formErrors?.salePrice, select, required {Vui lòng chọn đơn vị tính} maxlength {Đơn vị tính không được phép vượt quá 50 ký tự.}}</span>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.salePrice">
+                <label class="col-sm-2 control-label" ghmLabel="Nguồn sản phẩm"
+                       i18n-ghmLabel="@@source"></label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="source" placeholder=" Nguồn sản phẩm">
+                    <span class="help-block">{formErrors?.salePrice, select, maxlength {Đơn vị tính không được phép vượt quá 500 ký tự.}}</span>
                 </div>
             </div>
             <div class="form-group"
@@ -121,7 +209,26 @@
                     </mat-slide-toggle>
                 </div>
             </div>
-
+            <div class="form-group"
+                 [class.has-error]="formErrors?.isHot">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle formControlName="isHot" color="primary">
+                        <span i18n="@@isHot">
+                            {model.value.isHot, select, 0 {No hot} 1 {Hot}}
+                        </span>
+                    </mat-slide-toggle>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.isHomePage">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <mat-slide-toggle formControlName="isHomePage" color="primary">
+                        <span i18n="@@isHot">
+                            {model.value.isHomePage, select, 0 {No HomePage} 1 {HomePage}}
+                        </span>
+                    </mat-slide-toggle>
+                </div>
+            </div>
             <mat-accordion class="example-headers-align">
                 <mat-expansion-panel hideToggle class="cm-mgt-10">
                     <mat-expansion-panel-header class="cm-mgb-10">

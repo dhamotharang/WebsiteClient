@@ -7,5 +7,9 @@
                         (onCancel)="choiceMenuItemModal.dismiss()"></app-new-select>
         <app-category-select *ngIf="type === subjectType.newsCategory" (onAccept)="acceptSelectListGroup($event)"
                              (onCancel)="choiceMenuItemModal.dismiss()"></app-category-select>
+        <app-product-select *ngIf="type === subjectType.product" (onAccept)="acceptSelectListGroup($event)"
+            (onCancel)="choiceMenuItemModal.dismiss()"></app-product-select>
+        <app-product-category-select *ngIf="type === subjectType.productCategory" (onAccept)="acceptSelectListGroup($event)"
+                            (onCancel)="choiceMenuItemModal.dismiss()"></app-product-category-select>
     </nh-modal-content>
 </nh-modal>

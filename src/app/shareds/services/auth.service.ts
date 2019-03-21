@@ -83,7 +83,7 @@ export class AuthService implements Resolve<any> {
         }
         const body = `grant_type=password&userName=${userName}&password=${password}
             &client_id=${this.appConfig.CLIENT_ID}&scope=${this.appConfig.SCOPES}`;
-        return this.http.post(this.appConfig.AUTHORITY, body, {
+        return this.http.post(`${this.appConfig.API_GATEWAY_URL}auth/connect/token`, body, {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
@@ -104,7 +104,7 @@ export class AuthService implements Resolve<any> {
 
     getRefreshToken() {
         const body = `grant_type=refresh_token&client_id=${this.appConfig.CLIENT_ID}&refresh_token=${this.refreshToken}`;
-        return this.http.post(this.appConfig.AUTHORITY, body, {
+        return this.http.post(`${this.appConfig.API_GATEWAY_URL}auth/connect/token`, body, {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             })

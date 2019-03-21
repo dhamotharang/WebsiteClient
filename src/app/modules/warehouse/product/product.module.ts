@@ -55,13 +55,16 @@ import { ProductAttributeSuggestionComponent } from './product-attribute/product
 import { ProductAttributeValueSuggestionComponent } from './product-attribute/product-attribute-value-suggestion/product-attribute-value-suggestion.component';
 import { GhmCurrencyPipe } from '../../../shareds/components/ghm-mask/ghm-currency.pipe';
 import { GhmMaskModule } from '../../../shareds/components/ghm-mask/ghm-mask.module';
+import { ProductSelectComponent } from './product-select/product-select.component';
+import { ProductCategorySelectComponent } from './product-category/product-category-select/product-category-select.component';
+import {TinymceModule} from '../../../shareds/components/tinymce/tinymce.module';
 
 @NgModule({
     imports: [
         CommonModule, ProductRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
         NHTreeModule, NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule,
         DatetimeFormatModule, NhWizardModule, NhTabModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
-        MatRadioModule, MatSlideToggleModule, GhmMaskModule, FormatNumberModule,
+        MatRadioModule, MatSlideToggleModule, GhmMaskModule, FormatNumberModule, TinymceModule,
         MatRadioModule, NhSuggestionModule,
         NhImageViewerModule, MatExpansionModule,
         SweetAlert2Module.forRoot({
@@ -79,10 +82,13 @@ import { GhmMaskModule } from '../../../shareds/components/ghm-mask/ghm-mask.mod
         BrandFormComponent, ProductFormComponent, ProductUnitComponent, ProductFormAttributeComponent, ProductDetailComponent,
         SupplierSuggestionComponent, SupplierDetailComponent, ProductSuggestionComponent, UnitSuggestionComponent,
         ProductAttributeSuggestionComponent,
-        ProductAttributeValueSuggestionComponent],
+        ProductAttributeValueSuggestionComponent,
+        ProductSelectComponent,
+        ProductCategorySelectComponent],
     entryComponents: [ProductFormComponent, ProductDetailComponent],
     exports: [ProductAttributeComponent, BrandFormComponent, ProductFormComponent, ProductUnitComponent,
-        ProductFormAttributeComponent, SupplierSuggestionComponent, ProductSuggestionComponent]
+        ProductFormAttributeComponent, SupplierSuggestionComponent, ProductSuggestionComponent,
+        ProductSelectComponent, ProductCategorySelectComponent]
 })
 export class ProductModule {
 }

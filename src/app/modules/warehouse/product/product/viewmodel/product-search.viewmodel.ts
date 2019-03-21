@@ -6,4 +6,9 @@ export class ProductSearchViewModel {
     defaultUnit: string;
     isManagementByLot:  boolean;
     isActive: boolean;
+    selected: boolean;
+    isHot: boolean;
+    isHomePage: boolean;
+    source: string;
+    status: number;
 }

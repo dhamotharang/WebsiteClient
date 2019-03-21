@@ -84,6 +84,14 @@ export class ProductService {
         })) as Observable<ActionResultViewModel>;
     }
 
+    updateApprove(id: string, status: number): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.post(`${this.url}/updateApprove/${id}/${status}`, null).pipe(finalize(() => this.spinnerService.hide()),
+            map( (result: ActionResultViewModel) => {
+            this.toastr.success(result.message);
+            return result;
+        })) as Observable<ActionResultViewModel>;
+    }
     updateManagementByLot(id: string, isManagementByLot: boolean): Observable<ActionResultViewModel> {
         return this.http.post(`${this.url}/${id}/management-by-lots/${isManagementByLot}`, {})
             .pipe(map((result: ActionResultViewModel) => {

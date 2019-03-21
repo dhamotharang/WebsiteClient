@@ -86,6 +86,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
                         this.onSaveSuccess.emit();
                     });
             } else {
+                console.log(this.model.value);
                 this.menuService.insertMenuItem(this.menuId, this.menuItem)
                     .pipe(finalize(() => this.isSaving = false))
                     .subscribe((result: ActionResultViewModel) => {
@@ -146,10 +147,8 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     }
 
     selectSubjectType(value) {
-        if (value && value.id === SubjectType.newsCategory || value.id === SubjectType.news) {
             this.choiceMenuItemComponent.type = value.id;
             this.choiceMenuItemComponent.show();
-        }
     }
 
     selectMenuItem(values) {
@@ -180,13 +179,9 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     }
 
     addMenuItem() {
-        if (this.model.value.subjectType && this.model.value.subjectType === SubjectType.newsCategory
-            || this.model.value.subjectType === SubjectType.news) {
             this.choiceMenuItemComponent.type = this.model.value.subjectType;
             this.choiceMenuItemComponent.show();
-        }
     }
-
     private renderForm() {
         this.buildForm();
         this.renderTranslationFormArray(this.buildFormLanguage);
