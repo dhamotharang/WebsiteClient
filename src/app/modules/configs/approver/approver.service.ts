@@ -9,6 +9,7 @@ import { ApproverViewModel } from './view-models/approver.viewmodel';
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
 import { SuggestionViewModel } from '../../../shareds/view-models/SuggestionViewModel';
 import { finalize } from 'rxjs/operators';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class ApproverService implements Resolve<any> {
@@ -17,7 +18,7 @@ export class ApproverService implements Resolve<any> {
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

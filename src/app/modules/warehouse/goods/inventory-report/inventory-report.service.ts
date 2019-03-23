@@ -10,6 +10,7 @@ import { IActionResultResponse } from '../../../../interfaces/iaction-result-res
 import { SearchResultViewModel } from '../../../../shareds/view-models/search-result.viewmodel';
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class InventoryReportService implements Resolve<any> {
@@ -17,7 +18,7 @@ export class InventoryReportService implements Resolve<any> {
 
     constructor(private spinnerService: SpinnerService, @Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig, private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

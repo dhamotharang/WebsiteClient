@@ -8,6 +8,7 @@ import {ActionResultViewModel} from '../../../shareds/view-models/action-result.
 import {finalize, map} from 'rxjs/operators';
 import {Files} from '../model/file.model';
 import {FileDetailViewModel} from '../viewmodels/file-detail.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 export class FileService {
     url = 'files/';
@@ -16,7 +17,7 @@ export class FileService {
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.FILE_MANAGEMENT}${this.url}`;
+        this.url = `${environment.filemanagementUrl}${this.url}`;
     }
 
     getDetail(id: number): Observable<FileDetailViewModel> {

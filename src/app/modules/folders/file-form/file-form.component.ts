@@ -11,6 +11,7 @@ import {FileDetailViewModel} from '../viewmodels/file-detail.viewmodel';
 import {TreeData} from '../../../view-model/tree-data';
 import {FolderService} from '../service/folder.service';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-file-form',
@@ -32,7 +33,7 @@ export class FileFormComponent extends BaseFormComponent implements OnInit {
                 private fileService: FileService) {
         super();
 
-        this.urlUpload = `${ this.appConfig.FILE_MANAGEMENT}uploads`;
+        this.urlUpload = `${ environment.filemanagementUrl}uploads`;
     }
 
     ngOnInit() {

@@ -10,6 +10,7 @@ import {Language} from '../../modules/configs/website/language/model/language.mo
 import {SpinnerService} from '../../core/spinner/spinner.service';
 import {ToastrService} from 'ngx-toastr';
 import {SuggestionViewModel} from '../view-models/SuggestionViewModel';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class LanguageService {
@@ -19,7 +20,7 @@ export class LanguageService {
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService,
                 private http: HttpClient) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     getListSupportedLanguage(): Observable<LanguageSearchViewModel[]> {

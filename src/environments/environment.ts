@@ -3,7 +3,20 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiGatewayUrl: 'http://localhost:50008/',
+  notificationUrl: 'http://localhost:50004',
+  fileUrl: 'http://localhost:50005/',
+  filemanagementUrl: 'http://localhost:50005/api/v1/',
+
+
+
+  // product
+  // production: true,
+  // apiGatewayUrl: 'http://quyapigateway.ghmsoft.vn/',
+  // notificationUrl: 'http://localhost:50004',
+  // fileUrl: 'http://quyfile.ghmsoft.vn/',
+  // filemanagementUrl: 'http://quyfile.ghmsoft.vn/api/v1/',
 };
 
 /*

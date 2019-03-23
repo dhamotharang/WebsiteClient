@@ -14,6 +14,7 @@ import { NhSuggestion } from '../../../../shareds/components/nh-suggestion/nh-su
 import { GoodsReceiptNoteBarcodeViewModel } from './goods-receipt-note-print-barcode/goods-receipt-note-barcode.viewmodel';
 import { WarehouseCardViewModel } from '../inventory-report/warehouse-card/warehouse-card.viewmodel';
 import { WarehouseCardDetailViewModel } from '../inventory-report/warehouse-card-detail/warehouse-card-detail.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class GoodsReceiptNoteService implements Resolve<any> {
@@ -23,7 +24,7 @@ export class GoodsReceiptNoteService implements Resolve<any> {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

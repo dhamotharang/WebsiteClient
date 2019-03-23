@@ -9,6 +9,7 @@ import { finalize, map } from 'rxjs/operators';
 import { SettingViewModel } from '../view-models/setting.viewmodel';
 import { SearchResultViewModel } from '../../../../shareds/view-models/search-result.viewmodel';
 import { SpinnerService } from '../../../../core/spinner/spinner.service';
+import {environment} from '../../../../../environments/environment';
 
 export class WebsiteService {
     url = 'api/v1/website/settings/';
@@ -18,7 +19,7 @@ export class WebsiteService {
                 private toastr: ToastrService,
                 private http: HttpClient) {
 
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     save(settings: SettingViewModel[]): Observable<ActionResultViewModel> {

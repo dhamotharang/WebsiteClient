@@ -18,6 +18,7 @@ import { ProductInfoDeliveryViewModel } from '../../viewmodel/product-info-deliv
 import { ProductSuggestionComponent } from '../../../../product/product/product-suggestion/product-suggestion.component';
 import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { GoodsReceiptNoteService } from '../../../goods-receipt-note/goods-receipt-note.service';
+import {environment} from '../../../../../../../environments/environment';
 
 @Component({
     selector: 'app-goods-delivery-note-product',
@@ -76,7 +77,7 @@ export class GoodsDeliveryNoteProductComponent extends BaseFormComponent impleme
                 private goodsDeliveryNoteService: GoodsDeliveryNoteService,
                 private goodsReceiptNoteService: GoodsReceiptNoteService) {
         super();
-        this.urlSearchProduct = `${appConfig.API_GATEWAY_URL}api/v1/warehouse/products`;
+        this.urlSearchProduct = `${environment.apiGatewayUrl}api/v1/warehouse/products`;
     }
 
     ngOnInit() {

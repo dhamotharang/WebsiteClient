@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { APP_CONFIG, IAppConfig } from '../../../../../../configs/app.config';
 import { ToastrService } from 'ngx-toastr';
 import { BaseFormComponent } from '../../../../../../base-form.component';
+import {environment} from '../../../../../../../environments/environment';
 
 @Component({
     selector: 'app-product-form-attribute',
@@ -32,7 +33,7 @@ export class ProductFormAttributeComponent extends BaseFormComponent implements 
                 private toastr: ToastrService,
                 private productAttributeService: ProductAttributeService) {
         super();
-        this.urlProductAttributeSuggestion = `${appConfig.API_GATEWAY_URL}api/v1/warehouse/product-attributes/suggestion`;
+        this.urlProductAttributeSuggestion = `${environment.apiGatewayUrl}api/v1/warehouse/product-attributes/suggestion`;
     }
 
     ngOnInit() {

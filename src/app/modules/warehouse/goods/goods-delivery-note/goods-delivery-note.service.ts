@@ -14,6 +14,7 @@ import { finalize, map } from 'rxjs/internal/operators';
 import { GoodsDeliveryNoteDetail } from './model/goods-delivery-note-details.model';
 import { GoodsDeliveryNoteDetailViewModel } from './viewmodel/goods-delivery-note.detail.viewmodel';
 import { ProductInfoDeliveryViewModel } from './viewmodel/product-info-delivery.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 export class GoodsDeliveryNoteService implements Resolve<any> {
     url = 'api/v1/warehouse/goods-delivery-notes';
@@ -23,7 +24,7 @@ export class GoodsDeliveryNoteService implements Resolve<any> {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

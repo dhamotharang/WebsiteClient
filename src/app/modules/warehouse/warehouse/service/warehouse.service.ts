@@ -17,6 +17,7 @@ import { WarehouseDetailViewModel } from '../viewmodel/warehouse-detail.viewmode
 import { WarehouseLimit } from '../model/warehouse-limit.model';
 import { WarehouseLimitSearchViewModel } from '../viewmodel/warehouse-limit-search.viewmodel';
 import { SuggestionViewModel } from '../../../../shareds/view-models/SuggestionViewModel';
+import {environment} from '../../../../../environments/environment';
 
 export class WarehouseService {
 
@@ -28,7 +29,7 @@ export class WarehouseService {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

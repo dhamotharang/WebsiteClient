@@ -6,6 +6,7 @@ import { SearchResultViewModel } from '../../view-models/search-result.viewmodel
 import { NhUserPicker } from './nh-user-picker.model';
 import { map } from 'rxjs/operators';
 import { UserSuggestion } from '../ghm-user-suggestion/ghm-user-suggestion.component';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class NhUserPickerService {
@@ -13,7 +14,7 @@ export class NhUserPickerService {
 
     constructor(@Inject(APP_CONFIG) appConfig: IAppConfig,
                 private http: HttpClient) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string, officeId?: number, page: number = 1, pageSize: number = 10): Observable<SearchResultViewModel<NhUserPicker>> {

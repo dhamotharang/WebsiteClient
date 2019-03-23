@@ -16,6 +16,7 @@ import { NhUserPicker } from '../../../shareds/components/nh-user-picker/nh-user
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
 import { SpinnerService } from '../../../core/spinner/spinner.service';
 import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class RoleService implements Resolve<any> {
@@ -25,7 +26,7 @@ export class RoleService implements Resolve<any> {
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService,
                 private http: HttpClient) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

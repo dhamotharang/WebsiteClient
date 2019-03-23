@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { ActionResultViewModel } from '../../view-models/action-result.viewmodel';
 import { finalize, map } from 'rxjs/operators';
 import { CurrentDirectoryViewModel } from './view-models/current-directory.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class GhmFileExplorerService {
@@ -18,8 +19,8 @@ export class GhmFileExplorerService {
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.FILE_MANAGEMENT}${this.url}`;
-        this.folderUrl = `${appConfig.FILE_MANAGEMENT}${this.folderUrl}`;
+        this.url = `${environment.fileUrl}${this.url}`;
+        this.folderUrl = `${environment.filemanagementUrl}${this.folderUrl}`;
     }
 
     createFolder(folder: Folder): Observable<ActionResultViewModel> {

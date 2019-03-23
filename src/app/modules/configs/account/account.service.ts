@@ -8,6 +8,7 @@ import { SearchResultViewModel } from '../../../shareds/view-models/search-resul
 import { AccountViewModel } from './view-models/account.viewmodel';
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
 import { Account } from './models/account.model';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class AccountService {
@@ -16,7 +17,7 @@ export class AccountService {
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string, isActive?: boolean, page: number = 1,

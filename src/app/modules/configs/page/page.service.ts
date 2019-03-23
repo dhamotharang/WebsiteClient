@@ -15,6 +15,7 @@ import { PageDetailViewModel } from './models/page-detail.viewmodel';
 import { PageActivatedSearchViewModel } from './models/page-activated-search.viewmodel';
 import { PageSearchViewModel } from './models/page-search.viewmodel';
 import { SpinnerService } from '../../../core/spinner/spinner.service';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class PageService implements Resolve<any> {
@@ -23,7 +24,7 @@ export class PageService implements Resolve<any> {
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

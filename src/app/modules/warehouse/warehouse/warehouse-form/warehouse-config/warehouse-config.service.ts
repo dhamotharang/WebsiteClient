@@ -8,6 +8,7 @@ import {WarehouseConfig} from './warehouse-config.model';
 import {Observable} from 'rxjs';
 import {ActionResultViewModel} from '../../../../../shareds/view-models/action-result.viewmodel';
 import {SearchResultViewModel} from '../../../../../shareds/view-models/search-result.viewmodel';
+import {environment} from '../../../../../../environments/environment';
 
 export class WarehouseConfigService {
     url = 'api/v1/warehouse/warehouse-configs/';
@@ -17,7 +18,7 @@ export class WarehouseConfigService {
                 private toastr: ToastrService,
                 private http: HttpClient) {
 
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     save(warehouseConfigs: WarehouseConfig[]): Observable<ActionResultViewModel> {

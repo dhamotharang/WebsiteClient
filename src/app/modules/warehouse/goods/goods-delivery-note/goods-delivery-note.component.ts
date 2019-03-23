@@ -18,6 +18,7 @@ import * as FileSaver from 'file-saver';
 import { DeliveryType, DeliveryTypes } from '../../../../shareds/constants/deliveryType.const';
 import { GoodsDeliveryNoteDetail } from './model/goods-delivery-note-details.model';
 import { GoodsDeliveryNoteType } from './goods-delivery-note-type.const';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-goods-delivery-note',
@@ -47,7 +48,7 @@ export class GoodsDeliveryNoteComponent extends BaseListComponent<GoodsDeliveryN
                 private goodsDeliveryNoteService: GoodsDeliveryNoteService,
                 private utilService: UtilService) {
         super();
-        this.urlSearchWarehouse = `${appConfig.API_GATEWAY_URL}api/v1/warehouse/warehouses/suggestions`;
+        this.urlSearchWarehouse = `${environment.apiGatewayUrl}api/v1/warehouse/warehouses/suggestions`;
         this.listItems$ = this.route.data.pipe(map((result: { data: SearchResultViewModel<GoodsDeliveryNoteSearchViewModel> }) => {
             const data = result.data;
             this.totalRows = data.totalRows;

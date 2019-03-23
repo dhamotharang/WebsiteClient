@@ -12,6 +12,7 @@ import { TreeData } from '../../../view-model/tree-data';
 import { FileFolderSearchViewModel } from '../viewmodels/file-folder-search.viewmodel';
 import { FolderSearchViewModel } from '../viewmodels/folder-search.viewmodel';
 import { FileSearchViewModel } from '../viewmodels/file-search.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 export class FolderService {
     url = 'folders/';
@@ -21,7 +22,7 @@ export class FolderService {
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.FILE_MANAGEMENT}${this.url}`;
+        this.url = `${environment.filemanagementUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {
@@ -57,7 +58,7 @@ export class FolderService {
         }).pipe(finalize(() => this.spinnerService.hide()), map((result: FileFolderSearchViewModel) => {
             if (result.files && result.files.length > 0) {
                 result.files.forEach((item: FileSearchViewModel) => {
-                    item.absoluteUrl = `${this.appConfig.FILE_URL}${item.url}`;
+                    item.absoluteUrl = `${environment.fileUrl}${item.url}`;
                     item.sizeString = this.bytesToSize(item.size);
                     item.isImage = this.checkIsImage(item.extension);
                 });

@@ -9,6 +9,7 @@ import {ToastrService} from 'ngx-toastr';
 import {finalize, map} from 'rxjs/operators';
 import {ActionResultViewModel} from '../../../../../shareds/view-models/action-result.viewmodel';
 import {LanguageSearchViewModel} from '../viewmodel/language-search.viewmodel';
+import {environment} from '../../../../../../environments/environment';
 
 export class LanguageService {
     url = 'api/v1/core/languages';
@@ -17,7 +18,7 @@ export class LanguageService {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     getALlLanguage(): Observable<SearchResultViewModel<Language>> {

@@ -6,6 +6,7 @@ import { ActionResultViewModel } from '../../../view-models/action-result.viewmo
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class AccountService {
@@ -14,7 +15,7 @@ export class AccountService {
     constructor(@Inject(APP_CONFIG) appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private http: HttpClient) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     updatePassword(updatePassword: ChangePassword): Observable<ActionResultViewModel> {

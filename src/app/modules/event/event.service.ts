@@ -21,6 +21,7 @@ import * as _ from 'lodash';
 import {EventAlbumViewmodel} from './event-album/viewmodel/event-album.viewmodel';
 import {EventAlbum} from './event-album/event-album.model';
 import {Album} from '../gallery/photo/models/album.model';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class EventService implements Resolve<SurveyViewModel> {
@@ -30,7 +31,7 @@ export class EventService implements Resolve<SurveyViewModel> {
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService,
                 private http: HttpClient) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

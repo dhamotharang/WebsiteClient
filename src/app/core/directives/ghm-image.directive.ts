@@ -1,5 +1,6 @@
 import {Directive, ElementRef, HostListener, Inject, Input, Renderer2} from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
+import {environment} from '../../../environments/environment';
 
 @Directive({selector: '[ghmImage]'})
 export class GhmImageDirective {
@@ -8,7 +9,7 @@ export class GhmImageDirective {
 
     @Input()
     set src(value: string) {
-        this.renderer.setAttribute(this.el.nativeElement, 'src', `${!this.isUrlAbsolute ? this.appConfig.FILE_URL : '' }${value}`);
+        this.renderer.setAttribute(this.el.nativeElement, 'src', `${!this.isUrlAbsolute ? environment.fileUrl : '' }${value}`);
     }
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,

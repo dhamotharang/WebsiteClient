@@ -15,6 +15,7 @@ import { Supplier } from '../model/supplier.model';
 import * as _ from 'lodash';
 import { SupplierSuggestionsViewModel } from '../viewmodel/supplier-suggestions.viewmodel';
 import { NhSuggestion } from '../../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {environment} from '../../../../../../environments/environment';
 
 export class SupplierService {
     url = 'api/v1/warehouse/suppliers';
@@ -23,7 +24,7 @@ export class SupplierService {
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

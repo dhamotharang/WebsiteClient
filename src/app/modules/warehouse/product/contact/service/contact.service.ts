@@ -17,7 +17,7 @@ export class ContactService {
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     getDetail(id: string): Observable<ActionResultViewModel<Contact>> {

@@ -12,7 +12,7 @@ export class GhmUserSuggestionService {
     url = 'api/v1/hr/users/suggestions';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string): Observable<UserSuggestion[]> {

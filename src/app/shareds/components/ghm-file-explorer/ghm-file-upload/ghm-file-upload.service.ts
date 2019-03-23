@@ -3,6 +3,7 @@ import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {HttpClient, HttpEvent, HttpEventType, HttpHeaders} from '@angular/common/http';
 import {catchError, last, map, tap} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class GhmFileUploadService {
@@ -14,7 +15,7 @@ export class GhmFileUploadService {
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private http: HttpClient) {
-        this.url = `${appConfig.FILE_MANAGEMENT}${this.url}`;
+        this.url = `${environment.filemanagementUrl}${this.url}`;
     }
 
     upload(files: FileList, extractsData?: any) {

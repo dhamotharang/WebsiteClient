@@ -16,6 +16,7 @@ import {BrandSuggestionsViewModel} from '../viewmodel/brand-suggestions.viewmode
 import * as _ from 'lodash';
 import {BrandDetailViewModel} from '../viewmodel/brand-detail.viewmodel';
 import {NhSuggestion} from '../../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {environment} from '../../../../../../environments/environment';
 
 export class BrandService {
     url = 'api/v1/warehouse/brands';
@@ -24,7 +25,7 @@ export class BrandService {
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

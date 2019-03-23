@@ -10,6 +10,7 @@ import { AlbumViewModel } from './view-models/album.viewmodel';
 import { Album } from './models/album.model';
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class PhotoService implements Resolve<any> {
@@ -18,7 +19,7 @@ export class PhotoService implements Resolve<any> {
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

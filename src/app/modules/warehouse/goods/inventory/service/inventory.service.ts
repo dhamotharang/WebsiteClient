@@ -13,6 +13,7 @@ import { Inventory } from '../model/inventory.model';
 import { InventoryDetailViewModel } from '../viewmodel/inventory-detail.viewmodel';
 import { InventoryDetail } from '../model/inventory-detail.model';
 import { InventoryMember } from '../model/inventory-member.model';
+import {environment} from '../../../../../../environments/environment';
 
 export class InventoryService {
     url = 'api/v1/warehouse/inventories';
@@ -22,7 +23,7 @@ export class InventoryService {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

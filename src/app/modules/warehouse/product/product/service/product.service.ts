@@ -17,6 +17,7 @@ import { ProductListUnit } from '../product-form/product-unit/model/product-list
 import { ProductAttribute } from '../product-form/product-attribute/model/product-value.model';
 import { ProductCategoriesAttributeViewModel } from '../product-form/product-attribute/viewmodel/product-categories-attribute.viewmodel';
 import { ProductUnit } from '../product-form/product-unit/model/product-unit.model';
+import {environment} from '../../../../../../environments/environment';
 
 export class ProductService {
     url = 'api/v1/warehouse/products';
@@ -26,7 +27,7 @@ export class ProductService {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

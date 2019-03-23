@@ -12,6 +12,7 @@ import { IActionResultResponse } from '../../../../interfaces/iaction-result-res
 import { UserContact } from '../models/user-contact.model';
 import { ToastrService } from 'ngx-toastr';
 import { ShortUserInfoViewModel } from '../models/short-user-info.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class UserService implements Resolve<any> {
@@ -20,7 +21,7 @@ export class UserService implements Resolve<any> {
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

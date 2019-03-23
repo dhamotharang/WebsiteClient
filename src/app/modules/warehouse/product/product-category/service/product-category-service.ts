@@ -16,6 +16,7 @@ import {ProductCategory} from '../model/product-category.model';
 import {ProductCategorySuggestionViewModel} from '../viewmodel/product-category-suggestion.viewmodel';
 import * as _ from 'lodash';
 import {NhSuggestion} from '../../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {environment} from '../../../../../../environments/environment';
 
 export class ProductCategoryService {
     url = 'api/v1/warehouse/product-categories';
@@ -24,7 +25,7 @@ export class ProductCategoryService {
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

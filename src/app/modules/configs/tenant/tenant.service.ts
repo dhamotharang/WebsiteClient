@@ -10,6 +10,7 @@ import { SpinnerService } from '../../../core/spinner/spinner.service';
 import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
 import { ActionResultViewModel } from '../../../shareds/view-models/action-result.viewmodel';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class TenantService {
@@ -19,7 +20,7 @@ export class TenantService {
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private appService: AppService) {
-        this.url = `${appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string, isActive?: boolean, page?: number, pageSize: number = 1): Observable<SearchResultViewModel<Tenant>> {

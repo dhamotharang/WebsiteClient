@@ -30,6 +30,7 @@ import { FolderViewModel } from './view-models/folder.viewmodel';
 import { APP_CONFIG, IAppConfig } from '../../../configs/app.config';
 import { Folder } from '../../../modules/folders/model/folder.model';
 import { Breadcrumb } from './models/breadcrumb.model';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'ghm-file-explorer',
@@ -226,7 +227,7 @@ export class GhmFileExplorerComponent implements OnInit, OnDestroy {
     }
 
     private renderFileUrl(url: string) {
-        return `${this.appConfig.FILE_URL}${url}`;
+        return `${environment.fileUrl}${url}`;
     }
 
     private getCurrentDirectory() {

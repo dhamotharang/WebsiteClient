@@ -15,6 +15,7 @@ import {ActionResultViewModel} from '../../../../../shareds/view-models/action-r
 import {WarehouseLimitSearchViewModel} from '../../viewmodel/warehouse-limit-search.viewmodel';
 import * as _ from 'lodash';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../../../../environments/environment';
 
 @Component({
     selector: 'app-warehouse-limit',
@@ -46,7 +47,7 @@ export class WarehouseLimitComponent extends BaseFormComponent implements OnInit
                 private productService: ProductService,
                 private warehouseService: WarehouseService) {
         super();
-        this.urlSearchProduct = `${appConfig.API_GATEWAY_URL}api/v1/warehouse/products`;
+        this.urlSearchProduct = `${environment.apiGatewayUrl}api/v1/warehouse/products`;
         this.pageSize = this.appConfig.PAGE_SIZE;
     }
 

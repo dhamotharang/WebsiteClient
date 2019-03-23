@@ -17,6 +17,7 @@ import {Resolve} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {IActionResultResponse} from '../../interfaces/iaction-result-response.result';
 import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class AppService implements Resolve<any> {
@@ -47,7 +48,7 @@ export class AppService implements Resolve<any> {
                 private injector: Injector,
                 private title: Title,
                 private toastr: ToastrService) {
-        this.url = `${this.appConfig.API_GATEWAY_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve() {

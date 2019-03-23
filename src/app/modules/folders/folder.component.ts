@@ -25,6 +25,7 @@ import {Files} from './model/file.model';
 import {Breadcrumb} from '../../shareds/components/ghm-file-explorer/models/breadcrumb.model';
 import {SliderImageComponent} from './slider-image/slider-image.component';
 import {Folder} from './model/folder.model';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-folder',
@@ -89,7 +90,7 @@ export class FolderComponent extends BaseListComponent<FileFolderSearchViewModel
             this.folderTree = this.renderFolderTree(this.listFolderRoot);
         }
 
-        this.urlLoadFolder = `${this.appConfig.FILE_MANAGEMENT}folders/children/`;
+        this.urlLoadFolder = `${environment.filemanagementUrl}folders/children/`;
 
         this.ghmFileUploadService.complete$
             .subscribe((result: ActionResultViewModel<FileViewModel[]>) => {
