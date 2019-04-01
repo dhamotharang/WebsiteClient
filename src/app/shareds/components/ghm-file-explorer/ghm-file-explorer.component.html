@@ -62,7 +62,7 @@
                             <div class="ghm-fe-item-content"
                                  [class.selected]="item.isSelected">
                                 <div class="ghm-fe-item-icon">
-                                    <img src="{{ item.absoluteUrl }}" *ngIf="item.isImage; else fileTemplate">
+                                    <img ghmImage [src]="item.absoluteUrl" *ngIf="item.isImage; else fileTemplate">
                                     <ng-template #fileTemplate>
                                         <i class="icon icon-{{ item.extension }}"></i>
                                     </ng-template>

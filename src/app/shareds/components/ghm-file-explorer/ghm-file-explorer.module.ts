@@ -10,11 +10,12 @@ import {GhmFileUploadComponent} from './ghm-file-upload/ghm-file-upload.componen
 import {GhmFileExplorerService} from './ghm-file-explorer.service';
 import {GhmFileUploadService} from './ghm-file-upload/ghm-file-upload.service';
 import {DatetimeFormatModule} from '../../pipe/datetime-format/datetime-format.module';
+import {CoreModule} from '../../../core/core.module';
 
 @NgModule({
     imports: [
         CommonModule, OverlayModule, MatCheckboxModule, MatTooltipModule, NhModalModule,
-        FormsModule, DatetimeFormatModule
+        FormsModule, DatetimeFormatModule, CoreModule
     ],
     declarations: [GhmFileExplorerComponent, GhmNewFolderComponent, GhmFileUploadComponent],
     entryComponents: [],

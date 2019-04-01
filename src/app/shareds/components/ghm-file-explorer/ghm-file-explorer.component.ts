@@ -227,7 +227,8 @@ export class GhmFileExplorerComponent implements OnInit, OnDestroy {
     }
 
     private renderFileUrl(url: string) {
-        return `${environment.fileUrl}${url}`;
+        // return `${environment.fileUrl}${url}`;
+        return url;
     }
 
     private getCurrentDirectory() {
