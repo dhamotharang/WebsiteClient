@@ -5,6 +5,7 @@ export class Category {
     concurrencyStamp: string;
     categoryTranslations: CategoryTranslation[];
     order: number;
+    bannerImage: string;
 
     constructor() {
         this.isActive = true;

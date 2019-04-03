@@ -116,6 +116,18 @@
                     </div>
                 </div>
             </span>
+            <div class="form-group cm-mg-0">
+                <label class="col-sm-4 control-label" >
+                </label>
+                <div class="col-sm-8 col-sm-offset-4">
+                    <ghm-file-explorer i18n-buttonText="@@selectImage" [buttonText]="'Select image'"
+                                       (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
+                    <div class="cm-mgt-10">
+                        <img *ngIf="model.value?.bannerImage" ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
+                             [src]="model.value?.bannerImage">
+                    </div>
+                </div>
+            </div>
             <div class="form-group cm-mg-0" [formGroup]="model"
                  [class.has-error]="formErrors.order">
                 <label class="col-sm-4 control-label" i18n-ghmlabel="@@order" ghmLabel="Order" [required]="true">

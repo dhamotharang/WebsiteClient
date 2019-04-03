@@ -23,44 +23,44 @@
                 <label i18n-ghmLabel="@@typeBanner" class="col-sm-3 control-label" ghmLabel="Banner Type"
                        [required]="true"></label>
                 <div class="col-sm-3" [class.has-error]="formErrors?.type">
-                    <nh-select
-                        i18n-title="@@bannerType"
+                    <ghm-select
+                        i18n="@@bannerType"
                         title="-- Please select banner type --"
                         [data]="bannerTypes"
                         formControlName="type"
-                    ></nh-select>
+                    ></ghm-select>
                     <span class="help-block" >{ formErrors?.type, select, required {Type is required} isValid {Type is invalid}} </span>
                 </div>
                 <label i18n-ghmLabel="@@positionBanner" class="col-sm-3 control-label" ghmLabel="Banner Position"
                        [required]="true"></label>
                 <div class="col-sm-3" [class.has-error]="formErrors?.position">
-                    <nh-select
-                            i18n-title="@@bannerPosition"
+                    <ghm-select
+                            i18n="@@bannerPosition"
                             title="-- Please select banner position --"
                             [data]="positions"
                             formControlName="position"
-                    ></nh-select>
+                    ></ghm-select>
                     <span class="help-block" >{ formErrors?.position, select, required {Position is required} isValid {Position is invalid}} </span>
                 </div>
             </div>
             <div class="form-group">
                 <label i18n-ghmLabel="@@show" class="col-sm-3 control-label" ghmLabel="Show"></label>
                 <div class="col-sm-3" [class.has-error]="formErrors?.displayType">
-                    <nh-select
+                    <ghm-select
                         i18n-title="@@show"
                         title="-- Please select display type --"
                         [data]="displayTypes"
                         formControlName="displayType"
-                    ></nh-select>
+                    ></ghm-select>
                     <span class="help-block" >{ formErrors?.displayType , select, required {Display type is required} isValid {Display type is invalid}}</span>
                 </div>
                 <label i18n-ghmLabel="@@effect" class="col-sm-3 control-label" ghmLabel="Effect"></label>
                 <div class="col-sm-3" [class.has-error]="formErrors?.effectType">
-                    <nh-select
+                    <ghm-select
                             i18n-title="@@effectType"
                             title="-- Please select effect type --"
                             [data]="effectTypes"
-                            formControlName="effectType"></nh-select>
+                            formControlName="effectType"></ghm-select>
                     <span class="help-block" *ngIf="formErrors?.effectType">{formErrors?.effectType, select, required {EffectType is required} isValid {EffectType is invalid}}</span>
                 </div>
             </div>

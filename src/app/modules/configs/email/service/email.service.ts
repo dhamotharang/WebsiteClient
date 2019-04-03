@@ -11,15 +11,16 @@ import {EmailDetailViewModel} from '../viewmodel/email-detail.viewmodel';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ActivatedRouteSnapshot} from '@angular/router';
 import {EmailSearchViewModel} from '../viewmodel/email-search.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 export class EmailService {
-    url = '/mails';
+    url = 'api/v1/website/mails';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${this.appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

@@ -9,7 +9,7 @@ import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class GhmUserSuggestionService {
-    url = 'api/v1/hr/users/suggestions';
+    url = 'api/v1/core/accounts';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private http: HttpClient) {
         this.url = `${environment.apiGatewayUrl}${this.url}`;

@@ -139,7 +139,8 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
             _.each(this.productImages, (image: ProductImage) => {
                 image.isThumbnail = false;
             });
-            this.model.patchValue({thumbnail: item.url});
+            this.product.thumbnail = item.url;
+            // this.model.patchValue({thumbnail: item.url});
         }
         item.isThumbnail = !item.isThumbnail;
     }

@@ -43,12 +43,13 @@ export class AppService implements Resolve<any> {
         }
     };
     private url = 'api/v1/core/apps';
-
+    private url2 = 'api/v1/core';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private injector: Injector,
                 private title: Title,
                 private toastr: ToastrService) {
         this.url = `${environment.apiGatewayUrl}${this.url}`;
+        this.url2 = `${environment.apiGatewayUrl}${this.url2}`;
     }
 
     resolve() {
@@ -192,7 +193,7 @@ export class AppService implements Resolve<any> {
     toggleSidebar() {
         const currentValue = this.isCloseSidebar$.getValue();
         this.isCloseSidebar$.next(currentValue == null || currentValue === undefined ? true : !currentValue);
-        this.http.get(`${this.url}/user-settings/close-sidebar/${!currentValue}`)
+        this.http.get(`${this.url2}/user-settings/close-sidebar/${!currentValue}`)
             .subscribe();
     }
 
@@ -205,8 +206,10 @@ export class AppService implements Resolve<any> {
 
     changeTheme(themeName: string) {
         this.theme$.next(themeName);
-        this.http.get(`${this.url}/user-settings/change-theme/${themeName}`)
-            .subscribe();
+        this.http.get(`${this.url2}/user-settings/change-theme/${themeName}`)
+            .subscribe(() => {
+                this.appSetting.theme = themeName;
+            });
     }
 
     renderCssUrl(themeName: string) {

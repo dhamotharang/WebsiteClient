@@ -56,6 +56,11 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
         this.categoryFormModal.open();
     }
 
+    onImageSelected(value: any) {
+        console.log(value);
+        this.model.patchValue({'bannerImage': value.absoluteUrl});
+    }
+
     save() {
         const isValid = this.validateModel();
         const isLanguageValid = this.checkLanguageValid();
@@ -128,6 +133,7 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
         this.model = this.fb.group({
             isActive: [this.category.isActive],
             isHomePage: [this.category.isHomePage],
+            bannerImage: [this.category.bannerImage],
             parentId: [this.category.parentId],
             order: [this.category.order, [this.numberValidator.isValid, this.numberValidator.greaterThan(0)]],
             concurrencyStamp: [this.category.concurrencyStamp],

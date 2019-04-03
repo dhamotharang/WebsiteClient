@@ -20,9 +20,10 @@ import {BannerHistoryComponent} from './banner-history/banner-history.component'
 import {BannerItemComponent} from './banner-items/banner-item.component';
 import {GhmFileExplorerModule} from '../../shareds/components/ghm-file-explorer/ghm-file-explorer.module';
 import {BannerItemFormComponent} from './banner-items/banner-item-form/banner-item-form.component';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 
 @NgModule({
-    imports: [LayoutModule, CommonModule, BannerRoutingModule,  NhSelectModule, DatetimeFormatModule,
+    imports: [LayoutModule, CommonModule, BannerRoutingModule,  NhSelectModule, DatetimeFormatModule, GhmSelectModule,
         MatCheckboxModule, ReactiveFormsModule, NhDateModule, NhDateModule, MatTooltipModule, GhmFileExplorerModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
