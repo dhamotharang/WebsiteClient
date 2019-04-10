@@ -10,15 +10,16 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {BranchSearchViewModel} from './viewmodel/branch-search.viewmodel';
 import {SpinnerService} from '../../../../core/spinner/spinner.service';
 import {BranchDetailViewModel} from './viewmodel/branch-detail.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 export class BranchService {
-    url = 'branchs/';
+    url = 'api/v1/website/branchs/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private httpClient: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${this.appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string, page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE)

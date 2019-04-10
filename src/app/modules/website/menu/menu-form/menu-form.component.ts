@@ -15,6 +15,7 @@ import { GhmMultiSelect } from '../../../../shareds/components/ghm-multi-select/
 import { Category } from '../../category/category.model';
 import { finalize } from 'rxjs/operators';
 import { AppService } from '../../../../shareds/services/app.service';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-menu-form',
@@ -36,7 +37,7 @@ export class MenuFormComponent extends BaseFormComponent implements OnInit {
         CATEGORY: 1,
         NEWS: 2
     };
-
+    environment = environment;
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private fb: FormBuilder,
                 private toastr: ToastrService,

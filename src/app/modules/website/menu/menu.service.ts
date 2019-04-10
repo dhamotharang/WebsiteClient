@@ -5,14 +5,15 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { IResponseResult } from '../../../interfaces/iresponse-result';
 import { APP_CONFIG, IAppConfig } from '../../../configs/app.config';
 import { Menu } from './menu.model';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class MenuService {
-    url = 'menu/';
+    url = 'api/v1/website/menu/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

@@ -8,15 +8,16 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {SpinnerService} from '../../../../core/spinner/spinner.service';
 import {finalize, map} from 'rxjs/operators';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 export class SocialNetworkService {
-    url = 'social-networks/';
+    url = 'api/v1/website/social-networks/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private httpClient: HttpClient) {
-        this.url = `${this.appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(): Observable<SearchResultViewModel<SocialNetwork>> {

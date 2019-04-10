@@ -84,9 +84,8 @@
                  [class.has-error]="formErrors.image">
                 <div class="fileinput fileinput-new">
                     <div class="fileinput-new thumbnail">
-                        <nh-image [errorImageUrl]="'/assets/images/no-image.png'"
-                                  [cssClass]="'w100 cm-mgb-5'"
-                                  [value]="model.value.image"></nh-image>
+                        <img class="w100" ghmImage [errorImageUrl]="'/assets/images/no-image.png'"
+                                  [src]="model.value.image"/>
                         <span class="help-block">{formErrors?.image, select, maxLength {Image  not allowed over 500 characters}}</span>
                         <ghm-file-explorer [buttonText]="'Select image'"
                                            (itemSelected)="selectImage($event)"></ghm-file-explorer>

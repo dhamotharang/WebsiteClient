@@ -41,14 +41,15 @@
             <tbody>
             <tr *ngFor="let item of listItems$ | async; let i = index">
                 <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                <td class="middle"><a href="javascript://" (click)="detail(item.id)">{{ item.name }}</a></td>
+                <td class="middle" *ngIf="permission.edit || permission.view"><a href="javascript://"  routerLink="/config/roles/{{item.id}}">{{ item.name }}</a></td>
+                <td class="middle" *ngIf="!permission.edit && !permission.view">{{ item.name }}</td>
                 <td class="middle">{{ item.description }}</td>
                 <td class="middle" i18n="@@roleType">{item.type, select, 0 {Built in} 1 {Custom}}</td>
                 <td class="text-right middle" *ngIf="permission.view || permission.edit || permission.delete">
                     <!--<ghm-button icon="fa fa-eye" classes="btn dark btn-outlet btn-sm"-->
                                 <!--*ngIf="item.type !== 0"-->
                                 <!--(clicked)="detail(item)"></ghm-button>-->
-                    <a *ngIf="permission.edit && item.type !== 0"
+                    <a *ngIf="permission.edit && item.type !== 0" routerLink="/config/roles/{{item.id}}"
                        class="btn blue btn-outline btn-sm">
                         <i class="fa fa-edit"></i>
                     </a>

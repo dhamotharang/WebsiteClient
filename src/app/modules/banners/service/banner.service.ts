@@ -13,15 +13,16 @@ import {BannerDetailViewModel} from '../viewmodel/banner-detail.viewmodel';
 import {BannerHistoryViewModel} from '../viewmodel/banner-history.viewmodel';
 import {BannerItem} from '../models/banner-items.model';
 import {BannerResultViewModel} from '../viewmodel/banner-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 export class BannerService {
-    url = 'banners/';
+    url = 'api/v1/website/banners/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

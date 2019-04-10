@@ -66,6 +66,7 @@ export class NhDateComponent implements OnInit, AfterViewInit, OnDestroy, Contro
     @Input() material = false;
     @Input() type: 'input' | 'inputButton' | 'inline' | 'link' = 'input';
     @Input() format = 'DD/MM/YYYY';
+    @Input() outputFormat = 'DD/MM/YYYY';
     @Input() placeholder = 'Vui lòng chọn ngày tháng';
     @Input() showTime = false;
     @Input() allowRemove = true;

@@ -4,14 +4,15 @@ import { PromotionSubject } from '../model/promotion-subject.model';
 import { IActionResultResponse } from '../../../../interfaces/iaction-result-response.result';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { APP_CONFIG, IAppConfig } from '../../../../configs/app.config';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class PromotionSubjectService {
-    url = 'promotion-subject/'
+    url = 'api/v1/website/promotion-subject/'
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     insert(promotionSubjects: PromotionSubject[]): Observable<IActionResultResponse> {

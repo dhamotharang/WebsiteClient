@@ -7,14 +7,15 @@ import { Observable } from 'rxjs';
 import { ISearchResult } from '../../../interfaces/isearch.result';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { INewsPickerViewModel } from './inews-picker.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class NewsService implements Resolve<ISearchResult<News>> {
-    url = 'news/';
+    url = 'api/v1/website/news/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

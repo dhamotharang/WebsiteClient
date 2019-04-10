@@ -43,7 +43,7 @@ export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implem
     listNews: NewsSearchViewModel[];
     listNewsSelect: string [];
     newsStatus = NewsStatus;
-    isApprove = true;
+    isApprove = false;
     categoryId: number;
     listNewsIdForApprove;
     listNewsIdForSend;
@@ -68,6 +68,7 @@ export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implem
     ngOnInit() {
         this.appService.setupPage(this.pageId.NEWS, this.pageId.NEWS_LIST, 'Quản lý tin tức', 'Danh sách tin tức');
         this.subscribers.data = this.route.data.subscribe((result: { data: SearchNewViewModel }) => {
+            console.log(result);
             const data = result.data.searchResult;
             this.totalRows = data.totalRows;
             this.listNews = data.items;

@@ -4,14 +4,15 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IResponseResult } from '../../../../interfaces/iresponse-result';
 import { CourseRegister } from './course-register.model';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class CourseRegisterService {
-    url = 'course-register/';
+    url = 'api/v1/website/course-register/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     insert(courseRegister: CourseRegister): Observable<IResponseResult> {

@@ -5,14 +5,15 @@ import { ISearchResult } from '../../../../interfaces/isearch.result';
 import { PromotionVoucher } from '../model/promotion-voucher.model';
 import { IActionResultResponse } from '../../../../interfaces/iaction-result-response.result';
 import { APP_CONFIG, IAppConfig } from '../../../../configs/app.config';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class PromotionVoucherService {
-    url = 'promotion-voucher/';
+    url = 'api/v1/website/promotion-voucher/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     insert(voucher: PromotionVoucher): Observable<PromotionVoucher> {

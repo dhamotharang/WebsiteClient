@@ -44,7 +44,7 @@
         <th class="middle w200" i18n="@@email">Email</th>
         <th class="middle w200" i18n="@@phoneNumber">Phone number</th>
         <th class="middle" i18n="@@isActive">Is Active</th>
-        <th class="middle text-right w150" i18n="@@actions">Actions</th>
+        <th class="middle text-right w150" i18n="@@actions" *ngIf="permission.edit || permission.delete">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -61,10 +61,10 @@
                 </span>
         </td>
         <td class="middle text-right">
-            <button type="button" class="btn blue btn-outline btn-sm" (click)="edit(account)">
+            <button type="button" class="btn blue btn-outline btn-sm" *ngIf="permission.edit" (click)="edit(account)">
                 <i class="fa fa-edit"></i>
             </button>
-            <button type="button" class="btn red btn-outline btn-sm" [swal]="confirmDelete"
+            <button type="button" class="btn red btn-outline btn-sm" *ngIf="permission.delete" [swal]="confirmDelete"
                     (confirm)="delete(account.id)">
                 <i class="fa fa-trash-o"></i>
             </button>

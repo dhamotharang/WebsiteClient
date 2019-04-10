@@ -17,15 +17,16 @@ import {ChangeListNewsStatus} from '../model/changeListNewsStatus.model';
 import {NewSearchForSelectViewModel} from '../viewmodel/new-search-for-select.viewmodel';
 import * as _ from 'lodash';
 import {SearchNewViewModel} from '../viewmodel/searchNewViewModel';
+import {environment} from '../../../../../environments/environment';
 
 export class NewsService {
-    url = 'news/';
+    url = 'api/v1/website/news/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

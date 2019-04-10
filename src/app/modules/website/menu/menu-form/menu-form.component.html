@@ -106,14 +106,14 @@
     #categoryPicker
     titleIcon="fas fa-folder-open"
     title="Chọn chuyên mục"
-    [url]="appConfig.WEBSITE_API_URL + 'category/search-picker'"
+    [url]="environment.apiGatewayUrl + 'api/v1/website/category/search-picker'"
     (onAccept)="onAcceptSelectReference($event)"
 ></ghm-multi-select>
 <ghm-multi-select
     #newsPicker
     titleIcon="fas fa-file-alt"
     title="Chọn tin tức"
-    [url]="appConfig.WEBSITE_API_URL + 'news/search-picker'"
+    [url]="environment.apiGatewayUrl + 'api/v1/website/news/search-picker'"
     (onAccept)="onAcceptSelectReference($event)"
 ></ghm-multi-select>
 

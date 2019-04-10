@@ -10,15 +10,16 @@ import {EmailTemplate} from './model/email-template.model';
 import {EmailTemplateDetailViewModel} from './viewmodel/email-template-detail.viewmodel';
 import {EmailTemplateSearchViewModel} from './viewmodel/email-template-search.viewmodel';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {environment} from '../../../../../environments/environment';
 
 export class EmailTemplateService {
-    url = '/email-templates';
+    url = 'api/v1/website/email-templates';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService) {
-        this.url = `${this.appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE): Observable<SearchResultViewModel<EmailTemplateSearchViewModel>> {

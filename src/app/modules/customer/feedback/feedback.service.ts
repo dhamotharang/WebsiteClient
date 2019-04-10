@@ -11,15 +11,16 @@ import {ToastrService} from 'ngx-toastr';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {FeedbackDetailViewModel} from './viewmodel/feedback-detail.viewmodel';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
-    url = 'feedBacks/';
+    url = 'api/v1/website/feedBacks/';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

@@ -4,14 +4,15 @@ import { Promotion } from '../model/promotion.model';
 import { Observable } from 'rxjs';
 import { IActionResultResponse } from '../../../../interfaces/iaction-result-response.result';
 import { APP_CONFIG, IAppConfig } from '../../../../configs/app.config';
+import {environment} from '../../../../../environments/environment';
 
 @Injectable()
 export class PromotionService {
-    url = 'promotion/';
+    url = 'api/v1/website/promotion/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     search(keyword: string, fromDate?: string, toDate?: string, page: number = 1, pageSize: number = 20) {

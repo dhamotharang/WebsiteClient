@@ -14,15 +14,16 @@ import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {environment} from '../../../../environments/environment';
 
 export class BrandService {
-    url = 'brands';
+    url = 'api/v1/website/brands';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private toastr: ToastrService) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {

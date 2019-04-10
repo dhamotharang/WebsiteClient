@@ -12,16 +12,17 @@ import {Category} from './models/category.model';
 import {CategoryDetailViewModel} from './view-models/category-detail.viewmodel';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {CategorySearchForSelectViewModel} from './view-models/category-search-for-select.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class CategoryService implements Resolve<TreeData[]> {
-    url = 'categories/';
+    url = 'api/v1/website/categories/';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

@@ -11,16 +11,17 @@ import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class VideoService {
-    url = 'videos/';
+    url = 'api/v1/website/videos/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

@@ -7,14 +7,15 @@ import { Category } from './category.model';
 import { IResponseResult } from '../../../interfaces/iresponse-result';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { ICategoryPickerViewmodel } from './icategory-picker.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class CategoryService implements Resolve<any> {
-    url = 'category/';
+    url = 'api/v1/website/category/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

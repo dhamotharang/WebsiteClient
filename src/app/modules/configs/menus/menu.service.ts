@@ -15,15 +15,16 @@ import {MenuItem} from './models/menu-item.model';
 import {MenuItemDetailViewModel} from './viewmodel/menu-item-detail.viewmodel';
 import {TreeData} from '../../../view-model/tree-data';
 import {MenuItemSearchViewModel} from './viewmodel/menu-item-search.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 export class MenuService {
-    url = 'menus/';
+    url = 'api/v1/website/menus/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {

@@ -11,6 +11,7 @@ import {SearchResultViewModel} from '../view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../view-models/action-result.viewmodel';
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../core/spinner/spinner.service';
+import {environment} from '../../../environments/environment';
 
 declare var signalR: any;
 
@@ -26,7 +27,7 @@ export class NotificationService {
                 private toastr: ToastrService,
                 private spinnerService: SpinnerService,
                 private http: HttpClient) {
-        this.url = `${this.appConfig.NOTIFICATION_URL}/${this.url}`;
+        this.url = `${environment.notificationUrl}/${this.url}`;
         this.initNotificationConnection();
     }
 
@@ -34,7 +35,7 @@ export class NotificationService {
         const self = this;
         if (this.authService.token) {
             this.connection = new signalR.HubConnectionBuilder()
-                .withUrl(`${this.appConfig.NOTIFICATION_URL}/notifications?token=${this.authService.token}`)
+                .withUrl(`${environment.notificationUrl}/notifications?token=${this.authService.token}`)
                 .build();
 
             this.connection

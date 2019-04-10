@@ -59,7 +59,7 @@
            (confirm)="deleteNews()" i18n="@@delete">
             Delete
         </a>
-        <button type="button" class="btn blue" routerLink="/news/add" i18n="@@add">
+        <button type="button" *ngIf="permission.add"  class="btn blue" routerLink="/news/add" i18n="@@add">
             Add
         </button>
     </div>
@@ -69,15 +69,15 @@
     <thead>
     <tr>
         <th class="center middle w50">
-            <mat-checkbox color="primary" [(ngModel)]="isCheckAll" (change)="selectAll()"></mat-checkbox>
+            <mat-checkbox color="primary" [(ngModel)]="isCheckAll" *ngIf="permission.approve" (change)="selectAll()"></mat-checkbox>
         </th>
         <th class="middle" i18n="@@titleNews">Title</th>
         <th class="middle w200" i18n="@@categoryNews">Category</th>
         <th class="right middle w150" i18n="@@createDate">Create Date</th>
         <th class="center middle w50" i18n="@@viewCount">View count</th>
         <th class="middle center w100" i18n="@@statusApprove">Status approve</th>
-        <th class="middle center " i18n="@@approve" *ngIf="isApprove">Approve</th>
-        <th class="middle center" i18n="@@decline" *ngIf="isApprove">Decline</th>
+        <th class="middle center " i18n="@@approve" *ngIf="isApprove && permission.approve">Approve</th>
+        <th class="middle center" i18n="@@decline" *ngIf="isApprove && permission.approve">Decline</th>
         <th class="middle w150" i18n="@@userCreate">User Create</th>
         <th class="center middle w50" i18n="@@status">Active?</th>
         <th class="center middle w50" i18n="@@isHot">Hot?</th>
@@ -92,7 +92,7 @@
         [nhContextMenuData]="item">
         <td class="center middle">
             <mat-checkbox [disabled]="!(((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && item?.creatorId === currentUser.id)
-                                   || (item?.status === newsStatus.pending && isApprove))"
+                                   || (item?.status === newsStatus.pending && isApprove && permission.approve))"
                           color="primary" [(ngModel)]="item.isCheck" (change)="selectNew(item)"></mat-checkbox>
         </td>
         <td class="middle">
@@ -121,7 +121,7 @@
                              {item.status, select, 0 {Draft} 1 {Pending} 2 {Approved} 3 {Decline}}
                 </span>
         </td>
-        <td class="middle center" *ngIf="isApprove">
+        <td class="middle center" *ngIf="isApprove && permission.approve">
             <ghm-button
                     *ngIf="item.status === newStatus.pending"
                     icon="fa fa-check" classes="btn blue btn-sm"
@@ -131,7 +131,7 @@
                     *ngIf="item.status !== newStatus.pending"
                     class="btn default btn-sm" disabled><i class="fa fa-check"></i></button>
         </td>
-        <td class="middle center" *ngIf="isApprove">
+        <td class="middle center" *ngIf="isApprove && permission.approve">
             <button *ngIf="item.status === newsStatus.pending" class="btn red btn-sm"
                     [swal]="confirmDeclineNews"
                     (confirm)="updateStatus(item, newStatus.decline, $event)">
@@ -151,10 +151,10 @@
                               {item.isActive, select, 1 {Activated} 0 {InActive}}</span>
         </td>
         <td class="middle center">
-            <mat-checkbox color="primary" [checked]="item.isHot" [disabled]="item.status === 2" (change)="updateIsHot(item)"></mat-checkbox>
+            <mat-checkbox color="primary" [checked]="item.isHot" [disabled]="item.status === 2 ||  !permission.edit" (change)="updateIsHot(item)"></mat-checkbox>
         </td>
         <td class="middle center">
-            <mat-checkbox color="primary" [checked]="item.isHomePage" [disabled]="item.status === 2" (change)="updateIsHomePage(item)"></mat-checkbox>
+            <mat-checkbox color="primary" [checked]="item.isHomePage" [disabled]="item.status === 2 || !permission.edit" (change)="updateIsHomePage(item)"></mat-checkbox>
         </td>
         <td class="center middle">
             <nh-dropdown *ngIf="permission.view || permission.edit || permission.delete">
@@ -171,7 +171,7 @@
                     </li>
                     <li>
                         <a *ngIf="permission.edit && ((item?.status !== newsStatus.pending) && item?.creatorId === currentUser.id)
-                                   || (item?.status === newsStatus.pending && isApprove)"
+                                   || (item?.status === newsStatus.pending)"
                            (click)="edit(item)"
                            i18n="@@edit">
                             <i class="fa fa-edit"></i>

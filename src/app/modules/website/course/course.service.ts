@@ -6,14 +6,15 @@ import { IResponseResult } from '../../../interfaces/iresponse-result';
 import { Course } from './course.model';
 import { ISearchResult } from '../../../interfaces/isearch.result';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class CourseService implements Resolve<any> {
-    url = 'course/';
+    url = 'api/v1/website/course/';
 
     constructor( @Inject(APP_CONFIG) public appConfig: IAppConfig,
         private http: HttpClient) {
-        this.url = `${appConfig.WEBSITE_API_URL}${this.url}`;
+        this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
 
     resolve(route: ActivatedRouteSnapshot, state: Object) {
