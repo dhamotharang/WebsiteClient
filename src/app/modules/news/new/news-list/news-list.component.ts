@@ -129,6 +129,7 @@ export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implem
             this.listNews = result.searchResult.items;
             this.rendResult();
             this.isApprove = result.isApprove;
+
             this.getListNewSelect();
         });
     }

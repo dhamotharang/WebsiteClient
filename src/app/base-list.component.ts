@@ -35,7 +35,6 @@ export class BaseListComponent<TEntity> implements OnDestroy {
         this.appService = AppInjector.get(AppService);
         setTimeout(() => {
             this.permission = this.appService.getPermissionByPageId();
-            console.log(this.permission);
         });
     }
 
