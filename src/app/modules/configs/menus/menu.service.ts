@@ -101,6 +101,7 @@ export class MenuService {
     }
 
     updateMenuItem(menuId: string, menuItemId: number, menuItem: MenuItem): Observable<ActionResultViewModel> {
+        console.log(menuItem);
         return this.http.post(`${this.url}${menuId}/items/${menuItemId}`, {
             subjectId: menuItem.subjectId,
             subjectType: menuItem.subjectType,
@@ -112,6 +113,7 @@ export class MenuService {
             parentId: menuItem.parentId,
             concurrencyStamp: menuItem.concurrencyStamp,
             menuItemTranslations: menuItem.modelTranslations,
+            listMenuItemSelected: menuItem.listMenuItemSelected
         }).pipe(map((result: ActionResultViewModel) => {
             this.toastr.success(result.message);
             return result;

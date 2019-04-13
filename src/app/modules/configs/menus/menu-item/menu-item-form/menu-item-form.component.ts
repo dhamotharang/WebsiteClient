@@ -152,6 +152,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     }
 
     selectMenuItem(values) {
+
         if (values && values.length > 0) {
             _.each(values, (value, index) => {
                 const existsItem = _.find(this.listMenuItemSelect, (menuItem: MenuItemSelectViewModel) => {
