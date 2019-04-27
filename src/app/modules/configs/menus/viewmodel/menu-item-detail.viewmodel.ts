@@ -1,4 +1,5 @@
 import {MenuItemTranslation} from '../models/menu-item-translation.model';
+import {MenuItemSelectViewModel} from './menu-item-select.viewmodel';
 
 export class MenuItemDetailViewModel {
     id: number;
@@ -13,4 +14,5 @@ export class MenuItemDetailViewModel {
     order: number;
     concurrencyStamp: string;
     menuItemTranslations: MenuItemTranslation[];
+    menuItemSelected: MenuItemSelectViewModel[];
 }

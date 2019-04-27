@@ -75,6 +75,9 @@ export class NewsService {
     }
 
     insert(isSend: boolean, news: News): Observable<ActionResultViewModel> {
+        const listNews = _.each(news.modelTranslations, (item: any) => {
+             item.content = item.content.replace(new RegExp('"' + environment.fileUrl, 'g'), '"');
+        });
         return this.http.post(`${this.url}isSend/${isSend}`, {
             concurrencyStamp: news.concurrencyStamp,
             featureImage: news.featureImage,
@@ -85,7 +88,7 @@ export class NewsService {
             isHomePage: news.isHomePage,
             categoriesNews: news.categoriesNews,
             isActive: news.isActive,
-            newsTranslations: news.modelTranslations,
+            newsTranslations: listNews,
         }).pipe(map((result: ActionResultViewModel) => {
             this.toastr.success(result.message);
             return result;
@@ -93,6 +96,9 @@ export class NewsService {
     }
 
     update(id: string, news: News, isSend: boolean): Observable<ActionResultViewModel> {
+        const listNews =  _.each(news.modelTranslations, (item: any) => {
+                item.content = item.content.replace(new RegExp('"' + environment.fileUrl, 'g'), '"');
+            });
         return this.http.post(`${this.url}${id}/isSend/${isSend}`, {
             concurrencyStamp: news.concurrencyStamp,
             featureImage: news.featureImage,
@@ -103,8 +109,9 @@ export class NewsService {
             isHomePage: news.isHomePage,
             categoriesNews: news.categoriesNews,
             isActive: news.isActive,
-            newsTranslations: news.modelTranslations,
+            newsTranslations: listNews,
         }).pipe(map((result: ActionResultViewModel) => {
+            console.log(news.modelTranslations);
             this.toastr.success(result.message);
             return result;
         })) as Observable<ActionResultViewModel>;

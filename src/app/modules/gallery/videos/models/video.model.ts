@@ -10,6 +10,7 @@ export const VideoType = {
 
 export class Video {
     id: string;
+    albumId: string;
     videoLinkId: string;
     url: string;
     thumbnail: string;

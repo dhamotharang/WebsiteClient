@@ -9,8 +9,13 @@ export class GhmImageDirective {
 
     @Input()
     set src(value: string) {
-        console.log(value);
-        this.renderer.setAttribute(this.el.nativeElement, 'src', `${environment.fileUrl}${value}`);
+        if (value !== null) {
+            if (value.charAt(0) === 'u') {
+                this.renderer.setAttribute(this.el.nativeElement, 'src', `${environment.fileUrl}${value}`);
+            } else {
+                this.renderer.setAttribute(this.el.nativeElement, 'src', value);
+            }
+        }
     }
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,

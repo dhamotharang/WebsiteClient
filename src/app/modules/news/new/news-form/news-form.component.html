@@ -78,7 +78,7 @@
                                 <ghm-file-explorer i18n-buttonText="@@appendImageToContent"
                                                    [buttonText]="'Append image to content '"
                                                    [multiple]="true"
-                                                   (acceptSelected)="afterUploadImageContent($event)"></ghm-file-explorer>
+                                                   (acceptSelected)="afterUploadImageContent($event, i)"></ghm-file-explorer>
                             </div>
                             <tinymce [elementId]="'content'+ i" formControlName="content"
                                      [(ngModel)]="modelTranslation.value.content" [height]="350"></tinymce>

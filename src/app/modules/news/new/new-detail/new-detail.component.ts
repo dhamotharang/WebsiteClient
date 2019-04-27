@@ -13,6 +13,7 @@ import {TreeComment} from '../model/tree-comment.model';
 import {ToastrService} from 'ngx-toastr';
 import {ChangeNewsStatus} from '../model/newStatus.model';
 import {CategoryNewsViewModel} from '../viewmodel/categoryNewsViewModel';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-new-detail',
@@ -92,6 +93,9 @@ export class NewDetailComponent extends BaseFormComponent implements OnInit {
     getDetail(id: string) {
         this.newsService.getDetail(id).subscribe((result: ActionResultViewModel<NewDetailViewModel>) => {
             this.newDetail = result.data;
+            const listNewsTranslationDetail = _.each(this.newDetail.newsTranslations, (item: any) => {
+                item.content = item.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
+            });
             this.newsTranslation = this.newDetail.newsTranslations;
             this.listComment = this.newDetail.listComment;
             this.listCategoryNews = _.filter(this.newDetail.categoriesNews, (item: CategoryNewsViewModel) => {

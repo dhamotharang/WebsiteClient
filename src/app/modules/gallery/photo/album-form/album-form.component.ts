@@ -159,6 +159,7 @@ export class AlbumFormComponent extends BaseFormComponent implements OnInit {
                     }
                     this.photos = albumDetail.photos;
                     this.videos = albumDetail.videos;
+                    console.log(albumDetail.videos);
                 }
             });
     }

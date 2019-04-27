@@ -42,6 +42,7 @@ export class VideoService {
     }
 
     update(id: string, video: Video): Observable<ActionResultViewModel> {
+        console.log(video);
         return this.http.post(`${this.url}${id}`, video).pipe(map((result: ActionResultViewModel) => {
             this.toastr.success(result.message);
             return result;

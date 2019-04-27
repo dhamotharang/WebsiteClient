@@ -30,6 +30,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     @Output() onSaveSuccess = new EventEmitter();
     @Output() onCloseForm = new EventEmitter();
     menuItem = new MenuItem();
+    itemSelected: MenuItemSelectViewModel;
     modelTranslation = new MenuItemTranslation();
     subjectTypes = [
         {id: SubjectType.custom, name: 'Custom'},
@@ -38,7 +39,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
         {id: SubjectType.product, name: 'Product'},
         {id: SubjectType.productCategory, name: 'Product Category'},
     ];
-
+    subjectTypeModel = SubjectType;
     listMenuItemSelect: MenuItemSelectViewModel[] = [];
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -86,7 +87,6 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
                         this.onSaveSuccess.emit();
                     });
             } else {
-                console.log(this.model.value);
                 this.menuService.insertMenuItem(this.menuId, this.menuItem)
                     .pipe(finalize(() => this.isSaving = false))
                     .subscribe((result: ActionResultViewModel) => {
@@ -134,8 +134,18 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
                             }
                         );
                     }
+                    if (this.isUpdate && this.model.value.subjectType !== SubjectType.custom) {
+                        this.menuService.getItemSelectedBySubjectId(this.model.value.subjectType, this.model.value.subjectId, this.currentLanguage)
+                            .subscribe((resultAction: ActionResultViewModel<MenuItemSelectViewModel>) => {
+                                this.itemSelected = resultAction.data;
+                                return resultAction;
+                            });
+                    }
                 }
+
             );
+
+
     }
 
     onAcceptSelectMenuParent(value: TreeData) {
@@ -147,8 +157,10 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     }
 
     selectSubjectType(value) {
-            this.choiceMenuItemComponent.type = value.id;
+        this.choiceMenuItemComponent.type = value.id;
+        if (value.id !== SubjectType.custom) {
             this.choiceMenuItemComponent.show();
+        }
     }
 
     selectMenuItem(values) {
@@ -182,19 +194,19 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
     }
 
     addMenuItem() {
-            this.choiceMenuItemComponent.type = this.model.value.subjectType;
-            this.choiceMenuItemComponent.show();
+        this.choiceMenuItemComponent.type = this.model.value.subjectType;
+        this.choiceMenuItemComponent.show();
     }
+
     private renderForm() {
         this.buildForm();
         this.renderTranslationFormArray(this.buildFormLanguage);
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['subjectId', 'subjectType', 'parentId', 'image', 'icon', 'url', 'order',]);
+        this.formErrors = this.utilService.renderFormError(['subjectType', 'parentId', 'image', 'icon', 'url', 'order']);
         this.validationMessages = this.renderFormErrorMessage([
             {'subjectType': ['required', 'isValid']},
-            {'subjectId': ['isValid']},
             {'parentId': ['isValid']},
             {'image': ['maxLength']},
             {'icon': ['maxLength']},
@@ -217,7 +229,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
 
     private buildFormLanguage = (language: string) => {
         this.translationFormErrors[language] = this.utilService.renderFormError(
-            ['name',  'namePath']
+            ['name', 'namePath']
         );
         this.translationValidationMessage[language] = this.utilService.renderFormErrorMessage([
             {name: ['required', 'maxLength']},

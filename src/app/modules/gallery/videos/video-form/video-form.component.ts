@@ -100,28 +100,28 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
             } else {
                 this.utilService.focusElement('url ' + this.currentLanguage);
             }
-            // this.isSaving = true;
-            // if (this.isUpdate) {
-            //     this.videoService.update(this.id, this.video)
-            //         .pipe(finalize(() => this.isSaving = false))
-            //         .subscribe(() => {
-            //             this.isModified = true;
-            //             // this.onSaveSuccess.emit();
-            //             this.videoFormModal.dismiss();
-            //         });
-            // } else {
-            //     this.videoService.insert(this.video)
-            //         .pipe(finalize(() => this.isSaving = false))
-            //         .subscribe(() => {
-            //             this.isModified = true;
-            //             if (this.isCreateAnother) {
-            //                 this.resetForm();
-            //             } else {
-            //                 // this.onSaveSuccess.emit();
-            //                 this.videoFormModal.dismiss();
-            //             }
-            //         });
-            // }
+            this.isSaving = true;
+            if (this.isUpdate) {
+                this.videoService.update(this.video.id, this.video)
+                    .pipe(finalize(() => this.isSaving = false))
+                    .subscribe(() => {
+                        this.isModified = true;
+                        // this.onSaveSuccess.emit();
+                        this.videoFormModal.dismiss();
+                    });
+            } else {
+                this.videoService.insert(this.video)
+                    .pipe(finalize(() => this.isSaving = false))
+                    .subscribe(() => {
+                        this.isModified = true;
+                        if (this.isCreateAnother) {
+                            this.resetForm();
+                        } else {
+                            // this.onSaveSuccess.emit();
+                            this.videoFormModal.dismiss();
+                        }
+                    });
+            }
         }
     }
 
@@ -137,6 +137,7 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
                 order: videoDetail.order,
                 type: videoDetail.type,
                 concurrencyStamp: videoDetail.concurrencyStamp,
+                albumId: videoDetail.albumId
             });
             this.videoType = videoDetail.type;
             if (videoDetail.translations && videoDetail.translations.length > 0) {
@@ -286,6 +287,7 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
             type: [this.video.type, [
                 Validators.required
             ]],
+            albumId: [this.video.albumId],
             concurrencyStamp: [this.video.concurrencyStamp],
             translations: this.fb.array([])
         });

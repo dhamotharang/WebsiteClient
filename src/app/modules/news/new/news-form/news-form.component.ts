@@ -31,6 +31,7 @@ import {ExplorerItem} from '../../../../shareds/components/ghm-file-explorer/exp
 import {ToastrService} from 'ngx-toastr';
 import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
 import {CategoryNewsViewModel} from '../viewmodel/categoryNewsViewModel';
+import {environment} from '../../../../../environments/environment';
 
 declare var tinyMCE;
 
@@ -121,8 +122,10 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                                         );
                                     }
                                 );
+                                detail.content = detail.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
                                 if (detail) {
                                     model.patchValue(detail);
+
                                 }
                             }
                         );
@@ -209,13 +212,18 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
         this.model.patchValue({altImage: ''});
     }
 
-    afterUploadImageContent(images: ExplorerItem[]) {
+    afterUploadImageContent(images: ExplorerItem[], i: number) {
+        const id = 'content' + i;
         images.forEach((image) => {
             if (image.isImage) {
+                const imageAbsoluteUrl = environment.fileUrl + image.url;
                 tinyMCE.execCommand('mceInsertContent', false,
-                    `<img class="img-responsive" style="margin-left: auto; margin-right: auto" src="${image.absoluteUrl}"/>`);
+                    `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
             }
         });
+        // let content = tinyMCE.get(id).getContent();
+        // content = content.replace('"uploads/', '"' + environment.fileUrl + 'uploads/');
+        // tinyMCE.get(id).setContent(content);
     }
 
     closeForm() {

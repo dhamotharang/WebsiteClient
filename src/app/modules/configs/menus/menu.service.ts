@@ -16,6 +16,7 @@ import {MenuItemDetailViewModel} from './viewmodel/menu-item-detail.viewmodel';
 import {TreeData} from '../../../view-model/tree-data';
 import {MenuItemSearchViewModel} from './viewmodel/menu-item-search.viewmodel';
 import {environment} from '../../../../environments/environment';
+import {MenuItemSelectViewModel} from './viewmodel/menu-item-select.viewmodel';
 
 export class MenuService {
     url = 'api/v1/website/menus/';
@@ -151,5 +152,13 @@ export class MenuService {
                 .set('page', page ? page.toString() : '1')
                 .set('pageSize', pageSize ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
         }) as Observable<SearchResultViewModel<MenuItemSearchViewModel>>;
+    }
+
+    getItemSelectedBySubjectId(subjectType: number, subjectId: string, languageId: string): Observable<ActionResultViewModel<MenuItemSelectViewModel>> {
+        return this.http.get(`${this.url}${subjectId}/getMenuItemSelected`, {
+            params: new HttpParams()
+                .set('subjectType', subjectType.toString())
+                .set('languageId', languageId)
+        }) as Observable<ActionResultViewModel<MenuItemSelectViewModel>>;
     }
 }

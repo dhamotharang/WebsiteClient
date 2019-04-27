@@ -26,7 +26,6 @@ export class VideoComponent extends BaseListComponent<VideoSearchViewModel> impl
     @ViewChild(VideoDetailComponent) videoDetailComponent: VideoDetailComponent;
     @Input() albumId: string;
     @Input() videos: Video[] = [];
-
     isActive: boolean;
     type;
     height;

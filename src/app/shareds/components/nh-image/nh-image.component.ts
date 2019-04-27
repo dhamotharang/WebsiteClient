@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
     selector: 'nh-image',
     template: `
-        <img alt="" [class]="cssClass"
+        <img ghmImage alt="" [class]="cssClass"
              src="{{ value }}"
              alt="{{ alt }}"
              (error)="onImageError()"/>

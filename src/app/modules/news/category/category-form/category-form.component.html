@@ -148,7 +148,7 @@
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-4">
                     <mat-checkbox formControlName="isHomePage" color="primary" i18n="@@isHomePage">
-                        {model.value.isHomePage, select, 0 {Not Home Page} 1 {Home Page}}
+                        {{model.value.isHomePage ? "Home Page" : "Not Home Page"}}
                     </mat-checkbox>
                 </div>
             </div>
