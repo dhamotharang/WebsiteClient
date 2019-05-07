@@ -3,6 +3,9 @@
         (click)="showExplorer()">
     {{ buttonText }}
 </button>
+<button class="btn btn-danger"  *ngIf="buttonRemove" (click)="removed.emit(true); buttonRemove = !buttonRemove">
+    <i class="fa fa-times"></i>
+</button>
 
 <ng-template #ghmExplorerTemplate>
     <div class="ghm-file-explorer-container">

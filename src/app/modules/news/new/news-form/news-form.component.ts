@@ -200,6 +200,14 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
         }
     }
 
+    removeFeatureImage(item: any) {
+        console.log("ádasd");
+        this.model.patchValue({featureImage: ''});
+    }
+    removeBannerImage(item: any) {
+        this.model.patchValue({bannerImage: ''});
+    }
+
     afterUploadImageBanner(file: ExplorerItem) {
         if (file.isImage) {
             this.model.patchValue({bannerImage: file.absoluteUrl});

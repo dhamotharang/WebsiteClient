@@ -54,8 +54,11 @@ export class GhmFileExplorerComponent implements OnInit, OnDestroy {
     @Input() headerTitle = 'GHMSoft file explorer';
     @Input() showCloseButton = true;
 
+    @Input() buttonRemove = false;
+
     @Output() itemSelected = new EventEmitter();
     @Output() acceptSelected = new EventEmitter();
+    @Output() removed = new EventEmitter();
 
     selectItem$ = new Subject();
     openItem$ = new Subject();

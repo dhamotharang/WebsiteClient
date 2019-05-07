@@ -15,6 +15,8 @@ export class GhmImageDirective {
             } else {
                 this.renderer.setAttribute(this.el.nativeElement, 'src', value);
             }
+        } else {
+            this.renderer.setAttribute(this.el.nativeElement, 'src', this.errorImageUrl);
         }
     }
 

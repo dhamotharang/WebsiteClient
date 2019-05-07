@@ -204,6 +204,8 @@
                             || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
                                                        i18n-buttonText="@@selectImage"
                                                        [buttonText]="'Select image'"
+                                                       [buttonRemove]="model.value?.featureImage ? true : false"
+                                                       (removed)="removeFeatureImage($event)"
                                                        (itemSelected)="afterUploadImage($event)"></ghm-file-explorer>
                                     <span class="help-block">{formErrors?.featureImage, select, required {Image is required} maxLength {Image url  not allowed over 1000 characters}}</span>
                                 </div>
@@ -225,6 +227,8 @@
                             || ((newDetail?.status !==  newsStatus.pending) && newDetail?.creatorId === currentUser.id)"
                                                        i18n-buttonText="@@selectImage"
                                                        [buttonText]="'Select banner image'"
+                                                       [buttonRemove]="model.value?.bannerImage ? true : false"
+                                                       (removed)="removeBannerImage($event)"
                                                        (itemSelected)="afterUploadImageBanner($event)"></ghm-file-explorer>
                                     <span class="help-block">{formErrors?.bannerImage, select, required {Banner image is required} maxLength {Banner image url  not allowed over 1000 characters}}</span>
                                 </div>
