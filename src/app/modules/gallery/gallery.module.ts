@@ -31,7 +31,7 @@ import { AlbumFormComponent } from './photo/album-form/album-form.component';
         CommonModule, GalleryRoutingModule, LayoutModule, NhSelectModule, NhImageModule, DatetimeFormatModule,
         MatCheckboxModule, ReactiveFormsModule, NhDateModule, TreeTableModule, NhTagModule, GhmFileExplorerModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
-        MatTabsModule, MatIconModule, NhDropdownModule, GhmFileExplorerModule,
+        MatTabsModule, MatIconModule, NhDropdownModule, GhmFileExplorerModule, CoreModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

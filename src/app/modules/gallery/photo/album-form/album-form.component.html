@@ -221,7 +221,7 @@
                         <ul class="list-photos">
                             <li *ngFor="let photo of photos">
                                 <div class="photo-wrapper">
-                                    <img src="{{ photo.url }}">
+                                    <img ghmImage [src]="photo.url">
                                     <ul class="actions">
                                         <li>
                                             <button type="button" class="btn blue btn-sm" (click)="editPhoto(photo)">
