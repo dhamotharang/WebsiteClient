@@ -30,4 +30,8 @@ export class FeedbackDetailComponent {
     closeModal() {
         this.feedbackDetailModal.dismiss();
     }
+
+    updateView() {
+        this.feedbackService.updateResolve(this.feedbackDetail.id, this.feedbackDetail).subscribe();
+    }
 }

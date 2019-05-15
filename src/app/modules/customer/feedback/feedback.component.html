@@ -50,6 +50,7 @@
             <th class="middle" i18n="@@customerName">Customer Name</th>
             <th class="middle" i18n="@@phoneNumber">Phone Number</th>
             <th class="middle" i18n="@@email">Email</th>
+            <th class="middle">Trạng thái</th>
             <th class="middle w150" i18n="@@dateSend">Send date</th>
             <!--<th class="middle center w50" i18n="@@isResolve">Is Resolve?</th>-->
             <th class="middle center w50" *ngIf="permission.view || permission.edit">Sửa, Xóa</th>
@@ -65,6 +66,7 @@
                 {{item.phoneNumber}}
             </td>
             <td class="middle">{{item.email}}</td>
+            <td class="middle">{{item.isView === false ? ' Chưa được giải quyết' : 'Đã giải quyết'}}</td>
             <td class="middle">
                 {{item.createTime|dateTimeFormat:"DD/MM/YYYY hh:mm"}}
             </td>

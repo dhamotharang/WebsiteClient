@@ -58,9 +58,11 @@ export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
             .pipe(finalize(() => this.spinnerService.hide())) as Observable<ActionResultViewModel<FeedbackDetailViewModel>>;
     }
 
-    updateResolve(id: string, resolved: boolean): Observable<ActionResultViewModel> {
-        return this.http.post(`${this.url}${id}/resolve`, {})
-            .pipe(map((result: ActionResultViewModel) => {
+    updateResolve(id: string, resolved: any): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.post(`${this.url}${id}`, resolved)
+            .pipe(finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel) => {
                 this.toastr.success(result.message);
                 return result;
             })) as Observable<ActionResultViewModel>;

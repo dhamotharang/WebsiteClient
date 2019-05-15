@@ -4,6 +4,6 @@ export class FeedbackDetailViewModel {
     phoneNumber: string;
     email: string;
     createTime: Date;
-    isResolve: boolean;
+    isView: boolean;
     content: string;
 }
