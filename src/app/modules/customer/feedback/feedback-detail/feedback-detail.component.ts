@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {FeedbackService} from '../feedback.service';
 import {FeedbackDetailViewModel} from '../viewmodel/feedback-detail.viewmodel';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
@@ -11,7 +11,7 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 export class FeedbackDetailComponent {
     @ViewChild('feedbackDetailModal') feedbackDetailModal: NhModalComponent;
     feedbackDetail: FeedbackDetailViewModel;
-
+    @Output() saveSuccessfully = new EventEmitter();
     constructor(private feedbackService: FeedbackService) {
     }
 
@@ -32,6 +32,8 @@ export class FeedbackDetailComponent {
     }
 
     updateView() {
-        this.feedbackService.updateResolve(this.feedbackDetail.id, this.feedbackDetail).subscribe();
+        this.feedbackService.updateResolve(this.feedbackDetail.id, this.feedbackDetail).subscribe((result: any) => {
+            this.saveSuccessfully.emit(this.feedbackDetail);
+        });
     }
 }

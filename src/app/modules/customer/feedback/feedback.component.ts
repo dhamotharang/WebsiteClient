@@ -15,6 +15,8 @@ import {HelperService} from '../../../shareds/services/helper.service';
 import {FeedbackDetailComponent} from './feedback-detail/feedback-detail.component';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
+import {FeedbackDetailViewModel} from './viewmodel/feedback-detail.viewmodel';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-customer-feedback',
@@ -94,6 +96,14 @@ export class FeedbackComponent extends BaseListComponent<FeedbackSearchViewModel
     updateResolve(feedback: FeedbackSearchViewModel) {
 
         this.feedbackService.updateResolve(feedback.id, feedback);
+    }
+
+    updateSuccess(item: FeedbackDetailViewModel) {
+        console.log(item);
+        const index = _.findIndex(this.listFeedback, (items: FeedbackDetailViewModel) => {
+            return items.id === item.id;
+        });
+        this.listFeedback[index] = item;
     }
 
     detail(feedback: FeedbackSearchViewModel) {

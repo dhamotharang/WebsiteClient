@@ -88,4 +88,4 @@
             [isDisabled]="isSearching" i18n="@@customer" i18n-pageName [pageName]="'Customer'"></ghm-paging>
 
 
-<app-customer-feedback-detail></app-customer-feedback-detail>
+<app-customer-feedback-detail (saveSuccessfully)="updateSuccess($event)"></app-customer-feedback-detail>
