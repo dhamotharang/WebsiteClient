@@ -3,7 +3,7 @@ export class FeedbackDetailViewModel {
     fullName: string;
     phoneNumber: string;
     email: string;
-    createTime: Date;
+    createTime: string;
     isView: boolean;
     content: string;
 }

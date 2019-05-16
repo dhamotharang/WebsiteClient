@@ -41,7 +41,7 @@ export class DateTimeFormatPipe implements PipeTransform {
         'YYYY-DD-MM HH:mm Z',
     ];
 
-    transform(value: number, exponent: string, isUtc: boolean = false) {
+    transform(value: string, exponent: string, isUtc: boolean = false) {
         return this.formatDate(value, exponent, isUtc);
     }
 

@@ -14,7 +14,7 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 import {environment} from '../../../../environments/environment';
 
 export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
-    url = 'api/v1/website/feedBacks/';
+    url = 'api/v1/website/feedBacks';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinnerService: SpinnerService,
@@ -54,13 +54,13 @@ export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
 
     getDetail(id: string): Observable<ActionResultViewModel<FeedbackDetailViewModel>> {
         this.spinnerService.show();
-        return this.http.get(`${this.url}${id}`, {})
+        return this.http.get(`${this.url}/${id}`, {})
             .pipe(finalize(() => this.spinnerService.hide())) as Observable<ActionResultViewModel<FeedbackDetailViewModel>>;
     }
 
     updateResolve(id: string, resolved: any): Observable<ActionResultViewModel> {
         this.spinnerService.show();
-        return this.http.post(`${this.url}${id}`, resolved)
+        return this.http.post(`${this.url}/${id}`, resolved)
             .pipe(finalize(() => this.spinnerService.hide()),
                 map((result: ActionResultViewModel) => {
                 this.toastr.success(result.message);

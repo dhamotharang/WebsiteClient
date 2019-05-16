@@ -68,17 +68,17 @@
             <td class="middle">{{item.email}}</td>
             <td class="middle">{{item.isView === false ? ' Chưa được giải quyết' : 'Đã giải quyết'}}</td>
             <td class="middle">
-                {{item.createTime|dateTimeFormat:"DD/MM/YYYY hh:mm"}}
+                {{item.createTime | dateTimeFormat:"DD/MM/YYYY hh:mm"}}
             </td>
             <!--<td class="middle center">-->
-                <!--<mat-checkbox color="primary" [checked]="item.isResolve"-->
-                              <!--(change)="updateResolve(item)"></mat-checkbox>-->
+            <!--<mat-checkbox color="primary" [checked]="item.isResolve"-->
+            <!--(change)="updateResolve(item)"></mat-checkbox>-->
             <!--</td>-->
             <td class="middle center">
                 <ghm-button
-                    *ngIf="permission.view"
-                    icon="fa fa-eye" classes="btn default btn-sm"
-                    (clicked)="detail(item)"></ghm-button>
+                        *ngIf="permission.view"
+                        icon="fa fa-eye" classes="btn default btn-sm"
+                        (click)="detail(item)"></ghm-button>
             </td>
         </tr>
         </tbody>

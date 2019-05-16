@@ -4,6 +4,6 @@ export class FeedbackSearchViewModel {
     fullName: string;
     phoneNumber: string;
     email: string;
-    createTime: Date;
+    createTime: string;
     isView: boolean;
 }
