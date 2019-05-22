@@ -76,8 +76,8 @@
         <th class="right middle w150" i18n="@@createDate">Create Date</th>
         <th class="center middle w50" i18n="@@viewCount">View count</th>
         <th class="middle center w100" i18n="@@statusApprove">Status approve</th>
-        <th class="middle center " i18n="@@approve" *ngIf="isApprove && permission.approve">Approve</th>
-        <th class="middle center" i18n="@@decline" *ngIf="isApprove && permission.approve">Decline</th>
+        <th class="middle center " i18n="@@approve" *ngIf="isApprove">Approve</th>
+        <th class="middle center" i18n="@@decline" *ngIf="isApprove">Decline</th>
         <th class="middle w150" i18n="@@userCreate">User Create</th>
         <th class="center middle w50" i18n="@@status">Active?</th>
         <th class="center middle w50" i18n="@@isHot">Hot?</th>
@@ -92,7 +92,7 @@
         [nhContextMenuData]="item">
         <td class="center middle">
             <mat-checkbox [disabled]="!(((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && item?.creatorId === currentUser.id)
-                                   || (item?.status === newsStatus.pending && isApprove && permission.approve))"
+                                   || (item?.status === newsStatus.pending && isApprove))"
                           color="primary" [(ngModel)]="item.isCheck" (change)="selectNew(item)"></mat-checkbox>
         </td>
         <td class="middle">
@@ -121,7 +121,7 @@
                              {item.status, select, 0 {Draft} 1 {Pending} 2 {Approved} 3 {Decline}}
                 </span>
         </td>
-        <td class="middle center" *ngIf="isApprove && permission.approve">
+        <td class="middle center" *ngIf="isApprove">
             <ghm-button
                     *ngIf="item.status === newStatus.pending"
                     icon="fa fa-check" classes="btn blue btn-sm"
@@ -131,7 +131,7 @@
                     *ngIf="item.status !== newStatus.pending"
                     class="btn default btn-sm" disabled><i class="fa fa-check"></i></button>
         </td>
-        <td class="middle center" *ngIf="isApprove && permission.approve">
+        <td class="middle center" *ngIf="isApprove">
             <button *ngIf="item.status === newsStatus.pending" class="btn red btn-sm"
                     [swal]="confirmDeclineNews"
                     (confirm)="updateStatus(item, newStatus.decline, $event)">

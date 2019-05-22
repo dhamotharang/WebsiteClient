@@ -51,6 +51,7 @@ export class NewsService {
                 .set('page', page ? page.toString() : '1')
                 .set('pageSize', page ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
         }).pipe(map((result: SearchNewViewModel) => {
+            console.log(result);
             return result;
         })) as Observable<SearchNewViewModel>;
     }

@@ -163,7 +163,9 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
                     this.renderOrderMenuItem();
                 }
             });
+            console.log(this.listMenuItemSelect);
         }
+
     }
 
     removeListMenuItem(index: number) {
