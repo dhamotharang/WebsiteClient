@@ -4,6 +4,7 @@ import {WarehouseComponent} from './warehouse/warehouse.component';
 import {WarehouseService} from './warehouse/service/warehouse.service';
 import {WarehouseFormComponent} from './warehouse/warehouse-form/warehouse-form.component';
 import {WarehouseDetailComponent} from './warehouse/warehouse-detail/warehouse-detail.component';
+import {AuthGuardService} from '../../shareds/services/auth-guard.service';
 
 export const routes: Routes = [
     {
@@ -11,7 +12,8 @@ export const routes: Routes = [
         component: WarehouseComponent,
         resolve: {
             data: WarehouseService
-        }
+        },
+        canActivate: [AuthGuardService]
     }, {
         path: 'add',
         component: WarehouseFormComponent
@@ -33,7 +35,7 @@ export const routes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
-    providers: [WarehouseService]
+    providers: [WarehouseService, AuthGuardService]
 })
 
 export class WarehouseRoutingModule {

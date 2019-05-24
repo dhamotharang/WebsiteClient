@@ -23,6 +23,8 @@ import { ProductFormComponent } from './product-form/product-form.component';
 import { AppInjector } from '../../../../shareds/helpers/app-injector';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import {ProductStatus} from './contants/product-status.const';
+import {authConfig} from '../../../../shareds/constants/auth-config.const';
+import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
 
 @Component({
     selector: 'app-product',
@@ -47,42 +49,61 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private location: Location,
                 private route: ActivatedRoute,
-                private router: Router,
+                private router: Router, private oauthService: OAuthService,
                 private componentFactoryResolver: ComponentFactoryResolver,
                 private productCategoryService: ProductCategoryService,
                 private productService: ProductService,
                 private helperService: HelperService,
                 private utilService: UtilService) {
         super();
+        this.ConfigureImplicitFlowAuthentication();
     }
 
     ngOnInit(): void {
         this.appService.setupPage(this.pageId.PRODUCT, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Quản lý sản phẩm');
-        this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<ProductSearchViewModel> }) => {
-            const data = result.data;
-            this.totalRows = data.totalRows;
-            // this.listProduct = data.items;
-            this.rendResult(data.items);
-        });
+        // this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<ProductSearchViewModel> }) => {
+        //     const data = result.data;
+        //     this.totalRows = data.totalRows;
+        //     // this.listProduct = data.items;
+        //     this.rendResult(data.items);
+        // });
         // this.search(1);
 
-        this.subscribers.queryParams = this.route.queryParams.subscribe(params => {
-            this.keyword = params.keyword ? params.keyword : '';
-            this.categoryId = params.categoryId ? parseInt(params.categoryId) : '';
-            this.isManagementByLot = params.isManagementByLot !== null && params.isManagementByLot !== ''
-            && params.isManagementByLot !== undefined ? Boolean(params.isManagementByLot) : null;
-            this.isActive = params.isActive !== null && params.isActive !== '' && params.isActive !== undefined
-                ? Boolean(params.isActive) : null;
-            this.currentPage = params.page ? parseInt(params.page) : 1;
-            this.pageSize = params.pageSize ? parseInt(params.pageSize) : this.appConfig.PAGE_SIZE;
+        // this.subscribers.queryParams = this.route.queryParams.subscribe(params => {
+        //     this.keyword = params.keyword ? params.keyword : '';
+        //     this.categoryId = params.categoryId ? parseInt(params.categoryId) : '';
+        //     this.isManagementByLot = params.isManagementByLot !== null && params.isManagementByLot !== ''
+        //     && params.isManagementByLot !== undefined ? Boolean(params.isManagementByLot) : null;
+        //     this.isActive = params.isActive !== null && params.isActive !== '' && params.isActive !== undefined
+        //         ? Boolean(params.isActive) : null;
+        //     this.currentPage = params.page ? parseInt(params.page) : 1;
+        //     this.pageSize = params.pageSize ? parseInt(params.pageSize) : this.appConfig.PAGE_SIZE;
+        // });
+    }
+    private ConfigureImplicitFlowAuthentication() {
+
+        this.oauthService.configure(authConfig);
+
+        this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+
+        this.oauthService.loadDiscoveryDocument().then(() => {
+            this.oauthService.tryLogin()
+                .catch(err => {
+                    console.error(err);
+                    return false;
+                })
+                .then(() => {
+                    if (!this.oauthService.hasValidAccessToken()) {
+                        this.oauthService.initImplicitFlow();
+                    }
+                });
         });
     }
-
     ngAfterViewInit() {
-        this.getCategoryTrees();
-        this.swalConfirmDelete.confirm.subscribe(result => {
-            this.delete(this.productId);
-        });
+        // this.getCategoryTrees();
+        // this.swalConfirmDelete.confirm.subscribe(result => {
+        //     this.delete(this.productId);
+        // });
     }
 
     add() {

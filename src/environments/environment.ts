@@ -11,7 +11,7 @@ export const environment = {
 
 
     // production: false,
-    // apiGatewayUrl: 'https://websiteapi.ghmsoft.vn/',
+    // apiGatewayUrl: 'https://websiteapi.ghmsoft.vn/',IS
     // notificationUrl: 'https://websitenotification.ghmsoft.vn',
     // fileUrl: 'https://websitefile.ghmsoft.vn/',
     // filemanagementUrl: 'https://websitefile.ghmsoft.vn/api/v1/',

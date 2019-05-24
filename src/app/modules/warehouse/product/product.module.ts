@@ -58,6 +58,7 @@ import { GhmMaskModule } from '../../../shareds/components/ghm-mask/ghm-mask.mod
 import { ProductSelectComponent } from './product-select/product-select.component';
 import { ProductCategorySelectComponent } from './product-category/product-category-select/product-category-select.component';
 import {TinymceModule} from '../../../shareds/components/tinymce/tinymce.module';
+import {OAuthModule} from 'angular-oauth2-oidc';
 
 @NgModule({
     imports: [
@@ -67,6 +68,7 @@ import {TinymceModule} from '../../../shareds/components/tinymce/tinymce.module'
         MatRadioModule, MatSlideToggleModule, GhmMaskModule, FormatNumberModule, TinymceModule,
         MatRadioModule, NhSuggestionModule,
         NhImageViewerModule, MatExpansionModule,
+        OAuthModule.forRoot(),
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

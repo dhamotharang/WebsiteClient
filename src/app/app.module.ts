@@ -26,6 +26,7 @@ import { SpinnerService } from './core/spinner/spinner.service';
 import { SpinnerComponent } from './core/spinner/spinner.component';
 import { setAppInjector } from './shareds/helpers/app-injector';
 import { NotificationService } from './shareds/services/notification.service';
+import {OAuthModule} from 'angular-oauth2-oidc';
 
 registerLocaleData(localeVI, 'vi-VN', localeVIExtra);
 

@@ -16,6 +16,7 @@ import {BrandService} from './brand/services/brand.service';
 import {ProductService} from './product/service/product.service';
 import {ProductFormComponent} from './product/product-form/product-form.component';
 import {ProductDetailComponent} from './product/product-detail/product-detail.component';
+import {AuthWebsiteGuardService} from '../../../shareds/services/auth-website-guard.service';
 
 export const routes: Routes = [
     {
@@ -23,7 +24,8 @@ export const routes: Routes = [
         component: ProductComponent,
         resolve: {
             data: ProductService
-        }
+        },
+        // canActivate: [AuthWebsiteGuardService]
     },
     {
         path: 'add',
@@ -89,7 +91,7 @@ export const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
     providers: [ProductAttributeService, ProductCategoryService, SupplierService, UnitService,
-        BrandService, ProductService]
+        BrandService, ProductService, AuthWebsiteGuardService]
 })
 
 export class ProductRoutingModule {

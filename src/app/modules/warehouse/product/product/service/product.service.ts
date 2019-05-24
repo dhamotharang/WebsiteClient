@@ -32,14 +32,15 @@ export class ProductService {
 
     resolve(route: ActivatedRouteSnapshot, state: Object): any {
         const queryParams = route.queryParams;
-        return this.search(
-            queryParams.keyword,
-            queryParams.categoryId,
-            queryParams.isManagementByLot,
-            queryParams.isActive,
-            queryParams.page,
-            queryParams.pageSize
-        );
+        // return this.search(
+        //     queryParams.keyword,
+        //     queryParams.categoryId,
+        //     queryParams.isManagementByLot,
+        //     queryParams.isActive,
+        //     queryParams.page,
+        //     queryParams.pageSize
+        // );
+        return null;
     }
 
     search(keyword: string, categoryId: number, isManagementByLot: boolean, isActive?: boolean, page: number = 1,

@@ -28,6 +28,7 @@ import { TinymceModule } from '../../shareds/components/tinymce/tinymce.module';
 import { GhmMaskModule } from '../../shareds/components/ghm-mask/ghm-mask.module';
 import { ProductModule } from './product/product.module';
 import { WarehouseConfigComponent } from './warehouse/warehouse-form/warehouse-config/warehouse-config.component';
+import {OAuthModule} from 'angular-oauth2-oidc';
 
 @NgModule({
     imports: [CommonModule, WarehouseRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
@@ -35,6 +36,7 @@ import { WarehouseConfigComponent } from './warehouse/warehouse-form/warehouse-c
         DatetimeFormatModule, NhWizardModule, NhTabModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
         MatRadioModule, GhmUserSuggestionModule, NhSelectModule, FormatNumberModule, TinymceModule, GhmMaskModule, ProductModule,
         MatButtonModule,
+        OAuthModule.forRoot(),
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
