@@ -4,12 +4,14 @@ import {
     CanActivate, Router, RouterStateSnapshot
 } from '@angular/router';
 import {AuthService} from './auth.service';
-import {OAuthService} from 'angular-oauth2-oidc';
+import {AuthWebsiteService} from './auth-website.service';
 
 @Injectable()
 export class AuthWebsiteGuardService implements CanActivate {
+
     constructor(private router: Router,
-                private authService: AuthService, private oauthService: OAuthService) {
+                private authService: AuthService, private authWebsiteService: AuthWebsiteService ) {
+
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -27,10 +29,12 @@ export class AuthWebsiteGuardService implements CanActivate {
     }
 
     checkConnectWarehouse(url: string): boolean {
-        if (this.oauthService.hasValidAccessToken()) {
+        if (this.authWebsiteService.isAuthenticated()) {
             return true;
         }
-        this.router.navigate(['/login'], { queryParams: { redirect: url } });
+        this.authWebsiteService.login();
         return false;
     }
+
+
 }

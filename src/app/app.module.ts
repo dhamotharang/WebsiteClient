@@ -27,6 +27,8 @@ import { SpinnerComponent } from './core/spinner/spinner.component';
 import { setAppInjector } from './shareds/helpers/app-injector';
 import { NotificationService } from './shareds/services/notification.service';
 import {OAuthModule} from 'angular-oauth2-oidc';
+import {AuthWebsiteGuardService} from './shareds/services/auth-website-guard.service';
+import {AuthWebsiteService} from './shareds/services/auth-website.service';
 
 registerLocaleData(localeVI, 'vi-VN', localeVIExtra);
 
@@ -64,7 +66,7 @@ registerLocaleData(localeVI, 'vi-VN', localeVIExtra);
     ],
     providers: [
         ScriptLoaderService, ToastrService, AuthService, AuthGuardService, UtilService, HttpClient,
-        AppService, SpinnerService, NotificationService,
+        AppService, SpinnerService, NotificationService, AuthWebsiteGuardService, AuthWebsiteService,
         // {provide: APP_INITIALIZER, useFactory: appServiceFactory, deps: [AppService, Title], multi: true},
         {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
         {provide: APP_CONFIG, useValue: APP_CONFIG_DI},

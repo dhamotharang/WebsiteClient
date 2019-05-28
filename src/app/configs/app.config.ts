@@ -21,6 +21,8 @@ export interface IAppConfig {
     FILE_LOCAL_URL;
     API_GATEWAY_URL: string;
     WAREHOUSE_API_URL: string;
+    TENANTCORE_ID: string;
+    USE_AUTH: string;
 }
 
 export const APP_CONFIG_DI: IAppConfig = {
@@ -44,7 +46,9 @@ export const APP_CONFIG_DI: IAppConfig = {
     FILE_URL: 'https://testfilemanager.ghmsoft.vn/',
     FILE_LOCAL_URL: 'http://localhost:50005/',
     API_GATEWAY_URL: 'http://localhost:50008/',
-    WAREHOUSE_API_URL: 'http://localhost:50009/api/v1/'
+    WAREHOUSE_API_URL: 'http://localhost:50009/api/v1/',
+    TENANTCORE_ID: '7fa8058b-29bd-4184-b7a7-eef4c4a5a5a5',
+    USE_AUTH: 'CORE'
 };
 // quy test
 // export const APP_CONFIG_DI: IAppConfig = {

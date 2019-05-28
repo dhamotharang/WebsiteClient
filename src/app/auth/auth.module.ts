@@ -9,13 +9,15 @@ import { AlertService } from './_services/alert.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthCallbackComponent } from './callback/auth-callback.component';
 import { CoreModule } from '../core/core.module';
+import { LoginCoreComponent } from './login-core/login-core.component';
 
 @NgModule({
     declarations: [
         AuthComponent,
         AlertComponent,
         LogoutComponent,
-        AuthCallbackComponent
+        AuthCallbackComponent,
+        LoginCoreComponent
     ],
     imports: [
         CommonModule,
