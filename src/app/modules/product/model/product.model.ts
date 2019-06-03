@@ -11,4 +11,6 @@ export class Product {
     viewCount: number;
     salePrice: number;
     createTime: string;
+    categoryViewModel: string;
+    concurrencyStamp: string;
 }

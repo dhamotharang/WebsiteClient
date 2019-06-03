@@ -12,6 +12,9 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 import {ProductService} from '../services/product.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {AuthWebsiteService} from '../../../shareds/services/auth-website.service';
+import * as _ from 'lodash';
+import {MatDialog} from '@angular/material';
+import {ProductFormComponent} from './product-form/product-form.component';
 
 @Component({
     selector: 'app-product',
@@ -23,35 +26,44 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
     isActive: boolean;
     isHot: boolean;
     isHomePage: boolean;
+    websiteId: string;
+    productName: string;
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 @Inject(PAGE_ID) public pageId: IPageId,
                 private spinnerService: SpinnerService,
                 private route: ActivatedRoute,
+                private dialog: MatDialog,
                 private toastr: ToastrService,
                 private productService: ProductService, private authWebsiteService: AuthWebsiteService) {
         super();
+        this.websiteId = this.appService.currentUser.tenantId;
     }
 
     ngOnInit() {
-        this.appService.setupPage(this.pageId.WEBSITE, this.pageId.NEWS, 'Quản lý tin tức', 'Danh sách tin tức');
-        this.listItems$ = this.route.data.pipe(map((result: { data: SearchResultViewModel<Product> }) => {
+        this.appService.setupPage(this.pageId.PRODUCT_MANAGER, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Danh sách sản phẩm');
+        this.route.data.subscribe((result: { data: SearchResultViewModel<Product> }) => {
             const data = result.data;
             this.totalRows = data.totalRows;
-            return data.items;
-        }));
+            this.listItems = data.items;
+            this.rendResult();
+        });
     }
+
 
     search(currentPage: number) {
         this.currentPage = currentPage;
         this.isSearching = true;
-        this.listItems$ = this.productService.search(this.keyword, this.categoryId, this.isActive, this.isHot, this.isHomePage,
+        this.productService.search(this.appService.currentUser.tenantId, this.productName, this.categoryId,
+            this.isActive, this.isHot, this.isHomePage,
             this.currentPage, this.pageSize)
-            .pipe(finalize(() => this.isSearching = false),
-                map((result: SearchResultViewModel<News>) => {
+            .subscribe((result: SearchResultViewModel<Product>) => {
                     this.totalRows = result.totalRows;
-                    return result.items;
-                }));
+                    this.rendResult();
+                    this.listItems = result.items;
+                    this.spinnerService.hide();
+                });
+
     }
 
     delete(product: Product) {
@@ -62,8 +74,28 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
             });
     }
 
-    edit(product: Product) {
+    detail(id: string) {
+    }
 
+    edit(id: string) {
+        const productDiaLog = this.dialog.open(ProductFormComponent, {
+            id: `productEditDiaLog-${id}`,
+            data: {id: id}
+        });
+
+        productDiaLog.afterClosed().subscribe((data) => {
+            if (data) {
+                if (data.isModified) {
+                    this.search(1);
+                }
+            }
+        });
+    }
+
+    private rendResult() {
+        _.each(this.listItems, (item: Product) => {
+            item.categoryViewModel = _.join(item.categoriesName, ', ');
+        });
     }
 
 }

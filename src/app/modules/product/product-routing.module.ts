@@ -4,14 +4,21 @@ import {ProductComponent} from './product/product.component';
 import {AuthWebsiteGuardService} from '../../shareds/services/auth-website-guard.service';
 import {ProductCategoryComponent} from './product-category/product-category.component';
 import {ProductService} from './services/product.service';
+import {CategoryProductService} from './services/category-product.service';
+
 export const routes: Routes = [
     {
         path: '',
-        resolve: [ProductService],
+        resolve: {
+            data: ProductService
+        },
         component: ProductComponent
     },
     {
         path: 'categories',
+        resolve: {
+            data: CategoryProductService
+        },
         component: ProductCategoryComponent
     }
 ];

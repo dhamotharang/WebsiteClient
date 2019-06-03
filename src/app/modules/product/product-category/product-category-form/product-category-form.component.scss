@@ -1,0 +1,30 @@
+.product-category-form {
+  width: 600px;
+  .portlet-title {
+    padding: 0 !important;
+    ul {
+      list-style: none;
+      margin-bottom: 0;
+      padding: 0;
+      display: block;
+      width: 100%;
+
+      li {
+        display: inline-block;
+        float: left;
+
+        &.icon {
+          a {
+            display: block;
+            width: 48px;
+            height: 48px;
+          }
+        }
+
+        h4 {
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+}

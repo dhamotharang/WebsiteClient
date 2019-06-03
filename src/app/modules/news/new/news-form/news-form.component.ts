@@ -201,7 +201,6 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     }
 
     removeFeatureImage(item: any) {
-        console.log("ádasd");
         this.model.patchValue({featureImage: ''});
     }
     removeBannerImage(item: any) {

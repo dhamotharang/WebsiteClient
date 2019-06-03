@@ -1,15 +1,10 @@
 import {ProductCategoryTranslation} from './product-category-translation.model';
 
-export  class ProductCategory {
+export interface ProductCategoryViewModel {
     id: string;
+    bannerImage: string;
     isActive: boolean;
-    parentId?: number;
+    isHomePage: boolean;
     concurrencyStamp: string;
     categoryTranslations: ProductCategoryTranslation[];
-    order: number;
-    bannerImage: string;
-    constructor() {
-        this.isActive = true;
-        this.order = 1;
-    }
 }

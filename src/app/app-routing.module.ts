@@ -3,7 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from './shareds/services/auth-guard.service';
 import {LayoutComponent} from './shareds/layouts/layout.component';
 import {AppService} from './shareds/services/app.service';
-import {AuthService} from './shareds/services/auth.service';
 import {AuthWebsiteGuardService} from './shareds/services/auth-website-guard.service';
 
 const routes: Routes = [
@@ -47,7 +46,6 @@ const routes: Routes = [
                 path: 'products',
                 canActivate: [AuthWebsiteGuardService],
                 loadChildren: './modules/product/product.module#ProductModule'},
-            {path: 'warehouses', loadChildren: './modules/warehouse/warehouse.module#WarehouseModule'},
             {path: 'event', loadChildren: './modules/event/event.module#EventModule'},
             {path: 'brand', loadChildren: './modules/brand/brand.module#BrandModule'},
         ]

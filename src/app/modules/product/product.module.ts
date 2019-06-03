@@ -2,7 +2,7 @@ import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
 import {OAuthModule} from 'angular-oauth2-oidc';
 import {NhImageViewerModule} from '../../shareds/components/nh-image-viewer/nh-image-viewer.module';
 import {
-    MatCheckboxModule,
+    MatCheckboxModule, MatDialogModule,
     MatExpansionModule,
     MatIconModule,
     MatRadioModule,
@@ -28,9 +28,13 @@ import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.mo
 import {GhmFileExplorerModule} from '../../shareds/components/ghm-file-explorer/ghm-file-explorer.module';
 import {NhContextMenuModule} from '../../shareds/components/nh-context-menu/nh-context-menu.module';
 import {NgModule} from '@angular/core';
-import { ProductComponent } from './product/product.component';
-import { ProductCategoryComponent } from './product-category/product-category.component';
-import { ProductCategoryFormComponent } from './product-category/product-category-form/product-category-form.component';
+import {ProductComponent} from './product/product.component';
+import {ProductCategoryComponent} from './product-category/product-category.component';
+import {ProductCategoryFormComponent} from './product-category/product-category-form/product-category-form.component';
+import {ProductFormComponent} from './product/product-form/product-form.component';
+import {GhmDraggableModule} from '../../shareds/directives/ghm-draggable/ghm-draggable.module';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
+import {NhTagModule} from '../../shareds/components/nh-tags/nh-tag.module';
 
 
 @NgModule({
@@ -39,8 +43,8 @@ import { ProductCategoryFormComponent } from './product-category/product-categor
         NHTreeModule, NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule,
         DatetimeFormatModule, NhWizardModule, NhTabModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
         MatRadioModule, MatSlideToggleModule, GhmMaskModule, FormatNumberModule, TinymceModule,
-        MatRadioModule, NhSuggestionModule,
-        NhImageViewerModule, MatExpansionModule,
+        MatRadioModule, NhSuggestionModule, GhmDraggableModule, GhmSelectModule, NhTagModule,
+        NhImageViewerModule, MatExpansionModule, MatDialogModule,
         OAuthModule.forRoot(),
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
@@ -50,8 +54,8 @@ import { ProductCategoryFormComponent } from './product-category/product-categor
             showCancelButton: true,
         })
     ],
-    declarations: [ProductComponent, ProductCategoryComponent, ProductCategoryFormComponent],
-    entryComponents: [],
+    declarations: [ProductComponent, ProductCategoryComponent, ProductCategoryFormComponent, ProductFormComponent],
+    entryComponents: [ProductCategoryFormComponent, ProductFormComponent],
     exports: []
 })
 export class ProductModule {

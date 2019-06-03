@@ -23,7 +23,7 @@ export function getClientSettings(): UserManagerSettings {
         redirect_uri: 'http://localhost:4200/login/auth-callback',
         post_logout_redirect_uri: 'http://localhost:4200/products',
         client_secret: 'SG9hbmdEZXBUcmFp',
-        scope: 'openid profile GHM_Core_Api',
+        scope: 'openid profile GHM_Core_Api GHM_Warehouse_Api GHM_Notification_Api',
         response_type: 'id_token token'
     };
 }

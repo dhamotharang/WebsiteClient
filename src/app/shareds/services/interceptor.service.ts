@@ -35,7 +35,18 @@ export class InterceptorService implements HttpInterceptor {
             if (apiReq.headers.get('Content-Type') === 'clear') {
                 apiReq.headers.delete('Content-Type', 'clear');
             }
-            return next.handle(apiReq);
+            return next.handle(apiReq).pipe(
+                catchError(response => {
+                    if (response instanceof HttpErrorResponse) {
+                        if (response.status === 401) {
+                            authWebsiteService.signOut();
+                            return throwError(`Can't fresh token. ReLogin please.`);
+                        }
+                        return this.handlingError(response, authService);
+                    }
+
+                    return throwError('Something went wrong!');
+                }));
         } else {
             if (contentType === 'clear') {
                 apiReq = req.clone({

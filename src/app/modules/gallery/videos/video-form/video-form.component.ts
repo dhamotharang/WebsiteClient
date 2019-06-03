@@ -242,15 +242,6 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    removeTag(value) {
-        this.tagService.deleteTag(value.id).subscribe((result: ActionResultViewModel) => {
-        });
-    }
-
-    selectListTag(value) {
-        this.listTag = value;
-    }
-
     closeModal() {
         this.videoFormModal.dismiss();
     }

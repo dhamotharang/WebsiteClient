@@ -1,4 +1,4 @@
-<div class="row cm-mgb-10">
+<div class="row cm-mgb-10 cm-mgt-10">
   <div class="col-sm-12">
     <form class="form-inline" (ngSubmit)="search(1)">
       <div class="form-group">
@@ -9,13 +9,7 @@
         <!--<button class="btn btn-primary">-->
         <!--<i class="fas fa-search"></i>-->
         <!--</button>-->
-        <ghm-button [loading]="isSearching" icon="fas fa-search"></ghm-button>
-      </div>
-      <div class="form-group pull-right">
-        <button type="button" class="btn btn-primary" (click)="newsFormComponent.add()">
-          <i class="fas fa-plus"></i>
-          Thêm
-        </button>
+        <ghm-button icon="fa fa-search"></ghm-button>
       </div>
     </form>
   </div>
@@ -27,19 +21,28 @@
       <thead>
       <tr>
         <th class="center middle w50">STT</th>
-        <th class="center middle">Tiêu đề bài viết</th>
+        <th class="center middle">Tên sản phẩm</th>
         <th class="center middle">Ảnh</th>
-        <th class="center middle w50">Ngày tạo</th>
-        <th class="center middle w50">Nổi bật</th>
-        <th class="center middle w50">Trang chủ</th>
+        <th class="center middle w250">Chuyên mục</th>
+        <th class="center middle w150">Ngày tạo</th>
+        <th class="center middle w100">Nổi bật</th>
+        <th class="center middle w100">Trang chủ</th>
         <th class="center middle w100">Hành động</th>
       </tr>
       </thead>
-      <tbody>
-      <tr *ngFor="let item of listItems$ | async; let i = index">
+      <tbody *ngIf="!isSearching">
+      <tr *ngIf="totalRows === 0"><td colspan="8" class="center"><div class="">Không có dữ liệu</div></td></tr>
+      <tr *ngFor="let item of listItems; let i = index"
+          nhContextMenuTrigger
+          [nhContextMenuTriggerFor]="nhMenu"
+          [nhContextMenuData]="item.productId"
+      >
         <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
         <td class="middle">{{ item.name }}</td>
-        <td class="middle">{{ item.featureImage }}</td>
+        <td class="middle"><img ghmImage src="{{item.featureImage}}" [isUrlAbsolute]="true" class="media-object w50"
+                                    alt="{{item.name}}">
+        </td>
+        <td>{{item.categoryViewModel}}</td>
         <td class="middle">{{ item.createTime | dateTimeFormat: 'DD/MM/YYYY HH:mm' }}</td>
         <td class="center middle">
           <mat-checkbox color="primary" [checked]="item.isHot"></mat-checkbox>
@@ -48,22 +51,85 @@
           <mat-checkbox color="primary" [checked]="item.isHomePage"></mat-checkbox>
         </td>
         <td class="center middle">
-          <button type="button" class="btn btn-sm btn-primary" matTooltip="Sửa"
-                  [matTooltipPosition]="'above'"
-                  (click)="edit(item)">
-            <i class="fas fa-pencil-alt"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-danger" matTooltip="Xóa"
-                  [matTooltipPosition]="'above'"
-                  [swal]="{ title: 'Bạn có chắc chắn muốn xóa tin tức không?', type: 'warning' }"
-                  (confirm)="delete(item)">
-            <i class="fas fa-trash-alt"></i>
-          </button>
+          <nh-dropdown *ngIf="permission.view || permission.edit || permission.delete">
+            <button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <ul class="nh-dropdown-menu right" role="menu">
+              <li>
+                <a *ngIf="permission.view"
+                   (click)="detail(item.productId)" i18n="@@view">
+                  <i class="fa fa-eye"></i>
+                  View
+                </a>
+              </li>
+              <li>
+                <a *ngIf="permission.edit"
+                   (click)="edit(item.productId)"
+                   i18n="@@edit">
+                  <i class="fa fa-edit"></i>
+                  Edit
+                </a>
+              </li>
+              <li>
+                <a *ngIf="permission.delete" [swal]="confirmDeleteProduct"
+                   (confirm)="delete(item)" i18n="@@delete">
+                  <i class="fa fa-trash"></i>
+                  Delete
+                </a>
+              </li>
+            </ul>
+          </nh-dropdown>
+        </td>
+      </tr>
+      </tbody>
+      <tbody *ngIf="isSearching">
+      <tr>
+        <td colspan="8" class="center">
+          <div class="spinner" *ngIf="isSearching">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+          </div>
         </td>
       </tr>
       </tbody>
     </table>
-    <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
-                [isDisabled]="isSearching" pageName="tin tức"></ghm-paging>
+    <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                (pageClick)="search($event)"
+                [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
   </div>
 </div>
+<swal
+        #confirmDeleteProduct
+        i18n="@@confirmDeleteListProduct"
+        i18n-title="@@confirmDeleteListProduct"
+        i18n-text="@@confirmDeleteListProduct"
+        title="Are you sure for delete this list product?"
+        text="You can't recover this list product after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<nh-menu #nhMenu>
+  <nh-menu-item (clicked)="detail($event)">
+    <i class="fa fa-eye"></i>
+    <span i18n="@@view">View</span>
+  </nh-menu-item>
+  <nh-menu-item (clicked)="edit($event)">
+    <i class="fa fa-edit"></i>
+    <span i18n="@@edit">Edit</span>
+  </nh-menu-item>
+  <nh-menu-item *ngIf="permission.delete"
+                (clicked)="delete($event)">
+    <i class="fa fa-edit"></i>
+    <span i18n="@@edit">Delete</span>
+  </nh-menu-item>
+</nh-menu>

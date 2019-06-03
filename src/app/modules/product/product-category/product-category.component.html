@@ -1,82 +1,82 @@
-<div class="row cm-mgb-10">
-    <div class="col-sm-12">
-        <form class="form-inline" (ngSubmit)="search(1)">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm." [(ngModel)]="keyword"
-                       name="keyword">
-            </div>
-            <div class="form-group">
-                <nh-select
-                        title="-- Chọn trạng thái --"
-                        [data]="[{id: true, name: 'Đã kích hoạt'}, {id: false, name: 'Chưa kích hoạt'}]"
-                        (onSelectItem)="isActive = $event.id"
-                ></nh-select>
-            </div>
-            <div class="form-group">
-                <button mat-raised-button color="primary" [disabled]="isSearching">
-                    <i class="fas fa-search" *ngIf="!isSearching"></i>
-                    <i class="fas fa-spinner fa-spin" *ngIf="isSearching"></i>
-                </button>
-            </div>
-            <div class="form-group pull-right">
-                <button mat-raised-button color="primary" (click)="add()">
-                    <i class="fas fa-plus"></i>
-                    Thêm
-                </button>
-            </div>
-        </form>
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listCategoryPageTitle">List category</span>
+    <small i18n="@@newsModuleTitle">Product management</small>
+</h1>
+
+<form class="form-inline cm-mgb-10" (ngSubmit)="search()">
+    <div class="form-group cm-mgr-5">
+        <input type="text" class="form-control" i18n="@@enterKeyword" i18n-placeholder placeholder="Enter keyword."
+               name="keyword" [(ngModel)]="keyword">
     </div>
-</div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue" [disabled]="isSearching">
+            <i class="fa fa-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="button" class="btn btn-light" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <button type="button" class="btn blue" (click)="add()" i18n="@@add"
+                *ngIf="permission.add">
+            Add
+        </button>
+    </div>
+</form>
+
 
 <div class="row">
     <div class="col-sm-12">
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover table-stripped table-main">
-                <thead>
-                <tr>
-                    <th class="w50 center middle">STT</th>
-                    <th class="w250 center middle">Tên nhóm</th>
-                    <th class="center middle">Mô tả</th>
-                    <th class="w50 center middle">Kích hoạt</th>
-                    <th class="w100 center middle"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let category of listItems$ | async; let i = index">
-                    <td class="center"> {{ (currentPage - 1) * pageSize + i + 1 }}</td>
-                    <td>{{category.name}}</td>
-                    <td>{{category.description}}</td>
-                    <td class="center">
-                        <!--<mat-checkbox color="primary" [checked]="category.isActive"></mat-checkbox>-->
-                        <span class="badge "
-                              [class.badge-danger]="!category.isActive"
-                              [class.badge-success]="category.isActive"
-                        >{{ category.isActive ? 'Đã kích hoạt' : 'Chưa kích hoạt' }}</span>
-                    </td>
-                    <td class="center">
-                        <button type="button" class="btn btn-primary btn-sm"
-                                matTooltip="Chỉnh sửa" [matTooltipPosition]="'above'"
-                                (click)="edit(category)">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>
-                        <!--<button type="button" mat-mini-fab color="warn"-->
-                        <!--(click)="delete(category)">-->
-                        <!--<i class="fas fa-trash-alt"></i>-->
-                        <!--</button>-->
-                        <button type="button" class="btn btn-sm btn-danger" matTooltip="Xóa"
-                                [matTooltipPosition]="'above'"
-                                [swal]="{ title: 'Bạn có chắc chắn muốn xóa chuyên mục: ' + category.name + ' này không?', type: 'warning' }"
-                                (confirm)="delete(category.id)">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <ghm-paging [totalRows]="totalRows" [currentPage]="currentPage" [pageShow]="6" (pageClick)="search($event)"
-                    [isDisabled]="isSearching" [pageName]="'chuyên mục'"></ghm-paging>
+        <ul class="ghm-list-item-container">
+            <ng-template #recursiveTree let-listItems>
+                <li class="" *ngFor="let item of listItems">
+                    <div class="ghm-item">
+                        <div>
+                            <i class="fa fa-bars cm-mgr-5"></i>
+                            {{ item.text }}
+                        </div>
+
+                        <ul class="actions">
+                            <li>
+                                <a href="javascript://" class="btn blue btn-outline btn-sm"
+                                   *ngIf="permission.edit"
+                                   (click)="edit(item.id)">
+                                    <i class="fa fa-edit"></i>
+                                </a></li>
+                            <li>
+                                <a href="javascript://" class="btn red btn-outline btn-sm"
+                                   *ngIf="permission.delete"
+                                   [swal]="confirmDelete"
+                                   (confirm)="delete(item.id)">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="ghm-list-item-sub-container"
+                        ghmSortableList
+                        [sources]="item?.children">
+                        <ng-container
+                                *ngTemplateOutlet="recursiveTree; context:{ $implicit: item.children }"></ng-container>
+                    </ul>
+                </li>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: listItems }"></ng-container>
+        </ul>
     </div>
 </div>
-
-<app-product-category-form (onSaveSuccess)="search(1)"></app-product-category-form>
+<swal
+    #confirmDelete
+    i18n-title="@@confirmDeleteNewsCategoryTitle"
+    i18n-text="@@confirmDeleteNewsCategoryText"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    title="Are you sure for delete this category?"
+    text="Warning: You can't recover this category after delete."
+    type="question"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>

@@ -31,9 +31,11 @@ export class AuthWebsiteGuardService implements CanActivate {
     checkConnectWarehouse(url: string): boolean {
         if (this.authWebsiteService.isAuthenticated()) {
             return true;
+        } else {
+            this.authWebsiteService.login();
+            return false;
         }
-        this.authWebsiteService.login();
-        return false;
+
     }
 
 
