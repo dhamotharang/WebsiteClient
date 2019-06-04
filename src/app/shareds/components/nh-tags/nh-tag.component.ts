@@ -56,7 +56,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
     message: IMessage;
     private _text: string;
     propagateChange: any = () => {
-    }
+    };
 
     get text() {
         return this._text;
@@ -139,6 +139,9 @@ export class NhTagComponent implements OnInit, AfterViewInit {
         const value = e.target.value;
         if (keyCode === 13) {
             if (!this.checkIsExistsTagName(value)) {
+                if (this.listTag === null || !this.listTag) {
+                    this.listTag = [];
+                }
                 const tag = new Tag('', this.tenantId, this.languageId, value, this.type, '');
                 this.listTag.push(tag);
                 this.onSelectListItem.emit(this.listTag);
@@ -287,8 +290,8 @@ export class NhTagComponent implements OnInit, AfterViewInit {
 
     remove(item): void {
         if (_.filter(this.listTag, function (it) {
-                return it.name === item.name;
-            }).length > 0) {
+            return it.name === item.name;
+        }).length > 0) {
 
             this.value = '';
             this.text = '';

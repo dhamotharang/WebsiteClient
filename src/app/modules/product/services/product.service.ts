@@ -110,4 +110,25 @@ export class ProductService implements Resolve<SearchResultViewModel<Product>> {
                 .set('languageId', this.appService.currentLanguage)
         }) as Observable<ActionResultViewModel<ProductDetail>>;
     }
+
+    updateHomePage(id: string, isHomePage: boolean): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.get(`${this.url}${this.appService.currentUser.tenantId}/${id}/${isHomePage}/updateHomePage`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
+        }).pipe(finalize(() => this.spinnerService.hide()),
+            map((result: ActionResultViewModel) => {
+                this.toastrService.success(result.message);
+                return result;
+            })) as Observable<ActionResultViewModel>;
+    }
+
+    updateHot(id: string, isHot: boolean): Observable<ActionResultViewModel> {
+        return this.http.get(`${this.url}${this.appService.currentUser.tenantId}/${id}/${isHot}/updateHot`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
+        }).pipe(finalize(() => this.spinnerService.hide()),
+            map((result: ActionResultViewModel) => {
+                this.toastrService.success(result.message);
+                return result;
+            })) as Observable<ActionResultViewModel>;
+    }
 }

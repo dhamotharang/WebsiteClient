@@ -40,6 +40,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     categoriesProduct: number[];
     categoryTree;
     currentUser;
+
     constructor(@Inject(MAT_DIALOG_DATA) public data: any,
                 @Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -65,26 +66,27 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 this.productService.getDetail(this.data.id).subscribe((result: ActionResultViewModel<ProductDetail>) => {
                     this.productDetail = result.data;
                     if (this.productDetail) {
+                        console.log(this.productDetail);
                         if (this.productDetail.categories) {
                             this.categoriesProduct = [];
-                            const listCategoryByLanguageId = _.filter(this.productDetail.categories,
-                                (category: ProductCategoriesViewModel) => {
-                                    return category.languageId === this.currentLanguage;
-                                });
+                            // const listCategoryByLanguageId = _.filter(this.productDetail.categories,
+                            //     (category: ProductCategoriesViewModel) => {
+                            //         return category.languageId === this.currentLanguage;
+                            //     });
 
-                            _.each(listCategoryByLanguageId, (category: any) => {
+                            _.each(this.productDetail.categories, (category: any) => {
                                 this.categoriesProduct.push(category.categoryId);
                             });
 
-                            this.categoryText = _.join(_.map(listCategoryByLanguageId, (categoryNews: ProductCategoriesViewModel) => {
+                            this.categoryText = _.join(_.map(this.productDetail.categories, (categoryNews: ProductCategoriesViewModel) => {
                                 return categoryNews.categoryName;
                             }), ', ');
                         }
                         this.model.patchValue({
                             productId: this.productDetail.productId,
                             categories: this.categoriesProduct,
-                            isHot: this.productDetail.isHot,
-                            isHomePage: this.productDetail.isHomePage,
+                            isHot: this.productDetail.isHot !== null ? this.productDetail.isHot : true,
+                            isHomePage: this.productDetail.isHomePage ? this.productDetail.isHomePage : false,
                             featureImage: this.productDetail.featureImage,
                             concurrencyStamp: this.productDetail.concurrencyStamp,
                             salePrice: this.productDetail.salePrice
@@ -107,9 +109,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                                         environment.fileUrl + 'uploads/');
                                 }
                                 if (detail) {
-                                    console.log(detail);
-                                    model.patchValue(detail);
-
+                                     model.patchValue(detail);
                                 }
                             }
                         );
@@ -140,7 +140,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         const isLanguageValid = this.checkLanguageValid();
         if (isValid && isLanguageValid) {
             this.products = this.model.value;
-            console.log(this.products);
+            console.log(this.model.value);
             this.isSaving = true;
             if (this.isUpdate) {
                 this.productService.update(this.id, this.products)
@@ -175,6 +175,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         if (value) {
             this.listTag = value;
         }
+        this.modelTranslations.controls.forEach(
+            (model: FormGroup) => {
+                model.patchValue({tags: this.listTag});
+            }
+        );
     }
 
     afterUploadImage(file: ExplorerItem) {

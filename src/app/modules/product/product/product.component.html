@@ -45,10 +45,10 @@
         <td>{{item.categoryViewModel}}</td>
         <td class="middle">{{ item.createTime | dateTimeFormat: 'DD/MM/YYYY HH:mm' }}</td>
         <td class="center middle">
-          <mat-checkbox color="primary" [checked]="item.isHot"></mat-checkbox>
+          <mat-checkbox color="primary" (click)="updateHot(item.productId, !item.isHot)" [checked]="item.isHot"></mat-checkbox>
         </td>
         <td class="center middle">
-          <mat-checkbox color="primary" [checked]="item.isHomePage"></mat-checkbox>
+          <mat-checkbox color="primary"  (click)="updateHomePage(item.productId, !item.isHomePage)" [checked]="item.isHomePage"></mat-checkbox>
         </td>
         <td class="center middle">
           <nh-dropdown *ngIf="permission.view || permission.edit || permission.delete">
@@ -71,13 +71,13 @@
                   Edit
                 </a>
               </li>
-              <li>
-                <a *ngIf="permission.delete" [swal]="confirmDeleteProduct"
-                   (confirm)="delete(item)" i18n="@@delete">
-                  <i class="fa fa-trash"></i>
-                  Delete
-                </a>
-              </li>
+<!--              <li>-->
+<!--                <a *ngIf="permission.delete" [swal]="confirmDeleteProduct"-->
+<!--                   (confirm)="delete(item)" i18n="@@delete">-->
+<!--                  <i class="fa fa-trash"></i>-->
+<!--                  Delete-->
+<!--                </a>-->
+<!--              </li>-->
             </ul>
           </nh-dropdown>
         </td>
@@ -119,17 +119,17 @@
 </swal>
 
 <nh-menu #nhMenu>
-  <nh-menu-item (clicked)="detail($event)">
-    <i class="fa fa-eye"></i>
-    <span i18n="@@view">View</span>
-  </nh-menu-item>
+<!--  <nh-menu-item (clicked)="detail($event)">-->
+<!--    <i class="fa fa-eye"></i>-->
+<!--    <span i18n="@@view">View</span>-->
+<!--  </nh-menu-item>-->
   <nh-menu-item (clicked)="edit($event)">
     <i class="fa fa-edit"></i>
     <span i18n="@@edit">Edit</span>
   </nh-menu-item>
-  <nh-menu-item *ngIf="permission.delete"
-                (clicked)="delete($event)">
-    <i class="fa fa-edit"></i>
-    <span i18n="@@edit">Delete</span>
-  </nh-menu-item>
+<!--  <nh-menu-item *ngIf="permission.delete"-->
+<!--                (clicked)="delete($event)">-->
+<!--    <i class="fa fa-edit"></i>-->
+<!--    <span i18n="@@edit">Delete</span>-->
+<!--  </nh-menu-item>-->
 </nh-menu>

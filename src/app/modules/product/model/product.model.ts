@@ -1,8 +1,8 @@
 export class Product {
     productId: string;
     warehouseId: string;
-    isHot: string;
-    isHomePage: string;
+    isHot: boolean;
+    isHomePage: boolean;
     name: string;
     categoriesName: string[];
     featureImage: string;

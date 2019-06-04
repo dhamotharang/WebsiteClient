@@ -1,11 +1,9 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {IPageId, PAGE_ID} from '../../../configs/page-id.config';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {finalize, map} from 'rxjs/operators';
-import {News} from '../../website/news/news.model';
 import {BaseListComponent} from '../../../base-list.component';
 import {Product} from '../model/product.model';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
@@ -58,11 +56,11 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
             this.isActive, this.isHot, this.isHomePage,
             this.currentPage, this.pageSize)
             .subscribe((result: SearchResultViewModel<Product>) => {
-                    this.totalRows = result.totalRows;
-                    this.rendResult();
-                    this.listItems = result.items;
-                    this.spinnerService.hide();
-                });
+                this.totalRows = result.totalRows;
+                this.rendResult();
+                this.listItems = result.items;
+                this.isSearching = false;
+            });
 
     }
 
@@ -98,4 +96,22 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
         });
     }
 
+    updateHot(id: string, isHot: boolean) {
+        this.productService.updateHot(id, isHot).subscribe(() => {
+           const product = _.find(this.listItems, (item: Product) => {
+               return item.productId === id;
+           });
+            product.isHot = isHot;
+        });
+    }
+
+
+    updateHomePage(id: string, isHomePage: boolean) {
+        this.productService.updateHomePage(id, isHomePage).subscribe(() => {
+            const product = _.find(this.listItems, (item: Product) => {
+                return item.productId === id;
+            });
+            product.isHomePage = isHomePage;
+        });
+    }
 }
