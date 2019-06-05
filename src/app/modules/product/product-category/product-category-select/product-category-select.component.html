@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-sm-12">
+    <form class="form-inline" (ngSubmit)="search(1)">
+      <div class="form-group">
+        <input type="text" class="form-control" i18n-placeholder="@@searchPlaceHolder"
+               placeholder="Please enter categoryName"
+               (keyup)="keyword = searchGroupKeyword.value" #searchGroupKeyword/>
+      </div>
+      <div class="form-group">
+        <button type="button" class="btn blue">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row cm-mgt-10">
+  <div class="col-sm-12">
+    <ul class="media-list select-category-container cm-pdl-0">
+      <li class="media cursor-pointer" *ngFor="let item of listGroup"
+          [class.selected]="item.selected"
+          (click)="onSelectItem(item)">
+        <h4>{{item.name}}</h4>
+      </li>
+    </ul>
+    <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                (pageClick)="search($event)"
+                [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 text-right">
+    <button type="button" class="btn blue cm-mgr-5" (click)="accept()" i18n="@@accept">
+      Accept
+    </button>
+    <button type="button" class="btn default" (click)="cancel()" i18n="@@close">
+      Close
+    </button>
+  </div>
+</div>

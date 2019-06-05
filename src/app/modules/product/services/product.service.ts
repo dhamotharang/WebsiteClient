@@ -17,6 +17,7 @@ import {Products} from '../model/products.model';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {finalize, map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import {ProductSearchForSelectViewModel} from '../model/product-search-for-select.viewmodel';
 
 @Injectable({
     providedIn: 'root'
@@ -87,7 +88,18 @@ export class ProductService implements Resolve<SearchResultViewModel<Product>> {
                 .set('pageSize', page ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
         }) as Observable<SearchResultViewModel<Product>>;
     }
-
+    searchForSelect(keyword: string, categoryId: number, page = 1, pageSize = 20): Observable<SearchResultViewModel<ProductSearchForSelectViewModel>> {
+        return this.http.get( `${this.url}search-for-select`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
+            params: new HttpParams()
+                .set('websiteId', this.appService.currentUser.tenantId)
+                .set('keyword', keyword ? keyword : '')
+                .set('categoryId', categoryId ? categoryId.toString() : '')
+                .set('languageId', this.appService.currentLanguage)
+                .set('page', page ? page.toString() : '')
+                .set('pageSize', pageSize ? pageSize.toString() : '')
+        }) as Observable<SearchResultViewModel<ProductSearchForSelectViewModel>>;
+    }
     searchPicker(keyword: string, categoryId?: number, page: number = 1,
                  pageSize: number = 20): Observable<ActionResultViewModel<INewsPickerViewModel>> {
         return this.http.get(`${this.url}insert`, {

@@ -19,6 +19,7 @@ import {ActionResultViewModel} from '../../../shareds/view-models/action-result.
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {ProductCategoryViewModel} from '../model/product-category.viewmodel';
+import {CategoryProductSearchForSelectViewModel} from '../model/category-product-search-for-select.viewmodel';
 
 @Injectable({
     providedIn: 'root'
@@ -67,7 +68,7 @@ export class CategoryProductService {
 
     insert(category: ProductCategory): Observable<ActionResultViewModel> {
         this.spinnerService.show();
-        return this.http.post(`${this.url}${this.appService.currentUser.tenantId}`, category , {
+        return this.http.post(`${this.url}${this.appService.currentUser.tenantId}`, category, {
             headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
         }).pipe(finalize(() => this.spinnerService.hide()),
             map((result: ActionResultViewModel) => {
@@ -122,5 +123,17 @@ export class CategoryProductService {
                     return result.data;
                 })
             ) as Observable<ProductCategoryViewModel>;
+    }
+
+    searchForSelect(keyword: string, page: number = 1, pageSize: number = 20):
+        Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> {
+        return this.http.get(`${this.url}search-for-select`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
+            params: new HttpParams()
+                .set('websiteId', this.appService.currentUser.tenantId)
+                .set('keyword', keyword ? keyword : '')
+                .set('page', page > 0 ? page.toString() : '')
+                .set('pageSize', pageSize > 0 ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
+        }) as Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> ;
     }
 }

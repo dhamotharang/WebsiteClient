@@ -9,8 +9,11 @@ export const environment = {
   fileUrl: 'http://localhost:50005/',
   filemanagementUrl: 'http://localhost:50005/api/v1/',
   apiCoreGatewayUrl: 'http://localhost:5011/',
+  authentiocationCoreUrl: 'http://localhost:5000',
+  redirect_uri: 'http://localhost:4200/login/auth-callback',
+  post_logout_redirect_uri: 'http://localhost:4200/products'
 
-    // production: false,
+  // production: false,
     // apiGatewayUrl: 'https://websiteapi.ghmsoft.vn/',IS
     // notificationUrl: 'https://websitenotification.ghmsoft.vn',
     // fileUrl: 'https://websitefile.ghmsoft.vn/',

@@ -35,6 +35,8 @@ import {ProductFormComponent} from './product/product-form/product-form.componen
 import {GhmDraggableModule} from '../../shareds/directives/ghm-draggable/ghm-draggable.module';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 import {NhTagModule} from '../../shareds/components/nh-tags/nh-tag.module';
+import { ProductSelectComponent } from './product/product-select/product-select.component';
+import { ProductCategorySelectComponent } from './product-category/product-category-select/product-category-select.component';
 
 
 @NgModule({
@@ -54,9 +56,10 @@ import {NhTagModule} from '../../shareds/components/nh-tags/nh-tag.module';
             showCancelButton: true,
         })
     ],
-    declarations: [ProductComponent, ProductCategoryComponent, ProductCategoryFormComponent, ProductFormComponent],
+    declarations: [ProductComponent, ProductCategoryComponent, ProductCategoryFormComponent, ProductFormComponent,
+        ProductSelectComponent, ProductCategorySelectComponent],
     entryComponents: [ProductCategoryFormComponent, ProductFormComponent],
-    exports: []
+    exports: [ProductSelectComponent, ProductCategorySelectComponent]
 })
 export class ProductModule {
 }
