@@ -30,7 +30,7 @@
         <th class="center middle w100" i18n="@@actions">Actions</th>
     </tr>
     </thead>
-    <tbody *ngIf="totalRows > 0">
+    <tbody>
     <tr *ngFor="let item of listAlbum; let i = index">
         <td class="center middle visible-lg">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
         <td class="middle hidden-sm hidden-xs">
@@ -72,7 +72,7 @@
                             <span class="cm-mgl-5" i18n="@@edit">Edit</span>
                         </a>
                     </li>
-                    <li *ngIf="permission.delete"
+                    <li *ngIf="permission.edit"
                         (click)="edit(item)">
                         <a href="javascript://"
                            *ngIf="permission.delete"
@@ -86,9 +86,6 @@
             </nh-dropdown>
         </td>
     </tr>
-    </tbody>
-    <tbody *ngIf="totalRows === 0">
-        <td colspan="6" class="center cm-pd-20"> Không có dữ liệu </td>
     </tbody>
 </table>
 
