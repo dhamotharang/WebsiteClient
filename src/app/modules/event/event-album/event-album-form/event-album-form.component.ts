@@ -27,7 +27,7 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
     @ViewChild('albumFormModal') albumFormModal: NhModalComponent;
     @ViewChild('editPhotoModal') editPhotoModal: NhModalComponent;
     @ViewChild(VideoComponent) videoComponent: VideoComponent;
-
+    albumExist = false;
     eventId;
     album = new Album();
     photo = new Photo();
@@ -56,10 +56,12 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
     }
 
     ngOnInit() {
+        this.isUpdate = false;
         this.renderForm();
     }
 
     onModalHidden() {
+        this.resetModel();
     }
 
     add(eventId: string) {
@@ -93,7 +95,7 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
     }
 
     addVideo() {
-        this.videoComponent.add();
+        this.videoComponent.add(this.albumExist);
     }
 
     save() {
@@ -116,6 +118,7 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
                         this.isModified = true;
                         this.resetModel();
                         this.albumFormModal.dismiss();
+                        this.saveSuccessful.emit();
                     });
             } else {
                 this.eventService
@@ -123,8 +126,10 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
                     .pipe(finalize(() => this.isSaving = false))
                     .subscribe((result: ActionResultViewModel) => {
                         this.toastr.success(result.message);
+                        this.isModified = true;
                         this.resetModel();
                         if (!this.isCreateAnother) {
+                            this.saveSuccessful.emit();
                             this.albumFormModal.dismiss();
                         }
                     });
@@ -187,16 +192,23 @@ export class EventAlbumFormComponent extends BaseFormComponent implements OnInit
         this.model.patchValue({
             isActive: true,
             isPublic: false,
-            concurrencyStamp: ''
+            concurrencyStamp: '',
+            thumbnail: '',
+            type: 1,
         });
         this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 title: '',
-                description: ''
+                description: '',
+                seoLink: '',
+                metaTitle: '',
+                metaDescription: ''
             });
         });
         this.photos = [];
         this.videos = [];
+        this.album = null;
+        this.photo = null;
         this.clearFormError(this.formErrors);
         this.clearFormError(this.translationFormErrors);
     }

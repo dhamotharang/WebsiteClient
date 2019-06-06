@@ -67,7 +67,6 @@ export class AuthWebsiteService {
         localStorage.removeItem('_tw');
         this.manager.signoutRedirect().then(() => {
         });
-        this.router.navigate(['/website']);
     }
 
     startAuthentication(): Promise<void> {

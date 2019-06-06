@@ -126,13 +126,14 @@ export class AuthService implements Resolve<any> {
         this.token = '';
         this.refreshToken = '';
         this.isLoggedIn = false;
+
         if (localStorage) {
             localStorage.clear();
         }
+
     }
 
     signOut() {
-        this.authWebsiteService.signOut();
         this.resetAuthService();
         this.router.navigateByUrl('/login');
     }
