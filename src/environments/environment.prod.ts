@@ -6,11 +6,16 @@ export const environment = {
   filemanagementUrl: 'https://websitefile.ghmsoft.vn/api/v1/',
   apiCoreGatewayUrl: 'https://testapi.ghmsoft.vn/',
   authentiocationCoreUrl: 'https://testauth.ghmsoft.vn',
-  redirect_uri: 'http://websiteportal.ghmsoft.vn/login/auth-callback',
-  post_logout_redirect_uri: 'http://websiteportal.ghmsoft.vn/products'
+  redirect_uri: 'https://websiteportal.ghmsoft.vn/login/auth-callback',
+  post_logout_redirect_uri: 'https://websiteportal.ghmsoft.vn/products'
+
   // production: true,
-  // apiGatewayUrl: 'http://testwebsiteapi.ghmsoft.vn/',
-  // notificationUrl: 'http://testwebsitenotification.ghmsoft.vn',
-  // fileUrl: 'http://testwebsitefile.ghmsoft.vn/',
-  // filemanagementUrl: 'http://testwebsitefile.ghmsoft.vn/api/v1/',
+  // apiGatewayUrl: 'https://testwebsiteapi.ghmsoft.vn/',
+  // notificationUrl: 'https://testwebsitenotification.ghmsoft.vn',
+  // fileUrl: 'https://testwebsitefile.ghmsoft.vn/',
+  // filemanagementUrl: 'https://testwebsitefile.ghmsoft.vn/api/v1/',
+  // apiCoreGatewayUrl: 'https://testapi.ghmsoft.vn/',
+  // authentiocationCoreUrl: 'https://testauth.ghmsoft.vn',
+  // redirect_uri: 'https://websiteportal.ghmsoft.vn/login/auth-callback',
+  // post_logout_redirect_uri: 'https://websiteportal.ghmsoft.vn/products'
 };

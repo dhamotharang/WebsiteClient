@@ -57,8 +57,8 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
             this.currentPage, this.pageSize)
             .subscribe((result: SearchResultViewModel<Product>) => {
                 this.totalRows = result.totalRows;
-                this.rendResult();
                 this.listItems = result.items;
+                this.rendResult();
                 this.isSearching = false;
             });
 

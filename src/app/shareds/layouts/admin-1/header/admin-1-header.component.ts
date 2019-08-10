@@ -63,9 +63,9 @@ export class Admin1HeaderComponent implements OnInit, OnDestroy {
     }
 
     signOut() {
+        this.authService.signOut();
         this.notificationService.signOut()
             .subscribe(() => {
-                this.authService.signOut();
             });
     }
 

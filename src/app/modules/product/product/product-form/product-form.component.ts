@@ -20,6 +20,7 @@ import {ToastrService} from 'ngx-toastr';
 import {finalize} from 'rxjs/operators';
 import {Products} from '../../model/products.model';
 import {TagType} from '../../../../shareds/components/nh-tags/tag.model';
+import {SpinnerService} from '../../../../core/spinner/spinner.service';
 
 declare var tinyMCE;
 
@@ -49,6 +50,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 private utilService: UtilService,
                 private toastrService: ToastrService,
                 private productService: ProductService,
+                private spinnerService: SpinnerService,
                 private categoryService: CategoryProductService,
                 public dialogRef: MatDialogRef<ProductFormComponent>) {
         super();
@@ -62,11 +64,12 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         if (this.data) {
             if (this.data.id) {
                 this.isUpdate = true;
+                this.spinnerService.show();
                 this.id = this.data.id;
                 this.productService.getDetail(this.data.id).subscribe((result: ActionResultViewModel<ProductDetail>) => {
                     this.productDetail = result.data;
+                    this.spinnerService.hide();
                     if (this.productDetail) {
-                        console.log(this.productDetail);
                         if (this.productDetail.categories) {
                             this.categoriesProduct = [];
                             // const listCategoryByLanguageId = _.filter(this.productDetail.categories,
@@ -140,7 +143,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         const isLanguageValid = this.checkLanguageValid();
         if (isValid && isLanguageValid) {
             this.products = this.model.value;
-            console.log(this.model.value);
             this.isSaving = true;
             if (this.isUpdate) {
                 this.productService.update(this.id, this.products)
