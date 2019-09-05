@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PatientContact } from '../model/patient-contact.model';
-import { ContactType, UserContact } from '../../hr/user/models/user-contact.model';
 import { ToastrService } from 'ngx-toastr';
 import { CustomerService } from '../service/customer.service';
 import { finalize } from 'rxjs/internal/operators';
 import * as _ from 'lodash';
 import { IActionResultResponse } from '../../../interfaces/iaction-result-response.result';
+import {ContactType, UserContact} from '../model/customer-contact.model';
 
 @Component({
     selector: 'app-patient-contact',

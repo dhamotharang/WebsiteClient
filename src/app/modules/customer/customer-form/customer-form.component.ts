@@ -13,10 +13,7 @@ import { Customer } from '../model/customer.model';
 import { DateTimeValidator } from '../../../validators/datetime.validator';
 import { CustomerTranslation } from '../model/customer-translation.model';
 import { finalize } from 'rxjs/internal/operators';
-import { NationalService } from '../../hr/user/services/national.service';
-import { Gender } from '../../hr/user/models/user.model';
 import { PatientContact, ContactType } from '../model/patient-contact.model';
-import { UserContact } from '../../hr/user/models/user-contact.model';
 import { IActionResultResponse } from '../../../interfaces/iaction-result-response.result';
 import { CustomerDetailViewModel } from '../model/customer-detail.viewmodel';
 import { JobService } from '../config/jobs/service/job.service';
@@ -26,6 +23,8 @@ import { PatientResource } from '../config/patient-source/models/patient-resourc
 import { PatientResourceService } from '../config/patient-source/service/patient-resource.service';
 import { ContactPerson } from '../model/contact-person.model';
 import { ISearchResult } from '../../../interfaces/isearch.result';
+import {NationalService} from '../service/national.service';
+import {Gender, UserContact} from '../model/customer-contact.model';
 
 @Component({
     selector: 'app-customer-form',

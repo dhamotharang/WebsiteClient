@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Inject, OnInit, Output, ViewChild} from '@angular/core';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 import {TreeData} from '../../../../view-model/tree-data';
-import {Category} from '../../../website/category/category.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {UtilService} from '../../../../shareds/services/util.service';

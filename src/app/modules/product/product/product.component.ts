@@ -25,7 +25,6 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
     isHot: boolean;
     isHomePage: boolean;
     websiteId: string;
-    productName: string;
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 @Inject(PAGE_ID) public pageId: IPageId,
@@ -52,7 +51,7 @@ export class ProductComponent extends BaseListComponent<Product> implements OnIn
     search(currentPage: number) {
         this.currentPage = currentPage;
         this.isSearching = true;
-        this.productService.search(this.appService.currentUser.tenantId, this.productName, this.categoryId,
+        this.productService.search(this.keyword, this.categoryId,
             this.isActive, this.isHot, this.isHomePage,
             this.currentPage, this.pageSize)
             .subscribe((result: SearchResultViewModel<Product>) => {

@@ -10,7 +10,6 @@ import {EventViewModel} from './view-models/event.viewmodel';
 import {Event} from './models/event.model';
 import {ActionResultViewModel} from '../../shareds/view-models/action-result.viewmodel';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
-import {SurveyViewModel} from '../surveys/survey/survey-list/survey.viewmodel';
 import {EventDayViewModel} from './view-models/event-day.viewmodel';
 import {EventRegisterViewModel} from './view-models/event-register.viewmodel';
 import {EventDay} from './models/event-day.model';
@@ -24,7 +23,7 @@ import {Album} from '../gallery/photo/models/album.model';
 import {environment} from '../../../environments/environment';
 
 @Injectable()
-export class EventService implements Resolve<SurveyViewModel> {
+export class EventService implements Resolve<any> {
     url = 'api/v1/events/events';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
@@ -290,7 +289,8 @@ export class EventService implements Resolve<SurveyViewModel> {
     }
 
     // album
-    searchAlbum(eventId: string, page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE): Observable<SearchResultViewModel<EventAlbumViewmodel>> {
+    searchAlbum(eventId: string, page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE)
+        : Observable<SearchResultViewModel<EventAlbumViewmodel>> {
         return this.http
             .get(`${this.url}/${eventId}/albums`, {
                 params: new HttpParams()

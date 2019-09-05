@@ -1,4 +1,3 @@
-import { UserContact } from '../../hr/user/models/user-contact.model';
 
 export const Gender = {
     // Nam

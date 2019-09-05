@@ -2,12 +2,16 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { BaseListComponent } from '../../../base-list.component';
 import { GhmMultiSelect } from './ghm-multi-select.model';
 import { NhModalComponent } from '../nh-modal/nh-modal.component';
-import { INewsPickerViewModel } from '../../../modules/website/news/inews-picker.viewmodel';
 import * as _ from 'lodash';
 import { ISearchResult } from '../../../interfaces/isearch.result';
 import { GhmMultiSelectService } from './ghm-multi-select.service';
 import { ToastrService } from 'ngx-toastr';
 import { finalize, map } from 'rxjs/operators';
+
+class INewsPickerViewModel {
+    id: number;
+    name: string;
+}
 
 @Component({
     selector: 'ghm-multi-select',

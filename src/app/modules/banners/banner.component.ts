@@ -6,7 +6,6 @@ import {IResponseResult} from '../../interfaces/iresponse-result';
 import {FilterLink} from '../../shareds/models/filter-link.model';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HelperService} from '../../shareds/services/helper.service';
-import {CustomerService} from '../customer/service/customer.service';
 import {UtilService} from '../../shareds/services/util.service';
 import {IPageId, PAGE_ID} from '../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
@@ -26,7 +25,7 @@ import {BannerItemFormComponent} from './banner-items/banner-item-form/banner-it
     templateUrl: './banner.component.html',
     providers: [
         Location, {provide: LocationStrategy, useClass: PathLocationStrategy},
-        HelperService, CustomerService]
+        HelperService]
 })
 
 export class BannerComponent extends BaseListComponent<BannerResultViewModel> implements OnInit, AfterViewInit {

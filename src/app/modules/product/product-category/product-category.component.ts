@@ -1,15 +1,10 @@
 import {Component, EventEmitter, Inject, OnInit, Output, ViewChild} from '@angular/core';
-import {BaseFormComponent} from '../../../base-form.component';
-import {Category} from '../../website/category/category.model';
-import {IResponseResult} from '../../../interfaces/iresponse-result';
 import {ToastrService} from 'ngx-toastr';
 import {finalize, map} from 'rxjs/operators';
-import {ProductCategory} from '../model/product-category.model';
 import {IPageId, PAGE_ID} from '../../../configs/page-id.config';
 import {ActivatedRoute} from '@angular/router';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {BaseListComponent} from '../../../base-list.component';
-import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {ProductCategoryFormComponent} from './product-category-form/product-category-form.component';
 import {CategoryProductService} from '../services/category-product.service';
 import {SortEvent} from '../../../shareds/directives/ghm-draggable/ghm-sortable-list.directive';

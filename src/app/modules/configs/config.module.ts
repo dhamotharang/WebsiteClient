@@ -32,7 +32,6 @@ import {UserSettingComponent} from './user-setting/user-setting.component';
 import {NhImageModule} from '../../shareds/components/nh-image/nh-image.module';
 import {GhmSelectPickerModule} from '../../shareds/components/ghm-select-picker/ghm-select-picker.module';
 import {CoreModule} from '../../core/core.module';
-import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-user-picker.module';
 import {AccountComponent} from './account/account.component';
 import {AccountFormComponent} from './account/account-form/account-form.component';
 import {MenuFormComponent} from './menus/menu-form/menu-form.component';
@@ -70,7 +69,7 @@ import {ProductModule} from '../product/product.module';
 
 @NgModule({
     imports: [
-        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, NhUserPickerModule, TinymceModule,
+        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule,
         MatCheckboxModule, MatPaginatorModule, MatButtonModule, MatSlideToggleModule, DatetimeFormatModule, NhDateModule, NhDropdownModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmFileExplorerModule, GhmUserSuggestionModule,
         MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, ProductModule, DragDropModule, GhmSelectModule,

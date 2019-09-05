@@ -5,14 +5,11 @@ import { NhUserPickerService } from './nh-user-picker.service';
 import { SearchResultViewModel } from '../../view-models/search-result.viewmodel';
 import { SuggestionViewModel } from '../../view-models/SuggestionViewModel';
 import { finalize } from 'rxjs/operators';
-import { TreeData } from '../../../view-model/tree-data';
-import { OfficeService } from '../../../modules/hr/organization/office/services/office.service';
 
 @Component({
     selector: 'nh-user-picker',
     templateUrl: './nh-user-picker.component.html',
     styleUrls: ['./nh-user-picker.component.scss'],
-    providers: [OfficeService],
     encapsulation: ViewEncapsulation.None
 })
 
@@ -48,10 +45,7 @@ export class NhUserPickerComponent implements OnInit, OnChanges {
         return this._selectedItems;
     }
 
-    constructor(private userPickerService: NhUserPickerService,
-                private officeService: OfficeService) {
-        // this.officeService.getTree()
-        //     .subscribe((result: TreeData[]) => this.officeTree = result);
+    constructor(private userPickerService: NhUserPickerService) {
     }
 
     ngOnInit() {
