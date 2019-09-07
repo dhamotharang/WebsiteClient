@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { BaseListComponent } from '../../../base-list.component';
 import { Role } from './models/role.model';
 import { IPageId, PAGE_ID } from '../../../configs/page-id.config';
 import { RoleService } from './role.service';
@@ -9,16 +8,18 @@ import { finalize, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { RoleDetailComponent } from './role-detail/role-detail.component';
 import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
+import {BaseListComponent} from '../../../base-list.component';
 
 @Component({
     selector: 'app-role',
     templateUrl: './role.component.html',
     providers: [RoleService]
 })
+
 export class RoleComponent extends BaseListComponent<Role> implements OnInit {
     @ViewChild(RoleDetailComponent) roleDetailComponent: RoleDetailComponent;
 
-    constructor(@Inject(PAGE_ID) private pageId: IPageId,
+    constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 private route: ActivatedRoute,
                 private spinnerService: SpinnerService,
                 private toastr: ToastrService,
@@ -36,7 +37,7 @@ export class RoleComponent extends BaseListComponent<Role> implements OnInit {
     }
 
     search(currentPage: number) {
-        this.currentPage = currentPage
+        this.currentPage = currentPage;
         this.isSearching = true;
         this.listItems$ = this.roleService.search(this.keyword, this.currentPage)
             .pipe(finalize(() => this.isSearching = false),

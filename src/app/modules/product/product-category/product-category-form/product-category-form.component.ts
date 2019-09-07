@@ -1,212 +1,295 @@
-import {Component, EventEmitter, Inject, OnInit, Output, ViewChild} from '@angular/core';
-import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
-import {TreeData} from '../../../../view-model/tree-data';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {UtilService} from '../../../../shareds/services/util.service';
-import {finalize} from 'rxjs/operators';
-import {IResponseResult} from '../../../../interfaces/iresponse-result';
-import {BaseFormComponent} from '../../../../base-form.component';
-import {CategoryProductService} from '../../services/category-product.service';
+import {Component, enableProdMode, OnInit, ViewChild} from '@angular/core';
+import { ProductCategory } from '../model/product-category.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { ProductCategoryTranslation } from '../model/product-category-translation.model';
+import { ProductCategoryService } from '../service/product-category-service';
+import { ProductCategoryDetailViewModel } from '../viewmodel/product-category-detail.viewmodel';
 import * as _ from 'lodash';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {ProductCategory} from '../../model/product-category.model';
-import {ProductCategoryViewModel} from '../../model/product-category.viewmodel';
-import {ProductCategoryTranslation} from '../../model/product-category-translation.model';
-import {NumberValidator} from '../../../../validators/number.validator';
+import { ProductCategoryAttribute } from '../product-category-attribute/product-category-attribute.model';
+import { ProductAttributeService } from '../../product-attribute/product-attribute.service';
+import { ToastrService } from 'ngx-toastr';
+import { ProductCategoryAttributeViewModel } from '../product-category-attribute/product-category-attribute.viewmodel';
+import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
+import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
+import {BaseFormComponent} from '../../../../base-form.component';
+import {TreeData} from '../../../../view-model/tree-data';
+import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {UtilService} from '../../../../shareds/services/util.service';
+import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
+import {Pattern} from '../../../../shareds/constants/pattern.const';
 
+if (!/localhost/.test(document.location.host)) {
+    enableProdMode();
+}
 @Component({
     selector: 'app-product-category-form',
     templateUrl: './product-category-form.component.html',
-    styleUrls: ['./product-category-form.component.scss'],
-    providers: [NumberValidator],
 })
-export class ProductCategoryFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('categoryFormModal') categoryFormModal: NhModalComponent;
-    @Output() onSaveSuccess = new EventEmitter();
-    categoryTree: TreeData[] = [];
-    category = new ProductCategory();
-    modelTranslation = new ProductCategoryTranslation();
-    categoryTreeData: TreeData[] = [];
-    isShowMore = false;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-                private fb: FormBuilder,
+export class ProductCategoryFormComponent extends BaseFormComponent implements OnInit {
+    @ViewChild('productCategoryFormModal' ) productCategoryFormModal: NhModalComponent;
+    @ViewChild(NhTabComponent ) nhTabComponent: NhTabComponent;
+    productCategory = new ProductCategory();
+    productCategoryTree: TreeData[] = [];
+    modelTranslation = new ProductCategoryTranslation();
+    isGettingTree = false;
+    productCategoryAttributes: ProductCategoryAttribute[] = [];
+    listProductCategoryAttributeViewModel: ProductCategoryAttributeViewModel[];
+    productCategoryAttributeSuggestions: NhSuggestion[];
+    isSearchingProductCategory;
+    categoryText;
+    productCategoryAttributeSelect: NhSuggestion[];
+
+    constructor(private fb: FormBuilder,
                 private toastr: ToastrService,
-                private numberValidator: NumberValidator,
-                private categoryService: CategoryProductService,
-                private utilService: UtilService,
-                public dialogRef: MatDialogRef<ProductCategoryFormComponent>
-    ) {
+                private productCategoryService: ProductCategoryService,
+                private productAttributeService: ProductAttributeService,
+                private utilService: UtilService) {
         super();
     }
 
-    ngOnInit() {
-        if (this.data) {
-            if (this.data.id) {
-                this.id = this.data.id;
-                this.isUpdate = true;
-                this.getDetail(this.data.id);
-            }
-        }
-        this.getTree();
+    ngOnInit(): void {
         this.renderForm();
+    }
+
+    onModalShow() {
+        this.getProductCategoryTree();
+        this.isModified = false;
     }
 
     onModalHidden() {
         this.isUpdate = false;
-        this.resetModels();
+        this.resetForm();
         if (this.isModified) {
             this.saveSuccessful.emit();
         }
     }
 
     add() {
-        this.isUpdate = false;
-        this.categoryFormModal.open();
+        this.resetForm();
+        this.utilService.focusElement('name ' + this.currentLanguage);
+        this.renderForm();
+        this.productCategoryFormModal.open();
     }
 
     edit(id: number) {
+        this.utilService.focusElement('name ' + this.currentLanguage);
         this.isUpdate = true;
         this.id = id;
         this.getDetail(id);
-        this.categoryFormModal.open();
-    }
-
-    onImageSelected(value: any) {
-        console.log(value);
-        this.model.patchValue({'bannerImage': value.absoluteUrl});
+        this.productCategoryFormModal.open();
     }
 
     save() {
-        const isValid = this.validateModel();
-        const isLanguageValid = this.checkLanguageValid();
+        const isValid = this.utilService.onValueChanged(
+            this.model,
+            this.formErrors,
+            this.validationMessages,
+            true
+        );
+        const isLanguageValid = this.validateLanguage();
         if (isValid && isLanguageValid) {
-            this.isSaving = true;
-            this.category = this.model.value;
-            this.category.categoryTranslations = this.modelTranslations.getRawValue();
+            this.productCategory = this.model.value;
+            this.productCategory.productCategoryAttributes = this.productCategoryAttributes;
             this.isSaving = true;
             if (this.isUpdate) {
-                this.categoryService.update(this.id, this.category)
-                    .pipe(finalize(() => this.isSaving = false))
+                this.productCategoryService
+                    .update(this.id, this.productCategory)
+                    .pipe(finalize(() => (this.isSaving = false)))
                     .subscribe(() => {
                         this.isModified = true;
-                        this.dialogRef.close({isModified: this.isModified});
+                        this.reloadTree();
+                        this.saveSuccessful.emit();
+                        this.productCategoryFormModal.dismiss();
                     });
             } else {
-                this.categoryService.insert(this.category)
-                    .pipe(finalize(() => this.isSaving = false))
+                this.productCategoryService
+                    .insert(this.productCategory)
+                    .pipe(finalize(() => (this.isSaving = false)))
                     .subscribe(() => {
+                        this.isModified = true;
                         if (this.isCreateAnother) {
-                            this.resetModels();
-                            this.getTree();
+                            this.utilService.focusElement('name ' + this.currentLanguage);
+                            this.getProductCategoryTree();
+                            this.resetForm();
                         } else {
-                            this.isModified = true;
-                            this.dialogRef.close({isModified: this.isModified});
+                            this.saveSuccessful.emit();
+                            this.productCategoryFormModal.dismiss();
                         }
+                        this.reloadTree();
                     });
             }
         }
     }
 
-    private getDetail(id: number) {
-        this.subscribers.getDetail = this.categoryService.getDetail(id)
-            .subscribe((categoryDetail: ProductCategoryViewModel) => {
-                if (categoryDetail) {
-                    console.log(categoryDetail);
-                    this.model.patchValue(categoryDetail);
-                    if (categoryDetail.categoryTranslations && categoryDetail.categoryTranslations.length > 0) {
-                        this.modelTranslations.controls.forEach((model: FormGroup) => {
-                            const detail = _.find(categoryDetail.categoryTranslations, (translation: ProductCategoryTranslation) => {
-                                return translation.languageId === model.value.languageId;
-                            });
-                            if (detail) {
-                                model.patchValue(detail);
-                            }
-                        });
-                    }
-                }
-            });
+    onSearched(keyword) {
+        this.isSearchingProductCategory = true;
+        this.subscribers.searchSuggestionProductAttribute = this.productAttributeService
+            .suggestions(keyword, 1, 20)
+            .pipe(
+                finalize(() => this.isSearchingProductCategory = false)
+            )
+            .subscribe((result: SearchResultViewModel<NhSuggestion>) => this.productCategoryAttributeSuggestions = result.items);
     }
 
-    private getTree() {
-        this.subscribers.getCategoryTree = this.categoryService.getTree()
+    onSelectedProductAttribute(value: NhSuggestion) {
+        if (value) {
+            const countByProductAttributeId = _.countBy(this.productCategoryAttributes, (item: ProductCategoryAttribute) => {
+                return item.attributeId === value.id;
+            }).true;
+
+            if (countByProductAttributeId && countByProductAttributeId > 0) {
+                this.toastr.error('This attribute aldresdy exists');
+                return;
+            }
+
+            this.productCategoryAttributes.push(new ProductCategoryAttribute(this.id, value.id.toString()));
+            this.listProductCategoryAttributeViewModel
+                .push(new ProductCategoryAttributeViewModel(this.id, value.id.toString(), value.name));
+            this.productCategoryAttributeSelect = null;
+        } else {
+            this.productCategoryAttributeSelect = null;
+        }
+    }
+
+    deleteAttribute(value, index: number) {
+        _.pullAt(this.productCategoryAttributes, [index]);
+        _.remove(this.listProductCategoryAttributeViewModel, (item: ProductCategoryAttributeViewModel) => {
+            return item.attributeId === value.attributeId;
+        });
+    }
+
+    reloadTree() {
+        this.isGettingTree = true;
+        this.productCategoryService.getTree().subscribe((result: any) => {
+            this.isGettingTree = false;
+            this.productCategoryTree = result;
+        });
+    }
+
+    onParentSelect(productCategory: TreeData) {
+        this.model.patchValue({parentId: productCategory ? productCategory.id : null});
+    }
+
+    private getDetail(id: number) {
+        this.subscribers.productCategoryService = this.productCategoryService
+            .getDetail(id)
+            .subscribe(
+                (result: ActionResultViewModel<ProductCategoryDetailViewModel>) => {
+                    const productCategoryDetail = result.data;
+                    if (productCategoryDetail) {
+                        this.model.patchValue({
+                            isActive: productCategoryDetail.isActive,
+                            order: productCategoryDetail.order,
+                            parentId: productCategoryDetail.parentId,
+                            concurrencyStamp: productCategoryDetail.concurrencyStamp,
+                        });
+
+                        if (productCategoryDetail.productCategoryAttributes && productCategoryDetail.productCategoryAttributes.length > 0) {
+                            this.productCategoryAttributes = [];
+                            _.each(productCategoryDetail.productCategoryAttributes, (item: ProductCategoryAttributeViewModel) => {
+                                this.productCategoryAttributes.push(new ProductCategoryAttribute(item.categoryId, item.attributeId));
+                            });
+                        } else {
+                            this.productCategoryAttributes = [];
+                        }
+                        this.listProductCategoryAttributeViewModel = productCategoryDetail.productCategoryAttributes;
+
+                        if (productCategoryDetail.translations && productCategoryDetail.translations.length > 0) {
+                            this.translations.controls.forEach(
+                                (model: FormGroup) => {
+                                    const detail = _.find(
+                                        productCategoryDetail.translations,
+                                        (productCategoryTranslation: ProductCategoryTranslation) => {
+                                            return (
+                                                productCategoryTranslation.languageId ===
+                                                model.value.languageId
+                                            );
+                                        }
+                                    );
+                                    if (detail) {
+                                        model.patchValue(detail);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+            );
+    }
+
+    private getProductCategoryTree() {
+        this.subscribers.getTree = this.productCategoryService
+            .getTree()
             .subscribe((result: TreeData[]) => {
-                this.categoryTreeData = result;
+                this.productCategoryTree = result;
             });
     }
 
     private renderForm() {
         this.buildForm();
-        this.renderTranslationFormArray(this.buildFormLanguage);
+        this.renderTranslationArray(this.buildFormLanguage);
     }
 
     private buildForm() {
-        this.formErrors = this.renderFormError(['order']);
-        this.validationMessages = this.renderFormErrorMessage([
-            {'order': ['required', 'isValid', 'greaterThan']},
-            {'shortName': ['required', 'maxlength']},
-        ]);
+        this.formErrors = this.utilService.renderFormError([]);
         this.model = this.fb.group({
-            isActive: [this.category.isActive],
-            bannerImage: [this.category.bannerImage],
-            parentId: [this.category.parentId],
-            order: [this.category.order, [this.numberValidator.isValid, this.numberValidator.greaterThan(0)]],
-            concurrencyStamp: [this.category.concurrencyStamp],
-            modelTranslations: this.fb.array([])
+            parentId: [this.productCategory.parentId],
+            isActive: [this.productCategory.isActive],
+            order: [this.productCategory.order],
+            concurrencyStamp: [this.productCategory.concurrencyStamp],
+            productCategoryAttributes: [this.productCategoryAttributes],
+            translations: this.fb.array([])
         });
         this.model.valueChanges.subscribe(data => this.validateModel(false));
     }
 
-    private resetModels() {
-        this.isUpdate = false;
+    private resetForm() {
+        this.id = null;
+        this.categoryText = '-';
         this.model.patchValue({
-            isActive: true,
             parentId: null,
+            isActive: true,
+            order: 0,
         });
-        this.modelTranslations.controls.forEach((model: FormGroup) => {
+        this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 name: '',
-                metaTitle: '',
                 description: '',
-                metaDescription: '',
-                seoLink: ''
             });
         });
+        this.productCategoryAttributes = [];
+        this.listProductCategoryAttributeViewModel = [];
         this.clearFormError(this.formErrors);
         this.clearFormError(this.translationFormErrors);
     }
 
     private buildFormLanguage = (language: string) => {
-        this.translationFormErrors[language] = this.renderFormError(['name', 'metaTitle', 'description', 'metaDescription', 'seoLink']);
-        this.translationValidationMessage[language] = this.renderFormErrorMessage([
-            {'name': ['required', 'maxlength']},
-            {'description': ['maxlength']},
-            {'metaTitle': ['maxlength']},
-            {'metaDescription': ['maxlength']},
-            {'seoLink': ['maxlength']}
+        this.translationFormErrors[language] = this.utilService.renderFormError(
+            ['name', 'description']
+        );
+        this.translationValidationMessage[
+            language
+            ] = this.utilService.renderFormErrorMessage([
+            {name: ['required', 'maxlength', 'pattern']},
+            {description: ['maxlength']},
         ]);
-
-        const pageTranslationModel = this.fb.group({
+        const translationModel = this.fb.group({
             languageId: [language],
-            name: [this.modelTranslation.name, [
-                Validators.required,
-                Validators.maxLength(256)
-            ]],
-            seoLink: [this.modelTranslation.seoLink, [
-                Validators.maxLength(500)
-            ]],
-            metaTitle: [this.modelTranslation.metaTitle, [
-                Validators.maxLength(256)
-            ]],
-            metaDescription: [this.modelTranslation.metaDescription, [
-                Validators.maxLength(500)
-            ]],
-            description: [this.modelTranslation.description, [
-                Validators.maxLength(500)
-            ]],
+            name: [
+                this.modelTranslation.name,
+                [Validators.required, Validators.maxLength(256), Validators.pattern(Pattern.whiteSpace)]
+            ],
+            description: [
+                this.modelTranslation.description,
+                [Validators.maxLength(500)]
+            ]
         });
-        pageTranslationModel.valueChanges.subscribe((data: any) => this.validateTranslationModel(false));
-        return pageTranslationModel;
-    };
+        translationModel.valueChanges.subscribe((data: any) =>
+            this.validateTranslation(false)
+        );
+        return translationModel;
+    }
 }

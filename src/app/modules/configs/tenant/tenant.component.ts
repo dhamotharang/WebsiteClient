@@ -1,13 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { IPageId, PAGE_ID } from '../../../configs/page-id.config';
-import { BaseListComponent } from '../../../base-list.component';
 import { Tenant } from './tenant.model';
 import { ToastrService } from 'ngx-toastr';
 import { TenantService } from './tenant.service';
-import { ISearchResult } from '../../../interfaces/isearch.result';
 import { TenantFormComponent } from './tenant-form.component';
 import { finalize, map } from 'rxjs/operators';
-import { SearchResultViewModel } from '../../../shareds/view-models/search-result.viewmodel';
+import {BaseListComponent} from '../../../base-list.component';
+import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 
 @Component({
     selector: 'app-tenant',
@@ -18,7 +17,7 @@ export class TenantComponent extends BaseListComponent<Tenant> implements OnInit
     @ViewChild(TenantFormComponent) tenantFormComponent: TenantFormComponent;
     isActive: boolean;
 
-    constructor(@Inject(PAGE_ID) private pageId: IPageId,
+    constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 private toastr: ToastrService,
                 private tenantService: TenantService) {
         super();

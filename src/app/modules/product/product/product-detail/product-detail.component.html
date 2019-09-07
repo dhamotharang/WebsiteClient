@@ -1,0 +1,214 @@
+<nh-modal #productFormModal size="lg">
+    <nh-modal-header class="uppercase font-green-sharp bold">
+        <span
+            i18n="@@productDetailModalTitle">Chi tiết sản phẩm</span>
+    </nh-modal-header>
+    <form action="" class="form-horizontal">
+        <nh-modal-content>
+            <div>
+                <div class="form-group" *ngIf="languages && languages.length > 1">
+                    <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                           class="col-sm-4 control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <nh-select [data]="languages"
+                                   i18n-title="@@pleaseSelectLanguage"
+                                   title="-- Chọn ngôn ngữ --"
+                                   name="language"
+                                   [(value)]="currentLanguage"
+                                   (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" i18n-ghmLabel="@@productCategory"
+                           ghmLabel="Nhóm sản phẩm"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control height-auto">
+                           <span class="badge badge-info cm-mgr-5" *ngFor="let category of categories">
+                            {{ category.categoryName }}
+                           </span>
+                        </div>
+                    </div>
+                </div><!-- END: Product category -->
+                <div class="form-group"
+                     *ngFor="let translation of product?.translations"
+                     [hidden]="translation?.languageId !== currentLanguage">
+                    <label class="col-sm-4 control-label" ghmLabel="Tên sản phẩm"
+                           i18n-ghmLabel="@@productName"
+                           [required]="true"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control">
+                            {{ translation.name }}
+                        </div>
+                    </div>
+                </div><!-- END: Product name -->
+                <div class="form-group"
+                     *ngFor="let translation of product?.translations"
+                     [hidden]="translation?.languageId !== currentLanguage">
+                    <label class="col-sm-4 control-label" ghmLabel="Mô tả"
+                           i18n-ghmLabel="@@description"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control">{{ translation?.description }}</div>
+                    </div>
+                </div><!-- END: Product description -->
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" ghmLabel="Đơn vị tính"
+                       i18n-ghmLabel="@@productUnit"
+                       [required]="true"></label>
+                <div class="col-sm-8">
+                    <div class="form-control">{{ product?.unitName }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" ghmLabel="Giá bán"
+                       i18n-ghmLabel="@@salePrice"
+                       [required]="true"></label>
+                <div class="col-sm-8">
+                    <div class="form-control">{{ product?.salePrice }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box [value]="product?.isManagementByLot" text="Quản lý theo lô" [disabled]="true"></dx-check-box>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box [value]="product?.isActive" text="Sử dụng" [disabled]="true"></dx-check-box>
+                </div>
+            </div>
+            <mat-accordion class="example-headers-align">
+                <div class="cm-mgb-10">
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span i18n="@@unitConversion">Hình ảnh sản phẩm</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="product-images">
+                            <div class="image-content" *ngFor="let item of productImages"
+                                 [class.thumbnail]="item.isThumbnail">
+                                <img ghmImage [src]="item.url"
+                                     [nhImageViewer]="item.url"
+                                     [errorImageUrl]="'/assets/images/no-image.png'">
+                                <!--<button class="btn btn-sm btn-remove red" type="button" disabled-->
+                                        <!--[swal]="confirmDeleteImage"-->
+                                        <!--(confirm)="removeImage(item)">-->
+                                    <!--<i class="fa fa-times"></i>-->
+                                <!--</button>-->
+                                <button class="btn btn-sm btn-check blue" disabled *ngIf="item.isThumbnail"
+                                        [class.display-none]="!item.isThumbnail" (click)="checkThumbnail(item)"
+                                        type="button">
+                                    <i class="fa fa-check" aria-hidden="true" ></i>
+                                </button>
+                            </div>
+                        </div>
+                    </mat-expansion-panel><!-- END: Product images -->
+                </div>
+                <div class="cm-mgb-10">
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span i18n="@@unitConversion">Đơn vị chuyển đổi</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <table class="table table-stripped table-hover">
+                            <thead>
+                            <tr>
+                                <th i18n="@@unit">Đơn vị</th>
+                                <th></th>
+                                <th i18n="@@conversion" class="w100">Chuyển đổi</th>
+                                <th i18n="@@unit">Đơn vị</th>
+                                <th i18n="@@salePrice" class="text-right">Giá bán</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let conversionUnit of conversionUnits">
+                                <td>
+                                    {{ conversionUnit.unitName }}
+                                </td>
+                                <td class="center middle">=</td>
+                                <td>
+                                    {{ conversionUnit.value }}
+                                </td>
+                                <td class="middle">
+                                    {{ product?.unitName }}
+                                </td>
+                                <td class="text-right bold">
+                                    {{ conversionUnit?.salePrice | ghmCurrency:2 }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </mat-expansion-panel><!-- END: Product unit conversion -->
+                </div>
+                <div class="cm-mgb-10">
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span i18n="@@productAttribute">Thuộc tính sản phẩm</span>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="middle w200" i18n="@@productAttribute">Thuộc tính sản phẩm</th>
+                                    <th class="middle" i18n="@@productAttributeValue">Giá trị thuộc tính sản phẩm</th>
+                                    <th class="middle center" i18n="@@websiteVisible">Hiển thị website</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let attribute of attributes; let i = index">
+                                    <td>
+                                        <ng-container *ngIf="!isReadOnly">
+                                            {{ attribute?.attributeName }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                    <span *ngFor="let attributeValue of attribute?.attributeValues"
+                                          class="badge badge-info cm-mgr-5">
+                                        {{ attributeValue.name }}
+                                    </span>
+                                    </td>
+                                    <td class="center middle">
+                                        <dx-check-box [disabled]="true" [value]="attribute?.isShowClient"></dx-check-box>h
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </mat-expansion-panel><!-- END: Product attribute -->
+                </div>
+            </mat-accordion>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <button type="button" class="btn default" i18n="@@close" nh-dismiss
+                            [disabled]="isSaving">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
+
+<swal
+    #confirmDeleteImage
+    i18n="@@confirmDeleteImage"
+    i18n-title="@@confirmTitleDeleteImage"
+    i18n-text="@@confirmTextDeleteImage"
+    title="Are you sure for delete this Image?"
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>

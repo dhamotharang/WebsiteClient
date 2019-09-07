@@ -1,82 +1,190 @@
 <h1 class="page-title">
-    <span class="cm-mgr-5" i18n="@@listCategoryPageTitle">List category</span>
-    <small i18n="@@newsModuleTitle">Product management</small>
+    <span class="cm-mgr-5" i18n="@@listProductCategoryPageTitle">Danh sách nhóm sản phẩm</span>
+    <small i18n="@@productModuleTitle">Quản lý sản phẩm</small>
 </h1>
-
-<form class="form-inline cm-mgb-10" (ngSubmit)="search()">
-    <div class="form-group cm-mgr-5">
-        <input type="text" class="form-control" i18n="@@enterKeyword" i18n-placeholder placeholder="Enter keyword."
-               name="keyword" [(ngModel)]="keyword">
-    </div>
-    <div class="form-group cm-mgr-5">
-        <button class="btn blue" [disabled]="isSearching">
-            <i class="fa fa-search" *ngIf="!isSearching"></i>
-            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
-        </button>
-    </div>
-    <div class="form-group cm-mgr-5">
-        <button type="button" class="btn btn-light" (click)="refresh()">
-            <i class="fa fa-refresh"></i>
-        </button>
-    </div>
-    <div class="form-group pull-right">
-        <button type="button" class="btn blue" (click)="add()" i18n="@@add"
-                *ngIf="permission.add">
-            Add
-        </button>
-    </div>
-</form>
-
-
 <div class="row">
     <div class="col-sm-12">
-        <ul class="ghm-list-item-container">
-            <ng-template #recursiveTree let-listItems>
-                <li class="" *ngFor="let item of listItems">
-                    <div class="ghm-item">
-                        <div>
-                            <i class="fa fa-bars cm-mgr-5"></i>
-                            {{ item.text }}
-                        </div>
-
-                        <ul class="actions">
-                            <li>
-                                <a href="javascript://" class="btn blue btn-outline btn-sm"
-                                   *ngIf="permission.edit"
-                                   (click)="edit(item.id)">
-                                    <i class="fa fa-edit"></i>
-                                </a></li>
-                            <li>
-                                <a href="javascript://" class="btn red btn-outline btn-sm"
-                                   *ngIf="permission.delete"
-                                   [swal]="confirmDelete"
-                                   (confirm)="delete(item.id)">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <ul class="ghm-list-item-sub-container"
-                        ghmSortableList
-                        [sources]="item?.children">
-                        <ng-container
-                                *ngTemplateOutlet="recursiveTree; context:{ $implicit: item.children }"></ng-container>
-                    </ul>
-                </li>
-            </ng-template>
-            <ng-container *ngTemplateOutlet="recursiveTree; context:{ $implicit: listItems }"></ng-container>
-        </ul>
+        <form class="form-inline " (ngSubmit)="search(1)">
+            <div class="form-group cm-mgr-5">
+                <ghm-input icon="dx-icon-search" i18n="@@keywordSearch" i18n-placeholder
+                           placeholder="Nhập từ khóa tìm kiếm" elementId="searchInput"
+                           (remove)="search(1)"
+                           name="searchInput" [(ngModel)]="keyword"></ghm-input>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <ghm-select
+                    [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Kích hoạt'}]"
+                    i18n-title="@@selectStatus"
+                    [width]="200"
+                    [title]="'-- Chọn trạng thái --'"
+                    [(value)]="isActive"
+                    (itemSelected)="selectIsActive($event)"></ghm-select>
+            </div>
+            <div class="form-group">
+                <button class="btn blue" type="submit">
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group cm-mgl-5">
+                <button class="btn btn-light" type="button" (click)="resetFormSearch()">
+                    <i class="dx-icon-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                        type="button">
+                    Thêm
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+<!--<table class="table table-striped table-hover">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th class="middle center w50" i18n="@@no">STT</th>-->
+<!--<th class="middle " i18n="@@questionGroup">Nhóm Sản Phẩm</th>-->
+<!--<th class="middle center" i18n="@@status">Trạng Thái</th>-->
+<!--<th class="middle" i18n="@@description">Mô Tả</th>-->
+<!--<th class="middle text-right w150" i18n="@@actions" *ngIf="permission.edit || permission.delete">Thao Tác</th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngFor="let item of listProductCategory; let i = index"-->
+<!--nhContextMenuTrigger-->
+<!--[nhContextMenuTriggerFor]="nhMenu"-->
+<!--[nhContextMenuData]="item">-->
+<!--<td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>-->
+<!--<td class="middle"><span [innerHTML]="item.nameLevel"></span>{{ item.name }}</td>-->
+<!--<td class="middle center">-->
+<!--<mat-checkbox *ngIf="!item.isActive" color="primary" [checked]="item.isActive"-->
+<!--(change)="updateStatus(item)"></mat-checkbox>-->
+<!--<mat-checkbox *ngIf="item.isActive" color="primary" [checked]="item.isActive"-->
+<!--[swal]="waringUpdateProductCategory"-->
+<!--(confirm)="updateStatus(item)"></mat-checkbox>-->
+<!--</td>-->
+<!--<td class="middle">{{item.description}}</td>-->
+<!--<td class="text-right middle" *ngIf="permission.edit || permission.delete">-->
+<!--<nh-dropdown>-->
+<!--<button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">-->
+<!--<mat-icon>more_horiz</mat-icon>-->
+<!--</button>-->
+<!--<ul class="nh-dropdown-menu right" role="menu">-->
+<!--<li>-->
+<!--<a *ngIf="permission.edit"-->
+<!--(click)="edit(item)" i18n="@@edit">-->
+<!--<i class="fa fa-pencil"></i>-->
+<!--Sửa-->
+<!--</a>-->
+<!--</li>-->
+<!--<li>-->
+<!--<a (click)="confirm(item)" i18n="@@delete">-->
+<!--<i class="fa fa-trash"></i>-->
+<!--Xóa-->
+<!--</a>-->
+<!--</li>-->
+<!--</ul>-->
+<!--</nh-dropdown>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<div class="row">
+    <div class="col-sm-12">
+        <dx-tree-list
+            id="questionGroup"
+            [dataSource]="listProductCategory"
+            keyExpr="id"
+            parentIdExpr="parentId"
+            [autoExpandAll]="true"
+            [wordWrapEnabled]="true"
+            [columnAutoWidth]="true"
+            [allowColumnResizing]="true"
+            [allowColumnReordering]="true"
+            [showRowLines]="true"
+            [showBorders]="true"
+            (onContextMenuPreparing)="rightClickContextMenu($event)">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxi-column dataField="name" caption="Nhóm sản phẩm" cssClass="middle"></dxi-column>
+            <dxi-column caption="Mô tả" dataField="description" cssClass="middle"></dxi-column>
+            <dxi-column caption="Trạng thái" dataField="isActive" [width]="100" cellTemplate="activeTemplate"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'activeTemplate'" class="middle center">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isActive"
+                              (onValueChanged)="updateStatus(cell.data)"></dx-check-box>
+            </div>
+            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
+                        *ngIf="permission.edit || permission.delete" cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
+                <a *ngIf="permission.edit" class="text-decoration-none dx-icon-edit cm-mgr-5 color-dark-blue"
+                   i18n="@@edit"
+                   (click)="edit(cell.data)">
+                </a>
+                <a *ngIf="permission.delete" class="text-decoration-none dx-icon-remove color-red"
+                   (click)="confirm(cell.data)" i18n="@@delete">
+                </a>
+            </div>
+        </dx-tree-list>
+    </div>
+    <div class="cm-mgt-10 col-sm-12">
+        <ghm-paging
+            class="pull-right"
+            [totalRows]="totalRows"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            [pageSize]="pageSize"
+            (pageClick)="search($event)"
+            i18n="@@productCategory" i18n-pageName
+            (selectPage)="changePageSize($event)"
+            [pageName]="'Nhóm sản phẩm'">
+        </ghm-paging>
+    </div>
+</div>
+
+<app-product-category-form (saveSuccessful)="search(1)"></app-product-category-form>
+
 <swal
-    #confirmDelete
-    i18n-title="@@confirmDeleteNewsCategoryTitle"
-    i18n-text="@@confirmDeleteNewsCategoryText"
+    #confirmDeleteProductCategory
+    i18n="@@confirmDeleteProductCategory"
+    i18n-title="@@confirmTitleDeleteProductCategory"
+    i18n-text="@@confirmTextDeleteProductCategory"
+    title="Bạn có muốn xóa nhóm sản phẩm này?"
+    text="Bạn không thể khôi phục nhóm sản phẩm này sau khi xóa."
+    type="question"
     i18n-confirmButtonText="@@accept"
     i18n-cancelButtonText="@@cancel"
-    title="Are you sure for delete this category?"
-    text="Warning: You can't recover this category after delete."
-    type="question"
-    confirmButtonText="Accept"
-    cancelButtonText="Cancel">
+    confirmButtonText="Đồng Ý"
+    cancelButtonText="Hủy"
+    [showCancelButton]="true"
+    [focusCancel]="true">
 </swal>
+
+<swal
+    #waringUpdateProductCategory
+    i18n="@@waringUpdateProductCategory"
+    i18n-title="@@waringTitleUpdateProductCategory"
+    i18n-text="@@waringTextUpdateProductCategory"
+    title="Are you sure for update status isActive this product category?"
+    text="All children product category deactivate ."
+    type="warning"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Đồng Ý"
+    cancelButtonText="Hủy"
+    [showCancelButton]="true"
+    [focusCancel]="true">
+</swal>
+
+<!--<nh-menu #nhMenu>-->
+<!--<nh-menu-item (clicked)="edit($event)">-->
+<!--<i class="fa fa-edit"></i>-->
+<!--<span i18n="@@edit">Sửa</span>-->
+<!--</nh-menu-item>-->
+<!--<nh-menu-item *ngIf="permission.delete"-->
+<!--(clicked)="confirm($event)">-->
+<!--<i class="fa fa-trash"></i>-->
+<!--<span i18n="@@edit">Xóa</span>-->
+<!--</nh-menu-item>-->
+<!--</nh-menu>-->
+

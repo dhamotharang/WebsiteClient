@@ -1,0 +1,108 @@
+<div class="form-group">
+    <a href="javascript://" type="button" class="btn blue" routerLink="/products/attributes">
+        Danh sách thuộc tính sản phẩm
+    </a>
+</div>
+<form class="form-inline " (ngSubmit)="search(1)">
+    <div class="form-group cm-mgr-5">
+        <ghm-input elementId="keyword" i18n="@@enterKeyword" i18n-placeholder placeholder="Nhập từ khóa tìm kiếm"
+                   name="keyword" [(ngModel)]="keyword"></ghm-input>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <ghm-select [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Kích hoạt'}]"
+                    title="-- Chọn trạng thái --"
+                    i18n-title="@@allActiveStatus"
+                    (itemSelected)="onActiveStatusSelected($event)"></ghm-select>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button class="btn blue" [disabled]="isSearching">
+            <i class="dx-icon-search" *ngIf="!isSearching"></i>
+            <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+        </button>
+    </div>
+    <div class="form-group cm-mgr-5">
+        <button type="button" class="btn btn-light" (click)="refresh()">
+            <i class="dx-icon-refresh"></i>
+        </button>
+    </div>
+    <div class="form-group pull-right">
+        <a href="javascript://" type="button" class="btn blue" i18n="@@add"
+           *ngIf="permission.add && !readOnly"
+           (click)="productAttributeValueFormComponent.add()">
+            Thêm
+        </a>
+    </div>
+</form><!-- END: search form -->
+<table class="table table-hover table-stripped table-advance table-bordered">
+    <thead>
+    <tr>
+        <th class="middle center w50" i18n="@@no">STT</th>
+        <th class="middle" i18n="@@name">Tên giá trị thuộc tính</th>
+        <th class="middle" i18n="@@note">Ghi chú</th>
+        <th class="middle w100 center" i18n="@@active">Trạng thái</th>
+        <th class="middle center w100" i18n="@@actions" *ngIf="(permission.edit || permission.delete) && !readOnly">
+            Thao tác
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of listItems; let i = index">
+        <td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <td class="middle">
+            <a href="javascript://"
+               (click)="productAttributeValueFormComponent.edit(item.id)"
+               *ngIf="permission.edit; else noEditTemplate">{{ item.name }}</a>
+            <ng-template #noEditTemplate>
+                {{ item.name}}
+            </ng-template>
+        </td>
+        <td>{{ item.description}}</td>
+        <td class="center">
+            <dx-check-box [value]="item.isActive" (onValueChanged)="onChangeActiveStatus(item)"></dx-check-box>
+            <!--<mat-checkbox [checked]="item.isActive" color="primary"-->
+            <!--[disabled]="!permission.edit"-->
+            <!--(change)="onChangeActiveStatus(item)"></mat-checkbox>-->
+        </td>
+        <td class="middle center w100"
+            *ngIf="(permission.edit || permission.delete || permission.view) && !readOnly">
+            <a *ngIf="permission.edit" class="text-decoration-none color-dark-blue cm-mgr-5"
+               (click)="productAttributeValueFormComponent.edit(item.id)">
+                <i class="dx-icon-edit"></i>
+            </a>
+            <a *ngIf="permission.delete" href="javascript://"
+               [swal]="confirmDelete" class="text-decoration-none color-red"
+               (confirm)="delete(item.id)">
+                <i class="dx-icon-remove"></i>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<ghm-paging [totalRows]="totalRows"
+            [currentPage]="currentPage"
+            [pageShow]="6"
+            [isDisabled]="isSearching"
+            [pageSize]="pageSize"
+            (selectPage)="changePageSize($event)"
+            pageName="Giá trị thuộc tính"
+            (pageClick)="search($event)"
+></ghm-paging>
+
+<swal
+    #confirmDelete
+    i18n-title="@@confirmDeleteTitle"
+    i18n-text="@@confirmDeleteText"
+    title="Are you sure for delete this attribute value?"
+    text="You can't recover this attribute value after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>
+
+<app-product-attribute-value-form
+    [attributeId]="attributeId"
+    (saveSuccessful)="search(1)">
+</app-product-attribute-value-form>

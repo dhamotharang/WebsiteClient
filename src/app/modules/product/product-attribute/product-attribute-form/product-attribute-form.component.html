@@ -1,0 +1,134 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@attributeFormPageTitle">
+        {isUpdate, select, 0 {Thêm mới thuộc tính sản phẩm} 1 {Cập nhật thuộc tính sản phẩm}}
+    </span>
+    <small i18n="@@productModuleTitle">Quản lý sản phẩm</small>
+</h1>
+
+<nh-tab>
+    <nh-tab-pane [active]="true"
+                 title="Thông tin thuộc tính"
+                 i18n-title="@@attributeInfo"
+                 id="attributeInfo">
+        <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+            <ng-container formArrayName="translations">
+                <ng-container *ngFor="let modelTranslation of translations.controls; index as i" [formGroupName]="i">
+                    <div class="form-group"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                        <label class="col-sm-4 control-label" ghmLabel="Tên thuộc tính" i18n-ghmLabel="@@attributeName"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <ghm-input
+                                   formControlName="name"
+                                   elementId="attributeName{{ currentLanguage }}"
+                                   placeholder="Nhập tên thuộc tính"
+                                       i18n-placeholder="@@enterAttributeName"></ghm-input>
+                            <span class="help-block" i18n="@@productAttributeNameValidateMessage">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.name,
+                                select, required {Nhập thuộc tính sản phẩm} maxlength {Tên thuộc tính không được lớn hơn 256 ký tự}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                        <label class="col-sm-4 control-label" ghmLabel="Mô tả"
+                               i18n-ghmLabel="@@description"></label>
+                        <div class="col-sm-8">
+                            <textarea name="" class="form-control" rows="3"
+                                      formControlName="description"
+                                      placeholder="Nhập mô tả"
+                                      i18n-placeholder="@@enterDescription"></textarea>
+                            <span class="help-block" i18n="@@productAttributeDescriptionValidateMessage">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.name,
+                                select, maxlength {Mô tả thuộc tính sẩn phẩm không được lớn hơn 500 ký tự}
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isMultiple" text="Cho phép chọn nhiều?"></dx-check-box>
+                    <!--<mat-checkbox formControlName="isMultiple" color="primary"><span i18n="@@allowMultiple"></span>-->
+                        <!--Allow multiple-->
+                    <!--</mat-checkbox>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isRequire" text="Bắt buộc?"></dx-check-box>
+                    <!--<mat-checkbox formControlName="isRequire" color="primary"><span i18n="@@isRequire"></span> Require?-->
+                    <!--</mat-checkbox>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isActive" text="Kích hoạt?"></dx-check-box>
+                    <!--<mat-checkbox formControlName="isActive" color="primary"><span i18n="@@isActive"></span> Active-->
+                    <!--</mat-checkbox>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isSelfContent" text="Nôi dung?"></dx-check-box>
+                    <!--<mat-checkbox formControlName="isSelfContent" color="primary"><span i18n="@@selfResponding"></span>-->
+                        <!--Self responding-->
+                    <!--</mat-checkbox>-->
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                   <dx-check-box [(value)]="isCreateAnother" text="Tiếp tục thêm" *ngIf="!isUpdate"></dx-check-box>
+                    <button class="btn blue cm-mgr-5" i18n="@@save">
+                        Lưu
+                    </button>
+                    <button routerLink="/products/attributes" class="btn btn-light" i18n="@@cancel" type="button">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </form>
+    </nh-tab-pane><!-- END: Attribute info -->
+    <nh-tab-pane id="attributeValue"
+                 title="Giá trị thuộc tính"
+                 i18n-title="@@attributeValues"
+                 (tabSelected)="onAttributeValueTabSelected($event)"
+                 [show]="!isSelfContent">
+        <app-product-attribute-value [attributeId]="id"></app-product-attribute-value>
+    </nh-tab-pane><!-- END: Attribute value info -->
+</nh-tab>
+
+<nh-modal #productAttributeFormModal size="md"
+          (shown)="onModalShown()"
+          (hidden)="onModalHidden()">
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-header class="bold uppercase">
+            <span i18n="@@productAttributeFormModalTitle">
+                {isUpdate, select, 0 {Add new attribute} 1 {Update attribute}}
+            </span>
+        </nh-modal-header>
+        <nh-modal-content>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <mat-checkbox
+                class="cm-mgr-5"
+                color="primary"
+                name="isCreateAnother"
+                *ngIf="!isUpdate"
+                [(checked)]="isCreateAnother"
+                (change)="isCreateAnother = !isCreateAnother"
+                i18n="isCreateAnother"> Create another
+            </mat-checkbox>
+            <button class="btn blue cm-mgr-5" i18n="@@save">Save</button>
+            <button type="button" class="btn btn-light" nh-dismiss i18n="@@cancel">
+                Cancel
+            </button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

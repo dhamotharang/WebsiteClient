@@ -1,0 +1,112 @@
+<nh-modal #contactFormModal size="md"
+          (show)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase bold">
+        {isUpdate, select, 0 {Thêm mới người liên hệ} 1 {Cập nhật người liên hệ} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form">
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.fullName">
+                            <label i18n-ghmLabel="@@contactPersonName" ghmLabel="Tên Người Liên Hệ"
+                                   class="col-sm-4 control-label" [required]="true"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <ghm-input formControlName="fullName" elementId="fullName"
+                                           i18n-placeholder="@@enterContactFullNamePlaceHolder"
+                                           placeholder="Tên người liên hệ"></ghm-input>
+                                <span class="help-block">{ formErrors?.fullName, select,
+                                                            required {Tên người liên hệ không được để trống}
+                                                            maxlength {Tên người liên hệ không được vượt quá 256 ký tụ}
+                                                            pattern {Tên người liên hệ phải là chữ}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.phoneNumber">
+                            <label i18n-ghmLabel="@@phoneNumber" ghmLabel="Số Điện Thoại"
+                                   class="col-sm-4 control-label" [required]="true"></label>
+                            <div class="col-sm-8">
+                                <ghm-input icon="dx-icon-tel" i18n-placeholder="@@enterPhoneNumberPlaceHolder"
+                                           placeholder="Số điện thoại" elementId="phoneNumber"
+                                           formControlName="phoneNumber"></ghm-input>
+                                <span class="help-block">{ formErrors?.phoneNumber, select, required {Số điện thoại không được đê trống}
+                                    maxlength {Số điện thoại không được vượt quá 50 ký tự}
+                                                           pattern {Sô điện thoại không đúng định dạng}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.email">
+                            <label i18n-ghmLabel="@@email" ghmLabel="Email"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <ghm-input icon="dx-icon-message"
+                                           i18n-placeholder="@@enterEmailPlaceHolder"
+                                           placeholder="Email" elementId="mail"
+                                           formControlName="email"></ghm-input>
+                                <span class="help-block">{ formErrors?.email, select,
+                                                    maxlength {Email không được vượt quá 50 ký tự}
+                                                    pattern {Email không đúng định dạng}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.positionName">
+                            <label i18n-ghmLabel="@@email" ghmLabel="Vị Trí"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <ghm-input elementId="position"
+                                           i18n-placeholder="@@enterPositionPlaceHolder"
+                                           placeholder="Nhập vị trí làm việc"
+                                           formControlName="positionName"></ghm-input>
+                                <span class="help-block">{ formErrors?.position, select,
+                                                    maxlength {Vị trí làm việc không được vượt quá 500 ký tự}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10" *ngIf="id">
+                            <label i18n-ghmLabel="@@status" ghmLabel="Trạng thái"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8" [formGroup]="model">
+                                <ghm-select
+                                    [data]="listStatus" i18n-title="@@selectStatus"
+                                    title="-- Select status user contact --"
+                                    formControlName="status">
+                                </ghm-select>
+                            </div>
+                        </div>
+                        <div class="form-group cm-mgb-10"
+                             [class.has-error]="formErrors?.description">
+                            <label i18n-ghmLabel="@@description" ghmLabel="Mô tả"
+                                   class="col-sm-4 control-label"></label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control"
+                                          i18n-placeholder="@@enterDescriptionPlaceHolder"
+                                          placeholder="Nhập mô tả"
+                                          formControlName="description"></textarea>
+                                <span class="help-block">{ formErrors?.description, select,
+                                                    maxlength {Mô tả không được vượt quá 500 ký tự}}
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
+            <ghm-button classes="btn blue cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Lưu</span>
+            </ghm-button>
+            <ghm-button classes="btn default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Đóng</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

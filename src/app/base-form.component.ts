@@ -5,12 +5,14 @@ import {Observable, Subscriber} from 'rxjs';
 import {AppService} from './shareds/services/app.service';
 import {AppInjector} from './shareds/helpers/app-injector';
 import {PermissionViewModel} from './shareds/view-models/permission.viewmodel';
+import {IPageId, PAGE_ID} from './configs/page-id.config';
+import {BriefUser} from './shareds/models/brief-user.viewmodel';
 
 export class BaseFormComponent implements OnDestroy {
     @Output() saveSuccessful = new EventEmitter();
     appService: AppService;
-    id: any;
     formBuilder: FormBuilder;
+    id: any;
     model: FormGroup;
     modelTranslationArray: FormArray;
     isSubmitted = false;
@@ -27,6 +29,7 @@ export class BaseFormComponent implements OnDestroy {
     languages: LanguageViewModel[] = [];
     languages$: Observable<LanguageSearchViewModel[]>;
     // errorMessage$ = new Subject<string[]>();
+    pageId: IPageId;
 
     // Permission.
     permission: PermissionViewModel = {
@@ -47,6 +50,10 @@ export class BaseFormComponent implements OnDestroy {
 
     constructor() {
         this.appService = AppInjector.get(AppService);
+        this.pageId = AppInjector.get(PAGE_ID);
+        setTimeout(() => {
+            this.permission = this.appService.getPermissionByPageId();
+        });
         this.formBuilder = AppInjector.get(FormBuilder);
         this.renderLanguageData();
         setTimeout(() => {
@@ -64,6 +71,10 @@ export class BaseFormComponent implements OnDestroy {
 
     get translations(): FormArray {
         return this.model.get('translations') as FormArray;
+    }
+
+    get currentUser(): BriefUser {
+        return this.appService.currentUser;
     }
 
     ngOnDestroy() {
@@ -210,6 +221,12 @@ export class BaseFormComponent implements OnDestroy {
             } else {
                 formErrors[field] = '';
             }
+        }
+    }
+
+    clearFormArray = (formArray: FormArray) => {
+        while (formArray.length !== 0) {
+            formArray.removeAt(0);
         }
     }
 

@@ -1,0 +1,106 @@
+<nh-modal #productUnitFormModal size="md"
+          (shown)="onModalShow()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header class="uppercase bold">
+        {isUpdate, select, 0 {Thêm mới đơn vị} 1 {Cập nhật đơn vị} other {}}
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="col-sm-12">
+                <div formArrayName="translations">
+                    <div class="form-group" *ngIf="languages && languages.length > 1">
+                        <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                               class="col-sm-4 control-label"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <ghm-select [data]="languages"
+                                        i18n-title="@@pleaseSelectLanguage"
+                                        title="-- Chọn ngôn ngữ --"
+                                        name="language"
+                                        [(value)]="currentLanguage"
+                                        (itemSelected)="currentLanguage = $event.id"></ghm-select>
+                        </div>
+                    </div>
+                    <div class="form-group cm-mgb-10"
+                         *ngFor="let modelTranslation of translations.controls; index as i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [formGroupName]="i"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                        <label i18n-ghmLabel="@@name" ghmLabel="Tên đơn vị"
+                               class="col-sm-4 control-label" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <ghm-input elementId="{{'name ' + currentLanguage}}"
+                                       i18n-placeholder="@@enterUnitNamePlaceHolder"
+                                       placeholder="Nhập tên đơn vị."
+                                       formControlName="name"></ghm-input>
+                            <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.name, select,
+                                                        required {Tên đơn vị không được để trống}
+                                                        maxlength {Tên đơn vị không được để quá 256 ký tự}
+                                                        pattern {Tên đơn vị phải là chữ}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group cm-mgb-10"
+                         *ngFor="let modelTranslation of translations.controls; index as i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [formGroupName]="i"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.abbreviation">
+                        <label i18n-ghmLabel="@@abbreviation" ghmLabel="Tên viết tắt"
+                               class="col-sm-4 control-label" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <ghm-input elementId="abbreviation"
+                                       i18n-placeholder="@@enterUnitabbreviationPlaceHolder"
+                                       placeholder="Tên viết tắt"
+                                       formControlName="abbreviation"></ghm-input>
+                            <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.abbreviation, select,
+                                required {Đơn vị viết tắt không được để trống}
+                                maxlength {Đơn vị viết tắt không được vượt quá 50 ký tự}
+                                pattern {Đơn vị viết tắt phải là các chữ cái a-z, A-Z, 0-9}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group cm-mgb-10"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                        <label i18n="@@description" i18n-ghmLabel ghmLabel="Mô tả đơn vị"
+                               class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                                                    <textarea class="form-control" rows="3"
+                                                              formControlName="description"
+                                                              i18n-placeholder="@@enterDescriptionPlaceholder"
+                                                              placeholder="Nhập mô tả."></textarea>
+                            <span class="help-block">
+                                  {translationFormErrors[modelTranslation.value.languageId]?.description, select, maxlength {Môt tả đơn vị không được vượt quá 500 ký tự}}
+                             </span>
+                        </div>
+                    </div>
+                    <div class="form-group" [formGroup]="model">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <dx-check-box formControlName="isActive"
+                                          text="{{model.value.isActive === 0 ? 'Chưa kích hoạt' : 'Kích hoạt'}}">
+                            </dx-check-box>
+                            <!--<mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">-->
+                            <!--{model.value.isActive, select, 0 {Chưa kích hoạt} 1 {Kich hoạt}}-->
+                            <!--</mat-checkbox>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
+            <ghm-button classes="btn blue cm-mgr-5"
+                        [loading]="isSaving">
+                <span i18n="@@Save">Lưu</span>
+            </ghm-button>
+            <ghm-button classes="btn default"
+                        nh-dismiss="true"
+                        [type]="'button'"
+                        [loading]="isSaving">
+                <span i18n="@@close">Đóng</span>
+            </ghm-button>
+        </nh-modal-footer>
+    </form>
+</nh-modal>

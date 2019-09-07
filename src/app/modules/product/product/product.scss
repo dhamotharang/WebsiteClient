@@ -1,0 +1,106 @@
+@import "../../../../assets/styles/config";
+
+$color-border: #ddd;
+
+.thumbnail {
+    border: none;
+    position: relative;
+    .btn {
+        display: none;
+        padding: 4px 8px;
+        font-size: 12px;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+
+    &:hover {
+        .btn {
+            display: block;
+        }
+    }
+}
+
+.product-images {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -5px;
+    .image-content {
+        position: relative;
+        flex-basis: 22%;
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px;
+        padding: 5px;
+        border: 1px solid $color-border;
+
+        @media screen and (max-width: $max-width-mobile) {
+            flex-basis: 48%;
+        }
+
+        @media screen and (min-width: $max-width-mobile) and (max-width: $max-width-tablet) {
+            flex-basis: 32%;
+        }
+
+        @media screen and (min-width: $max-width-tablet) and (max-width: $max-width-desktop) {
+            flex-basis: 27%;
+        }
+
+        .btn {
+            display: none;
+            padding: 4px 8px;
+            font-size: 12px;
+            position: absolute;
+            top: 0px;
+        }
+
+        .btn-remove {
+            right: 0px;
+        }
+
+        .btn-check {
+            display: block;
+            left: 0px;
+        }
+
+        .display-none {
+            display: none;
+        }
+
+        &:hover {
+            .btn {
+                display: block;
+            }
+        }
+
+        img {
+            width: 100%;
+            &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+            }
+        }
+        transition: 0.5s ease-in-out;
+    }
+}
+
+.list-inline {
+    .product-attribute-value {
+        background-color: #f4f5f7;
+        color: #253858;
+        height: 20px;
+        line-height: 1;
+        border-radius: 3px;
+        margin: 4px !important;
+        padding: 0px;
+
+        &:last-child{
+            span{
+                display: none;
+            }
+        }
+    }
+}
