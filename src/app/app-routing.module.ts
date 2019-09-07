@@ -17,6 +17,7 @@ const routes: Routes = [
         },
         canActivate: [AuthGuardService],
         children: [
+            {path: 'customers', loadChildren: './modules/customer/customer.module#CustomerModule'},
             {path: 'config', loadChildren: './modules/configs/config.module#ConfigModule'},
             {path: 'error', loadChildren: './modules/error/error.module#ErrorModule'},
             {path: 'notifications', loadChildren: './modules/notifications/notification.module#NotificationModule'},

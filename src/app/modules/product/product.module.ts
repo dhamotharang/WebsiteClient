@@ -16,7 +16,6 @@ import {
     MatRadioModule,
     MatTooltipModule
 } from '@angular/material';
-import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {ProductAttributeValueComponent} from './product-attribute/product-attribute-value/product-attribute-value.component';
 import {ProductAttributeValueFormComponent} from './product-attribute/product-attribute-value/product-attribute-value-form/product-attribute-value-form.component';
 import {ProductAttributeDetailComponent} from './product-attribute/product-attribute-detail/product-attribute-detail.component';
@@ -50,6 +49,9 @@ import {DatetimeFormatModule} from '../../shareds/pipe/datetime-format/datetime-
 import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.module';
 import {NhModalModule} from '../../shareds/components/nh-modal/nh-modal.module';
 import {NhSelectModule} from '../../shareds/components/nh-select/nh-select.module';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
+import {ProductSelectComponent} from './product/product-select/product-select.component';
+import {ProductCategorySelectComponent} from './product-category/product-category-select/product-category-select.component';
 
 @NgModule({
     imports: [
@@ -69,10 +71,11 @@ import {NhSelectModule} from '../../shareds/components/nh-select/nh-select.modul
             cancelButtonText: 'Hủy bỏ'
         })],
     declarations: [ProductComponent, ProductAttributeComponent, ProductAttributeFormComponent, ProductAttributeValueComponent,
-        ProductAttributeValueFormComponent, ProductCategoryFormComponent, ProductCategoryComponent,
+        ProductAttributeValueFormComponent, ProductCategoryFormComponent, ProductCategoryComponent, ProductSelectComponent, ProductCategorySelectComponent,
         ProductAttributeDetailComponent, ProductFormComponent, ProductUnitComponent, ProductFormAttributeComponent, ProductDetailComponent,
         ProductAttributeSuggestionComponent, ProductAttributeValueSuggestionComponent],
     entryComponents: [ProductFormComponent, ProductDetailComponent],
+    exports: [ProductSelectComponent, ProductCategorySelectComponent],
     providers: [UnitService]
 })
 export class ProductModule {

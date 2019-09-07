@@ -4,6 +4,7 @@ import {BaseListComponent} from '../../../../base-list.component';
 import {Category} from '../../../news/category/models/category.model';
 import * as _ from 'lodash';
 import {CategoryProductService} from '../../services/category-product.service';
+
 @Component({
   selector: 'app-product-category-select',
   templateUrl: './product-category-select.component.html',

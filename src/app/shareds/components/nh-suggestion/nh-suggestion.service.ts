@@ -30,8 +30,6 @@ export class NhSuggestionService {
         this.suggestions.forEach((suggestionItem: NhSuggestionComponent) => {
             if (suggestion.id === suggestionItem.id) {
                 suggestionItem.isActive = isActive;
-            } else {
-                suggestionItem.isActive = false;
             }
         });
     }

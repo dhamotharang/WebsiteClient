@@ -58,7 +58,8 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
                 private tagService: TagService,
                 private videoService: VideoService) {
         super();
-        this.currentUser = this.appService.currentUser;
+        console.log(this.appService.currentUser);
+        // this.currentUser = this.appService.currentUser;
     }
 
     ngOnInit() {

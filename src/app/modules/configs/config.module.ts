@@ -66,13 +66,14 @@ import {CoreValuesFormComponent} from './website/core-values/core-values-form/co
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 import {ProductModule} from '../product/product.module';
+import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-user-picker.module';
 
 @NgModule({
     imports: [
-        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule,
+        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule, ProductModule,
         MatCheckboxModule, MatPaginatorModule, MatButtonModule, MatSlideToggleModule, DatetimeFormatModule, NhDateModule, NhDropdownModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmFileExplorerModule, GhmUserSuggestionModule,
-        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, ProductModule, DragDropModule, GhmSelectModule,
+        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, ProductModule, DragDropModule, GhmSelectModule, NhUserPickerModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

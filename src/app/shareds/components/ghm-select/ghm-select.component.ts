@@ -59,7 +59,7 @@ export class GhmSelectComponent implements OnChanges, OnInit, AfterViewInit, OnD
     @Input() icon = 'fa fa-list';
     @Input() title: string;
     @Input() isEnable = true;
-    // @Input() width = 250;
+    @Input() width = 250;
     @Input() isInsertValue = false;
     @Input() url: string;
     @Input() loading: boolean;

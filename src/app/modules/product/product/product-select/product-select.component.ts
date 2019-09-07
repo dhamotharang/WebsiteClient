@@ -9,17 +9,18 @@ import * as _ from 'lodash';
 import {ProductService} from '../../services/product.service';
 import {ProductSearchForSelectViewModel} from '../../model/product-search-for-select.viewmodel';
 import {CategoryProductService} from '../../services/category-product.service';
-@Component({
-  selector: 'app-product-select',
-  templateUrl: './product-select.component.html',
-  styleUrls: ['./product-select.component.scss'],
-  providers: [ProductService, CategoryProductService]
-})
-export class ProductSelectComponent extends BaseListComponent<Products> implements OnInit, AfterViewInit {
 
+@Component({
+    selector: 'app-product-select',
+    templateUrl: './product-select.component.html',
+    styleUrls: ['./product-select.component.scss'],
+    providers: [ProductService, CategoryProductService]
+})
+
+export class ProductSelectComponent extends BaseListComponent<Products> implements OnInit, AfterViewInit {
   @Output() onCancel = new EventEmitter();
   @Output() onAccept = new EventEmitter();
-  listSelectedNews = [];
+  listSelectedProducts = [];
   categoryId;
   keyword = '';
   listNews = [];
@@ -60,36 +61,36 @@ export class ProductSelectComponent extends BaseListComponent<Products> implemen
     this.search(1);
   }
 
-  onSelectItem(item: NewSearchForSelectViewModel) {
+  onSelectItem(item: ProductSearchForSelectViewModel) {
     item.selected = !item.selected;
 
     if (item.selected) {
-      const existsItem = _.find(this.listSelectedNews, (news) => {
+      const existsItem = _.find(this.listSelectedProducts, (news) => {
         return item.id === news.id;
       });
 
       if (existsItem) {
         return;
       } else {
-        this.listSelectedNews.push({
+        this.listSelectedProducts.push({
           id: item.id,
           name: item.title,
           image: item.featureImage,
         });
       }
     } else {
-      _.remove(this.listSelectedNews, (news) => {
+      _.remove(this.listSelectedProducts, (news) => {
         return item.id === news.id;
       });
     }
   }
 
   accept() {
-    if (this.listSelectedNews.length === 0) {
+    if (this.listSelectedProducts.length === 0) {
       this.toastr.warning('Vui lòng chọn ít nhất 1 nhóm.');
       return;
     }
-    this.onAccept.emit(_.map(this.listSelectedNews, (news) => {
+    this.onAccept.emit(_.map(this.listSelectedProducts, (news) => {
       return news;
     }));
     _.each(this.listNews, (item) => {
@@ -104,7 +105,7 @@ export class ProductSelectComponent extends BaseListComponent<Products> implemen
   private renderListNews(listNews) {
     const newsItems = [];
     _.each(listNews, (item: any) => {
-      item.selected = _.map(this.listSelectedNews, news => {
+      item.selected = _.map(this.listSelectedProducts, news => {
         return news.id;
       }).indexOf(item.id) > -1;
 
@@ -113,12 +114,4 @@ export class ProductSelectComponent extends BaseListComponent<Products> implemen
 
     this.listNews = newsItems;
   }
-
-  // private reRenderSelectedNews() {
-  //     _.each(this.listNews, (news) => {
-  //         news.selected = _.map(this.listSelectedNews, (item) => {
-  //             return item.id;
-  //         }).indexOf(news.id) > -1;
-  //     });
-  // }
 }

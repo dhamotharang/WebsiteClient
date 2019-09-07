@@ -1,17 +1,21 @@
-<div class="nhs-container"
+<div class="nhs-container" [class.disabled]="readonly"
      [class.active]="isActive">
     <div class="nhs-search-wrapper"
          (click)="activeSuggestion($event)">
         <div class="nhs-search-content">
             <ng-container *ngIf="multiple; else singleTemplate">
                 <ul class="nhs-selected-wrapper" *ngIf="selectedItems?.length > 0">
-                    <li class="nhs-item-selected" *ngFor="let item of selectedItems">
-                        <div class="nhs-item">
-                            <div class="nhs-item-info">
-                                <i class="{{ item.icon }}" *ngIf="item.icon"></i>
-                                <span>{{ item.name }}</span>
-                            </div>
-                            <span class="remove" (click)="removeSelectedItem(item)">
+                    <ng-container *ngFor="let item of selectedItems">
+                        <li class="nhs-item-selected" *ngIf="item.id && item.name">
+                            <div class="nhs-item">
+                                <div class="nhs-item-image" *ngIf="item.image">
+                                    <img class="avatar-xs img-circle" ghmImage="" src="{{ item.image }}" alt="{{ item.name }}">
+                                </div><!-- END: .nhs-item-image -->
+                                <div class="nhs-item-info">
+                                    <i class="{{ item.icon }}" *ngIf="item.icon"></i>
+                                    <span class="name">{{ item.name }}</span>
+                                </div>
+                                <span class="remove" (click)="removeSelectedItem(item)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
                                      role="presentation">
                                     <path
@@ -20,8 +24,9 @@
                                     </path>
                                 </svg>
                             </span><!-- END: .remove -->
-                        </div><!-- END: .nhs-item -->
-                    </li>
+                            </div><!-- END: .nhs-item -->
+                        </li>
+                    </ng-container>
                 </ul><!-- END: .nhs-selected-wrapper -->
             </ng-container><!-- END: display selected users -->
             <div class="nhs-search-input"
@@ -45,7 +50,9 @@
             </svg>
         </div><!-- END: .nhs-search-icon -->
     </div><!-- END: .nhs-search-wrapper -->
-    <div class="nhs-search-result-wrapper" *ngIf="isActive">
+    <div class="nhs-search-result-wrapper"
+         #searchResultContainer
+         *ngIf="isActive">
         <ul>
             <li class="searching" *ngIf="loading; else loadDoneTemplate">
                 <div class="m-loader m-loader--brand"></div>
@@ -55,11 +62,11 @@
                     <a href="javascript://" (click)="add()"><span i18n="@@add">Add</span>: {{ keyword }}</a>
                 </ng-container>
                 <ng-template #notFoundMessage>
-                    We can't find with keyword: "{{ keyword }}"
+                    Không tìm thấy kết quả với từ khóa: "{{ keyword }}"
                 </ng-template>
             </li>
-            <li i18n="@@loadMore" *ngIf="currentPage < totalPages" (click)="loadMore($event)">
-                <a href="javascript://">Load more</a>
+            <li i18n="@@loadMore" *ngIf="currentPage < totalPages" (click)="loadMore($event)" class="load-more">
+                <a href="javascript://">Tải thêm</a>
             </li>
         </ul>
     </div><!-- END: .nhs-search-result-wrapper -->
@@ -71,18 +78,22 @@
         [class.active]="item.isActive"
         [class.selected]="item.isSelected"
         (click)="selectItem(item)">
+        <div class="nhs-item-image" *ngIf="item.image || isShowImage">
+            <img class="avatar-sm img-circle" ghmImage="" src="{{ item.image }}" alt="{{ item.name }}">
+        </div><!-- END: .nhs-item-image -->
         <div class="nhs-item-info">
             <i class="{{ item.icon }}" *ngIf="item.icon"></i>
-            <span>{{ item.name }}</span>
-        </div>
+            <h2 class="nh-suggestion-name">{{ item.name }}</h2>
+            <div class="nh-suggestion-des" *ngIf="item.description">{{ item.description }}</div>
+        </div><!-- END: .nhs-item-info -->
     </li><!-- END: .nhs-item -->
 </ng-template><!-- END: search result template -->
 
 <ng-template #singleTemplate>
     <div class="nhs-item" *ngIf="selectedItem && !isShowSearchBox">
         <div class="nhs-item-info" (click)="showSearchBox($event)">
-            <i class="{{ selectedItem.icon }}" *ngIf="selectedItem.icon"></i>
-            <span>{{ selectedItem.name }}</span>
+            <i class="{{ selectedItem?.icon }}" *ngIf="selectedItem?.icon"></i>
+            <span>{{ selectedItem?.name }}</span>
         </div>
         <span class="remove" (click)="removeSelectedItem(selectedItem)">
             <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
