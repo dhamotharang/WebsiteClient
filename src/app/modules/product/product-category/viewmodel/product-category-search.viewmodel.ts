@@ -7,4 +7,5 @@ export class ProductCategorySearchViewModel {
     idPath: string;
     nameLevel: string;
     activeStatus: string;
+    image: string;
 }

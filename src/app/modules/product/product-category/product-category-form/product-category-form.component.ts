@@ -1,15 +1,15 @@
 import {Component, enableProdMode, OnInit, ViewChild} from '@angular/core';
-import { ProductCategory } from '../model/product-category.model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
-import { ProductCategoryTranslation } from '../model/product-category-translation.model';
-import { ProductCategoryService } from '../service/product-category-service';
-import { ProductCategoryDetailViewModel } from '../viewmodel/product-category-detail.viewmodel';
+import {ProductCategory} from '../model/product-category.model';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {finalize} from 'rxjs/operators';
+import {ProductCategoryTranslation} from '../model/product-category-translation.model';
+import {ProductCategoryService} from '../service/product-category-service';
+import {ProductCategoryDetailViewModel} from '../viewmodel/product-category-detail.viewmodel';
 import * as _ from 'lodash';
-import { ProductCategoryAttribute } from '../product-category-attribute/product-category-attribute.model';
-import { ProductAttributeService } from '../../product-attribute/product-attribute.service';
-import { ToastrService } from 'ngx-toastr';
-import { ProductCategoryAttributeViewModel } from '../product-category-attribute/product-category-attribute.viewmodel';
+import {ProductCategoryAttribute} from '../product-category-attribute/product-category-attribute.model';
+import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
+import {ToastrService} from 'ngx-toastr';
+import {ProductCategoryAttributeViewModel} from '../product-category-attribute/product-category-attribute.viewmodel';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
 import {BaseFormComponent} from '../../../../base-form.component';
@@ -19,18 +19,23 @@ import {UtilService} from '../../../../shareds/services/util.service';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
+import {ProductImage} from '../../product/model/product-image.model';
+import {ExplorerItem} from '../../../../shareds/components/ghm-file-explorer/explorer-item.model';
+import {environment} from '../../../../../environments/environment.prod';
 
 if (!/localhost/.test(document.location.host)) {
     enableProdMode();
 }
+
 @Component({
     selector: 'app-product-category-form',
+    styleUrls: ['./product-category-form.component.scss'],
     templateUrl: './product-category-form.component.html',
 })
 
 export class ProductCategoryFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('productCategoryFormModal' ) productCategoryFormModal: NhModalComponent;
-    @ViewChild(NhTabComponent ) nhTabComponent: NhTabComponent;
+    @ViewChild('productCategoryFormModal') productCategoryFormModal: NhModalComponent;
+    @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
     productCategory = new ProductCategory();
     productCategoryTree: TreeData[] = [];
     modelTranslation = new ProductCategoryTranslation();
@@ -41,6 +46,7 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
     isSearchingProductCategory;
     categoryText;
     productCategoryAttributeSelect: NhSuggestion[];
+    urlFile = `${environment.fileUrl}`;
 
     constructor(private fb: FormBuilder,
                 private toastr: ToastrService,
@@ -80,6 +86,19 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
         this.id = id;
         this.getDetail(id);
         this.productCategoryFormModal.open();
+    }
+
+    selectImage(file: ExplorerItem) {
+        if (!file.isImage) {
+            this.toastr.error('Product image already exists or File have select not is image');
+            return;
+        } else {
+            this.model.patchValue({image: file.url});
+        }
+    }
+
+    removeImage() {
+        this.model.patchValue({image: ''});
     }
 
     save() {
@@ -182,7 +201,10 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
                     if (productCategoryDetail) {
                         this.model.patchValue({
                             isActive: productCategoryDetail.isActive,
+                            isHot: productCategoryDetail.isHot,
+                            isHomePage: productCategoryDetail.isHomePage,
                             order: productCategoryDetail.order,
+                            image: productCategoryDetail.image,
                             parentId: productCategoryDetail.parentId,
                             concurrencyStamp: productCategoryDetail.concurrencyStamp,
                         });
@@ -238,6 +260,9 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
         this.model = this.fb.group({
             parentId: [this.productCategory.parentId],
             isActive: [this.productCategory.isActive],
+            image: [this.productCategory.image],
+            isHomePage: [this.productCategory.isHomePage],
+            isHot: [this.productCategory.isHot],
             order: [this.productCategory.order],
             concurrencyStamp: [this.productCategory.concurrencyStamp],
             productCategoryAttributes: [this.productCategoryAttributes],
@@ -252,11 +277,15 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
         this.model.patchValue({
             parentId: null,
             isActive: true,
+            isHomePage: false,
+            isHot: false,
+            image: '',
             order: 0,
         });
         this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 name: '',
+                seoLink: '',
                 description: '',
             });
         });
@@ -282,6 +311,10 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
                 this.modelTranslation.name,
                 [Validators.required, Validators.maxLength(256), Validators.pattern(Pattern.whiteSpace)]
             ],
+            seoLink: [
+                this.modelTranslation.seoLink,
+                [Validators.required, Validators.maxLength(256), Validators.pattern(Pattern.whiteSpace)]
+            ],
             description: [
                 this.modelTranslation.description,
                 [Validators.maxLength(500)]
@@ -291,5 +324,5 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
             this.validateTranslation(false)
         );
         return translationModel;
-    }
+    };
 }

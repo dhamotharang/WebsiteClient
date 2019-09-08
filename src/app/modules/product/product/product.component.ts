@@ -259,7 +259,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             _.each(list, (item: ProductSearchViewModel) => {
                 const productCategoryName = _.join(item.categoryNames, ', ');
                 this.listProduct.push(new ProductResultViewModel(item.id, item.thumbnail, productCategoryName,
-                    item.name, item.defaultUnit, item.isManagementByLot, item.isActive));
+                    item.name, item.defaultUnit, item.isManagementByLot, item.isActive, item.isHot, item.isHomePage, item.salePrice));
             });
         }
     }

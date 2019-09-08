@@ -43,7 +43,7 @@ export const APP_CONFIG_DI: IAppConfig = {
     RELATIONSHIP_API_URL: 'http://localhost:5009/api/v1/',
     SURVEY_API_URL: 'http://localhost:5011/api/v1/',
     EVENT_API_URL: 'http://localhost:50003/api/v1/',
-    FILE_URL: 'https://testfilemanager.ghmsoft.vn/',
+    FILE_URL: 'http://localhost:50005/',
     FILE_LOCAL_URL: 'http://localhost:50005/',
     API_GATEWAY_URL: 'http://localhost:50008/',
     WAREHOUSE_API_URL: 'http://localhost:50009/api/v1/',

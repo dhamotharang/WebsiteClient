@@ -1,7 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {SupplierDetailViewModel} from '../../supplier/viewmodel/supplier-detail.viewmodel';
 import {finalize} from 'rxjs/internal/operators';
 import {ActivatedRouteSnapshot} from '@angular/router';
 import {Inject} from '@angular/core';

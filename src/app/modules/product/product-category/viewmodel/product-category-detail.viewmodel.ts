@@ -7,6 +7,9 @@ export class ProductCategoryDetailViewModel {
     description: string;
     parentId: number;
     isActive: boolean;
+    isHot: boolean;
+    image: string;
+    isHomePage: boolean;
     order: number;
     concurrencyStamp: string;
     translations: ProductCategoryTranslation[];

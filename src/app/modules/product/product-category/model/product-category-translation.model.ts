@@ -3,4 +3,5 @@ export class ProductCategoryTranslation {
     languageId: string;
     name: string;
     description: string;
+    seoLink: string;
 }

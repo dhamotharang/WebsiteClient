@@ -15,6 +15,7 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 import {UtilService} from '../../../shareds/services/util.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
+import {environment} from '../../../../environments/environment';
 
 if (!/localhost/.test(document.location.host)) {
     enableProdMode();
@@ -31,6 +32,7 @@ export class ProductCategoryComponent extends BaseListComponent<ProductCategoryS
     isActive;
     listProductCategory: ProductCategorySearchViewModel[];
     productCategoryId;
+    urlFile = `${environment.fileUrl}`;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,

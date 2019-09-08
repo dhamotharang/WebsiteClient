@@ -81,79 +81,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         this.renderForm();
         this.addConversionUnit();
         this.addAttribute();
-        // this.subscribers.routerParam = this.route.params.subscribe((params: any) => {
-        //         const id = params['id'];
-        //         if (id) {
-        //             this.id = id;
-        //             this.isUpdate = true;
-        //             this.productService.getDetail(id).subscribe((result: ActionResultViewModel<ProductDetailViewModel>) => {
-        //                 this.productDetail = result.data;
-        //                 if (this.productDetail) {
-        //                     if (this.productDetail.categories) {
-        //                         this.categories = [];
-        //                         const listCategoryByLanguageId = _.filter(this.productDetail.categories,
-        //                             (category: ProductCategoryViewModel) => {
-        //                                 return category.languageId === this.currentLanguage;
-        //                             });
-        //
-        //                         _.each(listCategoryByLanguageId, (category: ProductCategoryViewModel) => {
-        //                             this.categories.push(category.categoryId);
-        //                         });
-        //
-        //                         this.categoryText = _.join(_.map(listCategoryByLanguageId, (categoryNews: ProductCategoryViewModel) => {
-        //                             return categoryNews.categoryName;
-        //                         }), ', ');
-        //                     }
-        //                     this.model.patchValue({
-        //                         id: this.productDetail.id,
-        //                         categories: this.categories,
-        //                         thumbnail: this.productDetail.thumbnail,
-        //                         images: this.productDetail.images,
-        //                         isManagementByLot: this.productDetail.isManagementByLot,
-        //                         isActive: this.productDetail.isActive,
-        //                         concurrencyStamp: this.productDetail.concurrencyStamp,
-        //                     });
-        //                     this.productImages = this.productDetail.images;
-        //                     this.listProductUnit = this.productDetail.units;
-        //                     this.listProductUnitConversion = this.productDetail.conversionUnits;
-        //                     this.getUnitIdFromProductUnitId();
-        //                     this.listProductValue = _.filter(this.productDetail.values, (productValue: ProductAttribute) => {
-        //                         return productValue.languageId === this.currentLanguage;
-        //                     });
-        //
-        //                     _.each(this.productImages, (image: ProductImage) => {
-        //                         if (image.url === this.productDetail.thumbnail) {
-        //                             image.isThumbnail = true;
-        //                         } else {
-        //                             image.isThumbnail = false;
-        //                         }
-        //                     });
-        //                 }
-        //
-        //                 if (this.productDetail.translations && this.productDetail.translations.length > 0) {
-        //                     this.translations.controls.forEach(
-        //                         (model: FormGroup) => {
-        //                             const detail = _.find(
-        //                                 this.productDetail.translations,
-        //                                 (productTranslation: ProductTranslation) => {
-        //                                     return (
-        //                                         productTranslation.languageId === model.value.languageId
-        //                                     );
-        //                                 }
-        //                             );
-        //                             if (detail) {
-        //                                 model.patchValue(detail);
-        //                             }
-        //                         }
-        //                     );
-        //                 }
-        //             });
-        //         } else {
-        //             this.resetForm();
-        //         }
-        //     }
-        // );
-        // this.utilService.focusElement('name ' + this.currentLanguage);
     }
 
     ngAfterViewInit() {
@@ -436,34 +363,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         item.isThumbnail = !item.isThumbnail;
     }
 
-    // onSelectProductListUnit(value: ProductListUnit) {
-    //     this.productListUnit = value ? value : null;
-    //     this.model.patchValue({productListUnit: this.productListUnit});
-    // }
-    //
-    // private getUnitIdFromProductUnitId() {
-    //     if (this.listProductUnitConversion && this.listProductUnit && this.listProductUnit.length > 0
-    //         && this.listProductUnitConversion.length > 0) {
-    //         _.each(this.listProductUnitConversion, (unitConversion: ProductConversionUnit) => {
-    //             const productUnitById = _.filter(this.listProductUnit, (unit: ProductUnit) => {
-    //                 return unit.id === unitConversion.productUnitId;
-    //             });
-    //
-    //             if (productUnitById && productUnitById.length > 0) {
-    //                 unitConversion.unitId = productUnitById[0].unitId;
-    //             }
-    //
-    //             const productUnitConversionById = _.filter(this.listProductUnit, (unitConvert: ProductUnit) => {
-    //                 return unitConvert.id === unitConversion.conversionUnitId;
-    //             });
-    //
-    //             if (productUnitConversionById && productUnitConversionById.length > 0) {
-    //                 unitConversion.conversionUnitId = productUnitConversionById[0].unitId;
-    //             }
-    //         });
-    //     }
-    // }
-
     private renderForm() {
         this.buildForm();
         this.renderTranslationArray(this.buildFormLanguage);
@@ -491,6 +390,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             thumbnail: [this.product.thumbnail, [Validators.maxLength(500)]],
             isManagementByLot: [this.product.isManagementByLot, [Validators.required]],
             isActive: [this.product.isActive, [Validators.required]],
+            isHomePage: [this.product.isHomePage],
+            isHot: [this.product.isHot],
             categories: [this.categories, [Validators.required]],
             images: [this.productImages],
             concurrencyStamp: [this.product.concurrencyStamp],
@@ -503,13 +404,14 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     private buildFormLanguage = (language: string) => {
         this.translationFormErrors[language] = this.utilService.renderFormError(
-            ['name', 'description']
+            ['name', 'description', 'seoLink']
         );
         this.translationValidationMessage[
             language
             ] = this.utilService.renderFormErrorMessage([
             {name: ['required', 'maxlength', 'pattern']},
             {description: ['maxlength']},
+            {seoLink: ['maxlength']},
         ]);
         const translationModel = this.fb.group({
             languageId: [language],
@@ -520,7 +422,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             description: [
                 this.modelTranslation.description,
                 [Validators.maxLength(500)]
-            ]
+            ],
+            seoLink: [this.modelTranslation.seoLink, [Validators.maxLength(256)]],
         });
         translationModel.valueChanges.subscribe((data: any) =>
             this.validateTranslation(false)
@@ -552,20 +455,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         const index = this.conversionUnits.length;
         this.conversionUnits.push(this.buildConversionForm(index));
     }
-
-    // private saveProductUnit(conversionUnitFormControl: FormControl, index: number) {
-    //     const isValid = this.validateFormGroup(conversionUnitFormControl, this.conversionFormErrors[index],
-    //         this.conversionValidationMessages[index], true);
-    //     if (!isValid) {
-    //         return;
-    //     }
-    //     const conversionUnit = conversionUnitFormControl.value;
-    //     this.subscribers.saveProductUnitConversion = this.productService.saveConversionUnit(this.id, conversionUnit.productUnitId,
-    //         conversionUnit.productUnitConversionId, conversionUnit.value, conversionUnit.salePrice)
-    //         .subscribe((result: ActionResultViewModel) => {
-    //             this.toastr.success(result.message);
-    //         });
-    // }
 
     private buildConversionForm(index: number, conversionUnit?: ProductConversionUnit) {
         this.conversionFormErrors[index] = this.renderFormError(['unitId', 'value']);
@@ -624,20 +513,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         this.attributes.push(this.buildAttributeForm(index));
     }
 
-    // private saveAttribute(attributeFormControl: FormControl, index: number) {
-    //     const isValid = this.validateFormGroup(attributeFormControl, this.conversionFormErrors[index],
-    //         this.conversionValidationMessages[index], true);
-    //     if (!isValid) {
-    //         return;
-    //     }
-    //     const attribute = attributeFormControl.value;
-    //     this.subscribers.saveProductUnitConversion = this.productService.saveAttribute(this.id, attribute.attributeId,
-    //         attribute.productAttributeValueId, attribute.value)
-    //         .subscribe((result: ActionResultViewModel) => {
-    //             this.toastr.success(result.message);
-    //         });
-    // }
-
     private resetAttributes() {
         while (this.attributes.length !== 0) {
             this.attributes.removeAt(0);
@@ -670,7 +545,9 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                     translations: result.translations,
                     concurrencyStamp: result.concurrencyStamp,
                     thumbnail: result.thumbnail,
-                    images: result.images
+                    images: result.images,
+                    isHot: result.isHot,
+                    isHomePage: result.isHomePage
                 });
                 this.productImages = result.images;
                 if (result.categories) {
@@ -679,7 +556,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                         (category: ProductCategoryViewModel) => {
                             return category.languageId === this.currentLanguage;
                         });
-
                     _.each(listCategoryByLanguageId, (category: ProductCategoryViewModel) => {
                         this.categories.push(category.categoryId);
                     });

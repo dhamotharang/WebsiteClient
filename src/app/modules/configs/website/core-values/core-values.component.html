@@ -39,7 +39,15 @@
             <tr *ngFor="let item of listCoreValue; let i = index" cdkDrag class="drag-and-drop">
                 <td class="middle center">{{i + 1}}</td>
                 <td class="middle">
-                    {{item.name}}
+                    <div class="media">
+                        <div class="media-left">
+                            <img ghmImage="" src="{{urlFile + item.image}}" class="img-reponsive w50"
+                            alt="{{item.name}}">
+                        </div>
+                        <div class="media-body">
+                            {{item.name}}
+                        </div>
+                    </div>
                 </td>
                 <td class="middle">{{item.description}}</td>
                 <td class="middle center"><i class="fa fa-check color-green" *ngIf="item.isActive"></i></td>

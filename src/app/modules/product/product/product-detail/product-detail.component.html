@@ -42,6 +42,17 @@
                             {{ translation.name }}
                         </div>
                     </div>
+                </div>
+                <div class="form-group"
+                     *ngFor="let translation of product?.translations"
+                     [hidden]="translation?.languageId !== currentLanguage">
+                    <label class="col-sm-4 control-label" ghmLabel="SeoLink"
+                           i18n-ghmLabel="@@productName"></label>
+                    <div class="col-sm-8">
+                        <div class="form-control">
+                            {{ translation.seoLink }}
+                        </div>
+                    </div>
                 </div><!-- END: Product name -->
                 <div class="form-group"
                      *ngFor="let translation of product?.translations"
@@ -69,14 +80,24 @@
                     <div class="form-control">{{ product?.salePrice }}</div>
                 </div>
             </div>
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-8 col-sm-offset-4">-->
+                    <!--<dx-check-box [value]="product?.isManagementByLot" text="Quản lý theo lô" [disabled]="true"></dx-check-box>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-4">
-                    <dx-check-box [value]="product?.isManagementByLot" text="Quản lý theo lô" [disabled]="true"></dx-check-box>
+                    <dx-check-box [value]="product?.isActive" text="Sử dụng" [disabled]="true"></dx-check-box>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-4">
-                    <dx-check-box [value]="product?.isActive" text="Sử dụng" [disabled]="true"></dx-check-box>
+                    <dx-check-box [value]="product?.isHot" text="Sản phẩm nổi bật" [disabled]="true"></dx-check-box>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box [value]="product?.isHomePage" text="Hiển thị trang chủ" [disabled]="true"></dx-check-box>
                 </div>
             </div>
             <mat-accordion class="example-headers-align">
@@ -93,11 +114,6 @@
                                 <img ghmImage [src]="item.url"
                                      [nhImageViewer]="item.url"
                                      [errorImageUrl]="'/assets/images/no-image.png'">
-                                <!--<button class="btn btn-sm btn-remove red" type="button" disabled-->
-                                        <!--[swal]="confirmDeleteImage"-->
-                                        <!--(confirm)="removeImage(item)">-->
-                                    <!--<i class="fa fa-times"></i>-->
-                                <!--</button>-->
                                 <button class="btn btn-sm btn-check blue" disabled *ngIf="item.isThumbnail"
                                         [class.display-none]="!item.isThumbnail" (click)="checkThumbnail(item)"
                                         type="button">
@@ -107,43 +123,43 @@
                         </div>
                     </mat-expansion-panel><!-- END: Product images -->
                 </div>
-                <div class="cm-mgb-10">
-                    <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <span i18n="@@unitConversion">Đơn vị chuyển đổi</span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <table class="table table-stripped table-hover">
-                            <thead>
-                            <tr>
-                                <th i18n="@@unit">Đơn vị</th>
-                                <th></th>
-                                <th i18n="@@conversion" class="w100">Chuyển đổi</th>
-                                <th i18n="@@unit">Đơn vị</th>
-                                <th i18n="@@salePrice" class="text-right">Giá bán</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let conversionUnit of conversionUnits">
-                                <td>
-                                    {{ conversionUnit.unitName }}
-                                </td>
-                                <td class="center middle">=</td>
-                                <td>
-                                    {{ conversionUnit.value }}
-                                </td>
-                                <td class="middle">
-                                    {{ product?.unitName }}
-                                </td>
-                                <td class="text-right bold">
-                                    {{ conversionUnit?.salePrice | ghmCurrency:2 }}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </mat-expansion-panel><!-- END: Product unit conversion -->
-                </div>
+                <!--<div class="cm-mgb-10">-->
+                    <!--<mat-expansion-panel hideToggle>-->
+                        <!--<mat-expansion-panel-header>-->
+                            <!--<mat-panel-title>-->
+                                <!--<span i18n="@@unitConversion">Đơn vị chuyển đổi</span>-->
+                            <!--</mat-panel-title>-->
+                        <!--</mat-expansion-panel-header>-->
+                        <!--<table class="table table-stripped table-hover">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th i18n="@@unit">Đơn vị</th>-->
+                                <!--<th></th>-->
+                                <!--<th i18n="@@conversion" class="w100">Chuyển đổi</th>-->
+                                <!--<th i18n="@@unit">Đơn vị</th>-->
+                                <!--<th i18n="@@salePrice" class="text-right">Giá bán</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
+                            <!--<tr *ngFor="let conversionUnit of conversionUnits">-->
+                                <!--<td>-->
+                                    <!--{{ conversionUnit.unitName }}-->
+                                <!--</td>-->
+                                <!--<td class="center middle">=</td>-->
+                                <!--<td>-->
+                                    <!--{{ conversionUnit.value }}-->
+                                <!--</td>-->
+                                <!--<td class="middle">-->
+                                    <!--{{ product?.unitName }}-->
+                                <!--</td>-->
+                                <!--<td class="text-right bold">-->
+                                    <!--{{ conversionUnit?.salePrice | ghmCurrency:2 }}-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</mat-expansion-panel>&lt;!&ndash; END: Product unit conversion &ndash;&gt;-->
+                <!--</div>-->
                 <div class="cm-mgb-10">
                     <mat-expansion-panel hideToggle>
                         <mat-expansion-panel-header>

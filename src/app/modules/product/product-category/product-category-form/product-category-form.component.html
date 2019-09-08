@@ -4,7 +4,7 @@
     <nh-modal-header class="uppercase bold">
         {isUpdate, select, 0 {Thêm mới nhóm sản phẩm} 1 {Cập nhật nhóm sản phẩm} other {}}
     </nh-modal-header>
-    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+    <form class="form-horizontal product-category-form" (ngSubmit)="save()" [formGroup]="model">
         <nh-modal-content>
             <div class="row">
                 <div class="col-sm-12">
@@ -27,16 +27,36 @@
                                                    (onSelectItem)="currentLanguage = $event.id"></nh-select>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label i18n-ghmLabel="@@productCategory" ghmLabel="Ảnh"
+                                           class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8" [formGroup]="model">
+                                        <ghm-file-explorer i18n-buttonText="@@selectImage"
+                                                           [multiple]="false"
+                                                           i18n-buttonText="@@selectProductImage"
+                                                           [buttonText]="'Chọn ảnh'"
+                                                           (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                                        <div class="product-images " *ngIf="model.value.image">
+                                                <img ghmImage [class]="'w150'" [src]="model.value.image"
+                                                     class="img-responsive"
+                                                     [errorImageUrl]="'/assets/images/no-image.png'">
+                                                <button class="btn btn-sm btn-remove red" type="button"
+                                                        (click)="removeImage()">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group cm-mgb-10">
                                     <label i18n-ghmLabel="@@productCategory" ghmLabel="Nhóm Sản Phẩm"
                                            class="col-sm-4 control-label"></label>
                                     <div class="col-sm-8" [formGroup]="model">
                                         <nh-dropdown-tree
-                                            [width]="500"
-                                            [data]="productCategoryTree" i18n-title="@@selectProductCategory"
-                                            [title]="'-- Chọn nhóm cha --'"
-                                            i18n-title="@@productCategoryTitle"
-                                            formControlName="parentId">
+                                                [width]="500"
+                                                [data]="productCategoryTree" i18n-title="@@selectProductCategory"
+                                                [title]="'-- Chọn nhóm cha --'"
+                                                i18n-title="@@productCategoryTitle"
+                                                formControlName="parentId">
                                         </nh-dropdown-tree>
                                     </div>
                                 </div>
@@ -56,7 +76,26 @@
                                                         required {Tên nhóm sản phẩm không được đê trống}
                                                         maxLength {Tên nhóm sản phẩm không được vượt quá 256 ký tự}
                                                         pattern {Tên nhóm sản phẩm phải là ký tự}}
-                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group cm-mgb-10"
+                                     *ngFor="let modelTranslation of translations.controls; index as i"
+                                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                     [formGroupName]="i"
+                                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.seoLink">
+                                    <label i18n-ghmLabel="@@categoryName" ghmLabel="SeoLink"
+                                           class="col-sm-4 control-label" [required]="true"></label>
+                                    <div class="col-sm-8">
+                                        <ghm-input elementId="{{'seoLink ' + currentLanguage}}"
+                                                   i18n-placeholder="@@enterCategoryNamePlaceHolder"
+                                                   placeholder="Nhập seoLink"
+                                                   formControlName="seoLink"></ghm-input>
+                                        <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.seoLink, select,
+                                                        required {SeoLink không được đê trống}
+                                                        maxLength {SeoLink không được vượt quá 256 ký tự}
+                                                        pattern {SeoLink phải là ký tự}}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="form-group cm-mgb-10"
@@ -78,10 +117,18 @@
                                 </div>
                                 <div class="form-group" [formGroup]="model">
                                     <div class="col-sm-8 col-sm-offset-4">
+                                        <dx-check-box formControlName="isHomePage"
+                                                      text="Hiển thị trang chủ?"></dx-check-box>
+                                    </div>
+                                </div>
+                                <div class="form-group" [formGroup]="model">
+                                    <div class="col-sm-8 col-sm-offset-4">
+                                        <dx-check-box formControlName="isHot" text="Nhóm nổi bật?"></dx-check-box>
+                                    </div>
+                                </div>
+                                <div class="form-group" [formGroup]="model">
+                                    <div class="col-sm-8 col-sm-offset-4">
                                         <dx-check-box formControlName="isActive" text="Kích hoạt?"></dx-check-box>
-                                        <!--<mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">-->
-                                        <!--{model.value.isActive, select, 0 {Chưa kích hoạt} 1 {Kich Hoạt}}-->
-                                        <!--</mat-checkbox>-->
                                     </div>
                                 </div>
                             </div>
@@ -117,13 +164,13 @@
                                         <td></td>
                                         <td colspan="2">
                                             <nh-suggestion
-                                                i18n-placeholder="@@productAttributeSuggestionPlaceholder"
-                                                placeholder="Nhập thuộc tính sản phẩm"
-                                                [selectedItems]="productCategoryAttributeSelect"
-                                                [sources]="productCategoryAttributeSuggestions"
-                                                [loading]="isSearchingProductCategory"
-                                                (searched)="onSearched($event)"
-                                                (itemSelected)="onSelectedProductAttribute($event)"
+                                                    i18n-placeholder="@@productAttributeSuggestionPlaceholder"
+                                                    placeholder="Nhập thuộc tính sản phẩm"
+                                                    [selectedItems]="productCategoryAttributeSelect"
+                                                    [sources]="productCategoryAttributeSuggestions"
+                                                    [loading]="isSearchingProductCategory"
+                                                    (searched)="onSearched($event)"
+                                                    (itemSelected)="onSelectedProductAttribute($event)"
                                             ></nh-suggestion>
                                         </td>
                                     </tr>
@@ -136,18 +183,21 @@
             </div>
         </nh-modal-content>
         <nh-modal-footer>
-            <dx-check-box [(value)]="isCreateAnother" text="Tiếp tục thêm" *ngIf="!isUpdate"></dx-check-box>
-            <ghm-button classes="btn blue cm-mgr-5"
-                        [loading]="isSaving">
-                <span i18n="@@Save">Lưu</span>
-            </ghm-button>
-            <ghm-button classes="btn default"
-                        nh-dismiss="true"
-                        [type]="'button'"
-                        [loading]="isSaving">
-                <span i18n="@@close">Đóng</span>
-            </ghm-button>
+            <div class="pull-right cm-mgb-10">
+                <dx-check-box [(value)]="isCreateAnother" text="Tiếp tục thêm" *ngIf="!isUpdate"></dx-check-box>
+                <ghm-button classes="btn blue cm-mgr-5"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Lưu</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            nh-dismiss="true"
+                            [type]="'button'"
+                            [loading]="isSaving">
+                    <span i18n="@@close">Đóng</span>
+                </ghm-button>
+            </div>
         </nh-modal-footer>
     </form>
 </nh-modal>
+
 

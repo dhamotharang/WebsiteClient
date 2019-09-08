@@ -63,6 +63,26 @@
                      *ngFor="let modelTranslation of translations.controls; index as i"
                      [formGroupName]="i"
                      [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                     [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.seoLink">
+                    <label class="col-sm-4 control-label" ghmLabel="SeoLink"
+                           i18n-ghmLabel="@@description"></label>
+                    <div class="col-sm-8">
+                                    <input name="" class="form-control" rows="3"
+                                              formControlName="seoLink"
+                                              placeholder="Nhập seolink"
+                                              i18n-placeholder="@@enterDescription"/>
+                        <span class="help-block">
+                            {
+                            translationFormErrors[modelTranslation.value.languageId]?.seolink,
+                            select, maxlength {SeoLink không được phép vượt quá 500 ký tự.}
+                            }
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group"
+                     *ngFor="let modelTranslation of translations.controls; index as i"
+                     [formGroupName]="i"
+                     [hidden]="modelTranslation.value.languageId !== currentLanguage"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
                     <label class="col-sm-4 control-label" ghmLabel="Mô tả"
                            i18n-ghmLabel="@@description"></label>
@@ -106,23 +126,33 @@
                             VNĐ
                         </span>
                     </div>
-                    <!--<ghm-input elementId="salePriceInput" placeholder="Giá bán" formControlName="salePrice"></ghm-input>-->
                     <span class="help-block">{formErrors?.salePrice, select, required {Vui lòng chọn giá bán} isValid {Giá bán phải là số.}}</span>
                 </div>
             </div>
-            <div class="form-group"
-                 [class.has-error]="formErrors?.isManagementByLot">
-                <div class="col-sm-8 col-sm-offset-4">
-                    <dx-check-box formControlName="isManagementByLot" text="Quản lý theo lô"></dx-check-box>
-                </div>
-            </div>
+            <!--<div class="form-group"-->
+                 <!--[class.has-error]="formErrors?.isManagementByLot">-->
+                <!--<div class="col-sm-8 col-sm-offset-4">-->
+                    <!--<dx-check-box formControlName="isManagementByLot" text="Quản lý theo lô"></dx-check-box>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group"
                  [class.has-error]="formErrors?.isActive">
                 <div class="col-sm-8 col-sm-offset-4">
                     <dx-check-box formControlName="isActive" text="Kích hoạt"></dx-check-box>
                 </div>
             </div>
-
+            <div class="form-group"
+                 [class.has-error]="formErrors?.isHot">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isHot" text="Sản phẩm nổi bật"></dx-check-box>
+                </div>
+            </div>
+            <div class="form-group"
+                 [class.has-error]="formErrors?.isHomePage">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <dx-check-box formControlName="isHomePage" text="Hiển thị trang chủ"></dx-check-box>
+                </div>
+            </div>
             <mat-accordion class="example-headers-align ">
                 <div class="cm-mgb-10">
                     <mat-expansion-panel hideToggle>
@@ -159,68 +189,68 @@
                         </div>
                     </mat-expansion-panel><!-- END: Product images -->
                 </div>
-                <div class="cm-mgb-10">
-                    <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <span i18n="@@unitConversion">Đơn vị chuyển đổi</span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <table class="table table-stripped table-hover"
-                               *ngIf="model.value.unitName; else selectDefaultUnitTemplate"
-                               formArrayName="conversionUnits">
-                            <thead>
-                            <tr>
-                                <th i18n="@@unit">Đơn vị</th>
-                                <th></th>
-                                <th i18n="@@conversion" class="w100">Chuyển đổi</th>
-                                <th i18n="@@unit">Đơn vị</th>
-                                <th i18n="@@salePrice" class="text-right">Giá bán</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let item of conversionUnits.controls; let i = index"
-                                [formGroupName]="i">
-                                <td>
-                                    <app-unit-suggestion
-                                        [selectedItem]="item.value.unitId ? {id: item.value.unitId, name: item.value.unitName} : null"
-                                        (itemSelected)="onConversionUnitSelected($event, item, i)"
-                                        (itemRemoved)="onConversionUnitRemoved(i)"></app-unit-suggestion>
-                                </td>
-                                <td class="center middle">=</td>
-                                <td>
-                                    <dx-number-box [class.has-error]="conversionFormErrors[i]?.value"
-                                                   formControlName="value" format="#,##0"
-                                                   id="conversionValue{{i}}"
-                                                   name="conversionValue{{i}}"></dx-number-box>
-                                    <!--<input type="text" class="form-control text-right"-->
-                                    <!--[class.has-error]="conversionFormErrors[i]?.value"-->
-                                    <!--ghm-text-selection-->
-                                    <!--formControlName="value"-->
-                                    <!--id="conversionValue{{i}}"-->
-                                    <!--name="conversionValue{{i}}">-->
-                                </td>
-                                <td class="middle">
-                                    {{ model.value.unitName }}
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <dx-number-box formControlName="salePrice" format="#,##0"
-                                                       [showClearButton]="true" cssClass="pull-right"></dx-number-box>
-                                        <span class="input-group-addon">
-                                            VNĐ
-                                        </span>
-                                    </div>
-                                    <!--<input type="text" class="form-control text-right" formControlName="salePrice">-->
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <ng-template #selectDefaultUnitTemplate>
-                            <div i18n="@@pleaseSelectUnit" class="alert alert-info">Vui lòng chọn đơn vị.</div>
-                        </ng-template>
-                    </mat-expansion-panel><!-- END: Product unit conversion -->
-                </div>
+                <!--<div class="cm-mgb-10">-->
+                    <!--<mat-expansion-panel hideToggle>-->
+                        <!--<mat-expansion-panel-header>-->
+                            <!--<mat-panel-title>-->
+                                <!--<span i18n="@@unitConversion">Đơn vị chuyển đổi</span>-->
+                            <!--</mat-panel-title>-->
+                        <!--</mat-expansion-panel-header>-->
+                        <!--<table class="table table-stripped table-hover"-->
+                               <!--*ngIf="model.value.unitName; else selectDefaultUnitTemplate"-->
+                               <!--formArrayName="conversionUnits">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th i18n="@@unit">Đơn vị</th>-->
+                                <!--<th></th>-->
+                                <!--<th i18n="@@conversion" class="w100">Chuyển đổi</th>-->
+                                <!--<th i18n="@@unit">Đơn vị</th>-->
+                                <!--<th i18n="@@salePrice" class="text-right">Giá bán</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
+                            <!--<tr *ngFor="let item of conversionUnits.controls; let i = index"-->
+                                <!--[formGroupName]="i">-->
+                                <!--<td>-->
+                                    <!--<app-unit-suggestion-->
+                                        <!--[selectedItem]="item.value.unitId ? {id: item.value.unitId, name: item.value.unitName} : null"-->
+                                        <!--(itemSelected)="onConversionUnitSelected($event, item, i)"-->
+                                        <!--(itemRemoved)="onConversionUnitRemoved(i)"></app-unit-suggestion>-->
+                                <!--</td>-->
+                                <!--<td class="center middle">=</td>-->
+                                <!--<td>-->
+                                    <!--<dx-number-box [class.has-error]="conversionFormErrors[i]?.value"-->
+                                                   <!--formControlName="value" format="#,##0"-->
+                                                   <!--id="conversionValue{{i}}"-->
+                                                   <!--name="conversionValue{{i}}"></dx-number-box>-->
+                                    <!--&lt;!&ndash;<input type="text" class="form-control text-right"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;[class.has-error]="conversionFormErrors[i]?.value"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;ghm-text-selection&ndash;&gt;-->
+                                    <!--&lt;!&ndash;formControlName="value"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;id="conversionValue{{i}}"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;name="conversionValue{{i}}">&ndash;&gt;-->
+                                <!--</td>-->
+                                <!--<td class="middle">-->
+                                    <!--{{ model.value.unitName }}-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                    <!--<div class="input-group">-->
+                                        <!--<dx-number-box formControlName="salePrice" format="#,##0"-->
+                                                       <!--[showClearButton]="true" cssClass="pull-right"></dx-number-box>-->
+                                        <!--<span class="input-group-addon">-->
+                                            <!--VNĐ-->
+                                        <!--</span>-->
+                                    <!--</div>-->
+                                    <!--&lt;!&ndash;<input type="text" class="form-control text-right" formControlName="salePrice">&ndash;&gt;-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                        <!--<ng-template #selectDefaultUnitTemplate>-->
+                            <!--<div i18n="@@pleaseSelectUnit" class="alert alert-info">Vui lòng chọn đơn vị.</div>-->
+                        <!--</ng-template>-->
+                    <!--</mat-expansion-panel>&lt;!&ndash; END: Product unit conversion &ndash;&gt;-->
+                <!--</div>-->
                 <div class="cm-mgb-10">
                     <mat-expansion-panel hideToggle>
                         <mat-expansion-panel-header>
@@ -248,19 +278,6 @@
                                                 (itemSelected)="onAttributeSelected($event, item, i)"
                                                 (itemRemoved)="onAttributeRemoved(i)"></app-product-attribute-suggestion>
                                         </ng-container>
-                                        <!--<ng-template #readOnly>-->
-                                        <!--<ul *ngIf="!item.isSelfContent; else spanValue"-->
-                                        <!--class="list-style-none list-inline">-->
-                                        <!--<li *ngFor="let attribute of item.productAttributeValueSuggestion"-->
-                                        <!--class="product-attribute-value">-->
-                                        <!--{{attribute.name}}-->
-                                        <!--<span> ,</span>-->
-                                        <!--</li>-->
-                                        <!--</ul>-->
-                                        <!--<ng-template #spanValue>-->
-                                        <!--{{item.value ? item.value : ''}}-->
-                                        <!--</ng-template>-->
-                                        <!--</ng-template>-->
                                     </td>
                                     <td>
                                         <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
@@ -292,7 +309,7 @@
         </nh-modal-content>
         <nh-modal-footer>
             <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-4">
+                <div class="pull-right cm-mgrl-15">
                     <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
                     <button class="btn blue cm-mgr-5" i18n="@@save"
                             [disabled]="isSaving">

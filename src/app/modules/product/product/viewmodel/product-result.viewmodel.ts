@@ -6,6 +6,9 @@ export class ProductResultViewModel {
     defaultUnit: string;
     isManagementByLot: boolean;
     isActive: boolean;
+    isHot: boolean;
+    isHomePage: boolean;
+    salePrice: number;
 
     constructor(id?: string,
                 thumbnail?: string,
@@ -13,7 +16,9 @@ export class ProductResultViewModel {
                 name?: string,
                 defaultUnit?: string,
                 isManagementByLot?: boolean,
-                isActive?: boolean) {
+                isActive?: boolean, isHot?: boolean,
+                isHomePage?: boolean,
+                salePrice?: number) {
         this.id = id;
         this.thumbnail = thumbnail;
         this.categoryName = categoryName;
@@ -21,5 +26,8 @@ export class ProductResultViewModel {
         this.defaultUnit = defaultUnit;
         this.isManagementByLot = isManagementByLot;
         this.isActive = isActive;
+        this.isHot = isHot;
+        this.isHomePage = isHomePage;
+        this.salePrice = salePrice;
     }
 }

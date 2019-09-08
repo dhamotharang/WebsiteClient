@@ -40,15 +40,9 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     @ViewChild('productFormModal') productFormModal: NhModalComponent;
     product = new Product();
     categoryTree: TreeData[];
-    categoryText;
     categories: any[];
     productImages: ProductImage[] = [];
     modelTranslation = new ProductTranslation();
-    listProductValue: ProductAttribute[] = [];
-    conversionFormErrors: any = {};
-    conversionValidationMessages: any = {};
-    attributeFormErrors: any = {};
-    attributeValidationMessages: any = {};
     conversionUnits = [];
     attributes = [];
 
@@ -74,31 +68,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
         this.reloadTree();
     }
 
-    onProductAttributeValueSelected(selectedAttributeValue: any, attributeFormControl: FormControl, index: number) {
-        const count = _.countBy(attributeFormControl.get('attributeValues').value, (attributeValue: NhSuggestion) => {
-            return attributeValue.id === selectedAttributeValue.id;
-        }).true;
-        if (count) {
-            this.toastr.warning('Giá trị thuộc tính đã tồn tại. Vui lòng kiểm tra lại.');
-            attributeFormControl.patchValue({attributeId: null, productAttributeName: null});
-            return;
-        }
-        attributeFormControl.patchValue({
-            productAttributeValues: selectedAttributeValue.map((attribute: NhSuggestion) => {
-                return {
-                    id: attribute.id,
-                    name: attribute.name
-                };
-            })
-        });
-        // if (this.isUpdate) {
-        //     this.saveAttribute(attributeFormControl, index);
-        // }
-    }
-
-    onProductAttributeValueRemoved(attributeFormControl: FormControl) {
-    }
-
     add() {
         this.productFormModal.open();
     }
@@ -107,27 +76,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
         this.id = productId;
         this.isUpdate = true;
         this.getDetail(productId);
-    }
-
-    removeThumbnail() {
-        this.model.patchValue({thumbnail: ''});
-    }
-
-    removeImage(productImage: ProductImage) {
-        if (productImage.isThumbnail) {
-            this.model.patchValue({thumbnail: ''});
-        }
-        _.remove(this.productImages, (item: ProductImage) => {
-            return item.url === productImage.url;
-        });
-    }
-
-    clickTabProductUnit(value) {
-        this.productUnitComponent.renderListUnit();
-    }
-
-    clickTabProductAttribute(value) {
-        this.productAttributeComponent.getProductAttribute();
     }
 
     reloadTree() {
@@ -146,54 +94,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
         item.isThumbnail = !item.isThumbnail;
     }
 
-    private buildConversionForm(index: number, conversionUnit?: ProductConversionUnit) {
-        this.conversionFormErrors[index] = this.renderFormError(['unitId', 'value']);
-        this.conversionValidationMessages[index] = this.renderFormErrorMessage([
-            {unitId: ['required']},
-            {value: ['isValid']}
-        ]);
-        const conversionModel = this.formBuilder.group({
-            unitId: [conversionUnit ? conversionUnit.unitId : '', [
-                Validators.required
-            ]],
-            unitName: [conversionUnit ? conversionUnit.unitName : ''],
-            salePrice: [conversionUnit ? conversionUnit.salePrice : null],
-            conversionUnitId: [conversionUnit ? conversionUnit.conversionUnitId : this.model.value.unitId],
-            conversionUnitName: [conversionUnit ? conversionUnit.conversionUnitName : ''],
-            value: [conversionUnit ? conversionUnit.value : null, [
-                this.numberValidator.isValid
-            ]],
-        });
-        conversionModel.valueChanges.subscribe(() => this.validateFormGroup(conversionModel, this.conversionFormErrors[index],
-            this.conversionValidationMessages[index], false));
-        return conversionModel;
-    }
-
-    private buildAttributeForm(index: number, productValue?: ProductAttribute) {
-        this.attributeFormErrors[index] = this.renderFormError(['unitId', 'value', 'productAttributeValues']);
-        this.attributeValidationMessages[index] = this.renderFormErrorMessage([
-            {unitId: ['required']},
-            {value: ['isValid']},
-            {productAttributeValues: ['required']},
-        ]);
-        const attributeModel = this.formBuilder.group({
-            attributeId: [productValue ? productValue.attributeId : '', [
-                Validators.required
-            ]],
-            attributeName: [productValue ? productValue.attributeName : ''],
-            value: [productValue ? productValue.value : ''],
-            isSelfContent: [productValue ? productValue.isSelfContent : false],
-            isMultiple: [productValue ? productValue.isMultiple : false],
-            isShowClient: [productValue ? productValue.isShowClient : false],
-            attributeValues: [productValue ? productValue.attributeValues : [], [
-                Validators.required
-            ]],
-        });
-        attributeModel.valueChanges.subscribe(() => this.validateFormGroup(attributeModel, this.attributeFormErrors[index],
-            this.attributeValidationMessages[index], false));
-        return attributeModel;
-    }
-
     private getDetail(productId: string) {
         this.productFormModal.open();
         this.subscribers.getDetail = this.productService.getDetail(productId)
@@ -202,6 +102,8 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
                     unitId: result.unitId,
                     unitName: result.unitName,
                     isActive: result.isActive,
+                    isHot: result.isHot,
+                    isHomePage: result.isHomePage,
                     isManagementByLot: result.isManagementByLot,
                     salePrice: result.salePrice,
                     translations: result.translations,
@@ -215,10 +117,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
                 }
                 if (result.conversionUnits && result.conversionUnits.length > 0) {
                     this.conversionUnits = result.conversionUnits;
-                    // result.conversionUnits.forEach((conversionUnit: ProductConversionUnit) => {
-                    //     this.conversionUnits.push(this.buildConversionForm(index, conversionUnit));
-                    //     index++;
-                    // });
                 }
                 if (result.attributes) {
                     const groups = _.groupBy(result.attributes, 'attributeId');

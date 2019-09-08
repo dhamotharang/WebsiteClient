@@ -14,6 +14,8 @@ export class ProductDetailViewModel {
     unitId: string;
     unitName: string;
     salePrice: number;
+    isHot: boolean;
+    isHomePage: boolean;
     categories: ProductCategoryViewModel[];
     units: ProductUnit[];
     conversionUnits: ProductConversionUnit[];

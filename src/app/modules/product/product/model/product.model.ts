@@ -20,6 +20,8 @@ export class Product {
     salePrice?: number;
     isChangeAttribute?: boolean;
     isChangeConversionUnit?: boolean;
+    isHomePage?: boolean;
+    isHot?: boolean;
 
     constructor() {
         this.isActive = true;
@@ -36,5 +38,7 @@ export class Product {
         this.salePrice = null;
         this.unitId = null;
         this.unitName = null;
+        this.isHomePage = false;
+        this.isHot = false;
     }
 }

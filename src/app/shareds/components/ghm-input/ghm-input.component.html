@@ -1,14 +1,16 @@
-<div class="ghm-input" [class.disabled]="isDisabled">
+<div class="ghm-input {{classes}}" [class.disabled]="isDisabled">
     <i *ngIf="icon" class="icon-prepend {{icon}}"></i>
     <input
         #ghmInput
-        [type]="type" class="form-control w100pc"
+        [attr.type]="type" class="form-control w100pc"
         [class.cm-pdl-10]="!icon"
         [value]="value"
         [id]="elementId" placeholder="{{placeholder}}"
         (keyup)="onKeyup($event)"
+        (blur)="onBlur($event)"
         (change)="onChange($event.target.value)"
         name="ghmInputElement"/>
-    <a class="remove-value" *ngIf="value && allowRemove" (click)="removeValue()">
+    <a class="remove-value dx-icon-clear" *ngIf="value && allowRemove"
+       (click)="removeValue()">
     </a>
 </div>

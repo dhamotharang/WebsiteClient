@@ -7,6 +7,9 @@ export class ProductCategory {
     idPath: string;
     isActive: boolean;
     order: number;
+    isHomePage: boolean;
+    isHot: boolean;
+    image: string;
     concurrencyStamp: string;
     productCategoryAttributes: ProductCategoryAttribute[];
     translations: ProductCategoryTranslation[];
@@ -18,6 +21,9 @@ export class ProductCategory {
         this.idPath = idPath;
         this.isActive = isActive !== undefined ? isActive : true;
         this.order = order ? order : 0;
+        this.isHomePage = false;
+        this.isHot = false;
+        this.image = '';
         this.concurrencyStamp = concurrencyStamp;
         this.translations = [];
         this.productCategoryAttributes = [];
