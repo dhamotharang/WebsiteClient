@@ -15,9 +15,9 @@ import {UtilService} from '../../../shareds/services/util.service';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-supplier',
     templateUrl: './supplier.component.html',

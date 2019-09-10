@@ -21,9 +21,10 @@ import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {UtilService} from '../../../shareds/services/util.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product',
     templateUrl: './product.component.html',

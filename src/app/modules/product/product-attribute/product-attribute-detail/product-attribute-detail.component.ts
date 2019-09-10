@@ -9,9 +9,9 @@ import {BaseFormComponent} from '../../../../base-form.component';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-attribute-detail',
     templateUrl: './product-attribute-detail.component.html'

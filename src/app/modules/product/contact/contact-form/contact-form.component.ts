@@ -12,9 +12,9 @@ import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-contact-form',

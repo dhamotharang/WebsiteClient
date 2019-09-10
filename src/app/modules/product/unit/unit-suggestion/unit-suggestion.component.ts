@@ -5,9 +5,9 @@ import { SearchResultViewModel } from '../../../../shareds/view-models/search-re
 import { BaseListComponent } from '../../../../base-list.component';
 import { UnitService } from '../service/unit.service';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
   selector: 'app-unit-suggestion',

@@ -28,7 +28,6 @@ export class NewDetailComponent extends BaseFormComponent implements OnInit {
     listCategory;
     isApprove;
     newsStatus = NewsStatus;
-    currentUser;
     declineReason;
     listComment = [];
     listCategoryNews: CategoryNewsViewModel[];
@@ -39,7 +38,7 @@ export class NewDetailComponent extends BaseFormComponent implements OnInit {
                 private toastr: ToastrService,
                 private newsService: NewsService) {
         super();
-        this.currentUser = this.appService.currentUser;
+        //this.currentUser = this.appService.currentUser;
     }
 
     ngOnInit() {

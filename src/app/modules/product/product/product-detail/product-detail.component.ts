@@ -23,9 +23,9 @@ import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {TreeData} from '../../../../view-model/tree-data';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-form',
     templateUrl: './product-detail.component.html',

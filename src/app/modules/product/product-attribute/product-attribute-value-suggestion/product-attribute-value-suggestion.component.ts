@@ -6,9 +6,9 @@ import {BaseListComponent} from '../../../../base-list.component';
 import {NhSuggestion, NhSuggestionComponent} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-attribute-value-suggestion',
     templateUrl: './product-attribute-value-suggestion.component.html'

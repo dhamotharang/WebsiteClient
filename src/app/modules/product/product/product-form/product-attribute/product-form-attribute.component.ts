@@ -11,9 +11,9 @@ import {APP_CONFIG, IAppConfig} from '../../../../../configs/app.config';
 import {SearchResultViewModel} from '../../../../../shareds/view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../../../../../shareds/view-models/action-result.viewmodel';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-form-attribute',
     styleUrls: ['../../product.scss'],

@@ -53,7 +53,6 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     newDetail: NewDetailViewModel;
     categoryNews: number[];
     modelTranslation = new NewsTranslation();
-    currentUser;
     newsStatus = NewsStatus;
     categoryText;
 
@@ -68,7 +67,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                 private toastr: ToastrService,
                 private newsService: NewsService) {
         super();
-        this.currentUser = this.appService.currentUser;
+        //this.currentUser = this.appService.currentUser;
     }
 
     ngOnInit() {

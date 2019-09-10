@@ -11,9 +11,9 @@ import {Contact} from '../../contact/model/contact.model';
 import {SupplierDetailViewModel} from '../viewmodel/supplier-detail.viewmodel';
 import {ContactType} from '../../../../shareds/constants/contact-type.const';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-supplier-form',
     templateUrl: './supplier-form.component.html'

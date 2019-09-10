@@ -28,9 +28,9 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-form',
     templateUrl: './product-form.component.html',

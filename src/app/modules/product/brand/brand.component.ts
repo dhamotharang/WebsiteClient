@@ -15,9 +15,9 @@ import {FilterLink} from '../../../shareds/models/filter-link.model';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-brand',

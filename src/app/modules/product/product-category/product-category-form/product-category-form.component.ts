@@ -23,9 +23,9 @@ import {ProductImage} from '../../product/model/product-image.model';
 import {ExplorerItem} from '../../../../shareds/components/ghm-file-explorer/explorer-item.model';
 import {environment} from '../../../../../environments/environment.prod';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-category-form',

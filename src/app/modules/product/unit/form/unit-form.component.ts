@@ -12,9 +12,9 @@ import {UnitDetailViewModel} from '../view-model/unit-detail.viewmodel';
 import * as _ from 'lodash';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-unit-form',

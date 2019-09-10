@@ -5,9 +5,9 @@ import {NhSuggestion, NhSuggestionComponent} from '../../../../shareds/component
 import {BaseListComponent} from '../../../../base-list.component';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-suggestion',
     templateUrl: './product-suggestion.component.html'

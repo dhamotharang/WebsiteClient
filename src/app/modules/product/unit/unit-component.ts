@@ -15,9 +15,9 @@ import {BaseListComponent} from '../../../base-list.component';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-unit',

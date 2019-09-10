@@ -12,9 +12,9 @@ import * as _ from 'lodash';
 import { ProductAttributeValueComponent } from '../product-attribute-value/product-attribute-value.component';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
 import {UtilService} from '../../../../shareds/services/util.service';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-attribute-form',
     templateUrl: './product-attribute-form.component.html'

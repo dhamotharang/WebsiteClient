@@ -5,9 +5,9 @@ import { SearchResultViewModel } from '../../../../shareds/view-models/search-re
 import { BaseListComponent } from '../../../../base-list.component';
 import { ProductAttributeService } from '../product-attribute.service';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
   selector: 'app-product-attribute-suggestion',
   templateUrl: './product-attribute-suggestion.component.html'

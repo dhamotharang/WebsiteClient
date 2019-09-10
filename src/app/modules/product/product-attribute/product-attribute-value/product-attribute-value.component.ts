@@ -9,9 +9,9 @@ import {ToastrService} from 'ngx-toastr';
 import {NhSelect} from '../../../../shareds/components/nh-select/nh-select.component';
 import {BaseListComponent} from '../../../../base-list.component';
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-attribute-value',
     templateUrl: './product-attribute-value.component.html'

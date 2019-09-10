@@ -5,9 +5,9 @@ import {BaseFormComponent} from '../../../../base-form.component';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 import {ContactType} from '../../../../shareds/constants/contact-type.const';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-supplier-detail',
     templateUrl: './supplier-detail.component.html'

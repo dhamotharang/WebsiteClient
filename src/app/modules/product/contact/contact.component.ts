@@ -10,9 +10,9 @@ import {BaseListComponent} from '../../../base-list.component';
 import {WorkStatus} from '../../../shareds/constants/work-status.const';
 import {ContactType} from '../../../shareds/constants/contact-type.const';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 
 @Component({
     selector: 'app-product-contact',

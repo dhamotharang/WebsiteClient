@@ -10,9 +10,9 @@ import {UtilService} from '../../../../../shareds/services/util.service';
 import {NhModalComponent} from '../../../../../shareds/components/nh-modal/nh-modal.component';
 import {ActionResultViewModel} from '../../../../../shareds/view-models/action-result.viewmodel';
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     selector: 'app-product-attribute-value-form',
     templateUrl: './product-attribute-value-form.component.html'
