@@ -1,7 +1,7 @@
 <nh-modal #productFormModal size="lg">
     <nh-modal-header class="uppercase font-green-sharp bold">
         <span
-            i18n="@@productDetailModalTitle">Chi tiết sản phẩm</span>
+                i18n="@@productDetailModalTitle">Chi tiết sản phẩm</span>
     </nh-modal-header>
     <form action="" class="form-horizontal">
         <nh-modal-content>
@@ -32,16 +32,17 @@
                     </div>
                 </div><!-- END: Product category -->
                 <div class="form-group"
-                     *ngFor="let translation of product?.translations"
-                     [hidden]="translation?.languageId !== currentLanguage">
-                    <label class="col-sm-4 control-label" ghmLabel="Tên sản phẩm"
-                           i18n-ghmLabel="@@productName"
-                           [required]="true"></label>
-                    <div class="col-sm-8">
-                        <div class="form-control">
-                            {{ translation.name }}
+                     *ngFor="let translation of product?.translations">
+                    <ng-container *ngIf="translation?.languageId === currentLanguage">
+                        <label class="col-sm-4 control-label" ghmLabel="Tên sản phẩm"
+                               i18n-ghmLabel="@@productName"
+                               [required]="true"></label>
+                        <div class="col-sm-8">
+                            <div class="form-control">
+                                {{ translation.name }}
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
                 </div>
                 <div class="form-group"
                      *ngFor="let translation of product?.translations"
@@ -81,9 +82,9 @@
                 </div>
             </div>
             <!--<div class="form-group">-->
-                <!--<div class="col-sm-8 col-sm-offset-4">-->
-                    <!--<dx-check-box [value]="product?.isManagementByLot" text="Quản lý theo lô" [disabled]="true"></dx-check-box>-->
-                <!--</div>-->
+            <!--<div class="col-sm-8 col-sm-offset-4">-->
+            <!--<dx-check-box [value]="product?.isManagementByLot" text="Quản lý theo lô" [disabled]="true"></dx-check-box>-->
+            <!--</div>-->
             <!--</div>-->
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-4">
@@ -97,7 +98,8 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-8 col-sm-offset-4">
-                    <dx-check-box [value]="product?.isHomePage" text="Hiển thị trang chủ" [disabled]="true"></dx-check-box>
+                    <dx-check-box [value]="product?.isHomePage" text="Hiển thị trang chủ"
+                                  [disabled]="true"></dx-check-box>
                 </div>
             </div>
             <mat-accordion class="example-headers-align">
@@ -117,48 +119,48 @@
                                 <button class="btn btn-sm btn-check blue" disabled *ngIf="item.isThumbnail"
                                         [class.display-none]="!item.isThumbnail" (click)="checkThumbnail(item)"
                                         type="button">
-                                    <i class="fa fa-check" aria-hidden="true" ></i>
+                                    <i class="fa fa-check" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
                     </mat-expansion-panel><!-- END: Product images -->
                 </div>
                 <!--<div class="cm-mgb-10">-->
-                    <!--<mat-expansion-panel hideToggle>-->
-                        <!--<mat-expansion-panel-header>-->
-                            <!--<mat-panel-title>-->
-                                <!--<span i18n="@@unitConversion">Đơn vị chuyển đổi</span>-->
-                            <!--</mat-panel-title>-->
-                        <!--</mat-expansion-panel-header>-->
-                        <!--<table class="table table-stripped table-hover">-->
-                            <!--<thead>-->
-                            <!--<tr>-->
-                                <!--<th i18n="@@unit">Đơn vị</th>-->
-                                <!--<th></th>-->
-                                <!--<th i18n="@@conversion" class="w100">Chuyển đổi</th>-->
-                                <!--<th i18n="@@unit">Đơn vị</th>-->
-                                <!--<th i18n="@@salePrice" class="text-right">Giá bán</th>-->
-                            <!--</tr>-->
-                            <!--</thead>-->
-                            <!--<tbody>-->
-                            <!--<tr *ngFor="let conversionUnit of conversionUnits">-->
-                                <!--<td>-->
-                                    <!--{{ conversionUnit.unitName }}-->
-                                <!--</td>-->
-                                <!--<td class="center middle">=</td>-->
-                                <!--<td>-->
-                                    <!--{{ conversionUnit.value }}-->
-                                <!--</td>-->
-                                <!--<td class="middle">-->
-                                    <!--{{ product?.unitName }}-->
-                                <!--</td>-->
-                                <!--<td class="text-right bold">-->
-                                    <!--{{ conversionUnit?.salePrice | ghmCurrency:2 }}-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!--</tbody>-->
-                        <!--</table>-->
-                    <!--</mat-expansion-panel>&lt;!&ndash; END: Product unit conversion &ndash;&gt;-->
+                <!--<mat-expansion-panel hideToggle>-->
+                <!--<mat-expansion-panel-header>-->
+                <!--<mat-panel-title>-->
+                <!--<span i18n="@@unitConversion">Đơn vị chuyển đổi</span>-->
+                <!--</mat-panel-title>-->
+                <!--</mat-expansion-panel-header>-->
+                <!--<table class="table table-stripped table-hover">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                <!--<th i18n="@@unit">Đơn vị</th>-->
+                <!--<th></th>-->
+                <!--<th i18n="@@conversion" class="w100">Chuyển đổi</th>-->
+                <!--<th i18n="@@unit">Đơn vị</th>-->
+                <!--<th i18n="@@salePrice" class="text-right">Giá bán</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--<tr *ngFor="let conversionUnit of conversionUnits">-->
+                <!--<td>-->
+                <!--{{ conversionUnit.unitName }}-->
+                <!--</td>-->
+                <!--<td class="center middle">=</td>-->
+                <!--<td>-->
+                <!--{{ conversionUnit.value }}-->
+                <!--</td>-->
+                <!--<td class="middle">-->
+                <!--{{ product?.unitName }}-->
+                <!--</td>-->
+                <!--<td class="text-right bold">-->
+                <!--{{ conversionUnit?.salePrice | ghmCurrency:2 }}-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+                <!--</table>-->
+                <!--</mat-expansion-panel>&lt;!&ndash; END: Product unit conversion &ndash;&gt;-->
                 <!--</div>-->
                 <div class="cm-mgb-10">
                     <mat-expansion-panel hideToggle>
@@ -191,7 +193,8 @@
                                     </span>
                                     </td>
                                     <td class="center middle">
-                                        <dx-check-box [disabled]="true" [value]="attribute?.isShowClient"></dx-check-box>h
+                                        <dx-check-box [disabled]="true"
+                                                      [value]="attribute?.isShowClient"></dx-check-box>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -203,7 +206,7 @@
         </nh-modal-content>
         <nh-modal-footer>
             <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-4">
+                <div class="pull-right cm-mgr-10">
                     <button type="button" class="btn default" i18n="@@close" nh-dismiss
                             [disabled]="isSaving">
                         Đóng
@@ -215,16 +218,16 @@
 </nh-modal>
 
 <swal
-    #confirmDeleteImage
-    i18n="@@confirmDeleteImage"
-    i18n-title="@@confirmTitleDeleteImage"
-    i18n-text="@@confirmTextDeleteImage"
-    title="Are you sure for delete this Image?"
-    type="question"
-    i18n-confirmButtonText="@@accept"
-    i18n-cancelButtonText="@@cancel"
-    confirmButtonText="Accept"
-    cancelButtonText="Cancel"
-    [showCancelButton]="true"
-    [focusCancel]="true">
+        #confirmDeleteImage
+        i18n="@@confirmDeleteImage"
+        i18n-title="@@confirmTitleDeleteImage"
+        i18n-text="@@confirmTextDeleteImage"
+        title="Are you sure for delete this Image?"
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
 </swal>

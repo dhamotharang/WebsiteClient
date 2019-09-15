@@ -45,7 +45,7 @@ export class UnitComponent extends BaseListComponent<UnitSearchViewModel> implem
     }
 
     ngOnInit(): void {
-        this.appService.setupPage(this.pageId.PRODUCT, this.pageId.UNIT, 'Quản lý đơn vị', 'Quản lý sản phẩm');
+        this.appService.setupPage(this.pageId.WAREHOUSE, this.pageId.UNIT, 'Quản lý đơn vị', 'Quản lý sản phẩm');
         this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<UnitSearchViewModel> }) => {
             const data = result.data;
             this.totalRows = data.totalRows;

@@ -2,13 +2,12 @@ import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/c
 import {ToastrService} from 'ngx-toastr';
 import {TreeData} from '../../../../view-model/tree-data';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
-import {NewSearchForSelectViewModel} from '../../../news/new/viewmodel/new-search-for-select.viewmodel';
 import {BaseListComponent} from '../../../../base-list.component';
 import {Products} from '../../model/products.model';
 import * as _ from 'lodash';
-import {ProductService} from '../../services/product.service';
 import {ProductSearchForSelectViewModel} from '../../model/product-search-for-select.viewmodel';
 import {CategoryProductService} from '../../services/category-product.service';
+import {ProductService} from '../service/product.service';
 
 @Component({
     selector: 'app-product-select',

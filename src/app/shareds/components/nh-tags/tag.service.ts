@@ -19,7 +19,7 @@ export class TagService {
                 private toastr: ToastrService,
                 private router: Router) {
         this.urlWebsite = `${environment.apiGatewayUrl}${this.urlWebsite}`;
-        this.urlProduct = `${environment.apiCoreGatewayUrl}${this.urlProduct}`;
+        this.urlProduct = `${environment.apiGatewayUrl}${this.urlProduct}`;
     }
 
     search(isAbsolute: boolean, tenantId: string, languageId: string, keyword: string, type: number, page: number, pageSize: number)

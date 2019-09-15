@@ -10,6 +10,7 @@ import {NhSuggestion} from '../../../../../shareds/components/nh-suggestion/nh-s
 import {APP_CONFIG, IAppConfig} from '../../../../../configs/app.config';
 import {SearchResultViewModel} from '../../../../../shareds/view-models/search-result.viewmodel';
 import {ActionResultViewModel} from '../../../../../shareds/view-models/action-result.viewmodel';
+import {environment} from '../../../../../../environments/environment';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
@@ -35,7 +36,7 @@ export class ProductFormAttributeComponent extends BaseFormComponent implements 
                 private toastr: ToastrService,
                 private productAttributeService: ProductAttributeService) {
         super();
-        this.urlProductAttributeSuggestion = `${appConfig.API_GATEWAY_URL}api/v1/warehouse/product-attributes/suggestion`;
+        this.urlProductAttributeSuggestion = `${environment.apiGatewayUrl}api/v1/warehouse/product-attributes/suggestion`;
     }
 
     ngOnInit() {

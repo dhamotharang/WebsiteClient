@@ -90,17 +90,19 @@
             </div>
         </nh-modal-content>
         <nh-modal-footer>
-            <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
-            <ghm-button classes="btn blue cm-mgr-5"
-                        [loading]="isSaving">
-                <span i18n="@@Save">Lưu</span>
-            </ghm-button>
-            <ghm-button classes="btn default"
-                        nh-dismiss="true"
-                        [type]="'button'"
-                        [loading]="isSaving">
-                <span i18n="@@close">Đóng</span>
-            </ghm-button>
+            <div class="pull-right">
+                <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
+                <ghm-button classes="btn blue cm-mgr-5"
+                            [loading]="isSaving">
+                    <span i18n="@@Save">Lưu</span>
+                </ghm-button>
+                <ghm-button classes="btn default"
+                            nh-dismiss="true"
+                            [type]="'button'"
+                            [loading]="isSaving">
+                    <span i18n="@@close">Đóng</span>
+                </ghm-button>
+            </div>
         </nh-modal-footer>
     </form>
 </nh-modal>

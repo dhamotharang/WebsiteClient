@@ -19,14 +19,16 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
+import {ProductSearchForSelectViewModel} from '../../model/product-search-for-select.viewmodel';
+import {AppService} from '../../../../shareds/services/app.service';
 
 export class ProductService {
-    url = 'api/v1/warehouse/products';
-
+    url = 'api/v1/warehouse/products-management';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinceService: SpinnerService,
                 private http: HttpClient,
                 private spinnerService: SpinnerService,
+                private appService: AppService,
                 private toastr: ToastrService) {
         this.url = `${environment.apiGatewayUrl}${this.url}`;
     }
@@ -217,5 +219,17 @@ export class ProductService {
                 .set('productUnitConversionId', productUnitConversionId)
                 .set('salePrice', salePrice ? salePrice.toString() : '')
         }).pipe(finalize(() => this.spinnerService.hide())) as Observable<ActionResultViewModel>;
+    }
+
+    searchForSelect(keyword: string, categoryId: number, page = 1, pageSize = 20)
+        : Observable<SearchResultViewModel<ProductSearchForSelectViewModel>> {
+        return this.http.get( `${this.url}search-for-select`, {
+            params: new HttpParams()
+                .set('keyword', keyword ? keyword : '')
+                .set('categoryId', categoryId ? categoryId.toString() : '')
+                .set('languageId', this.appService.currentLanguage)
+                .set('page', page ? page.toString() : '')
+                .set('pageSize', pageSize ? pageSize.toString() : '')
+        }) as Observable<SearchResultViewModel<ProductSearchForSelectViewModel>>;
     }
 }

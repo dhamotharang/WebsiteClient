@@ -63,7 +63,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
     }
 
     ngOnInit(): void {
-        this.appService.setupPage(this.pageId.PRODUCT, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Quản lý sản phẩm');
+        this.appService.setupPage(this.pageId.WAREHOUSE, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Quản lý sản phẩm');
         this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<ProductSearchViewModel> }) => {
             const data = result.data;
             this.totalRows = data.totalRows;

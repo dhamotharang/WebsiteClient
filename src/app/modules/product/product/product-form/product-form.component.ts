@@ -77,7 +77,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     ngOnInit(): void {
-        this.appService.setupPage(this.pageId.WAREHOUSE, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Quản lý sản phẩm');
         this.renderForm();
         this.addConversionUnit();
         this.addAttribute();

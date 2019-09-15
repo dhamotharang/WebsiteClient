@@ -19,10 +19,10 @@ export const authConfig: AuthConfig = {
 
 export function getClientSettings(): UserManagerSettings {
     return {
-        authority: `${environment.authentiocationCoreUrl}`,
+        // authority: `${environment.authentiocationCoreUrl}`,
         client_id: 'c3e86dc7-0417-4a2d-88f7-ef1454e5b1ff',
-        redirect_uri: `${environment.redirect_uri}`,
-        post_logout_redirect_uri: `${environment.post_logout_redirect_uri}`,
+        // redirect_uri: `${environment.redirect_uri}`,
+        // post_logout_redirect_uri: `${environment.post_logout_redirect_uri}`,
         client_secret: 'SG9hbmdEZXBUcmFp',
         scope: 'openid profile GHM_Core_Api GHM_Warehouse_Api GHM_Notification_Api',
         response_type: 'id_token token'

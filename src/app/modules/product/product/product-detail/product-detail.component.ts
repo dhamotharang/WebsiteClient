@@ -46,7 +46,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     conversionUnits = [];
     attributes = [];
 
-
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private numberValidator: NumberValidator,
@@ -61,7 +60,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     }
 
     ngOnInit(): void {
-        this.appService.setupPage(this.pageId.WAREHOUSE, this.pageId.PRODUCT, 'Quản lý sản phẩm', 'Quản lý sản phẩm');
     }
 
     ngAfterViewInit() {
