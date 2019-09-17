@@ -80,6 +80,8 @@
                         alignment="center" cssClass="middle"></dxi-column>
             <dxi-column caption="Hiển thị trang chủ" dataField="isHomePage" dataType="boolean" [width]="100"
                         alignment="center" cssClass="middle"></dxi-column>
+            <dxi-column caption="Giải pháp" dataField="isSolution" dataType="boolean" [width]="100"
+                        alignment="center" cssClass="middle"></dxi-column>
             <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
                         *ngIf="permission.edit || permission.delete" cssClass="middle"></dxi-column>
             <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">

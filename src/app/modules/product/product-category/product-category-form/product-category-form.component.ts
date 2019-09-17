@@ -204,6 +204,7 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
                             isHot: productCategoryDetail.isHot,
                             isHomePage: productCategoryDetail.isHomePage,
                             order: productCategoryDetail.order,
+                            isSolution: productCategoryDetail.isSolution,
                             image: productCategoryDetail.image,
                             parentId: productCategoryDetail.parentId,
                             concurrencyStamp: productCategoryDetail.concurrencyStamp,
@@ -263,6 +264,7 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
             image: [this.productCategory.image],
             isHomePage: [this.productCategory.isHomePage],
             isHot: [this.productCategory.isHot],
+            isSolution: [this.productCategory.isSolution],
             order: [this.productCategory.order],
             concurrencyStamp: [this.productCategory.concurrencyStamp],
             productCategoryAttributes: [this.productCategoryAttributes],
@@ -279,6 +281,7 @@ export class ProductCategoryFormComponent extends BaseFormComponent implements O
             isActive: true,
             isHomePage: false,
             isHot: false,
+            isSolution: false,
             image: '',
             order: 0,
         });

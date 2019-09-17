@@ -9,6 +9,7 @@ export class ProductCategory {
     order: number;
     isHomePage: boolean;
     isHot: boolean;
+    isSolution: boolean;
     image: string;
     concurrencyStamp: string;
     productCategoryAttributes: ProductCategoryAttribute[];
@@ -23,6 +24,7 @@ export class ProductCategory {
         this.order = order ? order : 0;
         this.isHomePage = false;
         this.isHot = false;
+        this.isSolution = false;
         this.image = '';
         this.concurrencyStamp = concurrencyStamp;
         this.translations = [];

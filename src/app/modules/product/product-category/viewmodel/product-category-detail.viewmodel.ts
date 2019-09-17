@@ -8,6 +8,7 @@ export class ProductCategoryDetailViewModel {
     parentId: number;
     isActive: boolean;
     isHot: boolean;
+    isSolution: boolean;
     image: string;
     isHomePage: boolean;
     order: number;
