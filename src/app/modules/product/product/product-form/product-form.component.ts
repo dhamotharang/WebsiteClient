@@ -40,7 +40,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 
 export class ProductFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
     @ViewChild(ProductUnitComponent) productUnitComponent: ProductUnitComponent;
-    @ViewChild(ProductFormAttributeComponent ) productAttributeComponent: ProductFormAttributeComponent;
+    @ViewChild(ProductFormAttributeComponent) productAttributeComponent: ProductFormAttributeComponent;
     @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
     @ViewChild('productFormModal') productFormModal: NhModalComponent;
     product = new Product();
@@ -55,6 +55,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     attributeFormErrors: any = {};
     attributeValidationMessages: any = {};
     urlFile = `${environment.fileUrl}`;
+
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private numberValidator: NumberValidator,
@@ -181,6 +182,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     // }
 
     onAttributeSelected(selectedAttribute: any, attributeFormControl: FormControl, index: number) {
+        console.log(selectedAttribute);
         const count = _.countBy(this.attributes.controls, (conversion: FormControl) => {
             return conversion.get('attributeId').value === selectedAttribute.id;
         }).true;
@@ -260,9 +262,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             });
             this.product.attributes = _.filter(this.product.attributes, (productAttributeValue: ProductAttribute) => {
                 return productAttributeValue.attributeId
-                    && productAttributeValue.attributeValues
-                    && productAttributeValue.attributeValues.length > 0;
+                    && ((productAttributeValue.attributeValues
+                    && productAttributeValue.attributeValues.length > 0 && !productAttributeValue.isSelfContent)
+                    || (productAttributeValue.isSelfContent && productAttributeValue.value));
             });
+
             this.isSaving = true;
             if (this.isUpdate) {
                 this.productService
@@ -368,9 +372,10 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['unitId', 'thumbnail', 'isManagementByLot', 'isActive',
+        this.formErrors = this.utilService.renderFormError(['id', 'unitId', 'thumbnail', 'isManagementByLot', 'isActive',
             'categories', 'salePrice']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
+            {'id': ['maxLength', 'pattern']},
             {'unitId': ['required', 'maxLength']},
             {'thumbnail': ['maxLength']},
             {'categories': ['required']},
@@ -380,6 +385,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         ]);
 
         this.model = this.fb.group({
+            id: [this.product.id, [Validators.maxLength(50),
+                Validators.pattern('[a-zA-Z0-9]+([-_\\.][a-z0-9]+)*[a-z0-9]$')]],
             unitId: [this.product.unitId, [
                 Validators.required,
                 Validators.maxLength(50)
@@ -428,7 +435,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             this.validateTranslation(false)
         );
         return translationModel;
-    }
+    };
 
     private resetForm() {
         this.id = null;
@@ -535,6 +542,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         this.subscribers.getDetail = this.productService.getDetail(productId)
             .subscribe((result: ProductDetailViewModel) => {
                 this.model.patchValue({
+                    id: productId,
                     categories: result.categories.map((category: any) => category.categoryId),
                     unitId: result.unitId,
                     unitName: result.unitName,

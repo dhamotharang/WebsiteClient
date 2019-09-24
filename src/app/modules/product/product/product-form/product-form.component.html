@@ -22,6 +22,22 @@
                     </div>
                 </div>
                 <div class="form-group" [formGroup]="model"
+                     [class.has-error]="formErrors?.id">
+                    <label class="control-label col-sm-4" i18n-ghmLabel="@@productCategory"
+                           ghmLabel="Mã sản phẩm"></label>
+                    <div class="col-sm-8">
+                        <ghm-input
+                                elementId="{{'code ' + currentLanguage}}"
+                                formControlName="id"
+                                placeholder="Không nhập mã sản phẩm hệ thống sẽ tự sinh mã"
+                                [isDisabled]="isUpdate"
+                                i18n-placeholder="@@enterProductName"></ghm-input>
+                        <span class="help-block">
+                                {formErrors?.id, select, maxlength {Mã sản phẩm không được vượt quá 500 ký tự.} pattern {Mã sản phẩm không đúng định dạng}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model"
                      [class.has-error]="formErrors?.categories">
                     <label class="control-label col-sm-4" i18n-ghmLabel="@@productCategory"
                            ghmLabel="Nhóm sản phẩm"
@@ -175,7 +191,7 @@
                                      [errorImageUrl]="'/assets/images/no-image.png'">
                                 <button class="btn btn-sm btn-remove red" type="button"
                                         [swal]="confirmDeleteImage"
-                                        (confirm)="removeImage(item)">
+                                        (click)="removeImage(item)">
                                     <i class="fa fa-times"></i>
                                 </button>
                                 <button class="btn btn-sm btn-check blue"

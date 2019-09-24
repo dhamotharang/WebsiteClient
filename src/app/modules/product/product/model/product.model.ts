@@ -1,10 +1,11 @@
-import { ProductTranslation } from './product-translation.model';
-import { ProductImage } from './product-image.model';
-import { ProductListUnit } from '../product-form/product-unit/model/product-list-unit.model';
-import { ProductConversionUnit } from '../product-form/product-unit/model/product-conversion-unit.model';
-import { ProductAttribute } from '../product-form/product-attribute/model/product-value.model';
+import {ProductTranslation} from './product-translation.model';
+import {ProductImage} from './product-image.model';
+import {ProductListUnit} from '../product-form/product-unit/model/product-list-unit.model';
+import {ProductConversionUnit} from '../product-form/product-unit/model/product-conversion-unit.model';
+import {ProductAttribute} from '../product-form/product-attribute/model/product-value.model';
 
 export class Product {
+    id: string;
     isActive: boolean;
     isManagementByLot: boolean;
     thumbnail: string;
@@ -24,6 +25,7 @@ export class Product {
     isHot?: boolean;
 
     constructor() {
+        this.id = '';
         this.isActive = true;
         this.isManagementByLot = true;
         this.images = [];
