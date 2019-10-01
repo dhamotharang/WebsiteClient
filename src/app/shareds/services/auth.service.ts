@@ -6,6 +6,7 @@ import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
 import {Resolve, Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../environments/environment';
+import {AuthWebsiteService} from './auth-website.service';
 
 export class SigninData {
     isLoggedIn: boolean;
@@ -29,6 +30,7 @@ export class AuthService implements Resolve<any> {
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private router: Router,
                 private toastr: ToastrService,
+                private authWebsiteService: AuthWebsiteService,
                 private http: HttpClient) {
     }
 
@@ -124,9 +126,11 @@ export class AuthService implements Resolve<any> {
         this.token = '';
         this.refreshToken = '';
         this.isLoggedIn = false;
+
         if (localStorage) {
             localStorage.clear();
         }
+
     }
 
     signOut() {

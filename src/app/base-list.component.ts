@@ -12,7 +12,7 @@ export class BaseListComponent<TEntity> implements OnDestroy {
     appService: AppService;
     keyword: string;
     currentPage = 1;
-    pageSize = 10;
+    pageSize = 20;
     totalRows = 0;
     totalRows$: Observable<number>;
     isSearching = false;
@@ -31,8 +31,13 @@ export class BaseListComponent<TEntity> implements OnDestroy {
         report: false
     };
 
+    appConfig: IAppConfig;
+    pageId: IPageId;
+
     constructor() {
         this.appService = AppInjector.get(AppService);
+        this.appConfig = AppInjector.get(APP_CONFIG);
+        this.pageId = AppInjector.get(PAGE_ID);
         setTimeout(() => {
             this.permission = this.appService.getPermissionByPageId();
         });
@@ -59,8 +64,9 @@ export class BaseListComponent<TEntity> implements OnDestroy {
     //     this.permission.approve = appService.checkPermission(pageId, Permission.approve);
     //     this.permission.report = appService.checkPermission(pageId, Permission.report);
     // }
+
     loadComponent<T>(viewContainerRef: ViewContainerRef,
-                    component: Type<T>) {
+                     component: Type<T>) {
         const {injector} = viewContainerRef;
         const componentFactoryResolver = injector.get(ComponentFactoryResolver);
         const componentFactory = componentFactoryResolver.resolveComponentFactory(component);

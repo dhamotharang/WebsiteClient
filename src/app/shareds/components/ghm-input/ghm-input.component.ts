@@ -17,17 +17,19 @@ import {UtilService} from '../../services/util.service';
 
 export class GhmInputComponent implements OnInit, ControlValueAccessor {
     @ViewChild('ghmInput') ghmInputElement: ElementRef;
-    @Input() icon = 'fa fa-pencil';
+    @Input() icon = 'dx-icon-edit';
     @Input() removeIcon = 'fa fa-times';
     @Input() isDisabled = false;
     @Input() allowRemove = true;
     @Input() elementId = '';
     @Input() placeholder = '';
-    @Input() name: string;
+    @Input() name;
+    @Input() classes;
     @Input() type = 'text';
     @Output() setVale = new EventEmitter();
     @Output() keyUp = new EventEmitter();
     @Output() remove = new EventEmitter();
+    @Output() blur = new EventEmitter();
 
     constructor(private utilService: UtilService) {
     }
@@ -46,7 +48,7 @@ export class GhmInputComponent implements OnInit, ControlValueAccessor {
     }
 
     propagateChange: any = () => {
-    };
+    }
 
     writeValue(value) {
         this.value = value;
@@ -83,5 +85,9 @@ export class GhmInputComponent implements OnInit, ControlValueAccessor {
         setTimeout(() => {
             this.ghmInputElement.nativeElement.focus();
         });
+    }
+
+    onBlur(value) {
+        this.blur.emit(value.target.value);
     }
 }

@@ -1,9 +1,9 @@
-import { FormArray, FormGroup } from '@angular/forms';
-import { Injectable } from '@angular/core';
-import { isNumber } from 'util';
+import {FormArray, FormGroup} from '@angular/forms';
+import {Injectable, Type, ViewContainerRef} from '@angular/core';
+import {isNumber} from 'util';
 import * as _ from 'lodash';
-import { FilterLink } from '../models/filter-link.model';
-import { TimeObject } from '../models/time-object.model';
+import {FilterLink} from '../models/filter-link.model';
+import {TimeObject} from '../models/time-object.model';
 
 /**
  * Created by HoangNH on 5/13/2017.
@@ -54,6 +54,7 @@ export class UtilService {
     }
 
     focusElement(selector: string, isId: boolean = true) {
+
         setTimeout(() => {
             if (isId) {
                 const element: any = document.getElementById(selector);
@@ -69,6 +70,30 @@ export class UtilService {
                 }
             }
         }, 200);
+    }
+
+    setValueElement(selector: string, isId: boolean = true, value: any) {
+
+        setTimeout(() => {
+            if (isId) {
+                $(`#${selector}`).val(value);
+            } else {
+                $(`.${selector}`).val(value);
+            }
+        }, 200);
+    }
+
+    scrollIntoView(selector: string, isCenter?: boolean) {
+        const element = document.getElementById(`${selector}`);
+        if (element) {
+            setTimeout(() => {
+                if (isCenter) {
+                    element.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'nearest'});
+                } else {
+                    element.scrollIntoView();
+                }
+            }, 50);
+        }
     }
 
     renderFormError(args: (string | Object)[]): any {
@@ -177,7 +202,7 @@ export class UtilService {
                 param.value === undefined || param.value == null
                     ? ''
                     : param.value
-            }`;
+                }`;
         });
         return query;
     }
@@ -259,7 +284,24 @@ export class UtilService {
         return !isNaN(obj - 0) && obj != null;
     }
 
-    loadComponent() {}
+    loadComponent<T>(viewContainerRef: ViewContainerRef, component: Type<T>) {
+    }
+
+    isObject(obj) {
+        return (typeof obj === 'object' && !Array.isArray(obj) && obj !== null);
+    }
+
+    convertToAbbreviation(str: string) {
+        if (str) {
+            const split = str.trim().split(' ');
+            let result = '';
+            _.each(split, (item) => {
+                result += this.stripToVietnameChar(item.charAt(0)).toUpperCase();
+            });
+
+            return result;
+        }
+    }
 
     private stripToVietnameChar(str): string {
         str = str.toLowerCase();
@@ -327,5 +369,44 @@ export class UtilService {
             }
         }
         return inValidCount === 0 && isValid;
+    }
+
+    renderSuggestionDays() {
+        let days = [];
+        for (let i = 1; i <= 31; i++) {
+            days = [...days, {id: i, name: i}];
+        }
+        return days;
+    }
+
+    renderSuggestionMonths() {
+        let months = [];
+        for (let i = 1; i <= 12; i++) {
+            months = [...months, {id: i, name: i}];
+        }
+        return months;
+    }
+
+    renderListMonth() {
+        let listMonths = [];
+        for (let i = 1; i <= 12; i++) {
+            listMonths = [...listMonths, {
+                id: i, name: i.toString()
+            }];
+        }
+        return listMonths;
+    }
+
+    renderListYear() {
+        const year = 2018;
+        const diff = new Date().getFullYear() - year;
+        let listYears = [];
+        for (let i = 0; i <= diff; i++) {
+            const currentYear = year + i;
+            listYears = [...listYears, {
+                id: currentYear, name: currentYear.toString()
+            }];
+        }
+        return listYears;
     }
 }

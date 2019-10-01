@@ -52,12 +52,10 @@ export class EventAlbumComponent extends BaseListComponent<EventAlbumViewmodel> 
     search(currentPage: number) {
         this.currentPage = currentPage;
         this.isSearching = true;
-
         this.eventService
             .searchAlbum(this.eventId, this.currentPage, this.pageSize)
             .pipe(finalize(() => this.isSearching = false))
             .subscribe((result: SearchResultViewModel<EventAlbumViewmodel>) => {
-                this.totalRows = result.totalRows;
                 this.listAlbum = result.items;
             });
     }

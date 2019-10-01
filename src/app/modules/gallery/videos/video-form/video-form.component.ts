@@ -30,6 +30,7 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
     videoLinkId;
     thumbnail;
     videoType;
+    albumExist: boolean;
     VideoType = VideoType;
     tagType = TagType;
     listTag = [];
@@ -57,7 +58,8 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
                 private tagService: TagService,
                 private videoService: VideoService) {
         super();
-        this.currentUser = this.appService.currentUser;
+        console.log(this.appService.currentUser);
+        // this.currentUser = this.appService.currentUser;
     }
 
     ngOnInit() {
@@ -68,7 +70,7 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
         this.isModified = false;
     }
 
-    add() {
+    add(albumExist: boolean) {
         this.utilService.focusElement('url ' + this.currentLanguage);
         this.isUpdate = false;
         this.videoType = VideoType.youtube;
@@ -95,33 +97,34 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
                 isUpdate: this.isUpdate
             });
             this.resetForm();
+            this.videoFormModal.dismiss();
             if (this.isUpdate || !this.isCreateAnother) {
                 this.videoFormModal.dismiss();
             } else {
                 this.utilService.focusElement('url ' + this.currentLanguage);
             }
-            this.isSaving = true;
-            if (this.isUpdate) {
-                this.videoService.update(this.video.id, this.video)
-                    .pipe(finalize(() => this.isSaving = false))
-                    .subscribe(() => {
-                        this.isModified = true;
-                        // this.onSaveSuccess.emit();
-                        this.videoFormModal.dismiss();
-                    });
-            } else {
-                this.videoService.insert(this.video)
-                    .pipe(finalize(() => this.isSaving = false))
-                    .subscribe(() => {
-                        this.isModified = true;
-                        if (this.isCreateAnother) {
-                            this.resetForm();
-                        } else {
-                            // this.onSaveSuccess.emit();
-                            this.videoFormModal.dismiss();
-                        }
-                    });
-            }
+            // this.isSaving = true;
+            // if (this.isUpdate) {
+            //     this.videoService.update(this.video.id, this.video)
+            //         .pipe(finalize(() => this.isSaving = false))
+            //         .subscribe(() => {
+            //             this.isModified = true;
+            //             // this.onSaveSuccess.emit();
+            //             this.videoFormModal.dismiss();
+            //         });
+            // } else {
+            //     this.videoService.insert(this.video)
+            //         .pipe(finalize(() => this.isSaving = false))
+            //         .subscribe(() => {
+            //             this.isModified = true;
+            //             if (this.isCreateAnother) {
+            //                 this.resetForm();
+            //             } else {
+            //                 // this.onSaveSuccess.emit();
+            //                 this.videoFormModal.dismiss();
+            //             }
+            //         });
+            // }
         }
     }
 
@@ -240,15 +243,6 @@ export class VideoFormComponent extends BaseFormComponent implements OnInit {
                 thumbnail: this.thumbnail
             });
         }
-    }
-
-    removeTag(value) {
-        this.tagService.deleteTag(value.id).subscribe((result: ActionResultViewModel) => {
-        });
-    }
-
-    selectListTag(value) {
-        this.listTag = value;
     }
 
     closeModal() {

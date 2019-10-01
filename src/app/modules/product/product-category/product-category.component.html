@@ -1,0 +1,146 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listProductCategoryPageTitle">Danh sách nhóm sản phẩm</span>
+    <small i18n="@@productModuleTitle">Quản lý sản phẩm</small>
+</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-inline " (ngSubmit)="search(1)">
+            <div class="form-group cm-mgr-5">
+                <ghm-input icon="dx-icon-search" i18n="@@keywordSearch" i18n-placeholder
+                           placeholder="Nhập từ khóa tìm kiếm" elementId="searchInput"
+                           (remove)="search(1)"
+                           name="searchInput" [(ngModel)]="keyword"></ghm-input>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <ghm-select
+                        [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Kích hoạt'}]"
+                        i18n-title="@@selectStatus"
+                        [width]="200"
+                        [title]="'-- Chọn trạng thái --'"
+                        [(value)]="isActive"
+                        (itemSelected)="selectIsActive($event)"></ghm-select>
+            </div>
+            <div class="form-group">
+                <button class="btn blue" type="submit">
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group cm-mgl-5">
+                <button class="btn btn-light" type="button" (click)="resetFormSearch()">
+                    <i class="dx-icon-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <button class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                        type="button">
+                    Thêm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 cm-mgb-20">
+        <dx-tree-list
+                id="questionGroup"
+                [dataSource]="listProductCategory"
+                keyExpr="id"
+                parentIdExpr="parentId"
+                [autoExpandAll]="true"
+                [wordWrapEnabled]="true"
+                [columnAutoWidth]="true"
+                [allowColumnResizing]="true"
+                [allowColumnReordering]="true"
+                [showRowLines]="true"
+                [showBorders]="true"
+                (onContextMenuPreparing)="rightClickContextMenu($event)">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxi-column dataField="name" [width]="250" caption="Nhóm sản phẩm" cssClass="middle"
+                        cellTemplate="nameTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'nameTemplate'">
+                <div class="meadia middle">
+                    <div class="media-left middle">
+                        <!--<img  src="{{urlFile + cell.data.image}}" class="img-reponsive w50"-->
+                             <!--alt="{{cell.data.name}}">-->
+                    </div>
+                    <div class="media-body middle">
+                        <span>{{cell.data.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <dxi-column caption="Mô tả" dataField="description" cssClass="middle"></dxi-column>
+            <dxi-column caption="Trạng thái" dataField="isActive" [width]="100" cellTemplate="activeTemplate"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'activeTemplate'" class="middle center">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isActive"
+                              (onValueChanged)="updateStatus(cell.data)"></dx-check-box>
+            </div>
+            <dxi-column caption="Nhóm nổi bật" dataField="isHot" dataType="boolean" [width]="100"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <dxi-column caption="Hiển thị trang chủ" dataField="isHomePage" dataType="boolean" [width]="100"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <dxi-column caption="Giải pháp" dataField="isSolution" dataType="boolean" [width]="100"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
+                        *ngIf="permission.edit || permission.delete" cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
+                <a *ngIf="permission.edit" class="text-decoration-none dx-icon-edit cm-mgr-5 color-dark-blue"
+                   i18n="@@edit"
+                   (click)="edit(cell.data)">
+                </a>
+                <a *ngIf="permission.delete" class="text-decoration-none dx-icon-remove color-red"
+                   (click)="confirm(cell.data)" i18n="@@delete">
+                </a>
+            </div>
+        </dx-tree-list>
+    </div>
+    <div class="cm-mgt-10 col-sm-12">
+        <ghm-paging
+                class="pull-right"
+                [totalRows]="totalRows"
+                [currentPage]="currentPage"
+                [pageShow]="6"
+                [pageSize]="pageSize"
+                (pageClick)="search($event)"
+                i18n="@@productCategory" i18n-pageName
+                (selectPage)="changePageSize($event)"
+                [pageName]="'Nhóm sản phẩm'">
+        </ghm-paging>
+    </div>
+</div>
+
+<app-product-category-form (saveSuccessful)="search(1)"></app-product-category-form>
+
+<swal
+        #confirmDeleteProductCategory
+        i18n="@@confirmDeleteProductCategory"
+        i18n-title="@@confirmTitleDeleteProductCategory"
+        i18n-text="@@confirmTextDeleteProductCategory"
+        title="Bạn có muốn xóa nhóm sản phẩm này?"
+        text="Bạn không thể khôi phục nhóm sản phẩm này sau khi xóa."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Đồng Ý"
+        cancelButtonText="Hủy"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #waringUpdateProductCategory
+        i18n="@@waringUpdateProductCategory"
+        i18n-title="@@waringTitleUpdateProductCategory"
+        i18n-text="@@waringTextUpdateProductCategory"
+        title="Are you sure for update status isActive this product category?"
+        text="All children product category deactivate ."
+        type="warning"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Đồng Ý"
+        cancelButtonText="Hủy"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+

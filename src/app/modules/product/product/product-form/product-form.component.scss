@@ -1,0 +1,50 @@
+.btn-close {
+  border-left: 1px solid gray;
+}
+.product-modal {
+  .portlet-title {
+    padding: 0 !important;
+    ul {
+      list-style: none;
+      margin-bottom: 0;
+      padding: 0;
+      display: block;
+      width: 100%;
+
+      li {
+        display: inline-block;
+        float: left;
+
+        &.icon {
+          a {
+            display: block;
+            width: 48px;
+            height: 48px;
+          }
+        }
+
+        h4 {
+          margin-top: 15px;
+        }
+      }
+    }
+  }
+  width: 1200px;
+  .portlet-body {
+    overflow-y: auto;
+    max-height: 80vh;
+    .form-body {
+      width: 98%;
+    }
+  }
+  .fileinput {
+    width: 80%;
+    margin-left: 5%;
+  }
+  .image-label {
+    width: 80%;
+    text-align: left;
+    margin-left: 5%;
+  }
+}
+

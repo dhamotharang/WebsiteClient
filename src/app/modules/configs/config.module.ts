@@ -32,7 +32,6 @@ import {UserSettingComponent} from './user-setting/user-setting.component';
 import {NhImageModule} from '../../shareds/components/nh-image/nh-image.module';
 import {GhmSelectPickerModule} from '../../shareds/components/ghm-select-picker/ghm-select-picker.module';
 import {CoreModule} from '../../core/core.module';
-import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-user-picker.module';
 import {AccountComponent} from './account/account.component';
 import {AccountFormComponent} from './account/account-form/account-form.component';
 import {MenuFormComponent} from './menus/menu-form/menu-form.component';
@@ -65,16 +64,16 @@ import {EmailTypeComponent} from './email/email-type/email-type.component';
 import {CoreValuesComponent} from './website/core-values/core-values.component';
 import {CoreValuesFormComponent} from './website/core-values/core-values-form/core-values-form.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {AppService} from '../../shareds/services/app.service';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
-import {ProductModule} from '../warehouse/product/product.module';
+import {ProductModule} from '../product/product.module';
+import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-user-picker.module';
 
 @NgModule({
     imports: [
-        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, NhUserPickerModule, TinymceModule,
+        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule, ProductModule,
         MatCheckboxModule, MatPaginatorModule, MatButtonModule, MatSlideToggleModule, DatetimeFormatModule, NhDateModule, NhDropdownModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmFileExplorerModule, GhmUserSuggestionModule,
-        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, DragDropModule, GhmSelectModule, ProductModule,
+        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, ProductModule, DragDropModule, GhmSelectModule, NhUserPickerModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

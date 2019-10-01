@@ -4,9 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
 import {GhmInputComponent} from './ghm-input.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {DxBoxModule} from 'devextreme-angular';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, MatInputModule, ReactiveFormsModule],
+    imports: [CommonModule, FormsModule, MatInputModule, ReactiveFormsModule, DxBoxModule],
     declarations: [GhmInputComponent],
     exports: [GhmInputComponent]
 })

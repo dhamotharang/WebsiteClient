@@ -11,7 +11,6 @@ import {FilterLink} from '../../../../shareds/models/filter-link.model';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HelperService} from '../../../../shareds/services/helper.service';
-import {QuestionGroupService} from '../../../surveys/question-group/service/question-group.service';
 import * as _ from 'lodash';
 import {ChangeListNewsStatus} from '../model/changeListNewsStatus.model';
 import {ToastrService} from 'ngx-toastr';
@@ -25,7 +24,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
     selector: 'app-news',
     templateUrl: './news-list.component.html',
     providers: [Location, {provide: LocationStrategy, useClass: PathLocationStrategy},
-        NewsService, HelperService, QuestionGroupService]
+        NewsService, HelperService]
 })
 
 export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implements OnInit, AfterViewInit {

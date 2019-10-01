@@ -6,9 +6,9 @@ import {ContactType, PatientContact} from '../model/patient-contact.model';
 import {JobService} from '../config/jobs/service/job.service';
 import {PatientResourceService} from '../config/patient-source/service/patient-resource.service';
 import {IActionResultResponse} from '../../../interfaces/iaction-result-response.result';
-import {UserContact} from '../../hr/user/models/user-contact.model';
 import {ContactPerson} from '../model/contact-person.model';
 import * as _ from 'lodash';
+import {UserContact} from '../model/customer-contact.model';
 
 @Component({
     selector: 'app-customer-detail',

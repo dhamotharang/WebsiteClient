@@ -7,6 +7,9 @@ import {CoreValuesService} from './core-values.service';
 import {CoreValuesFormComponent} from './core-values-form/core-values-form.component';
 import * as _ from 'lodash';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {environment} from '../../../../../environments/environment';
+import {ExplorerItem} from '../../../../shareds/components/ghm-file-explorer/explorer-item.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
     selector: 'app-config-website-core-values',
@@ -19,8 +22,11 @@ export class CoreValuesComponent extends BaseListComponent<CoreValuesSearchViewM
     listCoreValue: CoreValuesSearchViewModel[];
     isShowForm;
     branchId;
+    urlFile = `${environment.fileUrl}`;
 
-    constructor(private  coreValueService: CoreValuesService) {
+    constructor(
+        private toastr: ToastrService,
+        private  coreValueService: CoreValuesService) {
         super();
     }
 

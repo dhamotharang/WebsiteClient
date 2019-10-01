@@ -1,8 +1,4 @@
-//$bgColor: #F4F5F7;
-$bgColor: white;
-$borderColor: #ddd;
-$borderActiveColor: #007bff;
-$danger: #dc3545;
+@import "../../../../assets/styles/config";
 
 nh-suggestion.has-error {
     .nhs-container {
@@ -32,9 +28,10 @@ nh-suggestion.has-error {
 
 .nhs-container {
     border: 1px solid $borderColor;
-    background: $bgColor;
+    background: $white;
     border-radius: 5px !important;
     position: relative;
+    //z-index: 1000;
 
     &:hover {
         cursor: pointer;
@@ -87,7 +84,7 @@ nh-suggestion.has-error {
                     border: none;
                     display: block;
                     width: 100%;
-                    background: $bgColor;
+                    background: $white;
 
                     &:focus, &:visited, &:active {
                         outline: none !important;
@@ -113,13 +110,26 @@ nh-suggestion.has-error {
                         color: rgb(37, 56, 88);
                         cursor: default;
                         display: flex;
-                        height: 20px;
+                        height: 25px;
                         line-height: 1;
                         border-radius: 3px;
                         margin: 4px !important;
                         padding: 0px;
                         overflow: initial;
                         user-select: none;
+                        display: flex;
+                        align-items: center;
+
+                        .nhs-item-image {
+                            width: 20px;
+                            height: 20px;
+                            overflow: hidden;
+                            //border-radius: 50% !important;
+                            //img {
+                            //    width: 100%;
+                            //    height: 100%;
+                            //}
+                        }
 
                         .avatar-wrapper {
                             -webkit-box-align: center;
@@ -179,12 +189,15 @@ nh-suggestion.has-error {
         border-radius: 5px !important;
         box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.31) 0px 0px 1px;
 
+        &.hidden {
+            display: none;
+        }
+
         ul {
             padding: 5px 0;
 
             li {
                 -webkit-box-align: center;
-                align-items: center;
                 box-sizing: border-box;
                 color: rgb(23, 43, 77);
                 cursor: pointer;
@@ -192,12 +205,22 @@ nh-suggestion.has-error {
                 flex-wrap: nowrap;
                 font-size: 14px;
                 font-weight: normal;
-                padding: 0px 12px;
+                padding: 4px 12px;
                 text-decoration: none;
+                align-items: center;
+                width: 100%;
+                //border-bottom: 1px dashed $borderColor;
 
                 &.active, &:hover, &.selected {
                     cursor: pointer;
-                    background-color: rgb(244, 245, 247);
+                    background-color: #e6e6e6;
+                    color: #333 !important;
+
+                    .nhs-item-info {
+                        .nh-suggestion-name, .nh-suggestion-des {
+                            color: #333;
+                        }
+                    }
                 }
 
                 &.searching {
@@ -208,7 +231,63 @@ nh-suggestion.has-error {
                     }
 
                     div {
-                        margin-left: 5px;
+                        margin-left: 10px;
+                        margin-top: 10px;
+                    }
+                }
+
+                &:last-child {
+                    border-bottom: none !important;
+
+                    &.load-more {
+                        text-align: center;
+
+                        a {
+                            display: block;
+                            width: 100%;
+                            text-decoration: none;
+
+                            &:hover {
+                                color: white;
+                                text-decoration: none;
+                            }
+
+                            &:visited, &:active, &:focus {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+
+                .nhs-item-image {
+                    margin-right: 5px;
+                    width: 32px;
+                    height: 32px;
+                    overflow: hidden;
+                    //border-radius: 50% !important;
+                    //img {
+                    //    width: 100%;
+                    //    height: 100%;
+                    //}
+                }
+
+                .nhs-item-info {
+                    flex: 1;
+                    overflow: hidden;
+
+                    .nh-suggestion-name {
+                        color: #333;
+                        width: 100%;
+                        font-size: 1rem;
+                        margin-top: 0;
+                        margin-bottom: 3px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .nh-suggestion-des {
+                        color: #999;
                     }
                 }
             }
@@ -327,5 +406,16 @@ nh-suggestion {
         .nhs-container {
             border: 1px solid $danger;
         }
+    }
+}
+
+.disabled {
+    cursor: no-drop;
+    input {
+        background-color: #eef1f5 !important;
+    }
+
+    .icon-prepend {
+        color: #686868;
     }
 }

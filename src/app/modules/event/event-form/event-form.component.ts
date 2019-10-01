@@ -16,6 +16,7 @@ import {EventStatus} from '../constants/event-status.const';
 import {ActivatedRoute} from '@angular/router';
 import {NhWizardComponent} from '../../../shareds/components/nh-wizard/nh-wizard.component';
 import {ExplorerItem} from '../../../shareds/components/ghm-file-explorer/explorer-item.model';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-event-form',
@@ -81,16 +82,18 @@ export class EventFormComponent extends BaseFormComponent implements OnInit, Aft
             if (contentEditor.elementId === editorId) {
                 if (explorereItems instanceof Array) {
                     explorereItems.forEach((explorerItem: ExplorerItem) => {
+                        const imageAbsoluteUrl = environment.fileUrl + explorerItem.url;
                         if (!explorerItem.isImage) {
                             return;
                         }
-                        contentEditor.append(`<img class="img-responsive" style="margin-left: auto; margin-right: auto" src="${explorerItem.absoluteUrl}" data-url="${explorerItem.url}" />`, editorId);
+                        contentEditor.append(`<img class="img-responsive" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}" />`, editorId);
                     });
                 } else {
+                    const imageAbsoluteUrl = environment.fileUrl + explorereItems.url;
                     if (!explorereItems.isImage) {
                         return;
                     }
-                    contentEditor.append(`<img class="img-responsive" style="margin-left: auto; margin-right: auto" src="${explorereItems.absoluteUrl}" data-url="${explorereItems.url}" />`, editorId);
+                    contentEditor.append(`<img class="img-responsive" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}" />`, editorId);
                 }
             }
         });

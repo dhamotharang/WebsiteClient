@@ -1,0 +1,19 @@
+<nh-dropdown multiple="">
+    <button type="button" class="btn btn-light">
+        <i class="fa fa-cog"></i>
+    </button>
+    <ul class="nh-dropdown-menu right" role="menu">
+        <li>
+            <dx-check-box [(value)]="filterRow" [text]="'Filter Row'" (onValueChanged)="selectFilterRow.emit(filterRow)"></dx-check-box>
+        </li>
+        <li>
+            <dx-check-box [(value)]="filterHeader" [text]="'Filter Header'" (onValueChanged)="selectFilterHeader.emit(filterHeader)"></dx-check-box>
+        </li>
+        <li>
+            <dx-check-box [(value)]="groupColumn" [text]="'Group Column'" (onValueChanged)="selectGroupColumn.emit(groupColumn)"></dx-check-box>
+        </li>
+        <li>
+            <dx-check-box [(value)]="chooseColumn" [text]="'Choose Column'" (onValueChanged)="selectChooseColumn.emit(chooseColumn)"></dx-check-box>
+        </li>
+    </ul>
+</nh-dropdown>

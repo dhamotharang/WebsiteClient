@@ -4,7 +4,6 @@ import {NhModalComponent} from '../../../shareds/components/nh-modal/nh-modal.co
 import {EventService} from '../event.service';
 import {EventDay, EventDayTranslation} from '../models/event-day.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SurveyTranslation} from '../../surveys/survey/survey-translation.model';
 import * as _ from 'lodash';
 import {NumberValidator} from '../../../validators/number.validator';
 import {finalize} from 'rxjs/operators';
@@ -95,7 +94,7 @@ export class EventDayFormComponent extends BaseFormComponent implements OnInit {
                     this.model.patchValue(eventDay);
                     if (eventDay.eventDayTranslations && eventDay.eventDayTranslations.length > 0) {
                         this.modelTranslations.controls.forEach((model: FormGroup) => {
-                            const detail = _.find(eventDay.eventDayTranslations, (translation: SurveyTranslation) => {
+                            const detail = _.find(eventDay.eventDayTranslations, (translation: any) => {
                                 return translation.languageId === model.value.languageId;
                             });
                             if (detail) {

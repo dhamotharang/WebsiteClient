@@ -92,8 +92,8 @@ export class VideoComponent extends BaseListComponent<VideoSearchViewModel> impl
         }
     }
 
-    add() {
-        this.videoFormComponent.add();
+    add(albumExist: boolean = true) {
+        this.videoFormComponent.add(albumExist);
     }
 
     search() {

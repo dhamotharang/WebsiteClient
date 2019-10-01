@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -7,14 +8,14 @@ import {
     Input,
     OnDestroy,
     OnInit,
-    Output,
+    Output, ViewChild,
     ViewEncapsulation
 } from '@angular/core';
 import * as _ from 'lodash';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { NhSuggestionService } from './nh-suggestion.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export class NhSuggestion<T = any> {
     id: string | number;
@@ -23,6 +24,8 @@ export class NhSuggestion<T = any> {
     isSelected: boolean;
     isActive: boolean;
     data: T;
+    description: string;
+    image: string;
 
     constructor(id?: string | number, name?: string, icon?: string, isSelected?: boolean, isActive?: boolean, data?: any) {
         this.id = id;
@@ -31,6 +34,8 @@ export class NhSuggestion<T = any> {
         this.isSelected = isSelected !== undefined && isSelected != null ? isSelected : false;
         this.isActive = isActive !== undefined && isActive != null ? isActive : false;
         this.data = data;
+        this.description = '';
+        this.image = null;
     }
 }
 
@@ -49,12 +54,15 @@ export class NhSuggestion<T = any> {
 })
 
 export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAccessor {
+    @ViewChild('searchResultContainer') private searchResultContainer: ElementRef;
     @Input() multiple = false;
     @Input() isShowSelected = true;
     @Input() placeholder = '';
     @Input() loading = false;
     @Input() pageSize: number;
     @Input() allowAdd = false;
+    @Input() readonly = false;
+    @Input() isShowImage = false;
 
     @Input()
     set totalRows(value: number) {
@@ -102,8 +110,10 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
     currentPage = 1;
     totalPages = 0;
     searchTerm$ = new Subject<string>();
+    lastScrollHeight;
 
     constructor(private el: ElementRef,
+                private ref: ChangeDetectorRef,
                 private nhSuggestionService: NhSuggestionService) {
         this.id = Math.floor(Math.random() * 1000).toString();
         this.searchTerm$.pipe(
@@ -115,10 +125,13 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
     }
 
     @Input()
-    set selectedItem(value: NhSuggestion) {
-        this._selectedItem = value;
-        if (value) {
-            this.isShowSearchBox = false;
+    set selectedItem(value: NhSuggestion | NhSuggestion[]) {
+        if (value instanceof Array) {
+            this._selectedItems = value;
+            this.isShowSearchBox = !value || value.length === 0;
+        } else {
+            this._selectedItem = value;
+            this.isShowSearchBox = value ? false : true;
         }
     }
 
@@ -126,8 +139,12 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
         return this._selectedItem;
     }
 
+    get selectedItems() {
+        return this._selectedItems;
+    }
+
     propagateChange: any = () => {
-    };
+    }
 
     get isShowSearchBox() {
         return this._isShowSearchBox;
@@ -150,10 +167,6 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
 
     get sources() {
         return this._sources ? this._sources : [];
-    }
-
-    get selectedItems() {
-        return this._selectedItems;
     }
 
     get totalRows() {
@@ -187,7 +200,8 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
     @HostListener('document:click', ['$event'])
     onDocumentClick(targetElement) {
         if (this.el.nativeElement && !this.el.nativeElement.contains(targetElement.target)) {
-            this.nhSuggestionService.setActive(this, false);
+            // this.nhSuggestionService.setActive(this, false);
+            this.isActive = false;
             if (this.selectedItem || (this.selectedItems && this.selectedItems.length > 0)) {
                 this.isShowSearchBox = false;
             }
@@ -299,12 +313,23 @@ export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAcc
     loadMore(event) {
         event.preventDefault();
         event.stopPropagation();
+        if (this.searchResultContainer) {
+            this.lastScrollHeight = this.searchResultContainer.nativeElement.scrollTop;
+        }
         this.currentPage += 1;
         this.nextPage.emit({
             keyword: this.keyword,
             page: this.currentPage,
             pageSize: this.pageSize
         });
+    }
+
+    updateScrollPosition() {
+        if (this.searchResultContainer) {
+            setTimeout(() => {
+                this.searchResultContainer.nativeElement.scrollTop = this.lastScrollHeight;
+            });
+        }
     }
 
     private navigate(key) {

@@ -14,6 +14,8 @@ import { PageService } from './modules/configs/page/page.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from './shareds/services/auth.service';
 import { NotificationService } from './shareds/services/notification.service';
+import {JwksValidationHandler, OAuthService} from 'angular-oauth2-oidc';
+import {authConfig} from './shareds/constants/auth-config.const';
 
 @Component({
     selector: 'body',
@@ -34,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 private notificationService: NotificationService,
                 private authService: AuthService,
                 private spinnerService: SpinnerService) {
-        this.subscribers.router = this.router.events.subscribe(e => this.navigationInterceptor(e));
+        this.subscribers.router = this.router.events.subscribe(e => this.navigationInterceptor(e));;
     }
 
     ngOnInit() {

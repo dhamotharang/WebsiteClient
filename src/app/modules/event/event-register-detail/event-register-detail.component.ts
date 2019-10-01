@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseFormComponent } from '../../../base-form.component';
 import { NhModalComponent } from '../../../shareds/components/nh-modal/nh-modal.component';
-import { AccompanyPerson, EventRegister, EventDayRegister } from '../models/event-register.model';
 import { EventService } from '../event.service';
-import { CustomerService } from '../../customer/service/customer.service';
 import {
     EventRegisterDetailViewModel
 } from '../event-register/event-register-detail.viewmodel';
@@ -11,7 +9,6 @@ import {
 @Component({
     selector: 'app-event-register-detail',
     templateUrl: './event-register-detail.component.html',
-    providers: [CustomerService]
 })
 
 export class EventRegisterDetailComponent extends BaseFormComponent implements OnInit {
@@ -20,8 +17,7 @@ export class EventRegisterDetailComponent extends BaseFormComponent implements O
     eventRegisterDetail: EventRegisterDetailViewModel;
     eventId: string;
 
-    constructor(private eventService: EventService,
-                private customerService: CustomerService) {
+    constructor(private eventService: EventService) {
         super();
     }
 

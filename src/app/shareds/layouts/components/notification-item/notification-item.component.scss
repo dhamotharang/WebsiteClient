@@ -43,7 +43,7 @@ app-notification-item {
         }
 
         &.readed {
-            border-left: 3px solid $border-color;
+            background: #edf2fa;
         }
 
         &:hover {

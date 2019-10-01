@@ -1,11 +1,19 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthComponent } from './auth.component';
-import { AuthCallbackComponent } from './callback/auth-callback.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthComponent} from './auth.component';
+import {AuthCallbackComponent} from './callback/auth-callback.component';
+import {LoginCoreComponent} from './login-core/login-core.component';
+import {AuthService} from '../shareds/services/auth.service';
 
 const routes: Routes = [
-    { path: '', component: AuthComponent },
-    { path: 'auth-callback', component: AuthCallbackComponent }
+    {
+        path: '',
+        resolve: {
+            data: AuthService
+        }, component: AuthComponent
+    },
+    {path: 'core', component: LoginCoreComponent},
+    {path: 'auth-callback', component: AuthCallbackComponent}
 ];
 
 @NgModule({

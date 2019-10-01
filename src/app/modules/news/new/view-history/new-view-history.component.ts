@@ -3,7 +3,6 @@ import {ActivatedRoute} from '@angular/router';
 import {BaseListComponent} from '../../../../base-list.component';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
-import {NewsFormComponent} from '../../../website/news/news-form/news-form.component';
 import {NewsService} from '../service/news.service';
 import {NewViewHistoryViewModel} from '../viewmodel/new-view-history.viewmodel';
 import {finalize, map} from 'rxjs/operators';
@@ -12,6 +11,7 @@ import {FilterLink} from '../../../../shareds/models/filter-link.model';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HelperService} from '../../../../shareds/services/helper.service';
 import {UtilService} from '../../../../shareds/services/util.service';
+import {NewsFormComponent} from '../news-form/news-form.component';
 
 @Component({
     selector: 'app-news-view-history',

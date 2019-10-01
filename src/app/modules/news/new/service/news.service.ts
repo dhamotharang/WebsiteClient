@@ -56,8 +56,8 @@ export class NewsService {
         })) as Observable<SearchNewViewModel>;
     }
 
-    searchForSelect(keyword?: string, categoryId?: number,
-                    page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE): Observable<SearchResultViewModel<NewSearchForSelectViewModel>> {
+    searchForSelect(keyword?: string, categoryId?: number, page: number = 1, pageSize: number = this.appConfig.PAGE_SIZE)
+        : Observable<SearchResultViewModel<NewSearchForSelectViewModel>> {
         return this.http.get(`${this.url}search-for-select`, {
             params: new HttpParams()
                 .set('keyword', keyword ? keyword : '')

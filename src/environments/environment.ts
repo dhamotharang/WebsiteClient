@@ -3,31 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  apiGatewayUrl: 'http://localhost:50008/',
-  notificationUrl: 'http://localhost:50004',
-  fileUrl: 'http://localhost:50005/',
-  filemanagementUrl: 'http://localhost:50005/api/v1/',
+    production: false,
+    apiGatewayUrl: 'http://localhost:50008/',
+    notificationUrl: 'http://localhost:50004',
+    fileUrl: 'http://localhost:50005/',
+    filemanagementUrl: 'http://localhost:50005/api/v1/',
 
-
-    // production: false,
-    // apiGatewayUrl: 'https://websiteapi.ghmsoft.vn/',
-    // notificationUrl: 'https://websitenotification.ghmsoft.vn',
-    // fileUrl: 'https://websitefile.ghmsoft.vn/',
-    // filemanagementUrl: 'https://websitefile.ghmsoft.vn/api/v1/',
-
-    //test
-    // production: false,
-    // apiGatewayUrl: 'http://testwebsiteapi.ghmsoft.vn/',
-    // notificationUrl: 'http://testwebsitenotification.ghmsoft.vn',
-    // fileUrl: 'http://testwebsitefile.ghmsoft.vn/',
-    // filemanagementUrl: 'http://testwebsitefile.ghmsoft.vn/api/v1/',
-  // product
-  // production: true,
-  // apiGatewayUrl: 'http://quyapigateway.ghmsoft.vn/',
-  // notificationUrl: 'http://localhost:50004',
-  // fileUrl: 'http://quyfile.ghmsoft.vn/',
-  // filemanagementUrl: 'http://quyfile.ghmsoft.vn/api/v1/',
+    // production: true,
+    // apiGatewayUrl: 'https://testwebsiteapi.ghmsoft.vn/',
+    // notificationUrl: 'https://testwebsitenotification.ghmsoft.vn',
+    // fileUrl: 'https://testwebsitefile.ghmsoft.vn/',
+    // filemanagementUrl: 'https://testwebsitefile.ghmsoft.vn/api/v1/',
 };
 
 /*

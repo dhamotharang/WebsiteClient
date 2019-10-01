@@ -20,6 +20,7 @@ import {ToastrService} from 'ngx-toastr';
 import {debounceTime, distinctUntilChanged, finalize} from 'rxjs/internal/operators';
 import {TagService} from './tag.service';
 import {SearchResultViewModel} from '../../view-models/search-result.viewmodel';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'nh-tag',
@@ -30,6 +31,7 @@ import {SearchResultViewModel} from '../../view-models/search-result.viewmodel';
 export class NhTagComponent implements OnInit, AfterViewInit {
     @ViewChild('tagInput') tagInput: ElementRef;
     @Input() url = 'tag/search-tag';
+    @Input() urlAbsolute = ``;
     @Input() placeholder = 'Nhập tag';
     @Input() value: string;
     @Input() languageId: string;
@@ -45,7 +47,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
     @Input() objectId = 0;
     @Input() pageSize = 20;
     @Input() listTag: Tag[] = [];
-
+    @Input() isAbsoluteUrl = false;
     isSearching = false;
     isShowMenu = false;
     listItems = [];
@@ -54,7 +56,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
     message: IMessage;
     private _text: string;
     propagateChange: any = () => {
-    }
+    };
 
     get text() {
         return this._text;
@@ -70,7 +72,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
                 private renderer: Renderer,
                 private nhTagService: TagService,
                 private toastr: ToastrService) {
-
+        this.urlAbsolute = `${appConfig.CORE_API_URL}tags/`;
         this.searchTerm.pipe(
             debounceTime(500),
             distinctUntilChanged()
@@ -79,7 +81,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
                 return;
             }
             this.isSearching = true;
-            this.nhTagService.search(this.tenantId, this.languageId, term, this.type, 1, this.appConfig.PAGE_SIZE)
+            this.nhTagService.search(this.isAbsoluteUrl, this.tenantId, this.languageId, term, this.type, 1, this.appConfig.PAGE_SIZE)
                 .pipe(finalize(() => {
                     this.isSearching = false;
                 })).subscribe((result: SearchResultViewModel<Tag>) => {
@@ -113,7 +115,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
 
     search(keyword: string) {
         this.isSearching = true;
-        this.nhTagService.search(this.tenantId, this.languageId, keyword, this.type, 1, this.pageSize)
+        this.nhTagService.search(this.isAbsoluteUrl, this.tenantId, this.languageId, keyword, this.type, 1, this.pageSize)
             .subscribe((result: SearchResultViewModel<Tag>) => {
                 this.isSearching = false;
                 this.listItems = result.items;
@@ -137,6 +139,9 @@ export class NhTagComponent implements OnInit, AfterViewInit {
         const value = e.target.value;
         if (keyCode === 13) {
             if (!this.checkIsExistsTagName(value)) {
+                if (this.listTag === null || !this.listTag) {
+                    this.listTag = [];
+                }
                 const tag = new Tag('', this.tenantId, this.languageId, value, this.type, '');
                 this.listTag.push(tag);
                 this.onSelectListItem.emit(this.listTag);
@@ -285,8 +290,8 @@ export class NhTagComponent implements OnInit, AfterViewInit {
 
     remove(item): void {
         if (_.filter(this.listTag, function (it) {
-                return it.name === item.name;
-            }).length > 0) {
+            return it.name === item.name;
+        }).length > 0) {
 
             this.value = '';
             this.text = '';

@@ -1,0 +1,259 @@
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listAttributePageTitle">Attributes</span>
+    <small i18n="@@productModuleTitle">Product management</small>
+</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-inline " (ngSubmit)="search(1)">
+            <div class="form-group cm-mgr-5">
+                <ghm-input icon="dx-icon-search" i18n="@@enterKeyword" i18n-placeholder
+                           placeholder="Nhập tên thuộc tính"
+                           name="keyword" [(ngModel)]="keyword"></ghm-input>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <ghm-select [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Kích hoạt'}]"
+                            title="-- Chọn trạng thái --"
+                            i18n-title="@@allActiveStatus"
+                            (itemSelected)="onActiveStatusSelected($event)"></ghm-select>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <button class="btn blue" [disabled]="isSearching">
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <button type="button" class="btn btn-light" (click)="refresh()">
+                    <i class="dx-icon-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <a routerLink="/products/attributes/add" type="button" class="btn blue" i18n="@@add"
+                   *ngIf="permission.add">
+                    Thêm
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+<!--<table class="table table-hover table-stripped">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th class="middle center w50" i18n="@@no">No</th>-->
+<!--<th class="middle" i18n="@@name">Name</th>-->
+<!--<th class="middle" i18n="@@note">Note</th>-->
+<!--<th class="center w100 middle" i18n="@@selfResponding">Self responding</th>-->
+<!--<th class="center w100" i18n="@@multiple">Multiple</th>-->
+<!--<th class="center w100 text-right" i18n="@@require">Require</th>-->
+<!--<th class="center w100 text-right" i18n="@@active">Active</th>-->
+<!--<th class="text-right w150" i18n="@@actions" *ngIf="permission.edit || permission.delete">Actions-->
+<!--</th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr *ngFor="let item of listItems; let i = index"-->
+<!--nhContextMenuTrigger-->
+<!--[nhContextMenuTriggerFor]="nhMenu"-->
+<!--[nhContextMenuData]="item">-->
+<!--<td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>-->
+<!--<td class="middle">-->
+<!--<a routerLink="/products/attributes/edit/{{ item.id }}"-->
+<!--*ngIf="permission.edit; else noEditTemplate">{{ item.name }}</a>-->
+<!--<ng-template #noEditTemplate>-->
+<!--{{ item.name }}-->
+<!--</ng-template>-->
+<!--</td>-->
+<!--<td>{{ item.note }}</td>-->
+<!--<td class="center">-->
+<!--<mat-checkbox-->
+<!--[checked]="item.isSelfContent"-->
+<!--[disabled]="!permission.edit"-->
+<!--(change)="changeSelfContent(item)"-->
+<!--color="primary"></mat-checkbox>-->
+<!--</td>-->
+<!--<td class="center">-->
+<!--<mat-checkbox [checked]="item.isMultiple"-->
+<!--[disabled]="!permission.edit"-->
+<!--(change)="changeMultiple(item)"-->
+<!--color="primary"></mat-checkbox>-->
+<!--</td>-->
+<!--<td class="center">-->
+<!--<mat-checkbox [checked]="item.isRequire"-->
+<!--[disabled]="!permission.edit"-->
+<!--(change)="changeRequire(item)"-->
+<!--color="primary"></mat-checkbox>-->
+<!--</td>-->
+<!--<td class="center">-->
+<!--<mat-checkbox [checked]="item.isActive"-->
+<!--[disabled]="!permission.edit"-->
+<!--(change)="changeActive(item)"-->
+<!--color="primary"></mat-checkbox>-->
+<!--</td>-->
+<!--<td class="middle text-right w150"-->
+<!--*ngIf="permission.edit || permission.delete || permission.view">-->
+<!--<nh-dropdown>-->
+<!--<button type="button" class="btn btn-sm btn-no-background no-border" matTooltip="Menu">-->
+<!--<mat-icon>more_horiz</mat-icon>-->
+<!--</button>-->
+<!--<ul class="nh-dropdown-menu right">-->
+<!--<li *ngIf="permission.view">-->
+<!--<a routerLink="/products/attributes/{{ item.id }}">-->
+<!--<i class="fa fa-eye"></i>-->
+<!--<span class="cm-mgl-5" i18n="@@detail">Detail</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--<li *ngIf="permission.edit">-->
+<!--<a routerLink="/products/attributes/edit/{{ item.id }}">-->
+<!--<i class="fa fa-edit"></i>-->
+<!--<span class="cm-mgl-5" i18n="@@edit">Edit</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--<li *ngIf="permission.delete"-->
+<!--(click)="confirm(item)">-->
+<!--<a href="#">-->
+<!--<i class="fa fa-trash-o"></i>-->
+<!--<span class="cm-mgl-5" i18n="@@delete">Delete</span>-->
+<!--</a>-->
+<!--</li>-->
+<!--</ul>&lt;!&ndash; END: nh-dropdown-menu &ndash;&gt;-->
+<!--</nh-dropdown>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<div class="row">
+    <div class="col-sm-12">
+        <dx-data-grid
+            id="gridContactContainer"
+            keyExpr="id"
+            [allowColumnResizing]="true"
+            [showRowLines]="true"
+            [wordWrapEnabled]="true"
+            [allowColumnReordering]="true"
+            [columnAutoWidth]="true"
+            [dataSource]="listItems"
+            [noDataText]="'Không có dữ liệu'"
+            (onContextMenuPreparing)="rightClickContextMenu($event)"
+            [showBorders]="true">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-scrolling mode="infinite"></dxo-scrolling>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+            <dxi-column caption="STT" [width]="50" cellTemplate="NoTemplate" alignment="center"
+                        cssClass="middle"></dxi-column>
+            <div *dxTemplate="let data of 'NoTemplate'">
+                {{ (currentPage - 1) * pageSize + data.rowIndex + 1 }}
+            </div>
+            <dxi-column dataField="name" caption="Tên" cssClass="middle" cellTemplate="nameTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'nameTemplate'">
+                <a routerLink="/products/attributes/edit/{{ cell.data.id }}"
+                   *ngIf="permission.edit; else noEditTemplate">{{ cell.data.name }}</a>
+                <ng-template #noEditTemplate>
+                    {{ cell.data.name }}
+                </ng-template>
+            </div>
+            <dxi-column dataField="note" caption="Ghi chú" cssClass="middle"></dxi-column>
+
+            <dxi-column dataField="isSelfContent" type="boolean" [width]="120" caption="Nôi dung?" alignment="center"
+                        cellTemplate="isSelfContentTemplate" cssClass="middle">
+            </dxi-column>
+            <div *dxTemplate="let cell of 'isSelfContentTemplate'">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isSelfContent"
+                              (onValueChanged)="changeSelfContent(cell.data)"></dx-check-box>
+            </div>
+            <dxi-column dataField="isMultiple" type="boolean" [width]="100" caption="Chọn nhiều?" alignment="center"
+                        cellTemplate="isMultiTemplate" cssClass="middle">
+                <dxo-header-filter [dataSource]="[
+                                    {text: 'Cho phép chọn nhiều', value: ['isMultiple', '=', true]},
+                                    {text: 'Không cho phép chọn nhiều', value: ['isMultiple', '=', false]}]"></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'isMultiTemplate'">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isMultiple"
+                              (onValueChanged)="changeMultiple(cell.data)"></dx-check-box>
+            </div>
+
+            <dxi-column dataField="isRequire" type="boolean" [width]="100" caption="Bắt buộc?" alignment="center"
+                        cellTemplate="isRequireTemplate" cssClass="middle">
+                <dxo-header-filter [dataSource]="[
+                                    {text: 'Bắt buộc', value: ['isRequire', '=', true]},
+                                    {text: 'Không bắt buộc', value: ['isRequire', '=', false]}]"></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'isRequireTemplate'">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isRequire"
+                              (onValueChanged)="changeRequire(cell.data)"></dx-check-box>
+            </div>
+
+            <dxi-column dataField="isActive" type="boolean" [width]="100" caption="Trạng thái" alignment="center"
+                        cellTemplate="statusTemplate" cssClass="middle" cssClass="middle">
+                <dxo-header-filter [dataSource]="[
+                                    {text: 'Kích hoạt', value: ['isActive', '=', true]},
+                                    {text: 'Chưa kích hoạt', value: ['isActive', '=', false]}]"></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'statusTemplate'">
+                <dx-check-box [disabled]="!permission.edit" [value]="cell.data.isActive"
+                              (onValueChanged)="changeActive(cell.data)"></dx-check-box>
+            </div>
+            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
+                        *ngIf="(permission.edit || permission.delete || permission.view)" cssClass="middle">
+            </dxi-column>
+            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
+                <a *ngIf="permission.view" class="cm-mgr-5"
+                   i18n="@@edit" title="Xem"
+                   (click)="detail(cell.data)">
+                    <i class="fa fa-info-circle color-bright-gray font-size-16"></i>
+                </a>
+                <a *ngIf="permission.edit" class="color-dark-blue text-decoration-none cm-mgr-5"
+                   i18n="@@edit" title="Sửa"
+                   (click)="edit(cell.data)">
+                    <i class="dx-icon-edit"></i>
+                </a>
+                <a title="Xóa"
+                   class="color-red text-decoration-none" *ngIf="permission.delete"
+                   (click)="confirm(cell.data)" i18n="@@delete">
+                    <i class="dx-icon-remove"></i>
+                </a>
+            </div>
+        </dx-data-grid>
+    </div>
+
+    <div class="cm-mgt-10 col-sm-12">
+        <ghm-paging [totalRows]="totalRows"
+                    [currentPage]="currentPage"
+                    [pageShow]="6"
+                    [isDisabled]="isSearching"
+                    [pageSize]="pageSize"
+                    (selectPage)="changePageSize($event)"
+                    pageName="Thuộc tính"
+                    (pageClick)="search($event)"
+        ></ghm-paging>
+    </div>
+</div>
+
+<swal
+    #confirmDelete
+    i18n-title="@@confirmDeleteTitle"
+    i18n-text="@@confirmDeleteText"
+    title="Are you sure for delete this attribute?"
+    text="You can't recover this attribute after delete."
+    type="question"
+    i18n-confirmButtonText="@@accept"
+    i18n-cancelButtonText="@@cancel"
+    confirmButtonText="Accept"
+    cancelButtonText="Cancel">
+</swal>
+
+<!--<nh-menu #nhMenu>-->
+<!--<nh-menu-item (clicked)="detail($event)">-->
+<!--<mat-icon class="menu-icon">visibility</mat-icon>-->
+<!--<span i18n="@@detail">Detail</span>-->
+<!--</nh-menu-item>-->
+<!--<nh-menu-item (clicked)="edit($event)">-->
+<!--<mat-icon class="menu-icon">edit</mat-icon>-->
+<!--<span i18n="@@edit">Edit</span>-->
+<!--</nh-menu-item>-->
+<!--<nh-menu-item *ngIf="permission.delete"-->
+<!--(clicked)="confirm($event)">-->
+<!--<mat-icon class="menu-icon">delete</mat-icon>-->
+<!--<span i18n="@@edit">Delete</span>-->
+<!--</nh-menu-item>-->
+<!--</nh-menu>-->

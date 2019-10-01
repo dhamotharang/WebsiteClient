@@ -11,6 +11,8 @@ import {CoreValuesService} from '../core-values.service';
 import {CoreValueDetailViewModel} from '../viewmodel/core-value-detail.viewmodel';
 import * as _ from 'lodash';
 import {NumberValidator} from '../../../../../validators/number.validator';
+import {ExplorerItem} from '../../../../../shareds/components/ghm-file-explorer/explorer-item.model';
+import {Pattern} from '../../../../../shareds/constants/pattern.const';
 
 @Component({
     selector: 'app-config-website-core-values-form',
@@ -82,6 +84,8 @@ export class CoreValuesFormComponent extends BaseFormComponent implements OnInit
             if (coreValueDetail) {
                 this.model.patchValue({
                     id: coreValueDetail.id,
+                    url: coreValueDetail.url,
+                    image: coreValueDetail.image,
                     isActive: coreValueDetail.isActive,
                     order: coreValueDetail.order,
                     concurrencyStamp: coreValueDetail.concurrencyStamp,
@@ -112,15 +116,29 @@ export class CoreValuesFormComponent extends BaseFormComponent implements OnInit
         this.onCloseForm.emit();
     }
 
+    selectImage(file: ExplorerItem) {
+        if (!file.isImage) {
+            this.toastr.error('Product image already exists or File have select not is image');
+            return;
+        } else {
+            this.model.patchValue({image: file.url});
+        }
+    }
+
+    removeImage() {
+        this.model.patchValue({image: ''});
+    }
+
     private renderForm() {
         this.buildForm();
         this.renderTranslationArray(this.buildFormLanguage);
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['isActive', 'order']);
+        this.formErrors = this.utilService.renderFormError(['isActive', 'order', 'url']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'isActive': ['required']},
+            {'url': ['maxLength', 'pattern']},
             {'order': ['isValid', 'greaterThan']}
         ]);
 
@@ -130,6 +148,8 @@ export class CoreValuesFormComponent extends BaseFormComponent implements OnInit
             isActive: [this.coreValue.isActive, [
                 Validators.required
             ]],
+            image: [this.coreValue.image],
+            url: [this.coreValue.url, Validators.pattern(Pattern.url)],
             concurrencyStamp: [this.coreValue.concurrencyStamp],
             translations: this.fb.array([])
         });
@@ -161,7 +181,7 @@ export class CoreValuesFormComponent extends BaseFormComponent implements OnInit
 
     private resetForm() {
         this.id = null;
-        this.model.patchValue(new CoreValue(0, true, ''));
+        this.model.patchValue(new CoreValue(0, true, '', ''));
         this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 name: '',

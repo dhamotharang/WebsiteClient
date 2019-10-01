@@ -13,6 +13,7 @@
         line-height: 20px;
         text-align: center;
         font-weight: normal !important;
+        z-index: 10;
     }
 
     input {
@@ -22,16 +23,27 @@
 
     .remove-value {
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: 8px;
+        right: 8px;
         display: block;
-        width: 32px;
-        height: 32px;
-        margin: 0;
-        background: url('../../../../assets/images/icon/icon-remove.png') center no-repeat;
+        //width: 32px;
+        //height: 32px;
+        font-size: 18px;
+        color: #999999;
+        text-decoration: none;
+        //background: url('../../../../assets/images/icon/icon-remove.png') center no-repeat;
+        z-index: 3;
+        &:hover {
+            color: #999999;
+        }
     }
 }
-
+.alt-image {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
 .disabled {
     cursor: no-drop;
     input {
@@ -39,6 +51,6 @@
     }
 
     .icon-prepend {
-        color: #686868;
+        color: #999999;
     }
 }
