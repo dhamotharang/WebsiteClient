@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseListComponent} from '../../../base-list.component';
 import {IPageId, PAGE_ID} from '../../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
@@ -9,6 +9,8 @@ import {HelperService} from '../../../shareds/services/helper.service';
 import {UtilService} from '../../../shareds/services/util.service';
 import {FaqService} from '../service/faq.service';
 import {FaqGroupViewModel} from '../model/faq-group.viewmodel';
+import {FaqGroupFormComponent} from '../faq-group-form/faq-group-form.component';
+import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 
 @Component({
     selector: 'app-faq-list',
@@ -17,6 +19,7 @@ import {FaqGroupViewModel} from '../model/faq-group.viewmodel';
     providers: [HelperService, UtilService]
 })
 export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> implements OnInit {
+    @ViewChild(FaqGroupFormComponent) faqGroupForm: FaqGroupFormComponent;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -39,9 +42,11 @@ export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> imple
     }
 
     addGroup() {
+        this.faqGroupForm.add();
     }
 
-    updateGroup(item) {
+    updateGroup(item: FaqGroupViewModel) {
+        this.faqGroupForm.update(item.id);
     }
 
     showAnswer(item) {
@@ -50,12 +55,24 @@ export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> imple
     addQuestion() {
     }
 
-    deleteGroup(item) {
+    deleteGroup(item: FaqGroupViewModel) {
+        this.faqService.deleteGroup(item.id).subscribe((data: ActionResultViewModel) => {
+            if (data.code > 0) {
+                this.search();
+            }
+        });
     }
 
     updateQuestion(item) {
     }
 
     deleteQuestion(item) {
+    }
+
+    search() {
+        this.faqService.search('', null, 1, this.pageSize).subscribe(
+            (data: SearchResultViewModel<FaqGroupViewModel>) => {
+                this.listItems = data.items;
+            });
     }
 }

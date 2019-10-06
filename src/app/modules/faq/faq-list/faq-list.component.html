@@ -20,10 +20,10 @@
                 </a>
             </div>
             <div class="cell cell-progress-method w100 middle center hidden-xs">
-                <input class="form-control text-right" placeholder="Nhập STT" [(ngModel)]="item.order">
+                <input type="number" class="form-control text-right" placeholder="Nhập STT" [(ngModel)]="item.order">
             </div>
             <div class="cell cell-progress-method w100 middle center hidden-xs">
-                <dx-check-box [text]="'Dùng?'"></dx-check-box>
+                <dx-check-box [value]="item.isActive" [text]="'Dùng?'"></dx-check-box>
             </div>
             <div class="cell cell-action-priority w100 middle center"
                  *ngIf="(permission.add || permission.edit || permission.delete)">
@@ -32,7 +32,7 @@
                         class="fa fa-plus"></i></a>
                 <a *ngIf="permission.edit" (click)="updateGroup(item)" title="Cập nhật nhóm câu hỏi"><i
                         class="fa fa-pencil"></i></a>
-                <a *ngIf="permission.delete" [swal]="confirmDeleteTaskGroupLibrary"
+                <a *ngIf="permission.delete" [swal]="confirmDeleteFaqGroup"
                    (confirm)="deleteGroup(item.id)" title="Xóa nhóm công việc mẫu"><i class="fa fa-times"></i></a>
             </div>
         </div>
@@ -57,17 +57,19 @@
                                 </div>
                             </div>
                             <div class="cell gw-cell-progress-method middle center w100 hidden-xs cm-pd-5">
-                                <input class="form-control text-right" [(ngModel)]="faq.order" placeholder="Nhập STT">
+                                <input type="number" class="form-control text-right" [(ngModel)]="faq.order"
+                                       placeholder="Nhập STT">
                             </div>
                             <div class="cell gw-cell-progress-method middle center w100 hidden-xs">
-                                <dx-check-box [text]="'Dùng?'"></dx-check-box>
+                                <dx-check-box [value]="item.isActive" [text]="'Dùng?'"></dx-check-box>
                             </div>
-                            <div class="cell gw-cell-action-priority middle center w100" *ngIf="permission.add || permission.edit || permission.delete">
+                            <div class="cell gw-cell-action-priority middle center w100"
+                                 *ngIf="permission.add || permission.edit || permission.delete">
                                 <a *ngIf="permission.edit"
                                    (click)="updateQuestion(faq)"
                                    title="Cập nhật công việc mẫu"><i class="fa fa-pencil"></i></a>
                                 <a *ngIf="permission.delete"
-                                   [swal]="confirmDeleteTaskLibrary"
+                                   [swal]="confirmDeleteFaq"
                                    (confirm)=deleteQuestion(faq)
                                    title="Xóa công việc mẫu"><i class="fa fa-times"></i></a>
                             </div>
@@ -88,15 +90,12 @@
     </div>
 </ng-template>
 
-<swal #confirmDeleteTaskGroupLibrary
-      i18n="@@confirmDeleteTaskGroupLibrary"
-      i18n-title="@@confirmDeleteTaskGroupLibrary"
-      i18n-text="@@confirmDeleteTaskGroupLibrary"
+<app-faq-group-form (saveSuccessful)="search()"></app-faq-group-form>
+
+<swal #confirmDeleteFaqGroup
       title="Xác nhận"
-      text="Bạn có thực sự muốn xóa nhóm công việc mẫu này ?"
+      text="Bạn có thực sự muốn xóa nhóm câu hỏinày ?"
       type="question"
-      i18n-confirmButtonText="@@accept"
-      i18n-cancelButtonText="@@cancel"
       confirmButtonText="Đồng ý"
       cancelButtonText="Không"
       [showCancelButton]="true"
@@ -104,31 +103,10 @@
 </swal>
 
 <swal
-        #confirmDeleteTaskLibrary
-        i18n="@@confirmDeleteTaskLibrary"
-        i18n-title="@@confirmDeleteTaskLibrary"
-        i18n-text="@@confirmDeleteTaskLibrary"
+        #confirmDeleteFaq
         title="Xác nhận"
-        text="Bạn có thực sự muốn xóa công việc mẫu này ?"
+        text="Bạn có thực sự muốn câu hỏi này ?"
         type="question"
-        i18n-confirmButtonText="@@accept"
-        i18n-cancelButtonText="@@cancel"
-        confirmButtonText="Đồng ý"
-        cancelButtonText="Không"
-        [showCancelButton]="true"
-        [focusCancel]="true">
-</swal>
-
-<swal
-        #confirmDeleteTaskChekList
-        i18n="@@confirmDeleteTaskCheckList"
-        i18n-title="@@confirmDeleteTaskCheckList"
-        i18n-text="@@confirmDeleteTaskCheckList"
-        title="Xác nhận"
-        text="Bạn có thực sự muốn xóa checklist này ?"
-        type="question"
-        i18n-confirmButtonText="@@accept"
-        i18n-cancelButtonText="@@cancel"
         confirmButtonText="Đồng ý"
         cancelButtonText="Không"
         [showCancelButton]="true"

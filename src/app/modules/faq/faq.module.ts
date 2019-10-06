@@ -8,6 +8,11 @@ import {FaqService} from './service/faq.service';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {DxCheckBoxModule} from 'devextreme-angular';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NhModalModule} from '../../shareds/components/nh-modal/nh-modal.module';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
+import {GhmInputModule} from '../../shareds/components/ghm-input/ghm-input.module';
+import {CoreValue} from '../configs/website/core-values/model/core-value.model';
+import {CoreModule} from '../../core/core.module';
 
 export const routes: Routes = [
     {
@@ -21,7 +26,8 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule, FormsModule, ReactiveFormsModule, [RouterModule.forChild(routes)], DxCheckBoxModule,
+        CommonModule, CoreModule, FormsModule, ReactiveFormsModule, NhModalModule,
+        [RouterModule.forChild(routes)], DxCheckBoxModule, GhmSelectModule, GhmInputModule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
