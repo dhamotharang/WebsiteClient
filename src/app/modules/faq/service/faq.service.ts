@@ -45,7 +45,7 @@ export class FaqService {
             params: new HttpParams()
                 .set('keyword', keyword ? keyword : '')
                 .set('languageId', this.appService.currentLanguage)
-                .set('isActive', isActive != null && isActive !== undefined ? isActive.toString() : true.toString())
+                .set('isActive', isActive != null && isActive !== undefined ? isActive.toString() : null)
         }).pipe(finalize(() => this.spinnerService.hide())) as Observable<SearchResultViewModel<FaqGroupViewModel>>;
     }
 

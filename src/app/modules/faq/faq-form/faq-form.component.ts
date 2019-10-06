@@ -31,6 +31,16 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit {
     ngOnInit() {
     }
 
+    onModalShown() {
+        this.utilService.focusElement('name');
+    }
+
+    onModalHidden() {
+        if (this.isModified) {
+            this.saveSuccessful.emit();
+        }
+    }
+
     // save() {
     //     const isValid = this.utilService.onValueChanged(this.model, this.formErrors, this.validationMessages, true);
     //     if (isValid) {

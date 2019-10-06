@@ -33,7 +33,7 @@
                 <a *ngIf="permission.edit" (click)="updateGroup(item)" title="Cập nhật nhóm câu hỏi"><i
                         class="fa fa-pencil"></i></a>
                 <a *ngIf="permission.delete" [swal]="confirmDeleteFaqGroup"
-                   (confirm)="deleteGroup(item.id)" title="Xóa nhóm công việc mẫu"><i class="fa fa-times"></i></a>
+                   (confirm)="deleteGroup(item)" title="Xóa nhóm công việc mẫu"><i class="fa fa-times"></i></a>
             </div>
         </div>
         <div class="tt-body cm-pdb-0" *ngIf="item.listFaq && item.listFaq.length > 0 && item.isShowTask">
