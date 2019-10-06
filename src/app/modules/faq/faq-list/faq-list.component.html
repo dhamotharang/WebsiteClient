@@ -1,3 +1,136 @@
-<p>
-  faq-list works!
-</p>
+<h1 class="page-title">
+    <span class="cm-mgr-5">Danh sách câu hỏi</span>
+    <small>Quản lý câu hỏi</small>
+</h1>
+
+<div class="cm-mgb-10">
+    <button class="btn blue cm-mgr-10" type="button" (click)="addGroup()" i18n="@@add" *ngIf="permission.add">
+        Thêm nhóm câu hỏi
+    </button>
+</div>
+
+<div class="tasks-library" *ngIf="listItems && listItems.length > 0; else notFound">
+    <div class="table-tree" *ngFor="let item of listItems; let i = index">
+        <div class="tt-header">
+            <div class="cell cell-group middle w100pc cm-pd-12-6" (click)="item.isShowTask = !item.isShowTask">
+                <a class="icon cm-mgl-5">
+                    <i class="fa fa-caret-down" aria-hidden="true" *ngIf="item.isShowTask"></i>
+                    <i class="fa fa-caret-right" aria-hidden="true" *ngIf="!item.isShowTask"></i>
+                    {{item.name}}
+                </a>
+            </div>
+            <div class="cell cell-progress-method w100 middle center hidden-xs">
+                <input class="form-control text-right" placeholder="Nhập STT" [(ngModel)]="item.order">
+            </div>
+            <div class="cell cell-progress-method w100 middle center hidden-xs">
+                <dx-check-box [text]="'Dùng?'"></dx-check-box>
+            </div>
+            <div class="cell cell-action-priority w100 middle center"
+                 *ngIf="(permission.add || permission.edit || permission.delete)">
+                <a *ngIf="permission.add" data-toggle="tooltip" (click)="addQuestion(item)"
+                   title="Thêm mới câu hỏi"><i
+                        class="fa fa-plus"></i></a>
+                <a *ngIf="permission.edit" (click)="updateGroup(item)" title="Cập nhật nhóm câu hỏi"><i
+                        class="fa fa-pencil"></i></a>
+                <a *ngIf="permission.delete" [swal]="confirmDeleteTaskGroupLibrary"
+                   (confirm)="deleteGroup(item.id)" title="Xóa nhóm công việc mẫu"><i class="fa fa-times"></i></a>
+            </div>
+        </div>
+        <div class="tt-body cm-pdb-0" *ngIf="item.listFaq && item.listFaq.length > 0 && item.isShowTask">
+            <div class="parent-tree">
+                <div class="children">
+                    <div class="tree-container" *ngFor="let faq of item.listFaq; let i = index">
+                        <div class="goal-line row-tr bg-white"
+                             [class.last-goal-line]="i + 1 === item.listFaq.length">
+                            <div class="goal-tree-caret" (click)="faq.isShowAnswer = !faq.isShowAnswer">
+                                <i class="fa fa-fw fa-chevron-down" *ngIf="faq.isShowAnswer"></i>
+                                <i class="fa fa-chevron-right" aria-hidden="true" *ngIf="!faq.isShowAnswer"></i>
+                            </div>
+                            <div class="cell gw-cell-item w100pc middle">
+                                <div class="gw-item">
+                                    <div class="question" (click)="faq.isShowAnswer = !faq.isShowAnswer">
+                                        {{faq.question}}
+                                    </div>
+                                    <div class="gw-description answer cm-pdt-5" *ngIf="faq.isShowAnswer">
+                                        {{faq.answer}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell gw-cell-progress-method middle center w100 hidden-xs cm-pd-5">
+                                <input class="form-control text-right" [(ngModel)]="faq.order" placeholder="Nhập STT">
+                            </div>
+                            <div class="cell gw-cell-progress-method middle center w100 hidden-xs">
+                                <dx-check-box [text]="'Dùng?'"></dx-check-box>
+                            </div>
+                            <div class="cell gw-cell-action-priority middle center w100" *ngIf="permission.add || permission.edit || permission.delete">
+                                <a *ngIf="permission.edit"
+                                   (click)="updateQuestion(faq)"
+                                   title="Cập nhật công việc mẫu"><i class="fa fa-pencil"></i></a>
+                                <a *ngIf="permission.delete"
+                                   [swal]="confirmDeleteTaskLibrary"
+                                   (confirm)=deleteQuestion(faq)
+                                   title="Xóa công việc mẫu"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-confirm bg-info-blue" *ngIf="!item.listFaq || item.listFaq?.length === 0">
+            <i class="fa fa-info-circle color-dark-blue font-size-18"
+               aria-hidden="true"></i><span> Không có dữ liệu</span>
+        </div>
+    </div>
+</div>
+<ng-template #notFound>
+    <div class="alert alert-warning">
+        Chưa có nhóm câu hỏi nào
+    </div>
+</ng-template>
+
+<swal #confirmDeleteTaskGroupLibrary
+      i18n="@@confirmDeleteTaskGroupLibrary"
+      i18n-title="@@confirmDeleteTaskGroupLibrary"
+      i18n-text="@@confirmDeleteTaskGroupLibrary"
+      title="Xác nhận"
+      text="Bạn có thực sự muốn xóa nhóm công việc mẫu này ?"
+      type="question"
+      i18n-confirmButtonText="@@accept"
+      i18n-cancelButtonText="@@cancel"
+      confirmButtonText="Đồng ý"
+      cancelButtonText="Không"
+      [showCancelButton]="true"
+      [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmDeleteTaskLibrary
+        i18n="@@confirmDeleteTaskLibrary"
+        i18n-title="@@confirmDeleteTaskLibrary"
+        i18n-text="@@confirmDeleteTaskLibrary"
+        title="Xác nhận"
+        text="Bạn có thực sự muốn xóa công việc mẫu này ?"
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Đồng ý"
+        cancelButtonText="Không"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<swal
+        #confirmDeleteTaskChekList
+        i18n="@@confirmDeleteTaskCheckList"
+        i18n-title="@@confirmDeleteTaskCheckList"
+        i18n-text="@@confirmDeleteTaskCheckList"
+        title="Xác nhận"
+        text="Bạn có thực sự muốn xóa checklist này ?"
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Đồng ý"
+        cancelButtonText="Không"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>

@@ -42,7 +42,7 @@ export interface IAppConfig {
 
 export const APP_CONFIG_DI: IAppConfig = {
     CLIENT_ID: 'a3a3b45c-3665-44b2-931a-f840fdfca572',
-    PAGE_SIZE: 10,
+    PAGE_SIZE: 20,
     CORE_API_URL: 'http://localhost:50001/api/v1/',
     AUTHORITY: 'http://localhost:50008/auth',
     FILE_MANAGEMENT: 'http://localhost:50005/api/v1/',

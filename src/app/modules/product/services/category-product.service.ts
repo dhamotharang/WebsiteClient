@@ -1,8 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {IResponseResult} from '../../../interfaces/iresponse-result';
+import {ISearchResult} from '../../../interfaces/isearch.result';
 import {environment} from '../../../../environments/environment';
 import {ActivatedRouteSnapshot} from '@angular/router';
 import {TreeData} from '../../../view-model/tree-data';
@@ -21,7 +22,7 @@ import {ICategoryPickerViewmodel} from '../model/icategory-picker.viewmodel';
     providedIn: 'root'
 })
 export class CategoryProductService {
-    url = 'api/v1/warehouse/product-categories/';
+    url = 'api/v1/warehouse/website-category/';
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private appService: AppService,
@@ -42,7 +43,9 @@ export class CategoryProductService {
 
     search(keyword: string, isActive?: boolean, page: number = 1, pageSize: number = 20): Observable<TreeData[]> {
         return this.http.get(`${this.url}`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
             params: new HttpParams()
+                .set('websiteId', this.appService.currentUser.tenantId)
                 .set('keyword', keyword ? keyword : '')
                 .set('languageId', this.appService.currentLanguage)
                 .set('isActive', isActive != null && isActive !== undefined ? isActive.toString() : true.toString())
@@ -51,7 +54,9 @@ export class CategoryProductService {
 
     searchPicker(keyword: string, page: number, pageSize?: number): Observable<SearchResultViewModel<ICategoryPickerViewmodel>> {
         return this.http.get(`${this.url}search-picker`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
             params: new HttpParams()
+                .set('warehouseId', this.appService.currentUser.tenantId)
                 .set('keyword', keyword ? keyword : '')
                 .set('page', page ? page.toString() : '1')
                 .set('pageSize', pageSize ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
@@ -61,6 +66,7 @@ export class CategoryProductService {
     insert(category: ProductCategory): Observable<ActionResultViewModel> {
         this.spinnerService.show();
         return this.http.post(`${this.url}${this.appService.currentUser.tenantId}`, category, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
         }).pipe(finalize(() => this.spinnerService.hide()),
             map((result: ActionResultViewModel) => {
                 this.toasTrService.success(result.message);
@@ -71,6 +77,7 @@ export class CategoryProductService {
     update(id: number, category: ProductCategory): Observable<IResponseResult> {
         this.spinnerService.show();
         return this.http.post(`${this.url}${this.appService.currentUser.tenantId}/${id}`, category, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
         })
             .pipe(finalize(() => this.spinnerService.hide()),
                 map((result: ActionResultViewModel) => {
@@ -82,6 +89,7 @@ export class CategoryProductService {
     delete(id: number): Observable<ActionResultViewModel> {
         this.spinnerService.show();
         return this.http.delete(`${this.url}${this.appService.currentUser.tenantId}/${id}`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
         }).pipe(finalize(() => this.spinnerService.hide()),
             map((result: ActionResultViewModel) => {
                 this.toasTrService.success(result.message);
@@ -91,7 +99,9 @@ export class CategoryProductService {
 
     getTree(): Observable<TreeData[]> {
         return this.http.get(`${this.url}tree`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
             params: new HttpParams()
+                .set('websiteId', this.appService.currentUser.tenantId)
                 .set('keyword', '')
                 .set('languageId', this.appService.currentLanguage)
                 .set('isActive', true.toString())
@@ -102,6 +112,7 @@ export class CategoryProductService {
     getDetail(id: number): Observable<ProductCategoryViewModel> {
         this.spinnerService.show();
         return this.http.get(`${this.url}${this.appService.currentUser.tenantId}/${id}`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
         })
             .pipe(
                 finalize(() => this.spinnerService.hide()),
@@ -114,7 +125,9 @@ export class CategoryProductService {
     searchForSelect(keyword: string, page: number = 1, pageSize: number = 20):
         Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> {
         return this.http.get(`${this.url}search-for-select`, {
+            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
             params: new HttpParams()
+                .set('websiteId', this.appService.currentUser.tenantId)
                 .set('keyword', keyword ? keyword : '')
                 .set('page', page > 0 ? page.toString() : '')
                 .set('pageSize', pageSize > 0 ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
