@@ -3,6 +3,7 @@ export class Faq {
     photo: string;
     order: number;
     isActive: boolean;
+    isQuickUpdate;
     concurrencyStamp: string;
     transactions: FaqTransaction[];
 
@@ -13,6 +14,7 @@ export class Faq {
         this.isActive = true;
         this.concurrencyStamp = '';
         this.transactions = [];
+        this.isQuickUpdate = false;
     }
 }
 

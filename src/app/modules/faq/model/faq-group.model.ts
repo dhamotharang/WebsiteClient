@@ -1,6 +1,7 @@
 export class FaqGroup {
     isActive: boolean;
     order: number;
+    isQuickUpdate: boolean;
     concurrencyStamp: string;
     translations: FaqGroupTranslation[];
 
@@ -9,6 +10,7 @@ export class FaqGroup {
         this.order = 0;
         this.concurrencyStamp = '';
         this.translations = [];
+        this.isQuickUpdate = false;
     }
 }
 

@@ -78,6 +78,7 @@
                                 <ghm-file-explorer i18n-buttonText="@@appendImageToContent"
                                                    [buttonText]="'Append image to content '"
                                                    [multiple]="true"
+                                                   (itemSelected)="selectImage($event)"
                                                    (acceptSelected)="afterUploadImageContent($event, i)"></ghm-file-explorer>
                             </div>
                             <tinymce [elementId]="'content'+ i" formControlName="content"

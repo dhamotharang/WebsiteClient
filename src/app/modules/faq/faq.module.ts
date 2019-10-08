@@ -13,6 +13,10 @@ import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.mo
 import {GhmInputModule} from '../../shareds/components/ghm-input/ghm-input.module';
 import {CoreValue} from '../configs/website/core-values/model/core-value.model';
 import {CoreModule} from '../../core/core.module';
+import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
+import {GhmFileExplorerModule} from '../../shareds/components/ghm-file-explorer/ghm-file-explorer.module';
+import {NhSafeHtmlModeule} from '../../shareds/components/nh-safe-html/nh-safe-html.module';
+
 
 export const routes: Routes = [
     {
@@ -26,8 +30,8 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule, CoreModule, FormsModule, ReactiveFormsModule, NhModalModule,
-        [RouterModule.forChild(routes)], DxCheckBoxModule, GhmSelectModule, GhmInputModule,
+        CommonModule, CoreModule, FormsModule, ReactiveFormsModule, NhModalModule, TinymceModule, NhSafeHtmlModeule,
+        [RouterModule.forChild(routes)], DxCheckBoxModule, GhmSelectModule, GhmInputModule, GhmFileExplorerModule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

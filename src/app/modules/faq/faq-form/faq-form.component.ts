@@ -1,4 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {
+    AfterContentInit,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren
+} from '@angular/core';
 import {UtilService} from '../../../shareds/services/util.service';
 import {FormBuilder, Validators, FormGroup} from '@angular/forms';
 import {NumberValidator} from '../../../validators/number.validator';
@@ -7,14 +17,28 @@ import {BaseFormComponent} from '../../../base-form.component';
 import {FaqService} from '../service/faq.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {Faq, FaqTransaction} from '../model/faq.model';
+import * as _ from 'lodash';
+import {finalize} from 'rxjs/operators';
+import {FaqDetailViewModel} from '../model/faq-detail.viewmodel';
+import {NhModalComponent} from '../../../shareds/components/nh-modal/nh-modal.component';
+import {FaqGroup} from '../model/faq-group.model';
+import {TinymceComponent} from '../../../shareds/components/tinymce/tinymce.component';
+import {ExplorerItem} from '../../../shareds/components/ghm-file-explorer/explorer-item.model';
+import {environment} from '../../../../environments/environment';
+
+declare var tinyMCE;
 
 @Component({
     selector: 'app-faq-form',
     templateUrl: './faq-form.component.html',
-    styleUrls: ['./faq-form.component.css']
+    styleUrls: ['./faq-form.component.css'],
+    providers: [NumberValidator]
 })
 
-export class FaqFormComponent extends BaseFormComponent implements OnInit {
+export class FaqFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
+    @ViewChildren(TinymceComponent) questionContentEditor: QueryList<TinymceComponent>;
+    @ViewChild('faqFormModal') faqFormModal: NhModalComponent;
+    @Input() listFaqGroup: FaqGroup[];
     faq = new Faq();
     faqId;
     translation = new FaqTransaction();
@@ -29,10 +53,15 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.renderForm();
+    }
+
+    ngAfterViewInit() {
+        this.initEditor();
     }
 
     onModalShown() {
-        this.utilService.focusElement('name');
+        this.utilService.focusElement('question');
     }
 
     onModalHidden() {
@@ -41,87 +70,121 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    // save() {
-    //     const isValid = this.utilService.onValueChanged(this.model, this.formErrors, this.validationMessages, true);
-    //     if (isValid) {
-    //         this.faq = this.model.value;
-    //         this.isSaving = true;
-    //         if (this.isUpdate) {
-    //             this.bannerService.update(this.bannerId, this.banner)
-    //                 .pipe(finalize(() => this.isSaving = false))
-    //                 .subscribe((result: IResponseResult) => {
-    //                     this.isModified = true;
-    //                     this.bannerFormModal.dismiss();
-    //                 });
-    //         } else {
-    //             this.bannerService.insert(this.banner)
-    //                 .pipe(finalize(() => this.isSaving = false))
-    //                 .subscribe((result: IResponseResult) => {
-    //                     this.isModified = true;
-    //                     if (this.isCreateAnother) {
-    //                         this.utilService.focusElement('name');
-    //                         this.resetForm();
-    //                     } else {
-    //                         this.resetForm();
-    //                         this.bannerFormModal.dismiss();
-    //                     }
-    //                 });
-    //         }
-    //     }
-    // }
-
-    getDetail(id: string) {
+    add(faqGroupId: string) {
+        this.isUpdate = false;
+        this.resetForm();
+        this.model.patchValue({faqGroupId: faqGroupId});
+        this.faqFormModal.open();
     }
 
-    // private getDetail(id: number) {
-    //     this.subscribers.questionGroupService = this.questionGroupService
-    //         .getDetail(id)
-    //         .subscribe(
-    //             (result: IActionResultResponse<QuestionGroupDetailViewModel>) => {
-    //                 const questionGroupDetail = result.data;
-    //                 if (questionGroupDetail) {
-    //                     this.model.patchValue({
-    //                         isActive: questionGroupDetail.isActive,
-    //                         order: questionGroupDetail.order,
-    //                         parentId: questionGroupDetail.parentId,
-    //                         concurrencyStamp: questionGroupDetail.concurrencyStamp,
-    //                     });
-    //                     if (questionGroupDetail.questionGroupTranslations && questionGroupDetail.questionGroupTranslations.length > 0) {
-    //                         this.modelTranslations.controls.forEach(
-    //                             (model: FormGroup) => {
-    //                                 const detail = _.find(
-    //                                     questionGroupDetail.questionGroupTranslations,
-    //                                     (questionGroupTranslation: QuestionGroupTranslation) => {
-    //                                         return (
-    //                                             questionGroupTranslation.languageId ===
-    //                                             model.value.languageId
-    //                                         );
-    //                                     }
-    //                                 );
-    //                                 if (detail) {
-    //                                     model.patchValue(detail);
-    //                                 }
-    //                             }
-    //                         );
-    //                     }
-    //                 }
-    //             }
-    //         );
-    // }
+    update(id: string) {
+        this.faqId = id;
+        this.isUpdate = true;
+        this.getDetail(id);
+        this.faqFormModal.open();
+    }
+
+    afterUploadImageContent(images: ExplorerItem[], i: number) {
+        const id = 'content' + i;
+        images.forEach((image) => {
+            if (image.isImage) {
+                const imageAbsoluteUrl = environment.fileUrl + image.url;
+                tinyMCE.execCommand('mceInsertContent', false,
+                    `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
+            }
+        });
+    }
+
+    selectImage(image: ExplorerItem) {
+        if (image.isImage) {
+            const imageAbsoluteUrl = environment.fileUrl + image.url;
+            tinyMCE.execCommand('mceInsertContent', false,
+                `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
+        }
+    }
+
+    save() {
+        const isValid = this.utilService.onValueChanged(this.model, this.formErrors, this.validationMessages, true);
+        if (isValid) {
+            this.faq = this.model.value;
+            this.isSaving = true;
+            if (this.isUpdate) {
+                this.faqService.update(this.faqId, this.faq)
+                    .pipe(finalize(() => this.isSaving = false))
+                    .subscribe((result: ActionResultViewModel) => {
+                        this.isModified = true;
+                        this.faqFormModal.dismiss();
+                    });
+            } else {
+                this.faqService.insert(this.faq)
+                    .pipe(finalize(() => this.isSaving = false))
+                    .subscribe((result: ActionResultViewModel) => {
+                        this.isModified = true;
+                        if (this.isCreateAnother) {
+                            this.utilService.focusElement('question');
+                            this.resetForm();
+                        } else {
+                            this.resetForm();
+                            this.faqFormModal.dismiss();
+                        }
+                    });
+            }
+        }
+    }
+
+    private getDetail(id: string) {
+        this.faqService
+            .getDetail(id)
+            .subscribe(
+                (result: ActionResultViewModel<FaqDetailViewModel>) => {
+                    const detail = result.data;
+                    if (detail) {
+                        this.model.patchValue({
+                            isActive: detail.isActive,
+                            order: detail.order,
+                            faqGroupId: detail.faqGroupId,
+                            concurrencyStamp: detail.concurrencyStamp,
+                        });
+                        if (detail.translations && detail.translations.length > 0) {
+                            this.translations.controls.forEach(
+                                (model: FormGroup) => {
+                                    const detailTranslation = _.find(
+                                        detail.translations,
+                                        (questionGroupTranslation: FaqTransaction) => {
+                                            return (
+                                                questionGroupTranslation.languageId ===
+                                                model.value.languageId
+                                            );
+                                        }
+                                    );
+
+                                    if (detailTranslation) {
+                                        model.patchValue(detailTranslation);
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+            );
+    }
+
     private renderForm() {
         this.buildForm();
-        this.renderTranslationFormArray(this.buildFormLanguage);
+        this.renderTranslationArray(this.buildFormLanguage);
     }
 
     private buildForm() {
-        this.formErrors = this.utilService.renderFormError(['order', 'isActive']);
+        this.formErrors = this.utilService.renderFormError(['faqGroupId', 'order', 'isActive']);
         this.validationMessages = this.renderFormErrorMessage([
-            {'order': ['required']},
+            {'faqGroupId': ['required']},
+            {'order': ['required', 'isValid', 'greaterThan']},
             {'isActive': ['required']},
         ]);
         this.model = this.fb.group({
-            order: [this.faq.order],
-            isActive: [this.faq.isActive],
+            faqGroupId: [this.faq.faqGroupId, [Validators.required]],
+            order: [this.faq.order, [Validators.required, this.numberValidator.isValid, this.numberValidator.greaterThan(0)]],
+            isActive: [this.faq.isActive, [Validators.required]],
             concurrencyStamp: [this.faq.concurrencyStamp],
             translations: this.fb.array([])
         });
@@ -134,7 +197,7 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit {
             order: 0,
             isActive: true
         });
-        this.modelTranslations.controls.forEach((model: FormGroup) => {
+        this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 question: '',
                 answer: '',
@@ -160,12 +223,18 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit {
             ],
             answer: [
                 this.translation.answer,
-                [Validators.maxLength(500)]
+                [Validators.maxLength(4000)]
             ]
         });
         translationModel.valueChanges.subscribe((data: any) =>
-            this.validateTranslationModel(false)
+            this.validateTranslation(false)
         );
         return translationModel;
     };
+
+    private initEditor() {
+        this.questionContentEditor.forEach((eventContentEditor: TinymceComponent) => {
+            eventContentEditor.initEditor();
+        });
+    }
 }

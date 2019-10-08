@@ -21,6 +21,7 @@ import {FaqGroupDetailViewModel} from '../model/faq-group.detail.viewmodel';
 
 export class FaqGroupFormComponent extends BaseFormComponent implements OnInit {
     @ViewChild('faqGroupFormModal') faqGroupFormModal: NhModalComponent;
+
     faqGroup = new FaqGroup();
     translation = new FaqGroupTranslation();
     faqGroupId;
@@ -93,7 +94,7 @@ export class FaqGroupFormComponent extends BaseFormComponent implements OnInit {
     private getDetail(id: string) {
         this.faqService.getDetailGroup(id)
             .subscribe(
-                (result: ActionResultViewModel<any>) => {
+                (result: ActionResultViewModel<FaqGroupDetailViewModel>) => {
                     const detail = result.data;
                     if (detail) {
                         this.model.patchValue({
@@ -137,8 +138,8 @@ export class FaqGroupFormComponent extends BaseFormComponent implements OnInit {
             {'isActive': ['required']},
         ]);
         this.model = this.fb.group({
-            order: [this.faqGroup.order],
-            isActive: [this.faqGroup.isActive],
+            order: [this.faqGroup.order, [Validators.required]],
+            isActive: [this.faqGroup.isActive, [Validators.required]],
             concurrencyStamp: [this.faqGroup.concurrencyStamp],
             translations: this.fb.array([])
         });

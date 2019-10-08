@@ -10,10 +10,11 @@ import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
 import {FaqGroupViewModel} from '../model/faq-group.viewmodel';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
-import {Event} from '../../event/models/event.model';
 import {finalize, map} from 'rxjs/operators';
 import {FaqGroup} from '../model/faq-group.model';
 import {FaqGroupDetailViewModel} from '../model/faq-group.detail.viewmodel';
+import {Faq} from '../model/faq.model';
+import {FaqDetailViewModel} from '../model/faq-detail.viewmodel';
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +40,8 @@ export class FaqService {
         return this.search(keyword, isActive, page, pageSize);
     }
 
-    search(keyword: string, isActive?: boolean, page: number = 1, pageSize: number = 20): Observable<SearchResultViewModel<FaqGroupViewModel>> {
+    search(keyword: string, isActive?: boolean, page: number = 1, pageSize: number = 20)
+        : Observable<SearchResultViewModel<FaqGroupViewModel>> {
         this.spinnerService.show();
         return this.http.get(`${this.url}`, {
             params: new HttpParams()
@@ -87,6 +89,53 @@ export class FaqService {
     deleteGroup(id: string): Observable<ActionResultViewModel> {
         this.spinnerService.show();
         return this.http.delete(`${this.url}/group/${id}`)
+            .pipe(
+                finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel) => {
+                    this.toastr.success(result.message);
+                    return result;
+                })
+            ) as Observable<ActionResultViewModel>;
+    }
+
+    insert(faq: Faq): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.post(`${this.url}`, faq)
+            .pipe(
+                finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel) => {
+                    this.toastr.success(result.message);
+                    return result;
+                })
+            ) as Observable<ActionResultViewModel>;
+    }
+
+    update(id: string, faq: Faq): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.post(`${this.url}/${id}`, faq)
+            .pipe(
+                finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel) => {
+                    this.toastr.success(result.message);
+                    return result;
+                })
+            ) as Observable<ActionResultViewModel>;
+    }
+
+    getDetail(id: string): Observable<ActionResultViewModel<FaqDetailViewModel>> {
+        this.spinnerService.show();
+        return this.http.get(`${this.url}/${id}`)
+            .pipe(
+                finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel<FaqDetailViewModel>) => {
+                    return result;
+                })
+            ) as Observable<ActionResultViewModel<FaqDetailViewModel>>;
+    }
+
+    delete(id: string): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.delete(`${this.url}/${id}`)
             .pipe(
                 finalize(() => this.spinnerService.hide()),
                 map((result: ActionResultViewModel) => {

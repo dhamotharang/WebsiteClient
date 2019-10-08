@@ -4,6 +4,7 @@ export class FaqGroupViewModel {
     order: number;
     isActive: boolean;
     isShowTask: boolean;
+    concurrencyStamp: string;
     listFaq: FaqViewModel[];
 }
 
@@ -15,4 +16,5 @@ export class FaqViewModel {
     isActive: boolean;
     faqGroupId: string;
     isShowAnswer: boolean;
+    concurrencyStamp: string;
 }

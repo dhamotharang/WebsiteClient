@@ -20,10 +20,10 @@
                 </a>
             </div>
             <div class="cell cell-progress-method w100 middle center hidden-xs">
-                <input type="number" class="form-control text-right" placeholder="Nhập STT" [(ngModel)]="item.order">
+                <input type="number" class="form-control text-right" placeholder="Nhập STT" (blur)="changeFaqGroupOrder(item)" [(ngModel)]="item.order">
             </div>
             <div class="cell cell-progress-method w100 middle center hidden-xs">
-                <dx-check-box [value]="item.isActive" [text]="'Dùng?'"></dx-check-box>
+                <dx-check-box [value]="item.isActive" [text]="'Dùng?'" (onValueChanged)="changeFaqGroupStatus(item)"></dx-check-box>
             </div>
             <div class="cell cell-action-priority w100 middle center"
                  *ngIf="(permission.add || permission.edit || permission.delete)">
@@ -52,16 +52,16 @@
                                         {{faq.question}}
                                     </div>
                                     <div class="gw-description answer cm-pdt-5" *ngIf="faq.isShowAnswer">
-                                        {{faq.answer}}
+                                        <nh-safeHtml [html]="faq.answer"></nh-safeHtml>
                                     </div>
                                 </div>
                             </div>
                             <div class="cell gw-cell-progress-method middle center w100 hidden-xs cm-pd-5">
                                 <input type="number" class="form-control text-right" [(ngModel)]="faq.order"
-                                       placeholder="Nhập STT">
+                                       placeholder="Nhập STT" (blur)="changeOrderQuestion(faq)">
                             </div>
                             <div class="cell gw-cell-progress-method middle center w100 hidden-xs">
-                                <dx-check-box [value]="item.isActive" [text]="'Dùng?'"></dx-check-box>
+                                <dx-check-box [(value)]="faq.isActive" (onValueChanged)="changeStatusQuestion(faq)" [text]="'Dùng?'"></dx-check-box>
                             </div>
                             <div class="cell gw-cell-action-priority middle center w100"
                                  *ngIf="permission.add || permission.edit || permission.delete">
@@ -91,6 +91,7 @@
 </ng-template>
 
 <app-faq-group-form (saveSuccessful)="search()"></app-faq-group-form>
+<app-faq-form [listFaqGroup]="listFaqGroupSuggestion" (saveSuccessful)="search()"></app-faq-form>
 
 <swal #confirmDeleteFaqGroup
       title="Xác nhận"

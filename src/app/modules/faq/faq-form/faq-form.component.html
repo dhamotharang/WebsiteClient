@@ -1,0 +1,119 @@
+<nh-modal #faqFormModal
+          size="lg"
+          (shown)="onModalShown()"
+          (hidden)="onModalHidden()">
+    <nh-modal-header>
+        <span>{isUpdate, select, 1 {Cập nhật câu hỏi} 0 {Thêm mới câu hỏi}}</span>
+    </nh-modal-header>
+    <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div formArrayName="translations">
+                <div class="form-group" *ngIf="languages && languages.length > 1">
+                    <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                           class="col-sm-4 control-label"></label>
+                    <div class="col-sm-8">
+                        <ghm-select [data]="languages"
+                                    i18n-title="@@pleaseSelectLanguage"
+                                    title="-- Chọn ngôn ngữ --"
+                                    name="language"
+                                    [(value)]="currentLanguage"
+                                    (itemSelected)="currentLanguage = $event.id"></ghm-select>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label ghmLabel="Nhóm câu hỏi"
+                           class="col-sm-4 control-label" [required]="true"></label>
+                    <div class="col-sm-8">
+                        <ghm-select [title]="'--Chọn nhóm câu hỏi--'"
+                                    [data]="listFaqGroup"
+                                    formGroupName="faqGroupId"
+                        ></ghm-select>
+                        <span class="help-block">
+                            {formErrors?.faqGroupId, select, required {Nhóm câu hỏi không được để trống}}
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group cm-mg-0">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <ghm-file-explorer [buttonText]="'Append image to content '"
+                                           [multiple]="true"
+                                           (itemSelected)="selectImage($event)"
+                                           (acceptSelected)="afterUploadImageContent($event, i)"></ghm-file-explorer>
+                    </div>
+                </div>
+                <div *ngFor="let translation of translations.controls; index as i"
+                     [hidden]="translation.value.languageId !== currentLanguage"
+                     [formGroupName]="i">
+                    <div class="form-group"
+                         [class.has-error]="translationFormErrors[translation.value.languageId]?.question">
+                        <label i18n-ghmLabel ghmLabel="Tên câu hỏi"
+                               class="col-sm-4 control-label" [required]="true"></label>
+                        <div class="col-sm-8">
+                            <ghm-input [elementId]="'question'"
+                                       placeholder="Nhập tên câu hỏi."
+                                       formControlName="question"></ghm-input>
+                            <span class="help-block">
+                              {
+                                translationFormErrors[translation.value.languageId]?.question,
+                                select, required {Tên câu hỏi không được để trống} maxLength {Tên câu hỏi không được vượt quá 256 ký tự}
+                              }
+                          </span>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         [class.has-error]="translationFormErrors[translation.value.languageId]?.description">
+                        <label i18n="@@description" i18n-ghmLabel ghmLabel="Câu trả lời "
+                               class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            <tinymce #questionContentEditor
+                                     elementId="questionContent{{ translation.value.languageId }}"
+                                     formControlName="answer"></tinymce>
+                            <span class="help-block">
+                                        {
+                                        translationFormErrors[translation.value.languageId]?.answer,
+                                        select, maxLength {Mô tả nhóm câu hỏi không được vượt quá 4000 ký tự}
+                                        }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <div class="col-sm-8 col-sm-offset-4">
+                        <dx-check-box formControlName="isActive"
+                                      text="{{model.value.isActive === 0 ? 'Chưa kích hoạt' : 'Kích hoạt'}}">
+                        </dx-check-box>
+                    </div>
+                </div>
+                <div class="form-group" [formGroup]="model">
+                    <label ghmLabel="Số thứ tự"
+                           class="col-sm-4 control-label"></label>
+                    <div class="col-sm-4">
+                        <ghm-input formControlName="order" placeholder="'Nhập số thứ tự'"></ghm-input>
+                        <span class="help-block">
+                            {formErrors?.order, select, required {Số thứ tự không được để trống}
+                            isValid, {Số thứ tự phải là số}
+                            greaterThan, {Số thứ tự phải lớn hơn 0}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="pull-right cm-mgb-10">
+                <dx-check-box [(value)]="isCreateAnother"
+                              *ngIf="!isUpdate"
+                              text="Tiếp tục thêm">
+                </dx-check-box>
+                <ghm-button classes="btn blue cm-mgr-5" [loading]="isSaving" i18n="@@save">
+                    Lưu
+                </ghm-button>
+                <ghm-button type="button" classes="btn btn-light"
+                            nh-dismiss="true"
+                            [loading]="isSaving">
+                    Hủy
+                </ghm-button>
+            </div>
+        </nh-modal-footer>
+    </form>
+</nh-modal>
+
