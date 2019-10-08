@@ -30,6 +30,8 @@ const routes: Routes = [
                 loadChildren: './modules/product/product.module#ProductModule'},
             {path: 'event', loadChildren: './modules/event/event.module#EventModule'},
             {path: 'brand', loadChildren: './modules/brand/brand.module#BrandModule'},
+            {path: 'faq', loadChildren: './modules/faq/faq.module#FaqModule'},
+            {path: 'order', loadChildren: './modules/order/order.module#OrderModule'},
         ]
     },
     {path: '', redirectTo: 'titles', pathMatch: 'full'},

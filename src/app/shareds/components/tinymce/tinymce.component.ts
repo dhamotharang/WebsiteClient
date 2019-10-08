@@ -1,8 +1,21 @@
-import {AfterViewInit, Component, EventEmitter, forwardRef, Input, OnDestroy, Output, ViewEncapsulation} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {
+    AfterViewInit,
+    Component,
+    enableProdMode,
+    EventEmitter,
+    forwardRef,
+    Input,
+    OnDestroy,
+    Output,
+    ViewEncapsulation
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 declare var tinymce: any;
 
+if (!/localhost/.test(document.location.host)) {
+    enableProdMode();
+}
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: 'tinymce',
@@ -37,6 +50,7 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
     };
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onChange = new EventEmitter<any>();
+    @Output() onBlur = new EventEmitter<any>();
     editor;
     private _content;
     get content() {
@@ -49,7 +63,7 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
     }
 
     propagateChange: any = () => {
-    };
+    }
 
     constructor() {
     }
@@ -68,7 +82,7 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
             tinymce.init({
                 selector: `#${this.elementId}`,
                 plugins: ['fullscreen', 'link', 'autolink', 'paste', 'image', 'table', 'textcolor', 'print', 'preview', 'spellchecker',
-                    'colorpicker', 'fullscreen', 'code', 'lists', 'emoticons', 'wordcount'],
+                    'colorpicker', 'fullscreen', 'code', 'lists', 'wordcount'],
                 toolbar: 'insertfile undo redo | | fontselect | fontsizeselect | bold italic ' +
                 '| alignleft aligncenter alignright alignjustify ' +
                 '| bullist numlist outdent indent | link image | fullscreen',
@@ -96,9 +110,18 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
                             content: this.content
                         });
                     });
+                    editor.on('blur', (event) => {
+                        const contentChange = editor.getContent();
+                        this.content = contentChange;
+                        this.propagateChange(this.content);
+                        this.onBlur.emit({
+                            text: editor.getContent({format: 'text'}),
+                            content: this.content
+                        });
+                    });
                 }
             });
-        }, 100);
+        });
     }
 
     setContent(content: string) {
@@ -128,9 +151,6 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
         this.content = value;
         const editor = tinymce.get(this.elementId);
         this.initEditor();
-        if (editor != null) {
-            editor.setContent(this.content != null ? this.content : '');
-        }
     }
 
     registerOnTouched() {

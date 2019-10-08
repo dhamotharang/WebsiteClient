@@ -11,8 +11,8 @@ import {CategoryProductService} from '../../services/category-product.service';
   styleUrls: ['./product-category-select.component.scss'],
   providers: [CategoryProductService]
 })
-export class ProductCategorySelectComponent extends BaseListComponent<Category> implements OnInit, AfterViewInit {
 
+export class ProductCategorySelectComponent extends BaseListComponent<Category> implements OnInit, AfterViewInit {
   @Output() onCancel = new EventEmitter();
   @Output() onAccept = new EventEmitter();
   type = 0;

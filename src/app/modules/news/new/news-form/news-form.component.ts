@@ -232,6 +232,14 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
         // tinyMCE.get(id).setContent(content);
     }
 
+    selectImage(image: ExplorerItem) {
+        if (image.isImage) {
+            const imageAbsoluteUrl = environment.fileUrl + image.url;
+            tinyMCE.execCommand('mceInsertContent', false,
+                `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
+        }
+    }
+
     closeForm() {
         this.router.navigate(['/news']);
     }
