@@ -22,6 +22,7 @@ import {FaqGroup} from '../model/faq-group.model';
     styleUrls: ['./faq-list.component.scss'],
     providers: [HelperService, UtilService]
 })
+
 export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> implements OnInit {
     @ViewChild(FaqGroupFormComponent) faqGroupForm: FaqGroupFormComponent;
     @ViewChild(FaqFormComponent) faqForm: FaqFormComponent;

@@ -13,9 +13,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 declare var tinymce: any;
 
-if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
-}
+// if (!/localhost/.test(document.location.host)) {
+//     enableProdMode();
+// }
 @Component({
     encapsulation: ViewEncapsulation.None,
     selector: 'tinymce',

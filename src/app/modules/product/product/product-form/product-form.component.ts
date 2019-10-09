@@ -17,7 +17,7 @@ import {ProductAttribute} from './product-attribute/model/product-value.model';
 import {ProductCategoryViewModel} from '../viewmodel/product-category.viewmodel';
 import {NumberValidator} from '../../../../validators/number.validator';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
-import {environment} from '../../../../../environments/environment.prod';
+import {environment} from '../../../../../environments/environment';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {BaseFormComponent} from '../../../../base-form.component';
