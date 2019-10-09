@@ -35,7 +35,7 @@ export const routes: Routes = [
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
+            confirmButtonClass: 'btn btn-primary cm-mgr-5',
             cancelButtonClass: 'btn',
             confirmButtonText: 'Đồng ý',
             showCancelButton: true,

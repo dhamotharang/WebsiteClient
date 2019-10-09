@@ -66,7 +66,7 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit, After
 
     onModalHidden() {
         if (this.isModified) {
-            this.saveSuccessful.emit();
+            this.saveSuccessful.emit(this.faq);
         }
     }
 
@@ -84,8 +84,7 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit, After
         this.faqFormModal.open();
     }
 
-    afterUploadImageContent(images: ExplorerItem[], i: number) {
-        const id = 'content' + i;
+    afterUploadImageContent(images: ExplorerItem[]) {
         images.forEach((image) => {
             if (image.isImage) {
                 const imageAbsoluteUrl = environment.fileUrl + image.url;
@@ -109,6 +108,7 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit, After
             this.faq = this.model.value;
             this.isSaving = true;
             if (this.isUpdate) {
+                this.faq.id = this.faqId;
                 this.faqService.update(this.faqId, this.faq)
                     .pipe(finalize(() => this.isSaving = false))
                     .subscribe((result: ActionResultViewModel) => {
@@ -126,6 +126,7 @@ export class FaqFormComponent extends BaseFormComponent implements OnInit, After
                         } else {
                             this.resetForm();
                             this.faqFormModal.dismiss();
+                            this.faq.id = result.data;
                         }
                     });
             }

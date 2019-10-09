@@ -157,32 +157,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         }
     }
 
-    // onConversionValueBlur(conversionUnitControl: FormControl, index: number) {
-    //     if (this.isUpdate) {
-    //         this.saveProductUnit(conversionUnitControl, index);
-    //     }
-    // }
-
-    // onSalePriceBlur(conversionUnitControl: FormControl, index: number) {
-    //     if (this.isUpdate) {
-    //         // const isValid = this.validateFormGroup(conversionUnitControl, this.conversionFormErrors[index],
-    //         //     this.conversionValidationMessages[index], true);
-    //         // if (isValid) {
-    //         //     const salePrice = conversionUnitControl.value.salePrice;
-    //         //     const productUnitId = conversionUnitControl.value.productUnitId;
-    //         //     const productUnitConversionId = conversionUnitControl.value.productUnitConversionId;
-    //         //     this.subscribers.updateConversionSalePrice = this.productService.updateConversionUnitSalePrice(this.id, productUnitId,
-    //         //         productUnitConversionId, salePrice)
-    //         //         .subscribe((result: ActionResultViewModel) => {
-    //         //             this.toastr.success(result.message);
-    //         //         });
-    //         // }
-    //         // this.saveProductUnit(conversionUnitControl, index);
-    //     }
-    // }
-
     onAttributeSelected(selectedAttribute: any, attributeFormControl: FormControl, index: number) {
-        console.log(selectedAttribute);
         const count = _.countBy(this.attributes.controls, (conversion: FormControl) => {
             return conversion.get('attributeId').value === selectedAttribute.id;
         }).true;
