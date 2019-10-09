@@ -64,7 +64,7 @@ import {ProductCategorySelectComponent} from './product-category/product-categor
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
+            confirmButtonClass: 'btn btn-primary cm-mgr-5',
             cancelButtonClass: 'btn',
             confirmButtonText: 'Đồng ý',
             showCancelButton: true,

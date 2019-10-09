@@ -162,6 +162,7 @@
 
               .question {
                 cursor: pointer;
+                font-weight: bold;
               }
               .gw-description {
                 color: $brightGray;
@@ -197,7 +198,7 @@
                   top: -7px;
                   border-left: 7px solid transparent;
                   border-right: 7px solid transparent;
-                  border-bottom: 7px solid #fff;
+                  border-bottom: 7px solid #efefef;
                 }
               }
             }

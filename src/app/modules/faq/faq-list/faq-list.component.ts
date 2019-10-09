@@ -60,6 +60,10 @@ export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> imple
     changeFaqGroupOrder(item: FaqGroupViewModel) {
         const faqModel = this.getFaqGroupModel(item);
         this.faqService.updateGroup(item.id, faqModel).subscribe((result: ActionResultViewModel) => {
+            item.concurrencyStamp = result.data;
+            this.listItems = _.sortBy(this.listItems, (faqGroup) => {
+                return faqGroup.order;
+            });
         });
     }
 
@@ -69,10 +73,10 @@ export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> imple
         this.faqService.updateGroup(item.id, faqModel).subscribe((result: ActionResultViewModel) => {
             if (result.code > 0) {
                 item.isActive = !item.isActive;
+                item.concurrencyStamp = result.data;
             }
         });
     }
-
 
     addQuestion(item: FaqGroupViewModel) {
         this.faqForm.add(item.id);
@@ -81,37 +85,67 @@ export class FaqListComponent extends BaseListComponent<FaqGroupViewModel> imple
     deleteGroup(item: FaqGroupViewModel) {
         this.faqService.deleteGroup(item.id).subscribe((data: ActionResultViewModel) => {
             if (data.code > 0) {
-                this.search();
+                _.remove(this.listItems, (faqGroup: FaqViewModel) => {
+                    return faqGroup.id === item.id;
+                });
             }
         });
     }
 
     updateQuestion(item: FaqViewModel) {
-        const faqModel = this.getFaqModel(item);
-        this.faqService.update(item.id, faqModel).subscribe((result: ActionResultViewModel) => {
-        });
+        this.faqForm.update(item.id);
     }
 
-    changeStatusQuestion(item: FaqViewModel) {
+    changeStatusQuestion(item: FaqViewModel, faqGroup: FaqGroupViewModel) {
         const faqModel = this.getFaqModel(item);
         faqModel.isActive = !item.isActive;
         this.faqService.update(item.id, faqModel).subscribe((result: ActionResultViewModel) => {
             if (result.code > 0) {
                 item.isActive = !item.isActive;
+                item.concurrencyStamp = result.data;
             }
         });
     }
 
-    changeOrderQuestion(item: FaqViewModel) {
-
+    changeOrderQuestion(item: FaqViewModel, faqGroup: FaqGroupViewModel) {
+        const faqModel = this.getFaqModel(item);
+        this.faqService.update(item.id, faqModel).subscribe((result: ActionResultViewModel) => {
+            item.concurrencyStamp = result.data;
+            faqGroup.listFaq = _.sortBy(faqGroup.listFaq, (faq) => {
+                return faq.order;
+            });
+        });
     }
 
-    deleteQuestion(item: FaqViewModel) {
+    deleteQuestion(item: FaqViewModel, faqGroup: FaqGroupViewModel) {
         this.faqService.delete(item.id).subscribe((data: ActionResultViewModel) => {
             if (data.code > 0) {
-                this.search();
+                _.remove(faqGroup.listFaq, (faq: FaqViewModel) => {
+                    return faq.id === item.id;
+                });
             }
         });
+    }
+
+    updateQuestionSuccess(faq: Faq) {
+        this.faqService.search('', null, 1, this.pageSize).subscribe(
+            (data: SearchResultViewModel<FaqGroupViewModel>) => {
+                this.listItems = data.items;
+                this.renderListFaqGroupSuggestion();
+                const faqGroupInfo = _.find(this.listItems, (faqGroup: FaqGroupViewModel) => {
+                    return faqGroup.id = faq.faqGroupId;
+                });
+
+                if (faqGroupInfo) {
+                    faqGroupInfo.isShowTask = true;
+                    const faqInfo = _.find(faqGroupInfo.listFaq, (item: FaqViewModel) => {
+                        return item.id === faq.id;
+                    });
+                    if (faqInfo) {
+                        faqInfo.isShowAnswer = true;
+                    }
+                }
+            });
     }
 
     search() {

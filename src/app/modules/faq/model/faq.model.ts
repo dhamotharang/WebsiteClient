@@ -1,4 +1,5 @@
 export class Faq {
+    id: string;
     faqGroupId: string;
     photo: string;
     order: number;
