@@ -1,3 +1,8 @@
+<style>
+    label {
+        text-align: left !important;
+    }
+</style>
 <nh-modal #productFormModal size="lg"
           (shown)="onModalShown()"
           (hidden)="onModalHidden()">
@@ -9,18 +14,28 @@
         <nh-modal-content>
             <div class="row">
                 <div class="col-sm-4">
+                    <div class="product-thumbnail w200 center cm-mgb-10">
+                        <img ghmImage [src]="thumbnail"
+                             [class]="'img-responsive'"
+                             [nhImageViewer]="urlFile + thumbnail"
+                             [errorImageUrl]="'/assets/images/no-image.png'">
+                    </div>
                     <ghm-file-explorer i18n-buttonText="@@selectImage"
                                        [multiple]="true"
-                                       i18n-buttonText="@@selectProductImage"
                                        [buttonText]="'Chọn ảnh SP'"
                                        (itemSelected)="selectProductImage($event)"
                                        (acceptSelected)="uploadImageProduct($event)"></ghm-file-explorer>
+                    <button *ngIf="thumbnail" type="button" class="btn red cm-mgl-5" (click)="removeThumbnail()">
+                        <i class="fa fa-remove"></i>Xóa ảnh
+                    </button>
                     <div class="product-images">
                         <div class="image-content" *ngFor="let item of productImages"
                              [class.thumbnail]="item.isThumbnail">
                             <img ghmImage [src]="item.url"
                                  [nhImageViewer]="urlFile + item.url"
+                                 [class]="item.isThumbnail ? 'isThumbnail' : ''"
                                  [errorImageUrl]="'/assets/images/no-image.png'">
+                            <span *ngIf="item.isThumbnail" class="mg-overlay"></span>
                             <button class="btn btn-sm btn-remove red" type="button"
                                     [swal]="confirmDeleteImage"
                                     (click)="removeImage(item)">
@@ -184,62 +199,56 @@
                     </div>
                 </div>
             </div>
-            <mat-accordion class="example-headers-align ">
-                <div class="cm-mgb-10">
-                    <mat-expansion-panel hideToggle>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>
-                                <span i18n="@@productAttribute">Thuộc tính SP</span>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="table-responsive">
-                            <table class="table table-hover table-striped"
-                                   formArrayName="attributes">
-                                <thead>
-                                <tr>
-                                    <th class="middle w200" i18n="@@productAttribute">Thuộc tính SP</th>
-                                    <th class="middle" i18n="@@productAttributeValue">Giá trị thuộc tính SP</th>
-                                    <th class="middle center" i18n="@@websiteVisible">Hiển thị website</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr *ngFor="let item of attributes.controls; let i = index"
-                                    [formGroupName]="i">
-                                    <td>
-                                        <ng-container *ngIf="!isReadOnly">
-                                            <app-product-attribute-suggestion
-                                                    [selectedItem]="item.value.attributeId ? {id: item.value.attributeId, name: item.value.attributeName} : null"
-                                                    (itemSelected)="onAttributeSelected($event, item, i)"
-                                                    (itemRemoved)="onAttributeRemoved(i)"></app-product-attribute-suggestion>
-                                        </ng-container>
-                                    </td>
-                                    <td>
-                                        <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
-                                            <app-product-attribute-value-suggestion
-                                                    [class.has-error]="attributeFormErrors[i].productAttributeValues"
-                                                    [multiple]="item.value.isMultiple"
-                                                    [attributeId]="item.value.attributeId"
-                                                    [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
-                                                    (itemSelected)="onProductAttributeValueSelected($event, item, i)"
-                                                    (itemRemoved)="onProductAttributeValueRemoved(item)"></app-product-attribute-value-suggestion>
-                                        </ng-container>
-                                        <ng-template #selfContentTemplate>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="cm-mgt-10 cm-mgb-10">Thuộc tính SP</h3>
+                    <table class="table table-hover table-striped"
+                           formArrayName="attributes">
+                        <thead>
+                        <tr>
+                            <th class="middle w200" i18n="@@productAttribute">Thuộc tính SP</th>
+                            <th class="middle" i18n="@@productAttributeValue">Giá trị thuộc tính SP</th>
+                            <th class="middle center w100" i18n="@@websiteVisible">Hiển thị website</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let item of attributes.controls; let i = index"
+                            [formGroupName]="i">
+                            <td>
+                                <ng-container *ngIf="!isReadOnly">
+                                    <app-product-attribute-suggestion
+
+                                            [selectedItem]="item.value.attributeId ? {id: item.value.attributeId, name: item.value.attributeName} : null"
+                                            (itemSelected)="onAttributeSelected($event, item, i)"
+                                            (itemRemoved)="onAttributeRemoved(i)"></app-product-attribute-suggestion>
+                                </ng-container>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
+                                    <app-product-attribute-value-suggestion
+                                            [class.has-error]="attributeFormErrors[i].productAttributeValues"
+                                            [multiple]="item.value.isMultiple"
+                                            [attributeId]="item.value.attributeId"
+                                            [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
+                                            (itemSelected)="onProductAttributeValueSelected($event, item, i)"
+                                            (itemRemoved)="onProductAttributeValueRemoved(item)"></app-product-attribute-value-suggestion>
+                                </ng-container>
+                                <ng-template #selfContentTemplate>
                                         <textarea type="text" formControlName="value" class="form-control"
+                                                  rows="3"
                                                   [class.has-error]="attributeFormErrors[i].value"
                                                   placeholder="Nhập nội dung"
                                                   i18n-placeholder="@@enterContent"></textarea>
-                                        </ng-template>
-                                    </td>
-                                    <td class="center middle">
-                                        <dx-check-box formControlName="isShowClient"></dx-check-box>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </mat-expansion-panel><!-- END: Product attribute -->
+                                </ng-template>
+                            </td>
+                            <td class="center middle">
+                                <dx-check-box formControlName="isShowClient"></dx-check-box>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </mat-accordion>
+            </div>
         </nh-modal-content>
         <nh-modal-footer>
             <div class="form-group">

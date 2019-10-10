@@ -196,16 +196,14 @@
             </div>
             <dxi-column dataField="categoryName" [width]="200" caption="Nhóm sản phẩm" cssClass="middle"></dxi-column>
             <dxi-column dataField="defaultUnit" caption="Đơn vị tính" width="100" cssClass="middle"></dxi-column>
-            <dxi-column dataField="salePrice" caption="Giá bán(VNĐ)" width="100"  cssClass="middle"></dxi-column>
+            <dxi-column dataField="salePrice" caption="Giá bán(VNĐ)" width="100"  cssClass="middle" cellTemplate="salePriceTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'salePriceTemplate'">
+                <span>{{cell.data.salePrice | formatNumber}}</span>
+            </div>
             <dxi-column dataField="isHot" caption="Sản phẩm nổ bật" [width]="100" dataType="boolean" cssClass="middle">
             </dxi-column>
             <dxi-column dataField="isHomePage" caption="Hiển thị trang chủ" [width]="100" dataType="boolean" cssClass="middle">
             </dxi-column>
-            <div *dxTemplate="let cell of 'isManagementByLotTemplate'">
-                <dx-check-box color="primary" [value]="cell.data.isManagementByLot"
-                              [disabled]="!permission.edit"
-                              (onValueChanged)="updateManagementByLot(cell.data)"></dx-check-box>
-            </div>
             <dxi-column dataField="isActive" type="boolean" [width]="100" caption="Trạng thái" alignment="center"
                         cssClass="middle" cellTemplate="activeTemplate">
                 <dxo-header-filter [dataSource]="[
