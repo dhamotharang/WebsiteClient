@@ -55,12 +55,6 @@ export class ProductAttributeValueSuggestionComponent extends BaseListComponent<
                 this.totalRows = result.totalRows;
                 this.listItems = result.items;
             });
-        // this.productAttributeService.suggestions(this.keyword, this.currentPage, this.appConfig.PAGE_SIZE)
-        //     .pipe(finalize(() => this.isSearching = false))
-        //     .subscribe((result: SearchResultViewModel<NhSuggestion>) => {
-        //         this.totalRows = result.totalRows;
-        //         this.listItems = result.items;
-        //     });
     }
 
     clear() {

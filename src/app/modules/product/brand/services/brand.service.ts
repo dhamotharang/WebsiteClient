@@ -9,7 +9,7 @@ import {BrandSearchViewModel} from '../viewmodel/brand-search.viewmodel';
 import {Brand} from '../model/brand.model';
 import * as _ from 'lodash';
 import {BrandDetailViewModel} from '../viewmodel/brand-detail.viewmodel';
-import {environment} from '../../../../../environments/environment.prod';
+import {environment} from '../../../../../environments/environment';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';

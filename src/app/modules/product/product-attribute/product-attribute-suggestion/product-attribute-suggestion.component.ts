@@ -1,22 +1,23 @@
 import {Component, enableProdMode, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import { finalize } from 'rxjs/operators';
-import { NhSuggestion, NhSuggestionComponent } from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
-import { SearchResultViewModel } from '../../../../shareds/view-models/search-result.viewmodel';
-import { BaseListComponent } from '../../../../base-list.component';
-import { ProductAttributeService } from '../product-attribute.service';
-
+import {finalize} from 'rxjs/operators';
+import {NhSuggestion, NhSuggestionComponent} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {BaseListComponent} from '../../../../base-list.component';
+import {ProductAttributeService} from '../product-attribute.service';
+import * as _ from 'lodash';
+import {ProductAttribute} from '../../product/product-form/product-attribute/model/product-value.model';
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
 // }
 @Component({
-  selector: 'app-product-attribute-suggestion',
-  templateUrl: './product-attribute-suggestion.component.html'
+    selector: 'app-product-attribute-suggestion',
+    templateUrl: './product-attribute-suggestion.component.html'
 })
-export class ProductAttributeSuggestionComponent  extends BaseListComponent<NhSuggestion> implements OnInit {
+export class ProductAttributeSuggestionComponent extends BaseListComponent<NhSuggestion> implements OnInit {
     @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
     @Input() multiple = false;
     @Input() selectedItem;
-
+    @Input() listSelectedItem: ProductAttribute[];
     @Output() keyPressed = new EventEmitter();
     @Output() itemSelected = new EventEmitter();
     @Output() itemRemoved = new EventEmitter();
@@ -46,7 +47,13 @@ export class ProductAttributeSuggestionComponent  extends BaseListComponent<NhSu
             .pipe(finalize(() => this.isSearching = false))
             .subscribe((result: SearchResultViewModel<NhSuggestion>) => {
                 this.totalRows = result.totalRows;
-                this.listItems = result.items;
+                console.log(this.listSelectedItem);
+                this.listItems = _.filter(result.items, (select: NhSuggestion) => {
+                    return !(_.find(this.listSelectedItem, (selected: ProductAttribute) => {
+                            return selected.attributeId === select.id;
+                        }
+                    ));
+                });
             });
     }
 

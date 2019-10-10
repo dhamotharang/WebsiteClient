@@ -17,7 +17,7 @@ import {ProductAttribute} from './product-attribute/model/product-value.model';
 import {ProductCategoryViewModel} from '../viewmodel/product-category.viewmodel';
 import {NumberValidator} from '../../../../validators/number.validator';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
-import {environment} from '../../../../../environments/environment.prod';
+import {environment} from '../../../../../environments/environment';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {BaseFormComponent} from '../../../../base-form.component';
@@ -28,6 +28,9 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
+import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
+import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
 // }
@@ -49,12 +52,13 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     categories: number[];
     productImages: ProductImage[] = [];
     modelTranslation = new ProductTranslation();
-    listProductValue: ProductAttribute[] = [];
+    listProductAttribute: ProductAttributeViewModel[] = [];
     conversionFormErrors: any = {};
     conversionValidationMessages: any = {};
     attributeFormErrors: any = {};
     attributeValidationMessages: any = {};
     urlFile = `${environment.fileUrl}`;
+    thumbnail = '';
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -64,6 +68,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 private utilService: UtilService,
                 private route: ActivatedRoute,
                 private router: Router,
+                private productAttributeService: ProductAttributeService,
                 private productCategoryService: ProductCategoryService,
                 private productService: ProductService) {
         super();
@@ -214,6 +219,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     add() {
         this.productFormModal.open();
+        this.initProductAttribute();
     }
 
     edit(productId: string) {
@@ -238,8 +244,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             this.product.attributes = _.filter(this.product.attributes, (productAttributeValue: ProductAttribute) => {
                 return productAttributeValue.attributeId
                     && ((productAttributeValue.attributeValues
-                    && productAttributeValue.attributeValues.length > 0 && !productAttributeValue.isSelfContent)
-                    || (productAttributeValue.isSelfContent && productAttributeValue.value));
+                        && productAttributeValue.attributeValues.length > 0 && !productAttributeValue.isSelfContent)
+                        || (productAttributeValue.isSelfContent && productAttributeValue.value));
             });
 
             this.isSaving = true;
@@ -285,6 +291,14 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 }
             });
 
+            const existsProductThumbnail = _.find(this.productImages, (productImage: ProductImage) => {
+                return productImage.isThumbnail;
+            });
+
+            if (!existsProductThumbnail) {
+                this.thumbnail = files[0].url;
+            }
+
             this.model.patchValue({images: this.productImages});
         }
     }
@@ -301,16 +315,33 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             this.productImages.push(new ProductImage(this.id, '', file.url));
         }
 
+        const existsProductThumbnail = _.find(this.productImages, (productImage: ProductImage) => {
+            return productImage.isThumbnail;
+        });
+
+        if (!existsProductThumbnail) {
+            this.thumbnail = file.url;
+        }
         this.model.patchValue({images: this.productImages});
     }
 
     removeThumbnail() {
+        const existsProductImage = _.find(this.productImages, (productImage: ProductImage) => {
+            return productImage.isThumbnail;
+        });
+
+        if (existsProductImage) {
+            existsProductImage.isThumbnail = false;
+        }
+
         this.model.patchValue({thumbnail: ''});
+        this.thumbnail = '';
     }
 
     removeImage(productImage: ProductImage) {
         if (productImage.isThumbnail) {
             this.model.patchValue({thumbnail: ''});
+            this.thumbnail = '';
         }
         _.remove(this.productImages, (item: ProductImage) => {
             return item.url === productImage.url;
@@ -337,6 +368,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 image.isThumbnail = false;
             });
             this.model.patchValue({thumbnail: item.url});
+            this.thumbnail = item.url;
         }
         item.isThumbnail = !item.isThumbnail;
     }
@@ -531,6 +563,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                     isHot: result.isHot,
                     isHomePage: result.isHomePage
                 });
+                this.thumbnail = result.thumbnail;
                 this.productImages = result.images;
                 if (result.categories) {
                     this.categories = [];
@@ -598,5 +631,31 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                     this.addAttribute();
                 });
             });
+    }
+
+    private initProductAttribute() {
+        // this.productAttributeService.search('', null, null, true, 1, 20)
+        //     .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+        //         this.listProductAttribute = result.items;
+        //         let index = 0;
+        //         // this.model.patchValue({attributes: []});
+        //         _.each(this.listProductAttribute, (item: ProductAttributeViewModel) => {
+        //             const productAttributeValue: ProductAttribute = {
+        //                 id: '',
+        //                 attributeId: item.id,
+        //                 attributeName: item.name,
+        //                 value: null,
+        //                 isSelfContent: item.isSelfContent,
+        //                 isMultiple: item.isMultiple,
+        //                 isShowClient: true,
+        //                 attributeValues: null
+        //             };
+        //             this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
+        //             index++;
+        //         });
+        //         setTimeout(() => {
+        //             this.addAttribute();
+        //         });
+        //     });
     }
 }
