@@ -18,6 +18,7 @@ export class ProductAttributeValueSuggestionComponent extends BaseListComponent<
     @Input() multiple = false;
     @Input() selectedItem;
     @Input() attributeId;
+    @Input() allowAdd = false;
 
     @Output() keyPressed = new EventEmitter();
     @Output() itemSelected = new EventEmitter();

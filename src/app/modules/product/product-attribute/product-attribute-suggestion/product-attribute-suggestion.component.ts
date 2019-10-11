@@ -18,6 +18,8 @@ export class ProductAttributeSuggestionComponent extends BaseListComponent<NhSug
     @Input() multiple = false;
     @Input() selectedItem;
     @Input() listSelectedItem: ProductAttribute[];
+    @Input() isReadOnly = false;
+    @Input() allowAdd = false;
     @Output() keyPressed = new EventEmitter();
     @Output() itemSelected = new EventEmitter();
     @Output() itemRemoved = new EventEmitter();

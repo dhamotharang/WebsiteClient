@@ -26,7 +26,7 @@
                                        (itemSelected)="selectProductImage($event)"
                                        (acceptSelected)="uploadImageProduct($event)"></ghm-file-explorer>
                     <button *ngIf="thumbnail" type="button" class="btn red cm-mgl-5" (click)="removeThumbnail()">
-                        <i class="fa fa-remove"></i>Xóa ảnh
+                        Xóa ảnh
                     </button>
                     <div class="product-images">
                         <div class="image-content" *ngFor="let item of productImages"
@@ -202,7 +202,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <h3 class="cm-mgt-10 cm-mgb-10">Thuộc tính SP</h3>
-                    <table class="table table-hover table-striped"
+                    <table class="table table-striped"
                            formArrayName="attributes">
                         <thead>
                         <tr>
@@ -217,13 +217,14 @@
                             <td>
                                 <ng-container *ngIf="!isReadOnly">
                                     <app-product-attribute-suggestion
-
+                                            [listSelectedItem]="model.value.attributes"
+                                            [isReadOnly]="true"
                                             [selectedItem]="item.value.attributeId ? {id: item.value.attributeId, name: item.value.attributeName} : null"
                                             (itemSelected)="onAttributeSelected($event, item, i)"
                                             (itemRemoved)="onAttributeRemoved(i)"></app-product-attribute-suggestion>
                                 </ng-container>
                             </td>
-                            <td>
+                            <td class="middle">
                                 <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
                                     <app-product-attribute-value-suggestion
                                             [class.has-error]="attributeFormErrors[i].productAttributeValues"
@@ -234,11 +235,33 @@
                                             (itemRemoved)="onProductAttributeValueRemoved(item)"></app-product-attribute-value-suggestion>
                                 </ng-container>
                                 <ng-template #selfContentTemplate>
-                                        <textarea type="text" formControlName="value" class="form-control"
-                                                  rows="3"
-                                                  [class.has-error]="attributeFormErrors[i].value"
-                                                  placeholder="Nhập nội dung"
-                                                  i18n-placeholder="@@enterContent"></textarea>
+                                    <dx-html-editor formControlName="value" [height]="200">
+                                        <dxo-toolbar>
+                                            <dxi-item formatName="undo"></dxi-item>
+                                            <dxi-item formatName="redo"></dxi-item>
+                                            <dxi-item formatName="separator"></dxi-item>
+                                            <dxi-item formatName="size" [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
+                                            <dxi-item formatName="font" [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
+                                            <dxi-item formatName="separator"></dxi-item>
+                                            <dxi-item formatName="bold"></dxi-item>
+                                            <dxi-item formatName="italic"></dxi-item>
+                                            <dxi-item formatName="strike"></dxi-item>
+                                            <dxi-item formatName="underline"></dxi-item>
+                                            <dxi-item formatName="separator"></dxi-item>
+                                            <dxi-item formatName="alignLeft"></dxi-item>
+                                            <dxi-item formatName="alignCenter"></dxi-item>
+                                            <dxi-item formatName="alignRight"></dxi-item>
+                                            <dxi-item formatName="alignJustify"></dxi-item>
+                                            <dxi-item formatName="separator"></dxi-item>
+                                            <dxi-item formatName="color"></dxi-item>
+                                            <dxi-item formatName="background"></dxi-item>
+                                        </dxo-toolbar>
+                                    </dx-html-editor>
+                                        <!--<textarea type="text" formControlName="value" class="form-control"-->
+                                                  <!--rows="3"-->
+                                                  <!--[class.has-error]="attributeFormErrors[i].value"-->
+                                                  <!--placeholder="Nhập nội dung"-->
+                                                  <!--&gt;</textarea>&ndash;&gt;-->
                                 </ng-template>
                             </td>
                             <td class="center middle">

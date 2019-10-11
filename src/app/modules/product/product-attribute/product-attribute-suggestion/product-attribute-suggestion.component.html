@@ -1,8 +1,10 @@
 <nh-suggestion
-    [placeholder]="'Nhập tên thuộc tính.'"
-    [sources]="listItems"
-    [loading]="isSearching"
-    [selectedItem]="selectedItem"
-    (searched)="onSearchKeyPress($event)"
-    (itemRemoved)="itemRemoved.emit($event)"
-    (itemSelected)="onItemSelected($event)"></nh-suggestion>
+        [placeholder]="'Nhập tên thuộc tính.'"
+        [sources]="listItems"
+        [loading]="isSearching"
+        [selectedItem]="selectedItem"
+        [readonly]="isReadOnly"
+        [allowAdd]="allowAdd"
+        (searched)="onSearchKeyPress($event)"
+        (itemRemoved)="itemRemoved.emit($event)"
+        (itemSelected)="onItemSelected($event)"></nh-suggestion>

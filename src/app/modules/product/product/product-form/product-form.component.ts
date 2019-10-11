@@ -184,7 +184,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     onAttributeRemoved(index: number) {
         this.attributes.removeAt(index);
         const defaultFormControl = _.find(this.attributes, (formControl: FormControl) => {
-            return !formControl.value.attributeId;
+            return formControl.value && !formControl.value.attributeId;
         });
 
         if (!defaultFormControl) {
@@ -225,7 +225,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     edit(productId: string) {
         this.id = productId;
         this.isUpdate = true;
-        this.getDetail(productId);
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listProductAttribute = result.items;
+                this.getDetail(productId);
+            });
     }
 
     save() {
@@ -508,6 +512,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             isSelfContent: [productValue ? productValue.isSelfContent : false],
             isMultiple: [productValue ? productValue.isMultiple : false],
             isShowClient: [productValue ? productValue.isShowClient : false],
+            isRequired: [productValue ? productValue.isRequired : false],
             attributeValues: [productValue ? productValue.attributeValues : [], [
                 Validators.required
             ]],
@@ -589,32 +594,47 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 }
                 if (result.attributes) {
                     const groups = _.groupBy(result.attributes, 'attributeId');
-                    if (groups) {
-                        this.attributes.removeAt(0);
-                        let index = 0;
-                        for (const key in groups) {
-                            if (groups.hasOwnProperty(key)) {
-                                const groupItem: ProductAttribute = groups[key][0];
-                                const productAttributeValue: ProductAttribute = {
-                                    id: groupItem.id,
-                                    attributeId: groupItem.attributeId,
-                                    attributeName: groupItem.attributeName,
-                                    value: groupItem.value,
-                                    isSelfContent: groupItem.isSelfContent,
-                                    isMultiple: groupItem.isMultiple,
-                                    isShowClient: groupItem.isShowClient,
-                                    attributeValues: groups[key].map((group: ProductAttribute) => {
-                                        return {
-                                            id: group.attributeValueId,
-                                            name: group.attributeValueName
-                                        };
-                                    })
-                                };
-                                this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
-                            }
-                            index++;
+                    this.attributes.removeAt(0);
+                    let index = 0;
+                    _.each(this.listProductAttribute, (productAttribute: ProductAttributeViewModel) => {
+                        const groupItemInfo = _.find(groups, (group: any) => {
+                            return group && group.length > 0 && group[0].attributeId === productAttribute.id;
+                        });
+
+                        if (groupItemInfo) {
+                            const groupItem = groups[productAttribute.id][0];
+                            const productAttributeValue: ProductAttribute = {
+                                id: groupItem.id,
+                                attributeId: groupItem.attributeId,
+                                attributeName: groupItem.attributeName,
+                                value: groupItem.value,
+                                isSelfContent: groupItem.isSelfContent,
+                                isMultiple: groupItem.isMultiple,
+                                isShowClient: groupItem.isShowClient,
+                                attributeValues: groups[productAttribute.id].map((group: ProductAttribute) => {
+                                    return {
+                                        id: group.attributeValueId,
+                                        name: group.attributeValueName
+                                    };
+                                })
+                            };
+                            this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
+                        } else {
+                            const productAttributeValue: ProductAttribute = {
+                                id: '',
+                                attributeId: productAttribute.id,
+                                attributeName: productAttribute.name,
+                                value: null,
+                                isSelfContent: productAttribute.isSelfContent,
+                                isMultiple: productAttribute.isMultiple,
+                                isShowClient: true,
+                                isRequired: productAttribute.isRequire,
+                                attributeValues: []
+                            };
+                            this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
                         }
-                    }
+                        index++;
+                    });
                 }
                 if (result.images) {
                     this.productImages = result.images;
@@ -634,28 +654,29 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     private initProductAttribute() {
-        // this.productAttributeService.search('', null, null, true, 1, 20)
-        //     .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
-        //         this.listProductAttribute = result.items;
-        //         let index = 0;
-        //         // this.model.patchValue({attributes: []});
-        //         _.each(this.listProductAttribute, (item: ProductAttributeViewModel) => {
-        //             const productAttributeValue: ProductAttribute = {
-        //                 id: '',
-        //                 attributeId: item.id,
-        //                 attributeName: item.name,
-        //                 value: null,
-        //                 isSelfContent: item.isSelfContent,
-        //                 isMultiple: item.isMultiple,
-        //                 isShowClient: true,
-        //                 attributeValues: null
-        //             };
-        //             this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
-        //             index++;
-        //         });
-        //         setTimeout(() => {
-        //             this.addAttribute();
-        //         });
-        //     });
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listProductAttribute = result.items;
+                this.attributes.removeAt(0);
+                let index = 0;
+                _.each(this.listProductAttribute, (item: ProductAttributeViewModel) => {
+                    const productAttributeValue: ProductAttribute = {
+                        id: '',
+                        attributeId: item.id,
+                        attributeName: item.name,
+                        value: null,
+                        isSelfContent: item.isSelfContent,
+                        isMultiple: item.isMultiple,
+                        isShowClient: true,
+                        isRequired: item.isRequire,
+                        attributeValues: []
+                    };
+                    this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
+                    index++;
+                });
+                setTimeout(() => {
+                    this.addAttribute();
+                });
+            });
     }
 }

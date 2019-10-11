@@ -28,7 +28,7 @@ import {ProductAttributeValueSuggestionComponent} from './product-attribute/prod
 import {
     DxCheckBoxModule,
     DxContextMenuModule,
-    DxDataGridModule,
+    DxDataGridModule, DxHtmlEditorModule,
     DxNumberBoxModule,
     DxTemplateModule,
     DxTreeListModule
@@ -60,7 +60,7 @@ import {ProductCategorySelectComponent} from './product-category/product-categor
         DatetimeFormatModule, NhTabModule, GhmFileExplorerModule, NhContextMenuModule,
         MatRadioModule, GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule, NhSuggestionModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, DxTreeListModule, GhmSettingDataGridModule,
-        NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule,
+        NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule, DxHtmlEditorModule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
