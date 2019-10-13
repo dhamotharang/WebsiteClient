@@ -3,4 +3,5 @@ export class ProductTranslation {
     name: string;
     description: string;
     seoLink: string;
+    content: string;
 }

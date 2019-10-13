@@ -34,7 +34,6 @@
                 <input
                     [attr.id]="id"
                     type="text"
-                    [attr.disabled]="readonly"
                     [(ngModel)]="keyword"
                     name="searchSuggestion"
                     autocomplete="off"
@@ -84,7 +83,7 @@
         </div><!-- END: .nhs-item-image -->
         <div class="nhs-item-info">
             <i class="{{ item.icon }}" *ngIf="item.icon"></i>
-            <h2 class="nh-suggestion-name">{{ item.name }}</h2>
+            <h2 class="nh-suggestion-name" style="font-size: 13px">{{ item.name }}</h2>
             <div class="nh-suggestion-des" *ngIf="item.description">{{ item.description }}</div>
         </div><!-- END: .nhs-item-info -->
     </li><!-- END: .nhs-item -->
@@ -93,8 +92,8 @@
 <ng-template #singleTemplate>
     <div class="nhs-item" *ngIf="selectedItem && !isShowSearchBox">
         <div class="nhs-item-info" (click)="showSearchBox($event)">
-            <i class="{{ selectedItem?.icon }}" *ngIf="selectedItem?.icon"></i>
-            <span>{{ selectedItem?.name }}</span>
+            <i class="{{selectedItem?.icon }}" *ngIf="selectedItem?.icon"></i>
+            <span>{{selectedItem?.name }}</span>
         </div>
         <span class="remove" (click)="removeSelectedItem(selectedItem)" *ngIf="!readonly">
             <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"

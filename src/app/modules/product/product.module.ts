@@ -52,15 +52,17 @@ import {NhSelectModule} from '../../shareds/components/nh-select/nh-select.modul
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {ProductSelectComponent} from './product/product-select/product-select.component';
 import {ProductCategorySelectComponent} from './product-category/product-category-select/product-category-select.component';
+import {NhSafeHtmlModeule} from '../../shareds/components/nh-safe-html/nh-safe-html.module';
+import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
 
 @NgModule({
     imports: [
         CommonModule, ProductRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
         NHTreeModule, NhSelectModule, MatIconModule, NhModalModule, GhmPagingModule,
-        DatetimeFormatModule, NhTabModule, GhmFileExplorerModule, NhContextMenuModule,
+        DatetimeFormatModule, NhTabModule, GhmFileExplorerModule, NhContextMenuModule, TinymceModule,
         MatRadioModule, GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule, NhSuggestionModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, DxTreeListModule, GhmSettingDataGridModule,
-        NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule, DxHtmlEditorModule,
+        NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule, DxHtmlEditorModule, NhSafeHtmlModeule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

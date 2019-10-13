@@ -7,13 +7,12 @@
           (shown)="onModalShown()"
           (hidden)="onModalHidden()">
     <nh-modal-header class="uppercase font-green-sharp bold">
-        <span
-                i18n="@@productFormModalTitle">{isUpdate, select, 0 {Thêm mới SP} 1 {Cập nhật thông tin SP}}</span>
+        <span i18n="@@productFormModalTitle">{isUpdate, select, 0 {Thêm mới sản phẩm} 1 {Cập nhật thông tin sản phẩm}}</span>
     </nh-modal-header>
     <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
         <nh-modal-content>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="product-thumbnail w200 center cm-mgb-10">
                         <img ghmImage [src]="thumbnail"
                              [class]="'img-responsive'"
@@ -21,11 +20,12 @@
                              [errorImageUrl]="'/assets/images/no-image.png'">
                     </div>
                     <ghm-file-explorer i18n-buttonText="@@selectImage"
+                                       [buttonClass]="'btn-sm'"
                                        [multiple]="true"
-                                       [buttonText]="'Chọn ảnh SP'"
+                                       [buttonText]="'Chọn ảnh'"
                                        (itemSelected)="selectProductImage($event)"
                                        (acceptSelected)="uploadImageProduct($event)"></ghm-file-explorer>
-                    <button *ngIf="thumbnail" type="button" class="btn red cm-mgl-5" (click)="removeThumbnail()">
+                    <button *ngIf="thumbnail" type="button" class="btn btn-sm red cm-mgl-5" (click)="removeThumbnail()">
                         Xóa ảnh
                     </button>
                     <div class="product-images">
@@ -37,7 +37,6 @@
                                  [errorImageUrl]="'/assets/images/no-image.png'">
                             <span *ngIf="item.isThumbnail" class="mg-overlay"></span>
                             <button class="btn btn-sm btn-remove red" type="button"
-                                    [swal]="confirmDeleteImage"
                                     (click)="removeImage(item)">
                                 <i class="fa fa-times"></i>
                             </button>
@@ -51,13 +50,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-9">
                     <div formArrayName="translations">
                         <div class="form-group" *ngIf="languages && languages.length > 1">
                             <label i18n-ghmLabel="@@language" ghmLabel="Language"
-                                   class="col-sm-2 control-label"
+                                   class="col-sm-3 control-label"
                                    [required]="true"></label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <ghm-select [data]="languages"
                                             i18n-title="@@pleaseSelectLanguage"
                                             title="-- Please select language --"
@@ -68,28 +67,28 @@
                         </div>
                         <div class="form-group" [formGroup]="model"
                              [class.has-error]="formErrors?.id">
-                            <label class="control-label col-sm-2" i18n-ghmLabel="@@productCategory"
-                                   ghmLabel="Mã SP"></label>
-                            <div class="col-sm-10">
+                            <label class="control-label col-sm-3" i18n-ghmLabel="@@productCategory"
+                                   ghmLabel="Mã sản phẩm"></label>
+                            <div class="col-sm-9">
                                 <ghm-input
                                         elementId="{{'code ' + currentLanguage}}"
                                         formControlName="id"
-                                        placeholder="Không nhập mã SP hệ thống sẽ tự sinh mã"
+                                        placeholder="Không nhập mã sản phẩmhệ thống sẽ tự sinh mã"
                                         [isDisabled]="isUpdate"
                                         i18n-placeholder="@@enterProductName"></ghm-input>
                                 <span class="help-block">
-                                {formErrors?.id, select, maxlength {Mã SP không được vượt quá 500 ký tự.} pattern {Mã SP không đúng định dạng}}
+                                {formErrors?.id, select, maxlength {Mã sản phẩm không được vượt quá 500 ký tự.} pattern {Mã sản phẩmkhông đúng định dạng}}
                         </span>
                             </div>
                         </div>
                         <div class="form-group" [formGroup]="model"
                              [class.has-error]="formErrors?.categories">
-                            <label class="control-label col-sm-2" i18n-ghmLabel="@@productCategory"
-                                   ghmLabel="Nhóm SP"
+                            <label class="control-label col-sm-3" i18n-ghmLabel="@@productCategory"
+                                   ghmLabel="Nhóm sản phẩm"
                                    [required]="true"></label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <nh-dropdown-tree [data]="categoryTree"
-                                                  [title]="id ? categoryText : 'Chọn nhóm SP'"
+                                                  [title]="id ? categoryText : 'Chọn nhóm sản phẩm'"
                                                   [isMultiple]="true"
                                                   formControlName="categories"
                                                   (accepted)="onAcceptSelectCategory($event)">
@@ -102,20 +101,20 @@
                              [formGroupName]="i"
                              [hidden]="modelTranslation.value.languageId !== currentLanguage"
                              [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
-                            <label class="col-sm-2 control-label" ghmLabel="Tên SP"
+                            <label class="col-sm-3 control-label" ghmLabel="Tên sản phẩm"
                                    i18n-ghmLabel="@@productName"
                                    [required]="true"></label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <ghm-input
                                         elementId="{{'name ' + currentLanguage}}"
                                         formControlName="name"
-                                        placeholder="Nhập tên SP"
+                                        placeholder="Nhập tên sản phẩm"
                                         i18n-placeholder="@@enterProductName"></ghm-input>
                                 <span class="help-block">
                                 {
                                 translationFormErrors[modelTranslation.value.languageId]?.name,
-                                select, required {Vui lòng nhập tên SP.} maxlength {Tên SP không được vượt quá 256 ký tự.}
-                                        pattern  {Tên SP phải là chữ.}
+                                select, required {Vui lòng nhập tên sản phẩm.} maxlength {Tên sản phẩmkhông được vượt quá 256 ký tự.}
+                                        pattern  {Tên sản phẩm phải là chữ.}
                                 }
                             </span>
                             </div>
@@ -125,9 +124,9 @@
                              [formGroupName]="i"
                              [hidden]="modelTranslation.value.languageId !== currentLanguage"
                              [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.seoLink">
-                            <label class="col-sm-2 control-label" ghmLabel="SeoLink"
+                            <label class="col-sm-3 control-label" ghmLabel="SeoLink"
                                    i18n-ghmLabel="@@description"></label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <input name="" class="form-control" rows="3"
                                        formControlName="seoLink"
                                        placeholder="Nhập seolink"
@@ -145,9 +144,9 @@
                              [formGroupName]="i"
                              [hidden]="modelTranslation.value.languageId !== currentLanguage"
                              [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
-                            <label class="col-sm-2 control-label" ghmLabel="Mô tả"
+                            <label class="col-sm-3 control-label" ghmLabel="Mô tả"
                                    i18n-ghmLabel="@@description"></label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                              <textarea name="" class="form-control" rows="3"
                                        formControlName="description"
                                        placeholder="Nhập nội dung mô tả"
@@ -155,121 +154,132 @@
                                 <span class="help-block">
                             {
                             translationFormErrors[modelTranslation.value.languageId]?.description,
-                            select, maxlength {Thông tin mô tả SP không được phép vượt quá 500 ký tự.}
+                            select, maxlength {Thông tin mô tả sản phẩmkhông được phép vượt quá 500 ký tự.}
                             }
                         </span>
                             </div>
                         </div><!-- END: Product description -->
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" ghmLabel="Đơn vị tính"
+                        <label class="col-sm-3 control-label" ghmLabel="Đơn vị tính"
                                i18n-ghmLabel="@@productUnit"
                                [required]="true"></label>
-                        <div class="col-sm-4" [class.has-error]="formErrors?.unitId">
+                        <div class="col-sm-3" [class.has-error]="formErrors?.unitId">
                             <app-unit-suggestion
                                     [selectedItem]="model.value.unitId ? {id: model.value.unitId, name: model.value.unitName} : null"
                                     (itemSelected)="onUnitSelected($event)"
                                     (itemRemoved)="onUnitRemoved()"></app-unit-suggestion>
                             <span class="help-block">{formErrors?.unitId, select, required {Vui lòng chọn đơn vị tính} maxlength {Đơn vị tính không được phép vượt quá 50 ký tự.}}</span>
                         </div>
-                        <label class="col-sm-2 control-label" ghmLabel="Giá bán"
+                        <label class="col-sm-3 control-label" ghmLabel="Giá bán(VNĐ)"
                                i18n-ghmLabel="@@salePrice"
                                [required]="true"></label>
-                        <div class="col-sm-4" [class.has-error]="formErrors?.salePrice">
-                            <div class="input-group">
-                                <dx-number-box placeholder="Giá bán" formControlName="salePrice" format="#,##0"
-                                               [showClearButton]="true"></dx-number-box>
-                                <span class="input-group-addon">
-                                    VNĐ
-                                    </span>
-                            </div>
+                        <div class="col-sm-3" [class.has-error]="formErrors?.salePrice">
+                            <dx-number-box placeholder="Giá bán" formControlName="salePrice" format="#,##0"
+                                           [showClearButton]="true"></dx-number-box>
                             <span class="help-block">{formErrors?.salePrice, select, required {Vui lòng chọn giá bán} isValid {Giá bán phải là số.}}</span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-3 col-sm-offset-2" [class.has-error]="formErrors?.isActive">
+                        <div class="col-sm-3 col-sm-offset-3" [class.has-error]="formErrors?.isActive">
                             <dx-check-box formControlName="isActive" text="Kích hoạt"></dx-check-box>
                         </div>
                         <div class="col-sm-3" [class.has-error]="formErrors?.isHot">
-                            <dx-check-box formControlName="isHot" text="SP nổi bật"></dx-check-box>
+                            <dx-check-box formControlName="isHot" text="Sản phẩmnổi bật"></dx-check-box>
                         </div>
-                        <div class="col-sm-4" [class.has-error]="formErrors?.isHomePage">
+                        <div class="col-sm-3" [class.has-error]="formErrors?.isHomePage">
                             <dx-check-box formControlName="isHomePage" text="Hiển thị trang chủ"></dx-check-box>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row cm-mgt-10">
                 <div class="col-sm-12">
-                    <h3 class="cm-mgt-10 cm-mgb-10">Thuộc tính SP</h3>
-                    <table class="table table-striped"
-                           formArrayName="attributes">
-                        <thead>
-                        <tr>
-                            <th class="middle w200" i18n="@@productAttribute">Thuộc tính SP</th>
-                            <th class="middle" i18n="@@productAttributeValue">Giá trị thuộc tính SP</th>
-                            <th class="middle center w100" i18n="@@websiteVisible">Hiển thị website</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let item of attributes.controls; let i = index"
-                            [formGroupName]="i">
-                            <td>
-                                <ng-container *ngIf="!isReadOnly">
-                                    <app-product-attribute-suggestion
-                                            [listSelectedItem]="model.value.attributes"
-                                            [isReadOnly]="true"
-                                            [selectedItem]="item.value.attributeId ? {id: item.value.attributeId, name: item.value.attributeName} : null"
-                                            (itemSelected)="onAttributeSelected($event, item, i)"
-                                            (itemRemoved)="onAttributeRemoved(i)"></app-product-attribute-suggestion>
+                    <nh-tab>
+                        <nh-tab-pane [active]="true"
+                                     title="Thuộc tính sản phẩm"
+                                     id="attributeInfo">
+                            <div formArrayName="attributes">
+                                <ng-container *ngFor="let item of attributes.controls; let i = index">
+                                    <div class="form-group" [formGroupName]="i">
+                                        <label class="col-sm-3 control-label"
+                                               ghmLabel="{{item.value.attributeName}}"
+                                               [required]="item.value.isRequired">
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
+                                                <app-product-attribute-value-suggestion
+                                                        [class.has-error]="attributeFormErrors[i].productAttributeValues"
+                                                        [multiple]="item.value.isMultiple"
+                                                        [allowAdd]="true"
+                                                        [languageId]="currentLanguage"
+                                                        [attributeId]="item.value.attributeId"
+                                                        [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
+                                                        (itemSelected)="onProductAttributeValueSelected($event, item, i)"
+                                                        (addItem)="onAProductAttributeValueAdded($event, item, i)"
+                                                ></app-product-attribute-value-suggestion>
+                                            </ng-container>
+                                            <ng-template #selfContentTemplate>
+                                                <dx-html-editor formControlName="value" [height]="150">
+                                                    <dxo-toolbar>
+                                                        <dxi-item formatName="undo"></dxi-item>
+                                                        <dxi-item formatName="redo"></dxi-item>
+                                                        <dxi-item formatName="separator"></dxi-item>
+                                                        <dxi-item formatName="size"
+                                                                  [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
+                                                        <dxi-item formatName="font"
+                                                                  [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
+                                                        <dxi-item formatName="separator"></dxi-item>
+                                                        <dxi-item formatName="bold"></dxi-item>
+                                                        <dxi-item formatName="italic"></dxi-item>
+                                                        <dxi-item formatName="strike"></dxi-item>
+                                                        <dxi-item formatName="underline"></dxi-item>
+                                                        <dxi-item formatName="separator"></dxi-item>
+                                                        <dxi-item formatName="alignLeft"></dxi-item>
+                                                        <dxi-item formatName="alignCenter"></dxi-item>
+                                                        <dxi-item formatName="alignRight"></dxi-item>
+                                                        <dxi-item formatName="alignJustify"></dxi-item>
+                                                        <dxi-item formatName="separator"></dxi-item>
+                                                        <dxi-item formatName="color"></dxi-item>
+                                                        <dxi-item formatName="background"></dxi-item>
+                                                    </dxo-toolbar>
+                                                </dx-html-editor>
+                                            </ng-template>
+                                        </div>
+                                    </div>
                                 </ng-container>
-                            </td>
-                            <td class="middle">
-                                <ng-container *ngIf="!item.value.isSelfContent; else selfContentTemplate">
-                                    <app-product-attribute-value-suggestion
-                                            [class.has-error]="attributeFormErrors[i].productAttributeValues"
-                                            [multiple]="item.value.isMultiple"
-                                            [attributeId]="item.value.attributeId"
-                                            [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
-                                            (itemSelected)="onProductAttributeValueSelected($event, item, i)"
-                                            (itemRemoved)="onProductAttributeValueRemoved(item)"></app-product-attribute-value-suggestion>
-                                </ng-container>
-                                <ng-template #selfContentTemplate>
-                                    <dx-html-editor formControlName="value" [height]="200">
-                                        <dxo-toolbar>
-                                            <dxi-item formatName="undo"></dxi-item>
-                                            <dxi-item formatName="redo"></dxi-item>
-                                            <dxi-item formatName="separator"></dxi-item>
-                                            <dxi-item formatName="size" [formatValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
-                                            <dxi-item formatName="font" [formatValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
-                                            <dxi-item formatName="separator"></dxi-item>
-                                            <dxi-item formatName="bold"></dxi-item>
-                                            <dxi-item formatName="italic"></dxi-item>
-                                            <dxi-item formatName="strike"></dxi-item>
-                                            <dxi-item formatName="underline"></dxi-item>
-                                            <dxi-item formatName="separator"></dxi-item>
-                                            <dxi-item formatName="alignLeft"></dxi-item>
-                                            <dxi-item formatName="alignCenter"></dxi-item>
-                                            <dxi-item formatName="alignRight"></dxi-item>
-                                            <dxi-item formatName="alignJustify"></dxi-item>
-                                            <dxi-item formatName="separator"></dxi-item>
-                                            <dxi-item formatName="color"></dxi-item>
-                                            <dxi-item formatName="background"></dxi-item>
-                                        </dxo-toolbar>
-                                    </dx-html-editor>
-                                        <!--<textarea type="text" formControlName="value" class="form-control"-->
-                                                  <!--rows="3"-->
-                                                  <!--[class.has-error]="attributeFormErrors[i].value"-->
-                                                  <!--placeholder="Nhập nội dung"-->
-                                                  <!--&gt;</textarea>&ndash;&gt;-->
-                                </ng-template>
-                            </td>
-                            <td class="center middle">
-                                <dx-check-box formControlName="isShowClient"></dx-check-box>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            </div>
+                        </nh-tab-pane>
+                        <nh-tab-pane title="Chi tiết sản phẩm" id="productDetail">
+                            <div class="row" formArrayName="translations">
+                                <div class="col-sm-12">
+                                    <div class="form-group cm-mgl-0">
+                                        <ghm-file-explorer [buttonText]="'Append image to content '"
+                                                           [multiple]="true"
+                                                           (itemSelected)="selectImage($event)"
+                                                           (acceptSelected)="afterUploadImageContent($event)"></ghm-file-explorer>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div *ngFor="let modelTranslation of translations.controls; index as i"
+                                         [formGroupName]="i"
+                                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                                         [class.has-error]="translationFormErrors[modelTranslation?.value?.languageId]?.content">
+                                        <tinymce #questionContentEditor
+                                                 [height]="300"
+                                                 elementId="questionContent{{ modelTranslation?.value?.languageId }}"
+                                                 formControlName="content"></tinymce>
+                                        <span class="help-block">
+                                        {
+                                        translationFormErrors[modelTranslation.value.languageId]?.content,
+                                        select, maxlength {Chi tiết sản phẩm không được vượt quá 4000 ký tự}
+                                        }
+                                   </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </nh-tab-pane>
+                    </nh-tab>
                 </div>
             </div>
         </nh-modal-content>

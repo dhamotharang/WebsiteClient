@@ -985,3 +985,12 @@ hr {
         }
     }
 }
+
+.dx-overlay-wrapper, .dxc-tooltip {
+    z-index: 100000 !important;
+}
+
+.btn-sm {
+    padding: 3px 6px !important;
+    font-size: 11px !important;
+}

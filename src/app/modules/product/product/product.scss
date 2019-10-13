@@ -123,3 +123,7 @@ $color-border: #ddd;
     }
   }
 }
+
+.dx-overlay-wrapper {
+  z-index: 1700 !important;
+}

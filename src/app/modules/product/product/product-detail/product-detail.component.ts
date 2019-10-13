@@ -1,18 +1,18 @@
 import {AfterViewInit, Component, enableProdMode, Inject, OnInit, ViewChild} from '@angular/core';
-import { Product } from '../model/product.model';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { ProductImage } from '../model/product-image.model';
-import { ProductTranslation } from '../model/product-translation.model';
-import { ProductService } from '../service/product.service';
+import {Product} from '../model/product.model';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {ProductImage} from '../model/product-image.model';
+import {ProductTranslation} from '../model/product-translation.model';
+import {ProductService} from '../service/product.service';
 import * as _ from 'lodash';
-import { ProductCategoryService } from '../../product-category/service/product-category-service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { ProductDetailViewModel } from '../viewmodel/product-detail.viewmodel';
-import { ProductFormAttributeComponent } from '../product-form/product-attribute/product-form-attribute.component';
-import { ProductUnitComponent } from '../product-form/product-unit/product-unit.component';
-import { ProductConversionUnit } from '../product-form/product-unit/model/product-conversion-unit.model';
-import { ProductAttribute } from '../product-form/product-attribute/model/product-value.model';
+import {ProductCategoryService} from '../../product-category/service/product-category-service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {ProductDetailViewModel} from '../viewmodel/product-detail.viewmodel';
+import {ProductFormAttributeComponent} from '../product-form/product-attribute/product-form-attribute.component';
+import {ProductUnitComponent} from '../product-form/product-unit/product-unit.component';
+import {ProductConversionUnit} from '../product-form/product-unit/model/product-conversion-unit.model';
+import {ProductAttribute} from '../product-form/product-attribute/model/product-value.model';
 import {NumberValidator} from '../../../../validators/number.validator';
 import {BaseFormComponent} from '../../../../base-form.component';
 import {UtilService} from '../../../../shareds/services/util.service';
@@ -22,6 +22,10 @@ import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {TreeData} from '../../../../view-model/tree-data';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {environment} from '../../../../../environments/environment';
+import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
+import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
@@ -45,6 +49,9 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     modelTranslation = new ProductTranslation();
     conversionUnits = [];
     attributes = [];
+    urlFile = `${environment.fileUrl}`;
+    thumbnail;
+    listProductAttribute = [];
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -54,6 +61,7 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
                 private utilService: UtilService,
                 private route: ActivatedRoute,
                 private router: Router,
+                private productAttributeService: ProductAttributeService,
                 private productCategoryService: ProductCategoryService,
                 private productService: ProductService) {
         super();
@@ -63,7 +71,6 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     }
 
     ngAfterViewInit() {
-        this.reloadTree();
     }
 
     add() {
@@ -73,13 +80,11 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     show(productId: string) {
         this.id = productId;
         this.isUpdate = true;
-        this.getDetail(productId);
-    }
-
-    reloadTree() {
-        this.productCategoryService.getTree().subscribe((result: TreeData[]) => {
-            this.categoryTree = result;
-        });
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listProductAttribute = result.items;
+                this.getDetail(productId);
+            });
     }
 
     checkThumbnail(item: ProductImage) {
@@ -97,6 +102,7 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
         this.subscribers.getDetail = this.productService.getDetail(productId)
             .subscribe((result: ProductDetailViewModel) => {
                 this.product = {
+                    id: productId,
                     unitId: result.unitId,
                     unitName: result.unitName,
                     isActive: result.isActive,
@@ -110,41 +116,56 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
                     images: result.images
                 } as Product;
                 this.productImages = result.images;
-                if (result.categories) {
-                    this.categories = result.categories;
-                }
+                this.categories = result.categories;
+
+                this.thumbnail = result.thumbnail;
                 if (result.conversionUnits && result.conversionUnits.length > 0) {
                     this.conversionUnits = result.conversionUnits;
                 }
+
                 if (result.attributes) {
                     const groups = _.groupBy(result.attributes, 'attributeId');
-                    if (groups) {
-                        // this.attributes.removeAt(0);
-                        let index = 0;
-                        for (const key in groups) {
-                            if (groups.hasOwnProperty(key)) {
-                                const groupItem: ProductAttribute = groups[key][0];
-                                const productAttributeValue: ProductAttribute = {
-                                    id: groupItem.id,
-                                    attributeId: groupItem.attributeId,
-                                    attributeName: groupItem.attributeName,
-                                    value: groupItem.value,
-                                    isSelfContent: groupItem.isSelfContent,
-                                    isMultiple: groupItem.isMultiple,
-                                    isShowClient: groupItem.isShowClient,
-                                    attributeValues: groups[key].map((group: ProductAttribute) => {
-                                        return {
-                                            id: group.attributeValueId,
-                                            name: group.attributeValueName
-                                        };
-                                    })
-                                };
-                                // this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
-                                this.attributes = [...this.attributes, productAttributeValue];
-                            }
-                            index++;
+                    let index = 0;
+                    _.each(this.listProductAttribute, (productAttribute: ProductAttributeViewModel) => {
+                        const groupItemInfo = _.find(groups, (group: any) => {
+                            return group && group.length > 0 && group[0].attributeId === productAttribute.id;
+                        });
+
+                        if (groupItemInfo) {
+                            const groupItem = groups[productAttribute.id][0];
+                            const productAttributeValue: ProductAttribute = {
+                                id: groupItem.id,
+                                attributeId: groupItem.attributeId,
+                                attributeName: groupItem.attributeName,
+                                value: groupItem.value,
+                                isSelfContent: groupItem.isSelfContent,
+                                isMultiple: groupItem.isMultiple,
+                                isShowClient: groupItem.isShowClient,
+                                isRequired: productAttribute.isRequire,
+                                attributeValues: groups[productAttribute.id].map((group: ProductAttribute) => {
+                                    return {
+                                        id: group.attributeValueId,
+                                        name: group.attributeValueName
+                                    };
+                                })
+                            };
+                            this.attributes = [...this.attributes, productAttributeValue];
+                        } else {
+                            const productAttributeValue: ProductAttribute = {
+                                id: '',
+                                attributeId: productAttribute.id,
+                                attributeName: productAttribute.name,
+                                value: null,
+                                isSelfContent: productAttribute.isSelfContent,
+                                isMultiple: productAttribute.isMultiple,
+                                isShowClient: true,
+                                isRequired: productAttribute.isRequire,
+                                attributeValues: []
+                            };
+                            this.attributes = [...this.attributes, productAttributeValue];
                         }
-                    }
+                        index++;
+                    });
                 }
                 if (result.images) {
                     this.productImages = result.images;
