@@ -66,6 +66,12 @@ export class AlbumFormComponent extends BaseFormComponent implements OnInit {
         });
     }
 
+    removeThumbnail() {
+        this.model.patchValue({
+            thumbnail: ''
+        });
+    }
+
     onAcceptSelectPhotos(explorerItems: ExplorerItem[]) {
         explorerItems.map((explorerItem: ExplorerItem) => {
             this.photos.push(new Photo(explorerItem.absoluteUrl));
