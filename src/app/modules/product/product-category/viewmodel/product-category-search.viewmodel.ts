@@ -8,4 +8,5 @@ export class ProductCategorySearchViewModel {
     nameLevel: string;
     activeStatus: string;
     image: string;
+    order: number;
 }

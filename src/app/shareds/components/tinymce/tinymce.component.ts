@@ -84,8 +84,8 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
                 plugins: ['fullscreen', 'link', 'autolink', 'paste', 'image', 'table', 'textcolor', 'print', 'preview', 'spellchecker',
                     'colorpicker', 'fullscreen', 'code', 'lists', 'wordcount'],
                 toolbar: 'insertfile undo redo | | fontselect | fontsizeselect | bold italic ' +
-                '| alignleft aligncenter alignright alignjustify ' +
-                '| bullist numlist outdent indent | link image | fullscreen',
+                '| alignleft aligncenter alignright alignjustify' +
+                '| bullist numlist outdent indent | link image | fullscreen  | forecolor backcolor',
                 fontsize_formats: '8pt 9pt 10pt 11pt 12pt 13pt 14pt 18pt 24pt 36pt',
                 skin_url: '/assets/skins/lightgray',
                 menu: this.menu,

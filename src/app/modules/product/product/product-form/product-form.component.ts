@@ -31,9 +31,13 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
+
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
 // }
+
+declare var tinyMCE;
+
 @Component({
     selector: 'app-product-form',
     templateUrl: './product-form.component.html',
@@ -142,12 +146,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             conversionUnitControl.patchValue({unitId: null, unitName: null});
             return;
         } else {
-            // if (this.isUpdate) {
-            //     this.saveProductUnit(conversionUnitControl.value, index);
-            // } else {
             conversionUnitControl.patchValue({unitId: unit.id, unitName: unit.name});
             this.utilService.focusElement(`conversionValue${index}`);
-            // }
             this.addConversionUnit();
         }
     }
@@ -184,7 +184,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     onAttributeRemoved(index: number) {
         this.attributes.removeAt(index);
         const defaultFormControl = _.find(this.attributes, (formControl: FormControl) => {
-            return !formControl.value.attributeId;
+            return formControl.value && !formControl.value.attributeId;
         });
 
         if (!defaultFormControl) {
@@ -214,7 +214,21 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         // }
     }
 
-    onProductAttributeValueRemoved(attributeFormControl: FormControl) {
+    onAProductAttributeValueAdded(selectedAttributeValue: any, attributeFormControl: FormControl, index: number) {
+        let productAttributeValues = attributeFormControl.get('attributeValues').value;
+        if (!productAttributeValues) {
+            productAttributeValues = [];
+        }
+        productAttributeValues.push(selectedAttributeValue);
+
+        attributeFormControl.patchValue({
+            productAttributeValues: productAttributeValues.map((attribute: NhSuggestion) => {
+                return {
+                    id: attribute.id,
+                    name: attribute.name
+                };
+            })
+        });
     }
 
     add() {
@@ -225,7 +239,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     edit(productId: string) {
         this.id = productId;
         this.isUpdate = true;
-        this.getDetail(productId);
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listProductAttribute = result.items;
+                this.getDetail(productId);
+            });
     }
 
     save() {
@@ -241,6 +259,19 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             this.product.conversionUnits = _.filter(this.product.conversionUnits, (productConversionUnit: ProductConversionUnit) => {
                 return productConversionUnit.unitId;
             });
+
+            const attributeRequired = _.find(this.product.attributes, (productAttributeValue: ProductAttribute) => {
+                return productAttributeValue.isRequired
+                    && (((!productAttributeValue.attributeValues || productAttributeValue.attributeValues.length === 0)
+                        && !productAttributeValue.isSelfContent)
+                        || (productAttributeValue.isSelfContent && !productAttributeValue.value));
+            });
+
+            if (attributeRequired) {
+                this.toastr.error(`${attributeRequired.attributeName} chưa nhập giá trí`);
+                return;
+            }
+
             this.product.attributes = _.filter(this.product.attributes, (productAttributeValue: ProductAttribute) => {
                 return productAttributeValue.attributeId
                     && ((productAttributeValue.attributeValues
@@ -348,14 +379,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         });
     }
 
-    clickTabProductUnit(value) {
-        this.productUnitComponent.renderListUnit();
-    }
-
-    clickTabProductAttribute(value) {
-        this.productAttributeComponent.getProductAttribute();
-    }
-
     reloadTree() {
         this.productCategoryService.getTree().subscribe((result: TreeData[]) => {
             this.categoryTree = result;
@@ -371,6 +394,24 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             this.thumbnail = item.url;
         }
         item.isThumbnail = !item.isThumbnail;
+    }
+
+    afterUploadImageContent(images: ExplorerItem[]) {
+        images.forEach((image) => {
+            if (image.isImage) {
+                const imageAbsoluteUrl = environment.fileUrl + image.url;
+                tinyMCE.execCommand('mceInsertContent', false,
+                    `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
+            }
+        });
+    }
+
+    selectImage(image: ExplorerItem) {
+        if (image.isImage) {
+            const imageAbsoluteUrl = environment.fileUrl + image.url;
+            tinyMCE.execCommand('mceInsertContent', false,
+                `<img class="img-responsive lazy" style="margin-left: auto; margin-right: auto" src="${imageAbsoluteUrl}"/>`);
+        }
     }
 
     private renderForm() {
@@ -417,13 +458,14 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     private buildFormLanguage = (language: string) => {
         this.translationFormErrors[language] = this.utilService.renderFormError(
-            ['name', 'description', 'seoLink']
+            ['name', 'description', 'content', 'seoLink']
         );
         this.translationValidationMessage[
             language
             ] = this.utilService.renderFormErrorMessage([
             {name: ['required', 'maxlength', 'pattern']},
             {description: ['maxlength']},
+            {content: ['maxlength']},
             {seoLink: ['maxlength']},
         ]);
         const translationModel = this.fb.group({
@@ -436,6 +478,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 this.modelTranslation.description,
                 [Validators.maxLength(500)]
             ],
+            content: [this.modelTranslation.content, [Validators.maxLength(4000)]],
             seoLink: [this.modelTranslation.seoLink, [Validators.maxLength(256)]],
         });
         translationModel.valueChanges.subscribe((data: any) =>
@@ -508,6 +551,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             isSelfContent: [productValue ? productValue.isSelfContent : false],
             isMultiple: [productValue ? productValue.isMultiple : false],
             isShowClient: [productValue ? productValue.isShowClient : false],
+            isRequired: [productValue ? productValue.isRequired : false],
             attributeValues: [productValue ? productValue.attributeValues : [], [
                 Validators.required
             ]],
@@ -523,7 +567,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             return;
         }
         const index = this.attributes.length;
-        this.attributes.push(this.buildAttributeForm(index));
+        // this.attributes.push(this.buildAttributeForm(index));
     }
 
     private resetAttributes() {
@@ -589,32 +633,48 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                 }
                 if (result.attributes) {
                     const groups = _.groupBy(result.attributes, 'attributeId');
-                    if (groups) {
-                        this.attributes.removeAt(0);
-                        let index = 0;
-                        for (const key in groups) {
-                            if (groups.hasOwnProperty(key)) {
-                                const groupItem: ProductAttribute = groups[key][0];
-                                const productAttributeValue: ProductAttribute = {
-                                    id: groupItem.id,
-                                    attributeId: groupItem.attributeId,
-                                    attributeName: groupItem.attributeName,
-                                    value: groupItem.value,
-                                    isSelfContent: groupItem.isSelfContent,
-                                    isMultiple: groupItem.isMultiple,
-                                    isShowClient: groupItem.isShowClient,
-                                    attributeValues: groups[key].map((group: ProductAttribute) => {
-                                        return {
-                                            id: group.attributeValueId,
-                                            name: group.attributeValueName
-                                        };
-                                    })
-                                };
-                                this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
-                            }
-                            index++;
+                    this.attributes.removeAt(0);
+                    let index = 0;
+                    _.each(this.listProductAttribute, (productAttribute: ProductAttributeViewModel) => {
+                        const groupItemInfo = _.find(groups, (group: any) => {
+                            return group && group.length > 0 && group[0].attributeId === productAttribute.id;
+                        });
+
+                        if (groupItemInfo) {
+                            const groupItem = groups[productAttribute.id][0];
+                            const productAttributeValue: ProductAttribute = {
+                                id: groupItem.id,
+                                attributeId: groupItem.attributeId,
+                                attributeName: groupItem.attributeName,
+                                value: groupItem.value,
+                                isSelfContent: groupItem.isSelfContent,
+                                isMultiple: groupItem.isMultiple,
+                                isShowClient: groupItem.isShowClient,
+                                isRequired: productAttribute.isRequire,
+                                attributeValues: groups[productAttribute.id].map((group: ProductAttribute) => {
+                                    return {
+                                        id: group.attributeValueId,
+                                        name: group.attributeValueName
+                                    };
+                                })
+                            };
+                            this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
+                        } else {
+                            const productAttributeValue: ProductAttribute = {
+                                id: '',
+                                attributeId: productAttribute.id,
+                                attributeName: productAttribute.name,
+                                value: null,
+                                isSelfContent: productAttribute.isSelfContent,
+                                isMultiple: productAttribute.isMultiple,
+                                isShowClient: true,
+                                isRequired: productAttribute.isRequire,
+                                attributeValues: []
+                            };
+                            this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
                         }
-                    }
+                        index++;
+                    });
                 }
                 if (result.images) {
                     this.productImages = result.images;
@@ -634,28 +694,29 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     private initProductAttribute() {
-        // this.productAttributeService.search('', null, null, true, 1, 20)
-        //     .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
-        //         this.listProductAttribute = result.items;
-        //         let index = 0;
-        //         // this.model.patchValue({attributes: []});
-        //         _.each(this.listProductAttribute, (item: ProductAttributeViewModel) => {
-        //             const productAttributeValue: ProductAttribute = {
-        //                 id: '',
-        //                 attributeId: item.id,
-        //                 attributeName: item.name,
-        //                 value: null,
-        //                 isSelfContent: item.isSelfContent,
-        //                 isMultiple: item.isMultiple,
-        //                 isShowClient: true,
-        //                 attributeValues: null
-        //             };
-        //             this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
-        //             index++;
-        //         });
-        //         setTimeout(() => {
-        //             this.addAttribute();
-        //         });
-        //     });
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listProductAttribute = result.items;
+                this.attributes.removeAt(0);
+                let index = 0;
+                _.each(this.listProductAttribute, (item: ProductAttributeViewModel) => {
+                    const productAttributeValue: ProductAttribute = {
+                        id: '',
+                        attributeId: item.id,
+                        attributeName: item.name,
+                        value: null,
+                        isSelfContent: item.isSelfContent,
+                        isMultiple: item.isMultiple,
+                        isShowClient: true,
+                        isRequired: item.isRequire,
+                        attributeValues: []
+                    };
+                    this.attributes.push(this.buildAttributeForm(index, productAttributeValue));
+                    index++;
+                });
+                setTimeout(() => {
+                    this.addAttribute();
+                });
+            });
     }
 }

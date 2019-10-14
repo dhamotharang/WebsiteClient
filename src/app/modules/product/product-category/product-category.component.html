@@ -62,7 +62,7 @@
                 <div class="meadia middle">
                     <div class="media-left middle">
                         <!--<img  src="{{urlFile + cell.data.image}}" class="img-reponsive w50"-->
-                             <!--alt="{{cell.data.name}}">-->
+                        <!--alt="{{cell.data.name}}">-->
                     </div>
                     <div class="media-body middle">
                         <span>{{cell.data.name}}</span>
@@ -81,6 +81,8 @@
             <dxi-column caption="Hiển thị trang chủ" dataField="isHomePage" dataType="boolean" [width]="100"
                         alignment="center" cssClass="middle"></dxi-column>
             <dxi-column caption="Giải pháp" dataField="isSolution" dataType="boolean" [width]="100"
+                        alignment="center" cssClass="middle"></dxi-column>
+            <dxi-column caption="Thứ tự" dataField="order" dataType="number" [width]="100"
                         alignment="center" cssClass="middle"></dxi-column>
             <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
                         *ngIf="permission.edit || permission.delete" cssClass="middle"></dxi-column>

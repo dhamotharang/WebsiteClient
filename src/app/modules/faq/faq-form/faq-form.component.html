@@ -33,14 +33,6 @@
                         </span>
                     </div>
                 </div>
-                <div class="form-group cm-mg-0">
-                    <div class="col-sm-9 col-sm-offset-3 cm-pdl-10">
-                        <ghm-file-explorer [buttonText]="'Append image to content '"
-                                           [multiple]="true"
-                                           (itemSelected)="selectImage($event)"
-                                           (acceptSelected)="afterUploadImageContent($event)"></ghm-file-explorer>
-                    </div>
-                </div>
                 <div *ngFor="let translation of translations.controls; index as i"
                      [hidden]="translation.value.languageId !== currentLanguage"
                      [formGroupName]="i">
@@ -55,14 +47,22 @@
                             <span class="help-block">
                               {
                                 translationFormErrors[translation.value.languageId]?.question,
-                                select, required {Tên câu hỏi không được để trống} maxLength {Tên câu hỏi không được vượt quá 256 ký tự}
+                                select, required {Tên câu hỏi không được để trống} maxlength {Tên câu hỏi không được vượt quá 256 ký tự}
                               }
                           </span>
                         </div>
                     </div>
+                    <div class="form-group cm-mg-0">
+                        <div class="col-sm-9 col-sm-offset-3 cm-pdl-10">
+                            <ghm-file-explorer [buttonText]="'Append image to content '"
+                                               [multiple]="true"
+                                               (itemSelected)="selectImage($event)"
+                                               (acceptSelected)="afterUploadImageContent($event)"></ghm-file-explorer>
+                        </div>
+                    </div>
                     <div class="form-group"
                          [class.has-error]="translationFormErrors[translation.value.languageId]?.description">
-                        <label i18n="@@description" i18n-ghmLabel ghmLabel="Câu trả lời "
+                        <label i18n="@@answer" i18n-ghmLabel ghmLabel="Câu trả lời "
                                class="col-sm-3 control-label"></label>
                         <div class="col-sm-9">
                             <tinymce #questionContentEditor
@@ -71,7 +71,7 @@
                             <span class="help-block">
                                         {
                                         translationFormErrors[translation.value.languageId]?.answer,
-                                        select, maxLength {Mô tả nhóm câu hỏi không được vượt quá 4000 ký tự}
+                                        select, required {Câu trả lời không được để trông} maxlength {câu trả lời không được vượt quá 4000 ký tự}
                                         }
                             </span>
                         </div>

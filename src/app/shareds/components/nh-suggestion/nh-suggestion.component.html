@@ -42,7 +42,7 @@
                     (keyup)="inputKeyUp($event)">
             </div><!-- END: .nhs-search-input -->
         </div><!-- END: .nhs-search-content -->
-        <div class="nhs-search-icon">
+        <div class="nhs-search-icon" *ngIf="!readonly">
             <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
                 <path
                     d="M16.436 15.085l3.94 4.01a1 1 0 0 1-1.425 1.402l-3.938-4.006a7.5 7.5 0 1 1 1.423-1.406zM10.5 16a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"
@@ -52,7 +52,7 @@
     </div><!-- END: .nhs-search-wrapper -->
     <div class="nhs-search-result-wrapper"
          #searchResultContainer
-         *ngIf="isActive">
+         *ngIf="isActive && !readonly">
         <ul>
             <li class="searching" *ngIf="loading; else loadDoneTemplate">
                 <div class="m-loader m-loader--brand"></div>
@@ -83,7 +83,7 @@
         </div><!-- END: .nhs-item-image -->
         <div class="nhs-item-info">
             <i class="{{ item.icon }}" *ngIf="item.icon"></i>
-            <h2 class="nh-suggestion-name">{{ item.name }}</h2>
+            <h2 class="nh-suggestion-name" style="font-size: 13px">{{ item.name }}</h2>
             <div class="nh-suggestion-des" *ngIf="item.description">{{ item.description }}</div>
         </div><!-- END: .nhs-item-info -->
     </li><!-- END: .nhs-item -->
@@ -92,10 +92,10 @@
 <ng-template #singleTemplate>
     <div class="nhs-item" *ngIf="selectedItem && !isShowSearchBox">
         <div class="nhs-item-info" (click)="showSearchBox($event)">
-            <i class="{{ selectedItem?.icon }}" *ngIf="selectedItem?.icon"></i>
-            <span>{{ selectedItem?.name }}</span>
+            <i class="{{selectedItem?.icon }}" *ngIf="selectedItem?.icon"></i>
+            <span>{{selectedItem?.name }}</span>
         </div>
-        <span class="remove" (click)="removeSelectedItem(selectedItem)">
+        <span class="remove" (click)="removeSelectedItem(selectedItem)" *ngIf="!readonly">
             <svg width="24" height="24" viewBox="0 0 24 24" focusable="false"
                  role="presentation">
                 <path

@@ -34,7 +34,7 @@
                             <span class="help-block">
                               {
                                 translationFormErrors[translation.value.languageId]?.name,
-                                select, required {Tên nhóm không được để trống} maxLength {Tên nhóm không được vượt quá 256 ký tự}
+                                select, required {Tên nhóm không được để trống} maxlength {Tên nhóm không được vượt quá 256 ký tự}
                               }
                           </span>
                         </div>
@@ -48,7 +48,7 @@
                             <span class="help-block">
                                         {
                                         translationFormErrors[translation.value.languageId]?.description,
-                                        select, maxLength {Mô tả nhóm câu hỏi không được vượt quá 500 ký tự}
+                                        select, maxlength {Mô tả nhóm câu hỏi không được vượt quá 500 ký tự}
                                         }
                             </span>
                         </div>

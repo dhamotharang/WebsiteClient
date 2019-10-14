@@ -27,7 +27,7 @@ export class ProductAttributeValueComponent extends BaseListComponent<AttributeV
         private toastr: ToastrService,
         private productAttributeService: ProductAttributeService) {
         super();
-        this.pageSize = 5;
+        this.pageSize = 20;
     }
 
     ngOnInit() {

@@ -25,13 +25,14 @@ import { VideoFormComponent } from './videos/video-form/video-form.component';
 import { VideoDetailComponent } from './videos/video-detail/video-detail.component';
 import { NhDropdownModule } from '../../shareds/directives/nh-dropdown/nh-dropdown.module';
 import { AlbumFormComponent } from './photo/album-form/album-form.component';
+import {DxCheckBoxModule} from 'devextreme-angular';
 
 @NgModule({
     imports: [
         CommonModule, GalleryRoutingModule, LayoutModule, NhSelectModule, NhImageModule, DatetimeFormatModule,
         MatCheckboxModule, ReactiveFormsModule, NhDateModule, TreeTableModule, NhTagModule, GhmFileExplorerModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
-        MatTabsModule, MatIconModule, NhDropdownModule, GhmFileExplorerModule, CoreModule,
+        MatTabsModule, MatIconModule, NhDropdownModule, GhmFileExplorerModule, CoreModule, DxCheckBoxModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',

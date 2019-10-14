@@ -170,8 +170,7 @@
                         </a>
                     </li>
                     <li>
-                        <a *ngIf="permission.edit && ((item?.status !== newsStatus.pending) && item?.creatorId === currentUser.id)
-                                   || (item?.status === newsStatus.pending)"
+                        <a *ngIf="permission.edit && isApprove"
                            (click)="edit(item)"
                            i18n="@@edit">
                             <i class="fa fa-edit"></i>
@@ -179,7 +178,7 @@
                         </a>
                     </li>
                     <li>
-                        <a *ngIf="permission.delete && ((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && item?.creatorId === currentUser.id)"
+                        <a *ngIf="permission.delete && ((item?.status === newsStatus.decline || item?.status === newsStatus.draft) && isApprove)"
                            (click)="confirm(item)" i18n="@@delete">
                             <i class="fa fa-trash"></i>
                             Delete

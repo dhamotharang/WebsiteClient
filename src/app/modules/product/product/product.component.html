@@ -24,10 +24,10 @@
             <div class="form-group cm-mgr-5">
                 <ghm-select
                     [width]="200"
-                    [data]="[{id: false, name: 'Không quản lý theo lô'},{id: true, name: 'Quản lý theo lô'}]"
+                    [data]="[{id: false, name: 'Không là sản phẩm nổi bật'},{id: true, name: 'Là sản phẩm nổi  bật'}]"
                     i18n="@@selectStatus"
                     i18n-title
-                    [title]="'-- Tất cả --'"
+                    [title]="'-- Là sản phẩm nổi bật --'"
                     [(value)]="isManagementByLot"
                     (itemSelected)="selectIsManagementByLot($event)"></ghm-select>
             </div>
@@ -75,84 +75,6 @@
         </form>
     </div>
 </div>
-<!--<table class="table table-striped table-hover">-->
-<!--<thead>-->
-<!--<tr>-->
-<!--<th class="middle center w50" i18n="@@no">STT</th>-->
-<!--<th class="middle" i18n="@@product">Sản phẩm</th>-->
-<!--<th class="middle w200" i18n="@@productCategory">Nhóm sản phẩm</th>-->
-<!--<th class="middle center w100" i18n="@@unitDefault">Đơn vị tính</th>-->
-<!--<th class="middle w150  center" i18n="@@consignmentManagement">Theo lô</th>-->
-<!--<th class="middle center w100" i18n="@@status">Kích hoạt</th>-->
-<!--<th class="middle text-right w150" i18n="@@action" *ngIf="permission.edit || permission.delete">Hành động</th>-->
-<!--</tr>-->
-<!--</thead>-->
-<!--<tbody>-->
-<!--<tr *ngFor="let item of listProduct; let i = index"-->
-<!--nhContextMenuTrigger-->
-<!--[nhContextMenuTriggerFor]="nhMenu"-->
-<!--[nhContextMenuData]="item">-->
-<!--<td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>-->
-<!--<td class="middle">-->
-<!--<div class="media" [class.cursor-pointer]="permission.view" (click)="permission.view ? detail(item) : ''"-->
-<!--title="{{item.name}}">-->
-<!--<div class="media-left middle">-->
-<!--<img ghmImage="" [src]="item.thumbnail" class="media-object w50"-->
-<!--alt="{{item.thumbnail}}">-->
-<!--</div>-->
-<!--<div class="media-body middle">-->
-<!--<h4 class="media-heading">{{ item.name }}</h4>-->
-<!--</div>-->
-<!--</div>-->
-<!--</td>-->
-<!--<td class="middle">-->
-<!--{{item.categoryName}}-->
-<!--</td>-->
-<!--<td class="middle center">-->
-<!--{{item.defaultUnit}}-->
-<!--</td>-->
-<!--<td class="middle center">-->
-<!--<mat-checkbox color="primary" [checked]="item.isManagementByLot"-->
-<!--(change)="updateManagementByLot(item)"></mat-checkbox>-->
-<!--</td>-->
-<!--<td class="middle center">-->
-<!--<mat-checkbox color="primary" [checked]="item.isActive" (change)="updateStatus(item)"></mat-checkbox>-->
-<!--</td>-->
-<!--<td class="text-right middle" *ngIf="permission.edit || permission.delete">-->
-<!--<nh-dropdown>-->
-<!--<button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">-->
-<!--<mat-icon>more_horiz</mat-icon>-->
-<!--</button>-->
-<!--<ul class="nh-dropdown-menu right" role="menu">-->
-<!--<li>-->
-<!--<a *ngIf="permission.view"-->
-<!--(click)="detail(item)">-->
-<!--&lt;!&ndash;<i class="fa fa-eye"></i>&ndash;&gt;-->
-<!--<mat-icon class="menu-icon">info</mat-icon>-->
-<!--<span i18n="@@detail">Chi tiết</span>-->
-<!--</a>-->
-<!--</li>-->
-<!--<li>-->
-<!--<a *ngIf="permission.edit"-->
-<!--(click)="edit(item.id)">-->
-<!--&lt;!&ndash;<i class="fa fa-edit"></i>&ndash;&gt;-->
-<!--<mat-icon class="menu-icon">edit</mat-icon>-->
-<!--<span i18n="@@edit">Chỉnh sửa</span>-->
-<!--</a>-->
-<!--</li>-->
-<!--<li>-->
-<!--<a (click)="confirm(item)">-->
-<!--&lt;!&ndash;<i class="fa fa-trash"></i>&ndash;&gt;-->
-<!--<mat-icon class="menu-icon">delete</mat-icon>-->
-<!--<span i18n="@@delete">Xóa</span>-->
-<!--</a>-->
-<!--</li>-->
-<!--</ul>-->
-<!--</nh-dropdown>-->
-<!--</td>-->
-<!--</tr>-->
-<!--</tbody>-->
-<!--</table>-->
 <div class="row">
     <div class="col-sm-12">
         <dx-data-grid
