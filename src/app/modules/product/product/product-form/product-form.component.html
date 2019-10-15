@@ -214,7 +214,8 @@
                                                         [allowAdd]="true"
                                                         [languageId]="currentLanguage"
                                                         [attributeId]="item.value.attributeId"
-                                                        [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
+                                                        [selectedItem]="item.value.attributeValues && item.value.isMultiple ? item.value.attributeValues
+                                                                        : item.value.attributeValues && !item.value.isMultiple ? item.value.attributeValues[0] : []"
                                                         (itemSelected)="onProductAttributeValueSelected($event, item, i)"
                                                         (addItem)="onAProductAttributeValueAdded($event, item, i)"
                                                 ></app-product-attribute-value-suggestion>

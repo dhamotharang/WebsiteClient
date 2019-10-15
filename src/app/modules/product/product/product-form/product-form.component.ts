@@ -193,42 +193,57 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     onProductAttributeValueSelected(selectedAttributeValue: any, attributeFormControl: FormControl, index: number) {
-        const count = _.countBy(attributeFormControl.get('attributeValues').value, (attributeValue: NhSuggestion) => {
-            return attributeValue.id === selectedAttributeValue.id;
-        }).true;
-        if (count) {
-            this.toastr.warning('Giá trị thuộc tính đã tồn tại. Vui lòng kiểm tra lại.');
-            attributeFormControl.patchValue({attributeId: null, productAttributeName: null});
-            return;
+        if (attributeFormControl.get('isMultiple').value) {
+            const count = _.countBy(attributeFormControl.get('attributeValues').value, (attributeValue: NhSuggestion) => {
+                return attributeValue.id === selectedAttributeValue.id;
+            }).true;
+            if (count) {
+                this.toastr.warning('Giá trị thuộc tính đã tồn tại. Vui lòng kiểm tra lại.');
+                attributeFormControl.patchValue({attributeId: null, productAttributeName: null});
+                return;
+            }
+            attributeFormControl.patchValue({
+                attributeValues: selectedAttributeValue.map((attribute: NhSuggestion) => {
+                    return {
+                        id: attribute.id,
+                        name: attribute.name
+                    };
+                })
+            });
+        } else {
+            attributeFormControl.patchValue({
+                attributeValues: []
+            });
+            attributeFormControl.patchValue({
+                attributeValues: [{id: selectedAttributeValue.id, name: selectedAttributeValue.name}]
+            });
         }
-        attributeFormControl.patchValue({
-            productAttributeValues: selectedAttributeValue.map((attribute: NhSuggestion) => {
-                return {
-                    id: attribute.id,
-                    name: attribute.name
-                };
-            })
-        });
-        // if (this.isUpdate) {
-        //     this.saveAttribute(attributeFormControl, index);
-        // }
     }
 
     onAProductAttributeValueAdded(selectedAttributeValue: any, attributeFormControl: FormControl, index: number) {
-        let productAttributeValues = attributeFormControl.get('attributeValues').value;
-        if (!productAttributeValues) {
-            productAttributeValues = [];
-        }
-        productAttributeValues.push(selectedAttributeValue);
+        if (attributeFormControl.get('isMultiple').value) {
+            let productAttributeValues = attributeFormControl.get('attributeValues').value;
+            if (!productAttributeValues) {
+                productAttributeValues = [];
+            }
+            productAttributeValues.push(selectedAttributeValue);
 
-        attributeFormControl.patchValue({
-            productAttributeValues: productAttributeValues.map((attribute: NhSuggestion) => {
-                return {
-                    id: attribute.id,
-                    name: attribute.name
-                };
-            })
-        });
+            attributeFormControl.patchValue({
+                attributeValues: productAttributeValues.map((attribute: NhSuggestion) => {
+                    return {
+                        id: attribute.id,
+                        name: attribute.name
+                    };
+                })
+            });
+        } else {
+            attributeFormControl.patchValue({
+                attributeValues: []
+            });
+            attributeFormControl.patchValue({
+                attributeValues: [{id: selectedAttributeValue.id, name: selectedAttributeValue.name}]
+            });
+        }
     }
 
     add() {
@@ -536,11 +551,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     private buildAttributeForm(index: number, productValue?: ProductAttribute) {
-        this.attributeFormErrors[index] = this.renderFormError(['unitId', 'value', 'productAttributeValues']);
+        this.attributeFormErrors[index] = this.renderFormError(['unitId', 'value', 'attributeValues']);
         this.attributeValidationMessages[index] = this.renderFormErrorMessage([
             {unitId: ['required']},
             {value: ['isValid']},
-            {productAttributeValues: ['required']},
+            {attributeValues: ['required']},
         ]);
         const attributeModel = this.formBuilder.group({
             attributeId: [productValue ? productValue.attributeId : '', [
