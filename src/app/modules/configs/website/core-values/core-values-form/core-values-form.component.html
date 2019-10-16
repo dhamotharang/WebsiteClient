@@ -1,107 +1,110 @@
 <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
     <div class="tab-content" formArrayName="translations">
-        <div class="form-group" *ngIf="languages && languages.length > 1">
-            <label i18n-ghmLabel="@@language" ghmLabel="Language"
-                   class="col-sm-3 control-label"></label>
-            <div class="col-sm-8">
-                <nh-select [data]="languages"
-                           i18n-title="@@pleaseSelectLanguage"
-                           title="-- Please select language --"
-                           name="language"
-                           [(value)]="currentLanguage"
-                           (onSelectItem)="currentLanguage = $event.id"></nh-select>
-            </div>
-        </div>
-        <div class="form-group cm-mg-0" [formGroup]="model">
-            <label i18n-ghmLabel="@@order" ghmLabel="Ảnh" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
-                <ghm-file-explorer i18n-buttonText="@@selectImage"
-                                   [multiple]="false"
-                                   i18n-buttonText="@@selectProductImage"
-                                   [buttonText]="'Chọn ảnh'"
-                                   (itemSelected)="selectImage($event)"></ghm-file-explorer>
-                <div style="display: flex;align-items: flex-start;flex-direction: row" *ngIf="model.value.image">
-                    <img ghmImage [class]="'w150'" [src]="model.value.image"
-                         class="img-responsive"
-                         [errorImageUrl]="'/assets/images/no-image.png'">
-                    <button class="btn btn-sm btn-remove red" type="button"
+        <div class="col-sm-3">
+            <div class="form-group" [formGroup]="model">
+                <div class="col-sm-12">
+                    <div class="thumbnail">
+                        <img ghmImage [class]="'w150'" [src]="model.value.image"
+                             class="img-responsive"
+                             [errorImageUrl]="'/assets/images/no-image.png'">
+                    </div>
+                    <ghm-file-explorer i18n-buttonText="@@selectImage"
+                                       [multiple]="false"
+                                       i18n-buttonText="@@selectProductImage"
+                                       [buttonText]="'Chọn ảnh'"
+                                       (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                    <button class="btn cm-mgl-5 btn-remove red" *ngIf="model.value.image" type="button"
                             (click)="removeImage()">
-                        <i class="fa fa-times"></i>
+                        Xóa ảnh
                     </button>
                 </div>
             </div>
         </div>
-        <div class="form-group"
-             [hidden]="modelTranslation.value.languageId !== currentLanguage"
-             *ngFor="let modelTranslation of translations.controls; index as i"
-             [formGroupName]="i"
-             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
-            <label i18n-ghmLabel="@@name" ghmLabel="Name" class="col-sm-3 control-label"
-                   [required]="true"></label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" i18n-placeholder="@@namePlaceHolder"
-                       id="{{'name ' + currentLanguage}}"
-                       placeholder="Please enter name "
-                       formControlName="name"/>
-                <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Name is required} maxLength {Name not allowed
-                                                    over 256 characters} }</span>
+        <div class="col-sm-9">
+            <div class="form-group" *ngIf="languages && languages.length > 1">
+                <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                       class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <nh-select [data]="languages"
+                               i18n-title="@@pleaseSelectLanguage"
+                               title="-- Please select language --"
+                               name="language"
+                               [(value)]="currentLanguage"
+                               (onSelectItem)="currentLanguage = $event.id"></nh-select>
+                </div>
             </div>
-        </div>
-        <div class="form-group" [hidden]="modelTranslation.value.languageId !== currentLanguage"
-             *ngFor="let modelTranslation of translations.controls; index as i"
-             [formGroupName]="i"
-             [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
-            <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
+            <div class="form-group"
+                 [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                 *ngFor="let modelTranslation of translations.controls; index as i"
+                 [formGroupName]="i"
+                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
+                <label i18n-ghmLabel="@@name" ghmLabel="Name" class="col-sm-3 control-label"
+                       [required]="true"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@namePlaceHolder"
+                           id="{{'name ' + currentLanguage}}"
+                           placeholder="Please enter name "
+                           formControlName="name"/>
+                    <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.name, select, required {Name is required} maxLength {Name not allowed
+                                                    over 256 characters} }</span>
+                </div>
+            </div>
+            <div class="form-group" [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                 *ngFor="let modelTranslation of translations.controls; index as i"
+                 [formGroupName]="i"
+                 [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
+                <label i18n-ghmLabel="@@description" ghmLabel="Description" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
                 <textarea type="text" class="form-control" i18n-placeholder="@@descriptionPlaceHolder"
                           placeholder="Please enter description"
                           formControlName="description" rows="3"></textarea>
-                <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.description, select, maxLength {Description not allowed
+                    <span class="help-block">{ translationFormErrors[modelTranslation.value.languageId]?.description, select, maxLength {Description not allowed
                                                     over 500 characters}}
                  </span>
+                </div>
             </div>
-        </div>
-        <div class="form-group cm-mg-0" [formGroup]="model"
-             [class.has-error]="formErrors?.url">
-            <label i18n-ghmLabel="@@order" ghmLabel="Url" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" i18n-placeholder="@@orderPlaceHolder"
-                       placeholder="Please enter Url"
-                       formControlName="url"/>
-                <span class="help-block">{ formErrors?.url, select,
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors?.url">
+                <label i18n-ghmLabel="@@order" ghmLabel="Url" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                           placeholder="Please enter Url"
+                           formControlName="url"/>
+                    <span class="help-block">{ formErrors?.url, select,
                                             pattern {Url is invalid}}
                  </span>
+                </div>
             </div>
-        </div>
-        <div class="form-group cm-mg-0" [formGroup]="model"
-             [class.has-error]="formErrors?.order">
-            <label i18n-ghmLabel="@@order" ghmLabel="Order" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" i18n-placeholder="@@orderPlaceHolder"
-                       placeholder="Please enter order"
-                       formControlName="order"/>
-                <span class="help-block">{ formErrors?.order, select,
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors?.order">
+                <label i18n-ghmLabel="@@order" ghmLabel="Order" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                           placeholder="Please enter order"
+                           formControlName="order"/>
+                    <span class="help-block">{ formErrors?.order, select,
                                             isValid {Order must is number}
                                             greaterThan {Order must greater than 0}}
                  </span>
+                </div>
             </div>
-        </div>
-        <div class="form-group cm-mg-0" [formGroup]="model"
-             [class.has-error]="formErrors?.order">
-            <label i18n-ghmLabel="@@isActive" ghmLabel="IsActive" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
-                <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
-                    {model.value.isActive, select, 0 {Not Active} 1 {Active}}
-                </mat-checkbox>
-                <span class="help-block">{ formErrors?.isActive, select,
+            <div class="form-group cm-mg-0" [formGroup]="model"
+                 [class.has-error]="formErrors?.order">
+                <label i18n-ghmLabel="@@isActive" ghmLabel="IsActive" class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
+                        {model.value.isActive, select, 0 {Not Active} 1 {Active}}
+                    </mat-checkbox>
+                    <span class="help-block">{ formErrors?.isActive, select,
                                             required {IsActive is required}}
                  </span>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-9 col-sm-offset-3">
-                <button class="btn blue cm-mgr-5" i18n="@@save">Save</button>
-                <button class="btn default" i18n="@@cancel" type="button" (click)="closeForm()">Cancel</button>
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <button class="btn blue cm-mgr-5" i18n="@@save">Save</button>
+                    <button class="btn default" i18n="@@cancel" type="button" (click)="closeForm()">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
