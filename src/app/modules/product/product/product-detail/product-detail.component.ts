@@ -80,11 +80,7 @@ export class ProductDetailComponent extends BaseFormComponent implements OnInit,
     show(productId: string) {
         this.id = productId;
         this.isUpdate = true;
-        this.productAttributeService.search('', null, null, true, 1, 20)
-            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
-                this.listProductAttribute = result.items;
-                this.getDetail(productId);
-            });
+        this.getDetail(productId);
     }
 
     checkThumbnail(item: ProductImage) {

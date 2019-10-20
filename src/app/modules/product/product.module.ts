@@ -38,7 +38,6 @@ import {UnitService} from './unit/service/unit.service';
 import {GhmMaskModule} from '../../shareds/components/ghm-mask/ghm-mask.module';
 import {NhSuggestionModule} from '../../shareds/components/nh-suggestion/nh-suggestion.module';
 import {GhmFileExplorerModule} from '../../shareds/components/ghm-file-explorer/ghm-file-explorer.module';
-import {NhContextMenuModule} from '../../shareds/components/nh-context-menu/nh-context-menu.module';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 import {NhImageViewerModule} from '../../shareds/components/nh-image-viewer/nh-image-viewer.module';
 import {NhTabModule} from '../../shareds/components/nh-tab/nh-tab.module';
@@ -57,10 +56,10 @@ import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
 
 @NgModule({
     imports: [
-        CommonModule, ProductRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
-        NHTreeModule, NhSelectModule, MatIconModule, NhModalModule, GhmPagingModule,
-        DatetimeFormatModule, NhTabModule, GhmFileExplorerModule, NhContextMenuModule, TinymceModule,
-        MatRadioModule, GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule, NhSuggestionModule,
+        CommonModule, ProductRoutingModule, FormsModule, ReactiveFormsModule, CoreModule,
+        NhSelectModule, MatIconModule, NhModalModule, GhmPagingModule, MatCheckboxModule, MatRadioModule,
+        DatetimeFormatModule, NhTabModule, GhmFileExplorerModule, TinymceModule, NHTreeModule,
+        GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule, NhSuggestionModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, DxTreeListModule, GhmSettingDataGridModule,
         NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule, DxHtmlEditorModule, NhSafeHtmlModeule,
         SweetAlert2Module.forRoot({
