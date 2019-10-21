@@ -1,3 +1,243 @@
-<p>
-  order-list works!
-</p>
+<h1 class="page-title">
+    <span class="cm-mgr-5">Danh sách đơn hàng</span>
+    <small>Quản lý đơn hàng</small>
+</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group w200 cm-mgr-5">
+                <ghm-input elementId="keyword" i18n-placeholder="@@keywordSearch"
+                           icon="dx-icon-search"
+                           placeholder="Nhập tên hoặc SĐT KH."
+                           (remove)="search(1)"
+                           name="searchInput" [(ngModel)]="keyword"></ghm-input>
+            </div>
+            <div class="form-group w150 cm-mgr-5">
+                <app-product-suggestion
+                        (itemSelected)="onProductSelected($event)"
+                        (itemRemoved)="onProductRemoved()"></app-product-suggestion>
+            </div>
+            <div class="form-group w150 cm-mgr-5">
+                <nh-date
+                        [mask]="true"
+                        [showTime]="true"
+                        [format]="'DD/MM/YYYY'"
+                        [outputFormat]="'DD.MM.YYYY HH:mm:ss'"
+                        [(ngModel)]="fromDate"
+                        [placeholder]="'Từ ngày'"
+                        [allowRemove]="false"
+                        name="fromDate"
+                        (selectedDateEvent)="search(1)"></nh-date>
+            </div>
+            <div class="form-group w150 cm-mgr-5">
+                <nh-date
+                        [mask]="true"
+                        [showTime]="true"
+                        [format]="'DD/MM/YYYY'"
+                        [outputFormat]="'DD.MM.YYYY HH:mm:ss'"
+                        [(ngModel)]="toDate"
+                        [placeholder]="'Đến ngày'"
+                        [allowRemove]="false"
+                        name="toDate"
+                        (selectedDateEvent)="search(1)"></nh-date>
+            </div>
+            <div class="form-group w150 cm-mgr-5">
+                <ghm-select
+                        [data]="listStatus"
+                        i18n="@@selectStatus"
+                        i18n-title
+                        [title]="'-- Trạng thái --'"
+                        [(value)]="status"
+                        (itemSelected)="selectStatus($event)"></ghm-select>
+            </div>
+            <div class="form-group">
+                <button class="btn blue" type="button" (click)="search(1)">
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group cm-mgl-5">
+                <button class="btn btn-light" type="button" (click)="resetFormSearch()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <ghm-setting-data-grid
+                        [filterHeader]="filterHeader"
+                        [filterRow]="filterRow"
+                        [groupColumn]="groupColumn"
+                        [chooseColumn]="chooseColumn"
+                        (selectChooseColumn)="chooseColumn = $event"
+                        (selectFilterHeader)="filterHeader = $event"
+                        (selectFilterRow)="filterRow = $event"
+                        (selectGroupColumn)="groupColumn = $event"
+                ></ghm-setting-data-grid>
+            </div>
+            <div class="form-group pull-right cm-mgr-5">
+                <a class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add" (click)="add()"
+                   type="button">
+                    Thêm
+                </a>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-12">
+        <dx-data-grid
+                id="gridContainer"
+                keyExpr="id"
+                [showRowLines]="true"
+                [columnAutoWidth]="false"
+                [allowColumnResizing]="true"
+                [allowColumnReordering]="true"
+                [wordWrapEnabled]="true"
+                [dataSource]="listItems"
+                [showBorders]="true"
+                (onContextMenuPreparing)="rightClickContextMenu($event)">
+            <dxo-filter-row [visible]="filterRow"></dxo-filter-row>
+            <dxo-scrolling mode="infinite"></dxo-scrolling>
+            <dxo-header-filter [visible]="filterHeader"></dxo-header-filter>
+            <dxo-group-panel [visible]="groupColumn" title="Chọn cột để nhóm"></dxo-group-panel>
+            <dxo-column-chooser [enabled]="chooseColumn" mode="select"></dxo-column-chooser>
+
+            <dxi-column caption="STT" [width]="50" cellTemplate="NoTemplate" alignment="center"
+                        cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'NoTemplate'">
+                <ng-container *ngIf="cell.data">
+                    {{ (currentPage - 1) * pageSize + cell.rowIndex + 1 }}
+                </ng-container>
+            </div>
+            <dxi-column dataField="code" caption="Mã đơn hàng" [width]="100" cssClass="middle center"></dxi-column>
+            <dxi-column dataField="name" caption="Tên đơn hàng" cssClass="middle center"></dxi-column>
+            <dxi-column dataField="createTime" caption="Ngày đặt" type="date"
+                        cssClass="middle" [width]="150" cellTemplate="createTimeTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'createTimeTemplate'">
+                {{cell.data.createTime | dateTimeFormat: 'DD/MM/YYYY HH:mm'}}
+            </div>
+            <dxi-column dataField="status" caption="Trạng thái" [width]="120" cssClass="middle" alignment="center"
+                        cellTemplate="typeTemplate">
+                <dxo-header-filter [dataSource]="[
+                                    {text: 'Nháp', value: ['status', '=', 0]},
+                                    {text: 'Đang chờ xử lý', value: ['status', '=', 1]},
+                                    {text: 'Đã duyệt', value: ['status', '=', 2]},
+                                    {text: 'Không duyệt', value: ['status', '=', 3]},
+                                    {text: 'Đã giao', value: ['status', '=', 4]},
+                                    {text: 'Hoàn thành', value: ['status', '=', 5]},
+                                    {text: 'Hủy', value: ['status', '=', 6]}]"
+                ></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'typeTemplate'">
+              <span class="badge"
+                    [class.badge-info]="cell.data.status === orderStatus.Draft"
+                    [class.badge-warning]="cell.data.status === orderStatus.Pending"
+                    [class.badge-brand]="cell.data.status === orderStatus.Approved"
+                    [class.badge-dark]="cell.data.status === orderStatus.Decline"
+                    [class.badge-info]="cell.data.status === orderStatus.Arrived"
+                    [class.badge-success]="cell.data.status === orderStatus.Completed"
+                    [class.badge-danger]="cell.data.status === orderStatus.Canceled">
+                    {cell.data.status, select, 0 {Nháp} 1 {Đang chờ xử lý} 2 {Đã duyệt} 3 {Không duyệt} 4{Đã giao} 5{Hoàn thành} 6{Hủy} other{}}
+                </span>
+            </div>
+            <dxi-column dataField="quantity" caption="Tổng sản phẩm" [width]="100" alignment="right"
+                        cssClass="middle" cellTemplate="quantityTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'quantityTemplate'">
+                {{cell.data.quantity | formatNumber: 2}}
+            </div>
+            <dxi-column dataField="totalPrice" caption="Tổng tiền(VNĐ)" [width]="100" alignment="right"
+                        cssClass="middle" cellTemplate="totalAmountsTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'totalAmountsTemplate'">
+                {{cell.data.totalPrice | ghmCurrency: 0}}
+            </div>
+            <dxi-column dataField="deliveryDate" caption="Ngày giao hàng" type="date"
+                        cssClass="middle" [width]="150" cellTemplate="deliveryDateTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'deliveryDateTemplate'">
+                {{cell.data.deliveryDate | dateTimeFormat: 'DD/MM/YYYY HH:mm'}}
+            </div>
+            <dxi-column dataField="customerName" [width]="150" caption="Khách hàng" cssClass="middle"
+                        [visible]="false"></dxi-column>
+            <dxi-column dataField="creatorFullName" [width]="150" caption="Người tạo" cssClass="middle"
+                        [visible]="false"></dxi-column>
+            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
+                        *ngIf="permission.edit || permission.delete || permission.print"
+                        cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
+                <ng-container *ngIf="cell.data">
+                    <a *ngIf="permission.view" (click)="detail(cell.data.id)"
+                       class="cm-mgr-5">
+                        <i class="fa fa-info-circle color-bright-gray font-size-16"></i>
+                    </a>
+                    <a href="javascript://"
+                       *ngIf="permission.edit"
+                       class="text-decoration-none dx-icon-edit cm-mgr-5 color-dark-blue"
+                       (click)="edit(cell.data.id)">
+                    </a>
+                </ng-container>
+            </div>
+
+            <dxo-summary>
+                <dxi-group-item
+                        column="totalAmounts"
+                        summaryType="max"
+                        valueFormat="#,##0"
+                        [showInGroupFooter]="false"
+                        displayFormat="Lớn nhất: {0}"
+                        [alignByColumn]="true">
+                </dxi-group-item>
+                <dxi-group-item
+                        column="totalItems"
+                        summaryType="max"
+                        valueFormat="#,##0"
+                        [showInGroupFooter]="false"
+                        displayFormat="Lớn nhất: {0}"
+                        [alignByColumn]="true">
+                </dxi-group-item>
+                <dxi-group-item
+                        column="totalAmounts"
+                        summaryType="sum"
+                        valueFormat="#,##0"
+                        displayFormat="Tổng: {0} VNĐ"
+                        [showInGroupFooter]="true">
+                </dxi-group-item>
+                <dxi-group-item
+                        column="totalItems"
+                        summaryType="sum"
+                        valueFormat="#,##0"
+                        displayFormat="Tổng: {0}"
+                        [showInGroupFooter]="true">
+                </dxi-group-item>
+            </dxo-summary>
+        </dx-data-grid>
+    </div>
+    <div class="col-sm-12">
+        <ghm-paging
+                class="pull-right"
+                [totalRows]="totalRows"
+                [currentPage]="currentPage"
+                [pageShow]="6"
+                [pageSize]="pageSize"
+                (pageClick)="search($event)"
+                (selectPage)="changePageSize($event)"
+                [pageName]="'Phiếu nhập'">
+        </ghm-paging>
+    </div>
+</div>
+
+<swal
+        #confirmDeleteProduct
+        i18n="@@confirmDeleteProduct"
+        i18n-title="@@confirmTitleDeleteProduct"
+        i18n-text="@@confirmTextDeleteProduct"
+        title="Are you sure for delete this product?"
+        text="You can't recover this product after delete."
+        type="question"
+        i18n-confirmButtonText="@@accept"
+        i18n-cancelButtonText="@@cancel"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>
+
+<div dynamic-component-host></div>
+
+<!--<app-goods-receipt-note-form-->
+<!--(saveSuccessful)="onSaveSuccess($event)"></app-goods-receipt-note-form>-->

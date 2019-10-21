@@ -6,7 +6,7 @@
 <nh-modal #productFormModal size="lg"
           (shown)="onModalShown()"
           (hidden)="onModalHidden()">
-    <nh-modal-header class="uppercase font-green-sharp bold">
+    <nh-modal-header class="uppercase bold">
         <span i18n="@@productFormModalTitle">{isUpdate, select, 0 {Thêm mới sản phẩm} 1 {Cập nhật thông tin sản phẩm}}</span>
     </nh-modal-header>
     <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
@@ -20,12 +20,11 @@
                              [errorImageUrl]="'/assets/images/no-image.png'">
                     </div>
                     <ghm-file-explorer i18n-buttonText="@@selectImage"
-                                       [buttonClass]="'btn-sm'"
                                        [multiple]="true"
                                        [buttonText]="'Chọn ảnh'"
                                        (itemSelected)="selectProductImage($event)"
                                        (acceptSelected)="uploadImageProduct($event)"></ghm-file-explorer>
-                    <button *ngIf="thumbnail" type="button" class="btn btn-sm red cm-mgl-5" (click)="removeThumbnail()">
+                    <button *ngIf="thumbnail" type="button" class="btn red cm-mgl-5" (click)="removeThumbnail()">
                         Xóa ảnh
                     </button>
                     <div class="product-images">
@@ -214,7 +213,8 @@
                                                         [allowAdd]="true"
                                                         [languageId]="currentLanguage"
                                                         [attributeId]="item.value.attributeId"
-                                                        [selectedItem]="item.value.attributeValues ? item.value.attributeValues : []"
+                                                        [selectedItem]="item.value.attributeValues && item.value.isMultiple ? item.value.attributeValues
+                                                                        : item.value.attributeValues && !item.value.isMultiple ? item.value.attributeValues[0] : []"
                                                         (itemSelected)="onProductAttributeValueSelected($event, item, i)"
                                                         (addItem)="onAProductAttributeValueAdded($event, item, i)"
                                                 ></app-product-attribute-value-suggestion>

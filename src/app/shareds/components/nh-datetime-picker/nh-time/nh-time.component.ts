@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
     selector: 'nh-time',
@@ -8,19 +9,27 @@ import { AfterViewInit, Component, EventEmitter, HostListener, Input, OnInit, Ou
 export class NhTimeComponent implements OnInit {
     @Output() hourChange = new EventEmitter();
     @Output() minuteChange = new EventEmitter();
+    @Output() secondsChange = new EventEmitter();
 
     @Input()
     set hour(value: number) {
-        this._hour = !value ? 0 : value > 23 ? 23 : value;
+        this._hour = value == null || value === undefined ? moment().hours() : value > 23 ? 23 : value;
         this.hourChange.emit(this._hour);
         this.renderHourString();
     }
 
     @Input()
     set minute(value: number) {
-        this._minute = !value ? 0 : value > 59 ? 59 : value;
+        this._minute = value == null || value === undefined ? moment().minutes() : value > 59 ? 59 : value;
         this.minuteChange.emit(this._minute);
         this.renderMinuteString();
+    }
+
+    @Input()
+    set seconds(value: number) {
+        this._seconds = value == null || value === undefined ? moment().seconds() : value > 59 ? 59 : value;
+        this.secondsChange.emit(this._seconds);
+        this.renderSecondsString();
     }
 
     get hour() {
@@ -31,16 +40,27 @@ export class NhTimeComponent implements OnInit {
         return this._minute;
     }
 
+    get seconds() {
+        return this._seconds;
+    }
+
     private _hour = 0;
     private _minute = 0;
+    private _seconds = 0;
 
     hourString: string;
     minuteString: string;
+    secondsString: string;
 
     constructor() {
     }
 
     ngOnInit() {
+    }
+
+    onFocus(event: any) {
+        const length = event.target.value ? event.target.value.length : 0;
+        event.target.setSelectionRange(0, length);
     }
 
     onHourKeyUp() {
@@ -49,6 +69,10 @@ export class NhTimeComponent implements OnInit {
 
     onMinuteKeyUp() {
         this.calculateMinute();
+    }
+
+    onSecondsKeyUp() {
+        this.calculateSeconds();
     }
 
     changeHour(increase: boolean) {
@@ -64,6 +88,14 @@ export class NhTimeComponent implements OnInit {
             this.increaseMinute();
         } else {
             this.decreaseMinute();
+        }
+    }
+
+    changeSeconds(increase: boolean) {
+        if (increase) {
+            this.increaseSeconds();
+        } else {
+            this.decreaseSeconds();
         }
     }
 
@@ -120,6 +152,36 @@ export class NhTimeComponent implements OnInit {
             ? 0 : this.minute === 0 ? 59 : this.minute - 1;
         if (this.minute === 59) {
             this.decreaseHour();
+        }
+    }
+
+    private renderSecondsString() {
+        this.secondsString = this.seconds < 10
+            ? `0${this.seconds}`
+            : this.seconds.toString();
+    }
+
+    private calculateSeconds() {
+        this.seconds = Number(this.secondsString);
+        if (isNaN(this.seconds)) {
+            this.secondsString = '';
+            return;
+        }
+    }
+
+    private increaseSeconds() {
+        this.seconds = this.seconds == null || this.seconds === undefined
+            ? 0 : this.seconds === 59 ? 0 : this.seconds + 1;
+        if (this.seconds === 0) {
+            this.increaseMinute();
+        }
+    }
+
+    private decreaseSeconds() {
+        this.seconds = this.seconds == null || this.seconds === undefined
+            ? 0 : this.seconds === 0 ? 59 : this.seconds - 1;
+        if (this.seconds === 59) {
+            this.decreaseMinute();
         }
     }
 }

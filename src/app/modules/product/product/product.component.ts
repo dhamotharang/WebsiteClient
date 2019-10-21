@@ -21,6 +21,8 @@ import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {UtilService} from '../../../shareds/services/util.service';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
+import {ProductAttributeViewModel} from '../product-attribute/product-attribute.viewmodel';
+import {ProductAttributeService} from '../product-attribute/product-attribute.service';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
@@ -32,8 +34,8 @@ import {ActionResultViewModel} from '../../../shareds/view-models/action-result.
     providers: [HelperService]
 })
 export class ProductComponent extends BaseListComponent<ProductSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDeleteProduct' ) swalConfirmDelete: SwalComponent;
-    @ViewChild(NHDropdownTreeComponent ) nHDropdownTreeComponent: NHDropdownTreeComponent;
+    @ViewChild('confirmDeleteProduct') swalConfirmDelete: SwalComponent;
+    @ViewChild(NHDropdownTreeComponent) nHDropdownTreeComponent: NHDropdownTreeComponent;
     @ViewChild(DynamicComponentHostDirective) dynamicComponentHostDirective: DynamicComponentHostDirective;
     isActive;
     categoryId;
@@ -48,6 +50,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
     filterHeader = true;
     groupColumn = false;
     chooseColumn = false;
+    listAttribute;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -57,6 +60,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
                 private componentFactoryResolver: ComponentFactoryResolver,
                 private productCategoryService: ProductCategoryService,
                 private productService: ProductService,
+                private productAttributeService: ProductAttributeService,
                 private helperService: HelperService,
                 private utilService: UtilService) {
         super();
@@ -89,6 +93,11 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
         this.swalConfirmDelete.confirm.subscribe(result => {
             this.delete(this.productId);
         });
+
+        this.productAttributeService.search('', null, null, true, 1, 20)
+            .subscribe((result: SearchResultViewModel<ProductAttributeViewModel>) => {
+                this.listAttribute = result.items;
+            });
     }
 
     add() {
@@ -96,6 +105,8 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             this.dynamicComponentHostDirective.viewContainerRef,
             ProductFormComponent);
         setTimeout(() => {
+            productFormComponent.categoryTree = this.categoryTree;
+            productFormComponent.listProductAttribute = this.listAttribute;
             productFormComponent.add();
             this.subscribers.productFormModalDissmiss = productFormComponent.saveSuccessful.subscribe(() => {
                 this.search();
@@ -173,6 +184,8 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             this.dynamicComponentHostDirective.viewContainerRef,
             ProductFormComponent);
         setTimeout(() => {
+            productFormComponent.categoryTree = this.categoryTree;
+            productFormComponent.listProductAttribute = this.listAttribute;
             productFormComponent.edit(productId);
             this.subscribers.productFormModalDissmiss = productFormComponent.saveSuccessful.subscribe(() => {
                 this.search();
@@ -208,6 +221,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             this.dynamicComponentHostDirective.viewContainerRef,
             ProductDetailComponent);
         setTimeout(() => {
+            productFormComponent.listProductAttribute = this.listAttribute;
             productFormComponent.show(product.id);
             // this.subscribers.productFormModalDissmiss = productFormComponent.saveSuccessful.subscribe(() => {
             //             //     this.search();

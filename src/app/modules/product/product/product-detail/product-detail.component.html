@@ -4,7 +4,7 @@
     }
 </style>
 <nh-modal #productFormModal size="lg">
-    <nh-modal-header class="uppercase font-green-sharp bold">
+    <nh-modal-header class="uppercase bold">
         <span i18n="@@productDetailModalTitle">Chi tiết sản phẩm</span>
     </nh-modal-header>
     <form action="" class="form-horizontal">
@@ -54,7 +54,7 @@
                                i18n-ghmLabel="@@productName"
                                [required]="true"></label>
                         <div class="col-sm-9">
-                            <div class="form-control">
+                            <div class="form-control height-auto">
                                 {{ product?.id }}
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                                ghmLabel="Nhóm sản phẩm"
                                [required]="true"></label>
                         <div class="col-sm-9">
-                            <div class="form-control height-auto">
+                            <div class="form-control height-auto height-auto">
                            <span class="badge badge-info cm-mgr-5" *ngFor="let category of categories">
                             {{ category.categoryName }}
                            </span>
@@ -78,7 +78,7 @@
                                    i18n-ghmLabel="@@productName"
                                    [required]="true"></label>
                             <div class="col-sm-9">
-                                <div class="form-control">
+                                <div class="form-control height-auto">
                                     {{ translation.name }}
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                         <label class="col-sm-3 control-label" ghmLabel="SeoLink"
                                i18n-ghmLabel="@@productName"></label>
                         <div class="col-sm-9">
-                            <div class="form-control">
+                            <div class="form-control height-auto">
                                 {{ translation.seoLink }}
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                         <label class="col-sm-3 control-label" ghmLabel="Mô tả"
                                i18n-ghmLabel="@@description"></label>
                         <div class="col-sm-9">
-                            <div class="form-control">{{ translation?.description }}</div>
+                            <div class="form-control height-auto">{{ translation?.description }}</div>
                         </div>
                     </div><!-- END: Product description -->
                     <div class="form-group">
@@ -109,13 +109,13 @@
                                i18n-ghmLabel="@@productUnit"
                                [required]="true"></label>
                         <div class="col-sm-3">
-                            <div class="form-control">{{ product?.unitName }}</div>
+                            <div class="form-control height-auto">{{ product?.unitName }}</div>
                         </div>
                         <label class="col-sm-3 control-label" ghmLabel="Giá bán"
                                i18n-ghmLabel="@@salePrice"
                                [required]="true"></label>
                         <div class="col-sm-3">
-                            <div class="form-control">{{ product?.salePrice | formatNumber}}</div>
+                            <div class="form-control height-auto">{{ product?.salePrice | formatNumber}}</div>
                         </div>
                     </div>
                     <div class="form-group">

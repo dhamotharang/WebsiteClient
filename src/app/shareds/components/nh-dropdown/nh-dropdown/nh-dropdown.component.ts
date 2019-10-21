@@ -2,7 +2,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
-    HostListener,
+    HostListener, Input,
     OnInit,
     Output,
     Renderer2,
@@ -16,6 +16,7 @@ import {
     encapsulation: ViewEncapsulation.None
 })
 export class NhDropdownComponent implements OnInit {
+    @Input() isMulti = false;
     @Output() shown = new EventEmitter();
     @Output() hidden = new EventEmitter();
 

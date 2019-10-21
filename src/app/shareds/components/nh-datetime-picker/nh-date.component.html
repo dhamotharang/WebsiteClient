@@ -14,32 +14,34 @@
            [disabled]="disabled"
            [(ngModel)]="selectedDate"
            (focus)="showDate()"
-           name="inputDate"/>
+           name="inputDate"
+    />
     <!-- END: Input -->
-    <!-- BEGIN: Input button -->
+    <!-- BEGIN: Input logic -->
     <div class="input-group" *ngIf="type === 'inputButton'">
-        <!--{{day}}-->
         <input type="text" class="form-control" name="{{name}}" placeholder="{{placeholder}}"
                #nhDateInputElement
                [disabled]="disabled"
                [(ngModel)]="selectedDate"
                (focus)="showDate()"
+               (keyup)="onKeyup($event)"
                name="inputButtonDate"/>
         <span class="input-group-btn">
-                    <button class="btn btn-light" type="button"
-                            *ngIf="day && allowRemove"
-                            [disabled]="disabled"
-                            (click)="removeDate()">
-                        <i class="{{removeIcon}}"></i>
-                    </button>
-                    <button class="btn btn-light" type="button"
-                            [disabled]="disabled"
-                            (click)="showDate()">
-                        <i class="{{icon}}"></i>
-                    </button>
-                </span>
+            <button class="" type="button"
+                    *ngIf="day && allowRemove"
+                    [disabled]="disabled"
+                    (click)="removeDate()">
+                <i class="{{removeIcon}}"></i>
+            </button>
+            <button class="" type="button"
+                    [disabled]="disabled"
+                    (click)="showDate()">
+                <i class="{{icon}}"></i>
+            </button>
+        </span>
     </div>
-    <!-- END: Input button -->
+    <!-- END: Input logic -->
+    <span class="color-red" i18n="@@invalidDate" *ngIf="!isValid">Ngày tháng không hợp lệ.</span>
 </div>
 
 <ng-template #datePickerTemplate>
@@ -56,7 +58,7 @@
                     (click)="showMonth()">
                 {{ months[month] }}
             </button>
-            <button [class.dropup]="isShowYearPicker" type="button" class="btn-year" (click)="showYear()">
+            <button [class.dropup]="showYearPicker" type="button" class="btn-year" (click)="showYear()">
                 {{ year }}
             </button>
             <span class="btn-navigate next" (click)="next()">
@@ -64,12 +66,12 @@
             </span>
         </div><!-- END: .nh-date-header -->
         <div class="nh-date-body">
-            <ul class="nh-date-grid-container nh-day-years-container" *ngIf="isShowYearPicker">
-                <li class="nh-item" *ngFor="let year of listYear" [class.active]="year === year"
+            <ul class="nh-date-grid-container nh-day-years-container" *ngIf="showYearPicker">
+                <li class="nh-item" *ngFor="let year of years" [class.active]="year === year"
                     (click)="selectYear(year)">{{ year }}
                 </li>
             </ul><!-- END: year-container -->
-            <ul class="nh-date-grid-container" *ngIf="isShowMonthPicker"
+            <ul class="nh-date-grid-container" *ngIf="showMonthPicker"
                 [class.zoomIn]="isZoomIn"
                 [class.zoomOut]="isZoomOut">
                 <li class="nh-item"
@@ -80,7 +82,7 @@
                 </li>
             </ul><!-- END: .month-container -->
             <!-- END: .nh-date-name-day -->
-            <div class="nh-day-container" *ngIf="!isShowYearPicker && !isShowMonthPicker"
+            <div class="nh-day-container" *ngIf="!showYearPicker && !showMonthPicker"
                  [class.zoomIn]="isZoomIn">
                 <div class="nh-day-row">
                     <div class="nh-day-item" *ngFor="let day of dayOfWeekShort">
@@ -88,7 +90,7 @@
                     </div>
                 </div>
                 <div class="nh-day-row" *ngFor="let row of listRows">
-                    <div class="nh-day-item" *ngFor="let date of row" (click)="selectDay(date)"
+                    <div class="nh-day-item" *ngFor="let date of row" (click)="selectDay(date.day)"
                          [class.active]="date.day === day && date.month === month"
                          [class.out-month]="date.month !== month">{{ date.day }}
                     </div>
@@ -98,18 +100,19 @@
                 *ngIf="showTime"
                 [(hour)]="hour"
                 [(minute)]="minute"
+                [(seconds)]="seconds"
             ></nh-time> <!-- END: nh-time -->
             <div class="nh-date-footer-container" *ngIf="showTime">
-                <button type="button" class="button-accept" (click)="acceptChange()">
-                    Chọn
+                <button type="button" class="button-accept" (click)="acceptChange()" i18n="@@accept">
+                    Đồng ý
                 </button>
-                <button type="button" class="button-cancel" (click)="dismissDateBox()">
+                <button type="button" class="button-cancel" (click)="cancel()" i18n="@@cancel">
                     Hủy bỏ
                 </button>
-                <!--<button type="button" class="btn btn-primary">-->
+                <!--<logic type="logic" class="btn btn-primary">-->
                 <!--<i class="fa fa-calendar-o"></i>-->
                 <!--Ngày hôm nay-->
-                <!--</button>-->
+                <!--</logic>-->
             </div><!-- END: .nh-date-footer-container -->
         </div><!-- END: .nh-date-body -->
         <div class="nh-date-footer"></div>

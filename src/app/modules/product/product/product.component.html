@@ -52,7 +52,6 @@
                     <i class="fa fa-refresh"></i>
                 </button>
             </div>
-
             <div class="form-group pull-right">
                 <ghm-setting-data-grid
                     [filterHeader]="filterHeader"
@@ -111,7 +110,7 @@
             <dxi-column dataField="name" caption="Tên sản phẩm" cssClass="middle" cellTemplate="nameTemplate">
             </dxi-column>
             <div *dxTemplate="let cell of 'nameTemplate'">
-                <a href="javascripts://" (click)="permission.view ? detail(item) : ''"
+                <a href="javascripts://" (click)="permission.view ? detail(cell.data) : ''"
                    title="{{cell.data.name}}">
                     {{ cell.data.name }}
                 </a>
@@ -190,20 +189,3 @@
     [showCancelButton]="true"
     [focusCancel]="true">
 </swal>
-
-<!--<nh-menu #nhMenu>-->
-<!--<nh-menu-item (clicked)="detail($event)">-->
-<!--&lt;!&ndash;<i class="fa fa-eye menu-icon"></i>&ndash;&gt;-->
-<!--<mat-icon class="menu-icon">info</mat-icon>-->
-<!--<span i18n="@@view">Chi tiết</span>-->
-<!--</nh-menu-item>-->
-<!--<nh-menu-item (clicked)="edit($event.id)">-->
-<!--<mat-icon class="menu-icon">edit</mat-icon>-->
-<!--<span i18n="@@edit">Chỉnh sửa</span>-->
-<!--</nh-menu-item>-->
-<!--<nh-menu-item *ngIf="permission.delete"-->
-<!--(clicked)="confirm($event)">-->
-<!--<mat-icon class="menu-icon">delete</mat-icon>-->
-<!--<span i18n="@@edit">Xóa</span>-->
-<!--</nh-menu-item>-->
-<!--</nh-menu>-->

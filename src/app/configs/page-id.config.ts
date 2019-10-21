@@ -68,6 +68,8 @@ export interface IPageId {
     WAREHOUSE_CONFIG: number;
     INVENTORY: number;
     INVENTORY_REPORT: number;
+    ORDER_MANAGEMENT,
+    ORDER: number;
 }
 
 export const PAGE_ID_DI: IPageId = {
@@ -132,7 +134,9 @@ export const PAGE_ID_DI: IPageId = {
     GOODS_DELIVERY_NOTE: 100011,
     WAREHOUSE_CONFIG: 100012,
     INVENTORY: 100015,
-    INVENTORY_REPORT: 100013
+    INVENTORY_REPORT: 100013,
+    ORDER_MANAGEMENT: 100017,
+    ORDER: 100016
 };
 
 // Injection Tokens
