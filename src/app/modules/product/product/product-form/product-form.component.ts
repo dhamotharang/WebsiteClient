@@ -32,6 +32,7 @@ import {ProductAttributeService} from '../../product-attribute/product-attribute
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
 import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
+import {NewsTranslation} from '../../../news/new/model/news-translations.model';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
@@ -702,6 +703,33 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
                         }
                     });
                 }
+
+                if (result.translations && result.translations.length > 0) {
+                    this.translations.controls.forEach(
+                        (model: FormGroup) => {
+                            const detail = _.find(
+                                result.translations,
+                                (newTranslation: ProductTranslation) => {
+                                    return (
+                                        newTranslation.languageId === model.value.languageId
+                                    );
+                                }
+                            );
+                            detail.content = detail.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
+                            if (detail) {
+                                model.patchValue(detail);
+
+                                this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
+                                    const editorId = `productContent${this.currentLanguage}`;
+                                    if (contentEditor.elementId === editorId) {
+                                        contentEditor.setContent(detail.content);
+                                    }
+                                });
+
+                            }
+                        }
+                    );
+                }
                 setTimeout(() => {
                     this.addConversionUnit();
                     this.addAttribute();
@@ -734,10 +762,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
 
     private initEditor() {
         this.eventContentEditors.forEach((eventContentEditor: TinymceComponent) => {
-            setTimeout(() => {
-                eventContentEditor.destroy();
-                eventContentEditor.initEditor();
-            }, 100);
+            eventContentEditor.destroy();
+            eventContentEditor.initEditor();
         });
     }
 }

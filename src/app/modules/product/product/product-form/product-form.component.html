@@ -265,9 +265,9 @@
                                          [formGroupName]="i"
                                          [hidden]="modelTranslation.value.languageId !== currentLanguage"
                                          [class.has-error]="translationFormErrors[modelTranslation?.value?.languageId]?.content">
-                                        <tinymce 
+                                        <tinymce
                                                  [height]="300"
-                                                 elementId="questionContent{{ modelTranslation?.value?.languageId }}"
+                                                 elementId="productContent{{ modelTranslation?.value?.languageId}}"
                                                  formControlName="content"></tinymce>
                                         <span class="help-block">
                                         {

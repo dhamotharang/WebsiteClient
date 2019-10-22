@@ -125,6 +125,13 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                                 if (detail) {
                                     model.patchValue(detail);
 
+                                    this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
+                                        const editorId = `newsContent${this.currentLanguage}`;
+                                        if (contentEditor.elementId === editorId) {
+                                            contentEditor.setContent(detail.content);
+                                        }
+                                    });
+
                                 }
                             }
                         );
@@ -136,8 +143,8 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     }
 
     ngAfterViewInit() {
-        this.initEditor();
         this.cdr.detectChanges();
+        this.initEditor();
         this.utilService.focusElement('title ' + this.currentLanguage);
     }
 
@@ -361,10 +368,8 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
 
     private initEditor() {
         this.eventContentEditors.forEach((eventContentEditor: TinymceComponent) => {
-            setTimeout(() => {
-                eventContentEditor.destroy();
-                eventContentEditor.initEditor();
-            }, 100);
+            eventContentEditor.destroy();
+            eventContentEditor.initEditor();
         });
     }
 }
