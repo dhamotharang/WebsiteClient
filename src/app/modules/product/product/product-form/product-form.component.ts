@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, enableProdMode, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, enableProdMode, Inject, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Product} from '../model/product.model';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ProductImage} from '../model/product-image.model';
@@ -31,6 +31,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
+import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
@@ -49,6 +50,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     @ViewChild(ProductUnitComponent) productUnitComponent: ProductUnitComponent;
     @ViewChild(ProductFormAttributeComponent) productAttributeComponent: ProductFormAttributeComponent;
     @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
+    @ViewChildren(TinymceComponent) eventContentEditors: QueryList<TinymceComponent>;
     @ViewChild('productFormModal') productFormModal: NhModalComponent;
     product = new Product();
     categoryTree: TreeData[];
@@ -93,6 +95,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
     }
 
     ngAfterViewInit() {
+        this.initEditor();
         this.reloadTree();
     }
 
@@ -726,6 +729,15 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         });
         setTimeout(() => {
             this.addAttribute();
+        });
+    }
+
+    private initEditor() {
+        this.eventContentEditors.forEach((eventContentEditor: TinymceComponent) => {
+            setTimeout(() => {
+                eventContentEditor.destroy();
+                eventContentEditor.initEditor();
+            }, 100);
         });
     }
 }

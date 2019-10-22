@@ -289,6 +289,7 @@ export class EventFormComponent extends BaseFormComponent implements OnInit, Aft
 
     private initEditor() {
         this.eventContentEditors.forEach((eventContentEditor: TinymceComponent) => {
+            eventContentEditor.destroy();
             eventContentEditor.initEditor();
         });
     }

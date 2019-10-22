@@ -67,7 +67,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                 private toastr: ToastrService,
                 private newsService: NewsService) {
         super();
-        //this.currentUser = this.appService.currentUser;
+        // this.currentUser = this.appService.currentUser;
     }
 
     ngOnInit() {
@@ -130,13 +130,14 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                         );
                     }
                 });
+
             }
         });
     }
 
     ngAfterViewInit() {
-        this.cdr.detectChanges();
         this.initEditor();
+        this.cdr.detectChanges();
         this.utilService.focusElement('title ' + this.currentLanguage);
     }
 
@@ -202,6 +203,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     removeFeatureImage(item: any) {
         this.model.patchValue({featureImage: ''});
     }
+
     removeBannerImage(item: any) {
         this.model.patchValue({bannerImage: ''});
     }
@@ -359,7 +361,10 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
 
     private initEditor() {
         this.eventContentEditors.forEach((eventContentEditor: TinymceComponent) => {
-            eventContentEditor.initEditor();
+            setTimeout(() => {
+                eventContentEditor.destroy();
+                eventContentEditor.initEditor();
+            }, 100);
         });
     }
 }

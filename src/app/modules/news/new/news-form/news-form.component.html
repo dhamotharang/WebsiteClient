@@ -81,8 +81,8 @@
                                                    (itemSelected)="selectImage($event)"
                                                    (acceptSelected)="afterUploadImageContent($event, i)"></ghm-file-explorer>
                             </div>
-                            <tinymce [elementId]="'content'+ i" formControlName="content"
-                                     [(ngModel)]="modelTranslation.value.content" [height]="350"></tinymce>
+                            <tinymce elementId="newsContent{{ modelTranslation.value.languageId }}" formControlName="content"
+                                      [height]="350"></tinymce>
                             <span class="help-block">
                                 {translationFormErrors[modelTranslation.value.languageId]?.content, select, required {Content is required}}
                             </span>
