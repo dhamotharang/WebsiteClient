@@ -14,6 +14,9 @@ import {OrderService} from '../service/order.service';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
 import {NhTabService} from '../../../shareds/components/nh-tab/nh-tab.service';
 import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
+import {OrderDetail} from '../model/order.model';
+import {OrderDetailViewModel} from '../viewmodel/order-detail.viewmodel';
 
 @Component({
     selector: 'app-order-list',
@@ -30,9 +33,9 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
     // Setting Datagrid
     filterRow = true;
     filterHeader = true;
-    groupColumn = false;
+    groupColumn = true;
     chooseColumn = false;
-
+    orderDetail: OrderDetailViewModel;
     orderStatus = OrderStatus;
     listStatus = [{id: OrderStatus.Draft, name: 'Nháp'},
         {id: OrderStatus.Pending, name: 'Đang xử lý'},
@@ -77,6 +80,10 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
     add() {
     }
 
+    showDetail(value) {
+        this.getDetail(value.key);
+    }
+
     onProductSelected(item: NhSuggestion) {
         this.productId = item.id;
         this.search(1);
@@ -91,7 +98,10 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
         this.search(1);
     }
 
-    detail(id) {
+    getDetail(id) {
+        this.orderService.getDetail(id).subscribe((result: ActionResultViewModel<OrderDetailViewModel>) => {
+            this.orderDetail = result.data;
+        });
     }
 
     edit(id) {
@@ -123,7 +133,7 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
                 icon: 'info',
                 disabled: !this.permission.view,
                 onItemClick: () => {
-                    this.detail(data);
+                    this.getDetail(data);
                 }
             }, {
                 text: 'Sửa',

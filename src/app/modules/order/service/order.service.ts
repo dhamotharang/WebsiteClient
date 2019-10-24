@@ -78,14 +78,14 @@ export class OrderService {
         })) as Observable<ActionResultViewModel>;
     }
 
-    getDetail(id: string): Observable<OrderDetailViewModel> {
+    getDetail(id: string): Observable<ActionResultViewModel<OrderDetailViewModel>> {
         this.spinnerService.show();
         return this.http.get(`${this.url}/${id}`)
             .pipe(
                 finalize(() => this.spinnerService.hide()),
                 map((result: ActionResultViewModel<OrderDetailViewModel>) => {
-                    return result.data;
+                    return result;
                 })
-            ) as Observable<OrderDetailViewModel>;
+            ) as Observable<ActionResultViewModel<OrderDetailViewModel>>;
     }
 }

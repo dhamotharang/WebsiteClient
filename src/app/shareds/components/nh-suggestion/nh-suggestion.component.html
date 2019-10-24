@@ -59,7 +59,7 @@
             </li>
             <li i18n="@@cantFindPerson" *ngIf="keyword && sources.length === 0 && !isLoading">
                 <ng-container *ngIf="allowAdd; else notFoundMessage">
-                    <a href="javascript://" (click)="add()"><span i18n="@@add">Add</span>: {{ keyword }}</a>
+                    <a href="javascript://" (click)="add()" class="add"><span i18n="@@add"><i class="fa fa-plus"></i> Thêm</span>: {{ keyword }}</a>
                 </ng-container>
                 <ng-template #notFoundMessage>
                     Không tìm thấy kết quả với từ khóa: "{{ keyword }}"

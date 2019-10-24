@@ -60,7 +60,6 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
 
     @Input()
     set content(val) {
-        console.log(val);
         this._content = val;
     }
 

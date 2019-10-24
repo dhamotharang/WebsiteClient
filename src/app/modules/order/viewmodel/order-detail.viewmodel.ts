@@ -6,6 +6,7 @@ export class OrderDetailViewModel {
     name: string;
     customerName: string;
     phoneNumber: string;
+    address: string;
     email: string;
     totalPrice: number;
     discount: number;

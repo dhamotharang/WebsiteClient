@@ -279,6 +279,13 @@ export class EventFormComponent extends BaseFormComponent implements OnInit, Aft
                             });
                             if (detail) {
                                 model.patchValue(detail);
+
+                                this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
+                                    const editorId = `eventContent${this.currentLanguage}`;
+                                    if (contentEditor.elementId === editorId) {
+                                        contentEditor.setContent(detail.content);
+                                    }
+                                });
                             }
                         });
                     }

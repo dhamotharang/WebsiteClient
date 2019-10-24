@@ -1,3 +1,8 @@
+<style>
+    .order-detail {
+        background-color: #fff;
+    }
+</style>
 <h1 class="page-title">
     <span class="cm-mgr-5">Danh sách đơn hàng</span>
     <small>Quản lý đơn hàng</small>
@@ -8,11 +13,11 @@
             <div class="form-group w200 cm-mgr-5">
                 <ghm-input elementId="keyword" i18n-placeholder="@@keywordSearch"
                            icon="dx-icon-search"
-                           placeholder="Nhập tên hoặc SĐT KH."
+                           placeholder="Tên hoặc SĐT KH."
                            (remove)="search(1)"
                            name="searchInput" [(ngModel)]="keyword"></ghm-input>
             </div>
-            <div class="form-group w150 cm-mgr-5">
+            <div class="form-group w200 cm-mgr-5">
                 <app-product-suggestion
                         (itemSelected)="onProductSelected($event)"
                         (itemRemoved)="onProductRemoved()"></app-product-suggestion>
@@ -92,13 +97,13 @@
                 [wordWrapEnabled]="true"
                 [dataSource]="listItems"
                 [showBorders]="true"
+                (onRowExpanded)="showDetail($event)"
                 (onContextMenuPreparing)="rightClickContextMenu($event)">
             <dxo-filter-row [visible]="filterRow"></dxo-filter-row>
             <dxo-scrolling mode="infinite"></dxo-scrolling>
             <dxo-header-filter [visible]="filterHeader"></dxo-header-filter>
             <dxo-group-panel [visible]="groupColumn" title="Chọn cột để nhóm"></dxo-group-panel>
             <dxo-column-chooser [enabled]="chooseColumn" mode="select"></dxo-column-chooser>
-
             <dxi-column caption="STT" [width]="50" cellTemplate="NoTemplate" alignment="center"
                         cssClass="middle"></dxi-column>
             <div *dxTemplate="let cell of 'NoTemplate'">
@@ -156,26 +161,11 @@
                         [visible]="false"></dxi-column>
             <dxi-column dataField="creatorFullName" [width]="150" caption="Người tạo" cssClass="middle"
                         [visible]="false"></dxi-column>
-            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
-                        *ngIf="permission.edit || permission.delete || permission.print"
-                        cssClass="middle"></dxi-column>
-            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
-                <ng-container *ngIf="cell.data">
-                    <a *ngIf="permission.view" (click)="detail(cell.data.id)"
-                       class="cm-mgr-5">
-                        <i class="fa fa-info-circle color-bright-gray font-size-16"></i>
-                    </a>
-                    <a href="javascript://"
-                       *ngIf="permission.edit"
-                       class="text-decoration-none dx-icon-edit cm-mgr-5 color-dark-blue"
-                       (click)="edit(cell.data.id)">
-                    </a>
-                </ng-container>
-            </div>
+            <dxo-master-detail [enabled]="true" template="masterDetail"></dxo-master-detail>
 
             <dxo-summary>
                 <dxi-group-item
-                        column="totalAmounts"
+                        column="totalPrice"
                         summaryType="max"
                         valueFormat="#,##0"
                         [showInGroupFooter]="false"
@@ -183,7 +173,7 @@
                         [alignByColumn]="true">
                 </dxi-group-item>
                 <dxi-group-item
-                        column="totalItems"
+                        column="quantity"
                         summaryType="max"
                         valueFormat="#,##0"
                         [showInGroupFooter]="false"
@@ -191,20 +181,95 @@
                         [alignByColumn]="true">
                 </dxi-group-item>
                 <dxi-group-item
-                        column="totalAmounts"
+                        column="totalPrice"
                         summaryType="sum"
                         valueFormat="#,##0"
                         displayFormat="Tổng: {0} VNĐ"
                         [showInGroupFooter]="true">
                 </dxi-group-item>
                 <dxi-group-item
-                        column="totalItems"
+                        column="quantity"
                         summaryType="sum"
                         valueFormat="#,##0"
                         displayFormat="Tổng: {0}"
                         [showInGroupFooter]="true">
                 </dxi-group-item>
             </dxo-summary>
+            <div *dxTemplate="let detail of 'masterDetail'">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-stripped">
+                                <thead>
+                                <tr>
+                                    <th class="center middle w50 visible-lg" i18n="@@no">STT</th>
+                                    <th class="middle" i18n="@@titleNews">Mã SP</th>
+                                    <th class="middle w200" i18n="@@categoryNews">Tên Sản Phẩm</th>
+                                    <th class="right middle w100" i18n="@@createDate">Đơn vị</th>
+                                    <th class="center middle w50" i18n="@@viewCount">Số lượng</th>
+                                    <th class="middle text-right w100" i18n="@@statusApprove">Đơn giá</th>
+                                    <th class="middle text-right" i18n="@@approve">Chiết khấu</th>
+                                    <th class="middle text-right" i18n="@@decline">Thuế</th>
+                                    <th class="middle text-right " i18n="@@userCreate">Thành tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let item of orderDetail?.orderDetails; let i = index">
+                                    <td class="center middle visible-lg">{{i + 1 }}</td>
+                                    <td class="middle">{{item.productId}}</td>
+                                    <td class="middle">{{item.productName}}</td>
+                                    <td class="middle"></td>
+                                    <td class="middle text-right">{{item.quantity}}</td>
+                                    <td class="middle text-right">{{item.price | ghmCurrency: 0}}</td>
+                                    <td class="middle">
+                                        {{item.discount | formatNumber}}
+                                    </td>
+                                    <td class="center middle">
+                                    </td>
+                                    <td class="middle center">
+                                        {{item.amount | ghmCurrency: 0}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label ghmLabel="Họ tên: " class="control-label"></label>{{detail.data.customerName}}
+                            </div>
+                            <div class="form-group">
+                                <label ghmLabel="SĐT:" class="control-label"></label>
+                                {{detail.data.phoneNumber}}
+                            </div>
+                            <div class="form-group">
+                                <label ghmLabel="Địa chỉ:" class="control-label"></label>
+                                {{orderDetail?.address}}
+                            </div>
+                            <div class="form-group">
+                                <label ghmLabel="Trạng thái: " class="control-label"></label>
+                                <span class="badge"
+                                      [class.badge-info]="detail.data.status === orderStatus.Draft"
+                                      [class.badge-warning]="detail.data.status === orderStatus.Pending"
+                                      [class.badge-brand]="detail.data.status === orderStatus.Approved"
+                                      [class.badge-dark]="detail.data.status === orderStatus.Decline"
+                                      [class.badge-info]="detail.data.status === orderStatus.Arrived"
+                                      [class.badge-success]="detail.data.status === orderStatus.Completed"
+                                      [class.badge-danger]="detail.data.status === orderStatus.Canceled">
+                                 {detail.data.status, select, 0 {Nháp} 1 {Đang chờ xử lý} 2 {Đã duyệt} 3 {Không duyệt} 4{Đã giao} 5{Hoàn thành} 6{Hủy} other{}}
+                         </span>
+                            </div>
+                            <div class="form-group">
+                                <!--<button class="btn btn-sm blue cm-mgr-5">In</button>-->
+                                <button class="btn btn-sm blue cm-mgr-5">Chi tiết</button>
+                                <button class="btn btn-sm blue cm-mgr-5">Sửa</button>
+                                <button class="btn btn-sm red cm-mgr-5">Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </dx-data-grid>
     </div>
     <div class="col-sm-12">

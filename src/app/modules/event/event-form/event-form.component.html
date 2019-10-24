@@ -57,6 +57,9 @@
                                     <label i18n-ghmLabel="@@thumbnail" ghmLabel="Thumbnail"
                                            class="control-label"></label>
                                     <div>
+                                         <div class="thumbnail-preview">
+                                            <img ghmImage [src]="model.value.thumbnail" alt="">
+                                        </div><!-- END: .thumbnail-preview -->
                                         <div class="cm-mgb-5">
                                             <ghm-file-explorer
                                                 i18n-buttonText="@@chooseImage"
@@ -69,9 +72,6 @@
                                                 Remove thumbnail
                                             </button>
                                         </div>
-                                        <div class="thumbnail-preview">
-                                            <img ghmImage [src]="model.value.thumbnail" alt="">
-                                        </div><!-- END: .thumbnail-preview -->
                                     </div>
                                 </div>
                                 <div class="form-group"
