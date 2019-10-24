@@ -214,9 +214,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let item of orderDetail?.orderDetails; let i = index">
+                                <tr *ngFor="let item of detail.data.orderDetails; let i = index">
                                     <td class="center middle visible-lg">{{i + 1 }}</td>
-                                    <td class="middle">{{item.productId}}</td>
+                                    <td class="middle">{{item?.productId}}</td>
                                     <td class="middle">{{item.productName}}</td>
                                     <td class="middle"></td>
                                     <td class="middle text-right">{{item.quantity}}</td>

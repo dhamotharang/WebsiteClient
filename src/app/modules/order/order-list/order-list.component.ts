@@ -12,11 +12,10 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 import {finalize} from 'rxjs/operators';
 import {OrderService} from '../service/order.service';
 import {FilterLink} from '../../../shareds/models/filter-link.model';
-import {NhTabService} from '../../../shareds/components/nh-tab/nh-tab.service';
 import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggestion.component';
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
-import {OrderDetail} from '../model/order.model';
 import {OrderDetailViewModel} from '../viewmodel/order-detail.viewmodel';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-order-list',
@@ -81,7 +80,15 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
     }
 
     showDetail(value) {
-        this.getDetail(value.key);
+        const orderInfo = _.find(this.listItems, (item: OrderSearchViewModel) => {
+            return item.id === value.key;
+        });
+
+        if (orderInfo && (!orderInfo.orderDetails || orderInfo.orderDetails.length === 0)) {
+            this.orderService.getDetail(value.key).subscribe((result: ActionResultViewModel<OrderDetailViewModel>) => {
+                orderInfo.orderDetails = result.data.orderDetails;
+            });
+        }
     }
 
     onProductSelected(item: NhSuggestion) {
@@ -99,9 +106,6 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
     }
 
     getDetail(id) {
-        this.orderService.getDetail(id).subscribe((result: ActionResultViewModel<OrderDetailViewModel>) => {
-            this.orderDetail = result.data;
-        });
     }
 
     edit(id) {

@@ -1,3 +1,5 @@
+import {OrderDetail} from '../model/order.model';
+
 export class OrderSearchViewModel {
     id: string;
     code: string;
@@ -14,4 +16,5 @@ export class OrderSearchViewModel {
     deliveryDate: Date;
     createTime: Date;
     creatorFullName: string;
+    orderDetails: OrderDetail[];
 }
