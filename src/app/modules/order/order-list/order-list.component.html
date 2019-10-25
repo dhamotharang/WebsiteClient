@@ -235,6 +235,19 @@
                                     <td colspan="7" class=""><label class="control-label pull-right" ghmLabel="Chiết khấu"></label></td>
                                     <td colspan="1" class="pull-right">{{detail.data.discount}} {detail.data.discountType, select, 0 {VNĐ} 1 {%}}</td>
                                 </tr>
+                                <tr>
+                                    <td colspan="7" class=""><label class="control-label pull-right" ghmLabel="VAT"></label></td>
+                                    <td colspan="1" class="pull-right">{{detail.data.vat}} %</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" class=""><label class="control-label pull-right" ghmLabel="Tổng tiển phải trả"></label></td>
+                                    <td colspan="1" class="pull-right">{{detail.data.totalAmount | ghmCurrency: 0}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" class=""><label class="control-label pull-right">
+                                        {{ detail.data.totalAmounts | ghmAmountToWord }}
+                                    </label></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

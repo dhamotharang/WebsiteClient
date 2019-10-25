@@ -19,6 +19,7 @@ import {NhModalModule} from '../../shareds/components/nh-modal/nh-modal.module';
 import {NhDateModule} from '../../shareds/components/nh-datetime-picker/nh-date.module';
 import {CoreModule} from '../../core/core.module';
 import {NhTabModule} from '../../shareds/components/nh-tab/nh-tab.module';
+import {FormatMoneyStringModule} from '../../shareds/pipe/format-money-string/format-money-string.module';
 
 export const routes: Routes = [
     {
@@ -33,7 +34,7 @@ export const routes: Routes = [
 @NgModule({
     imports: [
         CommonModule, [RouterModule.forChild(routes)], CoreModule, FormsModule, ReactiveFormsModule, NhDateModule,
-        ProductSuggestionModule, GhmPagingModule, GhmSettingDataGridModule, NhModalModule, NhTabModule,
+        ProductSuggestionModule, GhmPagingModule, GhmSettingDataGridModule, NhModalModule, NhTabModule, FormatMoneyStringModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, GhmSettingDataGridModule,
         DatetimeFormatModule, GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule,
         SweetAlert2Module.forRoot({

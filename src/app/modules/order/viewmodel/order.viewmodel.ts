@@ -8,6 +8,8 @@ export class OrderSearchViewModel {
     phoneNumber: string;
     email: string;
     totalPrice: number;
+    totalAmount: number;
+    vat: number;
     discount: number;
     discountType: number;
     quantity: number;
