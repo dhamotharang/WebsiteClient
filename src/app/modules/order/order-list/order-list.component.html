@@ -209,7 +209,6 @@
                                     <th class="center middle w50" i18n="@@viewCount">Số lượng</th>
                                     <th class="middle text-right w100" i18n="@@statusApprove">Đơn giá</th>
                                     <th class="middle text-right" i18n="@@approve">Chiết khấu</th>
-                                    <th class="middle text-right" i18n="@@decline">Thuế</th>
                                     <th class="middle text-right " i18n="@@userCreate">Thành tiền</th>
                                 </tr>
                                 </thead>
@@ -218,17 +217,23 @@
                                     <td class="center middle visible-lg">{{i + 1 }}</td>
                                     <td class="middle">{{item?.productId}}</td>
                                     <td class="middle">{{item.productName}}</td>
-                                    <td class="middle"></td>
                                     <td class="middle text-right">{{item.quantity}}</td>
                                     <td class="middle text-right">{{item.price | ghmCurrency: 0}}</td>
-                                    <td class="middle">
+                                    <td class="middle">{{item.discount}} {item.discountType, select, 0 {VNĐ} 1 {%}}</td>
+                                    <td class="middle text-right">
                                         {{item.discount | formatNumber}}
                                     </td>
-                                    <td class="center middle">
-                                    </td>
-                                    <td class="middle center">
+                                    <td class="middle text-right">
                                         {{item.amount | ghmCurrency: 0}}
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" class=""><label class="control-label pull-right" ghmLabel="Tổng tiền"></label></td>
+                                    <td colspan="1" class="pull-right">{{detail.data.totalPrice | ghmCurrency: 0}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" class=""><label class="control-label pull-right" ghmLabel="Chiết khấu"></label></td>
+                                    <td colspan="1" class="pull-right">{{detail.data.discount}} {detail.data.discountType, select, 0 {VNĐ} 1 {%}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -303,6 +308,3 @@
 </swal>
 
 <div dynamic-component-host></div>
-
-<!--<app-goods-receipt-note-form-->
-<!--(saveSuccessful)="onSaveSuccess($event)"></app-goods-receipt-note-form>-->
