@@ -7,25 +7,28 @@
     <form class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
         <nh-modal-content>
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="form">
-                        <div class="form-group" [class.has-error]="formErrors?.logo">
-                            <label i18n-ghmLabel="@@logo" ghmLabel="Logo" class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8">
-                                <ghm-file-explorer buttonText="Select logo"
-                                                   i18n-buttonText="@@selectLogo"
-                                                   (itemSelected)="selectImage($event)"></ghm-file-explorer>
-                                <br>
-                                <img ghmImage [src]="model.value.logo" class="w150" [isUrlAbsolute]="true">
-                                <span class="help-block">{ formErrors?.logo, select,
-                                                            maxLength {Logo not allowed over 500 characters}}</span>
-                            </div>
+                <div class="col-sm-3">
+                    <div class="" [class.has-error]="formErrors?.logo">
+                        <div class="thumbnail">
+                            <img ghmImage [src]="model.value.logo" class="w150" [isUrlAbsolute]="true">
                         </div>
+                        <span class="help-block">{ formErrors?.logo, select,
+                                                            maxLength {Logo not allowed over 500 characters}}</span>
+                        <ghm-file-explorer buttonText="Select logo"
+                                           i18n-buttonText="@@selectLogo"
+                                           (itemSelected)="selectImage($event)"></ghm-file-explorer>
+                        <button class="btn btn-danger cm-mgl-5" (click)="removeImage()" *ngIf="model.value.logo">Xóa
+                            ảnh
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="col-sm-12">
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.name">
                             <label i18n-ghmLabel="@@brandName" ghmLabel="Brand Name"
-                                   class="col-sm-4 control-label" [required]="true"></label>
-                            <div class="col-sm-8" [formGroup]="model">
+                                   class="col-sm-3 control-label" [required]="true"></label>
+                            <div class="col-sm-9" [formGroup]="model">
                                 <input class="form-control" formControlName="name" id="name"
                                        i18n-placeholder="@@enterBrandPlaceHolder"
                                        placeholder="Enter brand">
@@ -38,8 +41,8 @@
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.email">
                             <label i18n-ghmLabel="@@email" ghmLabel="Email"
-                                   class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8" [formGroup]="model">
+                                   class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9" [formGroup]="model">
                                 <input class="form-control" formControlName="email"
                                        i18n-placeholder="@@enterEmailPlaceHolder"
                                        placeholder="Enter email">
@@ -51,8 +54,8 @@
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.phoneNumber">
                             <label i18n-ghmLabel="@@phoneNumber" ghmLabel="Phone Number"
-                                   class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8" [formGroup]="model">
+                                   class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9" [formGroup]="model">
                                 <input class="form-control" formControlName="phoneNumber"
                                        i18n-placeholder="@@enterPhoneNumberPlaceHolder"
                                        placeholder="Enter phone number">
@@ -64,8 +67,8 @@
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.website">
                             <label i18n-ghmLabel="@@website" ghmLabel="Website"
-                                   class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8" [formGroup]="model">
+                                   class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9" [formGroup]="model">
                                 <input class="form-control" formControlName="website"
                                        i18n-placeholder="@@enterWebsitePlaceHolder"
                                        placeholder="Enter website">
@@ -77,8 +80,8 @@
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.address">
                             <label i18n-ghmLabel="@@address" ghmLabel="Address"
-                                   class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8">
+                                   class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
                                 <textarea type="text" class="form-control"
                                           i18n-placeholder="@@enterAddressPlaceHolder"
                                           placeholder="Enter Address"
@@ -90,8 +93,8 @@
                         <div class="form-group cm-mgb-10"
                              [class.has-error]="formErrors?.description">
                             <label i18n-ghmLabel="@@description" ghmLabel="Description"
-                                   class="col-sm-4 control-label"></label>
-                            <div class="col-sm-8">
+                                   class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
                                 <textarea type="text" class="form-control"
                                           i18n-placeholder="@@enterDescriptionPlaceHolder"
                                           placeholder="Enter description"
@@ -102,7 +105,7 @@
                             </div>
                         </div>
                         <div class="form-group" [formGroup]="model">
-                            <div class="col-sm-8 col-sm-offset-4">
+                            <div class="col-sm-9 col-sm-offset-3">
                                 <mat-checkbox color="primary" formControlName="isActive" i18n="@@isActive">
                                     {model.value.isActive, select, 0 {Inactive} 1 {Active}}
                                 </mat-checkbox>

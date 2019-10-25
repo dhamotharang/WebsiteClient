@@ -10,7 +10,7 @@
 export class GhmPagingComponent implements OnInit, OnChanges {
     @Input() totalRows: number;
     @Input() pageSize = 20;
-    @Input() isShowSummary = false;
+    @Input() isShowSummary = true;
     @Input() pageShow = 5;
     @Input() currentPage = 5;
     @Input() isDisabled = false;
@@ -135,6 +135,6 @@ export class GhmPagingComponent implements OnInit, OnChanges {
             this.toPageSummary = this.totalRows;
         }
         // console.log(this.summaryMessage);
-        // this.summaryMessage = `Hiển thị từ ${this.fromPageSummary} đến ${this.toPageSummary} của  ${this.totalRows} ${this.pageName}`;
+        this.summaryMessage = `Hiển thị từ ${this.fromPageSummary} đến ${this.toPageSummary} của  ${this.totalRows} ${this.pageName}`;
     }
 }

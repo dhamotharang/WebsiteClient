@@ -43,6 +43,7 @@ export class OrderDetail {
     productName: string;
     quantity: number;
     unitId: string;
+    unitName: string;
     price: number;
     discount: number; // Giá trị giảm giá
     discountType: number; // Loại giảm giá, 0: tiền, 1 phần trăm

@@ -1,11 +1,12 @@
 ghm-paging {
-    ul.pagination {
-        margin: 0;
-        display: block;
-        width: 100%;
+  width: 100%;
+  ul.pagination {
+    margin: 0;
+    display: block;
+    width: 100%;
 
-        li {
-            display: inline !important;
-        }
+    li {
+      display: inline !important;
     }
+  }
 }

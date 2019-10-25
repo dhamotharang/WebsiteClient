@@ -2,6 +2,10 @@
     label {
         text-align: left !important;
     }
+
+    ::ng-deep numberAlign {
+        text-align: right;
+    }
 </style>
 <nh-modal #productFormModal size="lg"
           (shown)="onModalShown()"
@@ -153,7 +157,7 @@
                                 <span class="help-block">
                             {
                             translationFormErrors[modelTranslation.value.languageId]?.description,
-                            select, maxlength {Thông tin mô tả sản phẩmkhông được phép vượt quá 500 ký tự.}
+                            select, maxlength {Thông tin mô tả sản phẩm không được phép vượt quá 500 ký tự.}
                             }
                         </span>
                             </div>
@@ -175,7 +179,7 @@
                                [required]="true"></label>
                         <div class="col-sm-3" [class.has-error]="formErrors?.salePrice">
                             <dx-number-box placeholder="Giá bán" formControlName="salePrice" format="#,##0"
-                                           [showClearButton]="true"></dx-number-box>
+                                           [showClearButton]="true" class="numberAlign"></dx-number-box>
                             <span class="help-block">{formErrors?.salePrice, select, required {Vui lòng chọn giá bán} isValid {Giá bán phải là số.}}</span>
                         </div>
                     </div>
@@ -266,9 +270,9 @@
                                          [hidden]="modelTranslation.value.languageId !== currentLanguage"
                                          [class.has-error]="translationFormErrors[modelTranslation?.value?.languageId]?.content">
                                         <tinymce
-                                                 [height]="300"
-                                                 elementId="productContent{{ modelTranslation?.value?.languageId}}"
-                                                 formControlName="content"></tinymce>
+                                                [height]="300"
+                                                elementId="productContent{{ modelTranslation?.value?.languageId}}"
+                                                formControlName="content"></tinymce>
                                         <span class="help-block">
                                         {
                                         translationFormErrors[modelTranslation.value.languageId]?.content,

@@ -51,6 +51,10 @@ export class BrandFormComponent extends BaseFormComponent implements OnInit {
         this.brandFormModal.open();
     }
 
+    removeImage() {
+        this.model.patchValue({logo: ''});
+    }
+
     edit(id: string) {
         this.utilService.focusElement('name');
         this.isUpdate = true;

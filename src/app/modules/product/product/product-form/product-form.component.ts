@@ -132,6 +132,10 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             _.each(data, (tree: TreeData) => {
                 this.categories.push(parseInt(tree.id));
             });
+
+            this.categoryText = _.join(_.map(data, (categoryNews: TreeData) => {
+                return categoryNews.text;
+            }), ', ');
         }
         this.model.patchValue({categories: this.categories});
     }
@@ -346,6 +350,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
             }
 
             this.model.patchValue({images: this.productImages});
+            this.getThumbnail();
         }
     }
 
@@ -370,6 +375,18 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit, A
         }
 
         this.model.patchValue({images: this.productImages});
+        this.getThumbnail();
+    }
+
+    getThumbnail() {
+        const thumbnail = _.find(this.productImages, (item: ProductImage) => {
+            return item.url === this.thumbnail;
+        });
+
+        if (thumbnail) {
+            thumbnail.isThumbnail = true;
+            this.model.patchValue({thumbnail: this.thumbnail});
+        }
     }
 
     removeThumbnail() {

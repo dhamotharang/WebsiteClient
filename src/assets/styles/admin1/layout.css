@@ -102,6 +102,10 @@ Page Header
 
 .page-header.navbar .page-logo .logo-default {
     margin: 18px 0 0 0;
+
+    /* padding-bottom: 64px; */
+    margin-top: 15px;
+
 }
 
 .page-header.navbar .page-logo .logo-mini {
