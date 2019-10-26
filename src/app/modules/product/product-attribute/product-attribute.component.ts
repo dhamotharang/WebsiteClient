@@ -101,7 +101,8 @@ export class ProductAttributeComponent extends BaseListComponent<ProductAttribut
 
     changeSelfContent(attribute: ProductAttributeViewModel) {
         this.subscribers.changeSelfContent = this.productAttributeService.updateSelfContent(attribute.id, !attribute.isSelfContent)
-            .subscribe((result: ActionResultViewModel) => this.toastr.success(result.message));
+            .subscribe((result: ActionResultViewModel) =>
+                this.toastr.success(result.message));
     }
 
     changeMultiple(attribute: ProductAttributeViewModel) {
