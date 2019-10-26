@@ -57,8 +57,11 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
     }
 
     onImageSelected(value: any) {
-        console.log(value);
         this.model.patchValue({'bannerImage': value.absoluteUrl});
+    }
+
+    deleteImage() {
+        this.model.patchValue({'bannerImage': ''});
     }
 
     save() {

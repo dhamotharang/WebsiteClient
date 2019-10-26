@@ -1,4 +1,4 @@
-<nh-modal size="md" #categoryFormModal
+<nh-modal size="lg" #categoryFormModal
           (show)="onModalShown()"
           (hidden)="onModalHidden()">
     <nh-modal-header class="uppercase" i18n="@@categoryFormTitle">
@@ -6,36 +6,53 @@
     </nh-modal-header>
     <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
         <nh-modal-content>
-            <div class="form-group" *ngIf="languages.length > 1">
-                <label i18n-ghmLabel="@@language" ghmLabel="Language"
-                       class="col-sm-4 control-label"
-                       [required]="true"></label>
-                <div class="col-sm-8">
-                    <ghm-select [data]="languages"
-                               [(value)]="currentLanguage"></ghm-select>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="cm-mgt-10">
+                        <div class="thumbnail">
+                            <img ghmImage
+                                 [errorImageUrl]="'/assets/images/no-image.png'"
+                                 class="w150 cm-mgb-5"
+                                 [src]="model.value?.bannerImage">
+                        </div>
+                    </div>
+                    <ghm-file-explorer i18n-buttonText="@@selectImage" [buttonText]="'Select image'"
+                                       (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
+                    <button class="btn btn-danger cm-mgl-5" *ngIf="model.value.bannerImage" (click)="deleteImage()">Xóa
+                        ảnh
+                    </button>
                 </div>
-            </div>
-            <div class="form-group">
-                <label i18n-ghmLabel="@@parentCategory" ghmLabel="Parent category"
-                       class="col-sm-4 control-label"></label>
-                <div class="col-sm-8">
-                    <nh-dropdown-tree
-                            [data]="categoryTreeData"
-                            i18n-title="@@selectParentCategory"
-                            title="-- Select parent category --"
-                            formControlName="parentId"
-                    ></nh-dropdown-tree>
-                </div>
-            </div>
-            <span formArrayName="modelTranslations">
+                <div class="col-sm-9">
+                    <div class="form-group" *ngIf="languages.length > 1">
+                        <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                               class="col-sm-3 control-label"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <ghm-select [data]="languages"
+                                        [(value)]="currentLanguage"></ghm-select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label i18n-ghmLabel="@@parentCategory" ghmLabel="Parent category"
+                               class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <nh-dropdown-tree
+                                    [data]="categoryTreeData"
+                                    i18n-title="@@selectParentCategory"
+                                    title="-- Select parent category --"
+                                    formControlName="parentId"
+                            ></nh-dropdown-tree>
+                        </div>
+                    </div>
+                    <span formArrayName="modelTranslations">
                 <div class="form-group" *ngFor="let modelTranslation of modelTranslations.controls; index as i"
                      [hidden]="modelTranslation.value.languageId !== currentLanguage"
                      [formGroupName]="i"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.name">
                     <label i18n-ghmLabel="@@categoryName" ghmLabel="Category name"
-                           class="col-sm-4 control-label"
+                           class="col-sm-3 control-label"
                            [required]="true"></label>
-                    <div class="col-sm-8">
+                    <div class="col-sm-9">
                         <input type="text" class="form-control" placeholder="Enter category name"
                                i18n-placeholder="@@enterCategoryName" formControlName="name">
                         <span class="help-block">
@@ -51,8 +68,8 @@
                      [formGroupName]="i"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaTitle">
                     <label i18n-ghmLabel="@@metaTitle" ghmLabel="Meta title"
-                           class="col-sm-4 control-label"></label>
-                    <div class="col-sm-8">
+                           class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
                         <input type="text" class="form-control" placeholder="Enter meta title"
                                i18n-placeholder="@@enterMetaTitle" formControlName="metaTitle">
                         <span class="help-block">
@@ -68,8 +85,8 @@
                      [formGroupName]="i"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.description">
                     <label i18n-ghmLabel="@@description" ghmLabel="Description"
-                           class="col-sm-4 control-label"></label>
-                    <div class="col-sm-8">
+                           class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
                         <textarea rows="3" class="form-control" placeholder="Enter description"
                                   i18n-placeholder="@@enterDescription" formControlName="description"></textarea>
                         <span class="help-block">
@@ -85,8 +102,8 @@
                      [formGroupName]="i"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.metaDescription">
                     <label i18n-ghmLabel="@@metaDescription" ghmLabel="Meta description"
-                           class="col-sm-4 control-label"></label>
-                    <div class="col-sm-8">
+                           class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
                         <textarea rows="3" class="form-control" placeholder="Enter meta description"
                                   i18n-placeholder="@@enterMetaDescription"
                                   formControlName="metaDescription"></textarea>
@@ -103,8 +120,8 @@
                      [formGroupName]="i"
                      [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.seoLink">
                     <label i18n-ghmLabel="@@seoLink" ghmLabel="Seo link"
-                           class="col-sm-4 control-label"></label>
-                    <div class="col-sm-8">
+                           class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
                         <input type="text" class="form-control" placeholder="Enter seo link."
                                i18n-placeholder="@@enterSeoLink" formControlName="seoLink">
                         <span class="help-block">
@@ -116,40 +133,31 @@
                     </div>
                 </div>
             </span>
-            <div class="form-group cm-mg-0">
-                <label class="col-sm-4 control-label" >
-                </label>
-                <div class="col-sm-8 col-sm-offset-4">
-                    <ghm-file-explorer i18n-buttonText="@@selectImage" [buttonText]="'Select image'"
-                                       (itemSelected)="onImageSelected($event)"></ghm-file-explorer>
-                    <div class="cm-mgt-10">
-                        <img *ngIf="model.value?.bannerImage" ghmImage [errorImageUrl]="'/assets/images/no-image.png'" class="w150 cm-mgb-5"
-                             [src]="model.value?.bannerImage">
+                    <div class="form-group cm-mg-0" [formGroup]="model"
+                         [class.has-error]="formErrors.order">
+                        <label class="col-sm-3 control-label" i18n-ghmlabel="@@order" ghmLabel="Order"
+                               [required]="true">
+                        </label>
+                        <div class="col-sm-9">
+                            <input class="form-control" i18n-placeholder="@@orderPlaceHolder"
+                                   placeholder="Please enter order" formControlName="order">
+                            <span class="help-block">{formErrors?.order, select, required {Order is required} isValid {Order is inValid} greaterThan {Order must greater than 0}}</span>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group cm-mg-0" [formGroup]="model"
-                 [class.has-error]="formErrors.order">
-                <label class="col-sm-4 control-label" i18n-ghmlabel="@@order" ghmLabel="Order" [required]="true">
-                </label>
-                <div class="col-sm-8">
-                    <input class="form-control" i18n-placeholder="@@orderPlaceHolder"
-                           placeholder="Please enter order" formControlName="order">
-                    <span class="help-block">{formErrors?.order, select, required {Order is required} isValid {Order is inValid} greaterThan {Order must greater than 0}}</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-4">
-                    <mat-checkbox formControlName="isActive" color="primary" i18n="@@isActive">
-                        {model.value.isActive, select, 0 {In Active} 1 {Active}}
-                    </mat-checkbox>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-4">
-                    <mat-checkbox formControlName="isHomePage" color="primary" i18n="@@isHomePage">
-                        {{model.value.isHomePage ? "Home Page" : "Not Home Page"}}
-                    </mat-checkbox>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <mat-checkbox formControlName="isActive" color="primary" i18n="@@isActive">
+                                {model.value.isActive, select, 0 {In Active} 1 {Active}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <mat-checkbox formControlName="isHomePage" color="primary" i18n="@@isHomePage">
+                                {{model.value.isHomePage ? "Home Page" : "Not Home Page"}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nh-modal-content>
