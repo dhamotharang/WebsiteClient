@@ -203,13 +203,13 @@
                                 <thead>
                                 <tr>
                                     <th class="center middle w50 visible-lg" i18n="@@no">STT</th>
-                                    <th class="middle" i18n="@@titleNews">Mã SP</th>
-                                    <th class="middle w200" i18n="@@categoryNews">Tên Sản Phẩm</th>
+                                    <th class="middle w100" i18n="@@titleNews">Mã SP</th>
+                                    <th class="middle " i18n="@@categoryNews">Tên Sản Phẩm</th>
                                     <th class="right middle w100" i18n="@@createDate">Đơn vị</th>
                                     <th class="center middle w50" i18n="@@viewCount">Số lượng</th>
                                     <th class="middle text-right w100" i18n="@@statusApprove">Đơn giá</th>
-                                    <th class="middle text-right" i18n="@@approve">Chiết khấu</th>
-                                    <th class="middle text-right " i18n="@@userCreate">Thành tiền</th>
+                                    <th class="middle text-right w100" i18n="@@approve">Chiết khấu</th>
+                                    <th class="middle text-right w100" i18n="@@userCreate">Thành tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -230,24 +230,24 @@
                                 <tr>
                                     <td colspan="7" class=""><label class="control-label pull-right"
                                                                     ghmLabel="Tổng tiền"></label></td>
-                                    <td class="pull-right">{{detail.data.totalPrice | ghmCurrency: 0}}</td>
+                                    <td class="text-right">{{detail.data.totalPrice | ghmCurrency: 0}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="7" class=""><label class="control-label pull-right"
                                                                     ghmLabel="Chiết khấu"></label></td>
-                                    <td class="pull-right">{{detail.data.discount}} {detail.data.discountType, select, 0
+                                    <td class="text-right">{{detail.data.discount}} {detail.data.discountType, select, 0
                                         {VNĐ} 1 {%}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="7" class=""><label class="control-label pull-right"
                                                                     ghmLabel="VAT"></label></td>
-                                    <td class="pull-right">{{detail.data.vat}} %</td>
+                                    <td class="text-right">{{detail.data.vat}} %</td>
                                 </tr>
                                 <tr>
                                     <td colspan="7" class=""><label class="control-label pull-right"
                                                                     ghmLabel="Tổng tiển phải trả"></label></td>
-                                    <td class="pull-right">{{detail.data.totalAmount | ghmCurrency: 0}}</td>
+                                    <td class="text-right">{{detail.data.totalAmount | ghmCurrency: 0}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8" class=""><label class="control-label pull-right">
