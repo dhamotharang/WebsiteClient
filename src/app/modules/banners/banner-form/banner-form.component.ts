@@ -61,6 +61,24 @@ export class BannerFormComponent extends BaseFormComponent implements OnInit, Af
     }, {
         id: EffectType.slideUp,
         name: 'SlideUp'
+    }, {
+        id: EffectType.bounce,
+        name: 'Bounce'
+    }, {
+        id: EffectType.slip,
+        name: 'Slip'
+    }, {
+        id: EffectType.lightSpeed,
+        name: 'lightSpeed'
+    }, {
+        id: EffectType.rotate,
+        name: 'rotate'
+    }, {
+        id: EffectType.zoom,
+        name: 'zoom'
+    }, {
+        id: EffectType.bounce,
+        name: 'roll'
     }];
 
     positions = [{

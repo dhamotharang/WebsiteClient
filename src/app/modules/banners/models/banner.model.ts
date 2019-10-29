@@ -16,7 +16,13 @@ export const EffectType = {
     slideRight: 1,
     slideLeft: 2,
     slideDown: 3,
-    slideUp: 4
+    slideUp: 4,
+    bounce: 5,
+    slip: 6,
+    lightSpeed: 7,
+    rotate: 8,
+    zoom: 9,
+    roll: 10
 };
 
 export class Banner {
