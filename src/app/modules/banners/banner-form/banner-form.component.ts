@@ -77,7 +77,7 @@ export class BannerFormComponent extends BaseFormComponent implements OnInit, Af
         id: EffectType.zoom,
         name: 'zoom'
     }, {
-        id: EffectType.bounce,
+        id: EffectType.roll,
         name: 'roll'
     }];
 
