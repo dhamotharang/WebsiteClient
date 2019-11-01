@@ -32,6 +32,7 @@ import {ToastrService} from 'ngx-toastr';
 import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
 import {CategoryNewsViewModel} from '../viewmodel/categoryNewsViewModel';
 import {environment} from '../../../../../environments/environment';
+import {Location} from '@angular/common';
 
 declare var tinyMCE;
 
@@ -39,7 +40,7 @@ declare var tinyMCE;
     selector: 'app-news-form',
     templateUrl: './news-form.component.html',
     styleUrls: ['../news.scss'],
-    providers: [CategoryService, NewsService]
+    providers: [CategoryService, NewsService, Location]
 })
 
 export class NewsFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
@@ -55,6 +56,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     modelTranslation = new NewsTranslation();
     newsStatus = NewsStatus;
     categoryText;
+    page;
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 @Inject(PAGE_ID) public pageId: IPageId,
@@ -65,6 +67,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                 private utilService: UtilService,
                 private categoryService: CategoryService,
                 private toastr: ToastrService,
+                private location: Location,
                 private newsService: NewsService) {
         super();
         // this.currentUser = this.appService.currentUser;
@@ -76,6 +79,7 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
         this.getCategoryTree();
         this.subscribers.routerParam = this.route.params.subscribe((params: any) => {
             const id = params['id'];
+            this.page = params['page'];
             if (id) {
                 this.id = id;
                 this.isUpdate = true;
@@ -169,7 +173,8 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                     .pipe(finalize(() => this.isSaving = false))
                     .subscribe(() => {
                         this.isModified = true;
-                        this.router.navigate(['/news']);
+                        this.location.back();
+                        // this.router.navigate([`/new`]);
                     });
             } else {
                 this.newsService.insert(isSend, this.news)
@@ -180,7 +185,8 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
                             this.utilService.focusElement('title ' + this.currentLanguage);
                             this.resetForm();
                         } else {
-                            this.router.navigate(['/news']);
+                            this.location.back();
+                            // this.router.navigate([`/new`]);
                         }
                     });
             }
@@ -250,7 +256,8 @@ export class NewsFormComponent extends BaseFormComponent implements OnInit, Afte
     }
 
     closeForm() {
-        this.router.navigate(['/news']);
+        this.location.back();
+        // this.router.navigate(['/news']);
     }
 
     private renderForm() {
