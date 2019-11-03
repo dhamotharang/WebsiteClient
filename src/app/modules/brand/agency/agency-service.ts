@@ -15,7 +15,7 @@ import {AgencyDetailViewModel} from './model/agency-detail.viewmodel';
 import {Agency} from './model/agency.model';
 
 export class AgencyService {
-    url = 'api/v1/website/agency';
+    url = 'api/v1/website/agency-infos';
 
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,
                 private spinceService: SpinnerService,
