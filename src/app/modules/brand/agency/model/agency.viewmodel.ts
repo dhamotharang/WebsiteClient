@@ -20,4 +20,5 @@ export class AgencyViewModel {
     agencyName: string;
     provinceName: string;
     districtName: string;
+    addressRegistered: string;
 }

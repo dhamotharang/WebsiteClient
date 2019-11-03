@@ -124,7 +124,7 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
     }
 
     private renderFilterLink() {
-        const path = 'products/brands';
+        const path = 'brand';
         const query = this.utilService.renderLocationFilter([
             new FilterLink('keyword', this.keyword),
             new FilterLink('isActive', this.isActive),

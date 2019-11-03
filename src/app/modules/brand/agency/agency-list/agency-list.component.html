@@ -1,3 +1,157 @@
-<p>
-  agency-list works!
-</p>
+<h1 class="page-title">
+    <span class="cm-mgr-5" i18n="@@listProductPageTitle">Danh sách sản phẩm</span>
+    <small i18n="@@productModuleTitle">Quản lý sản phẩm</small>
+</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group cm-mgr-5">
+                <ghm-input elementId="keyword" i18n-placeholder="@@keywordSearch"
+                           icon="dx-icon-search"
+                           placeholder="Vui lòng nhập từ khóa tìm kiếm."
+                           (remove)="search(1)"
+                           name="searchInput" [(ngModel)]="keyword"></ghm-input>
+            </div>
+            <div class="form-group cm-mgr-5">
+                <ghm-select
+                        [width]="200"
+                        [data]="[{id: false, name: 'Chưa kích hoạt'},{id: true, name: 'Đã kích hoạt'}]"
+                        i18n="@@selectStatus"
+                        i18n-title
+                        [title]="'-- Chọn trạng thái --'"
+                        [(value)]="isActive"
+                        (itemSelected)="selectIsActive($event)"></ghm-select>
+            </div>
+            <div class="form-group">
+                <button class="btn blue" type="submit">
+                    <i class="fa fa-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+            <div class="form-group cm-mgl-5">
+                <button class="btn default" type="button" (click)="resetFormSearch()">
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+            <div class="form-group pull-right">
+                <ghm-setting-data-grid
+                        [filterHeader]="filterHeader"
+                        [filterRow]="filterRow"
+                        [groupColumn]="groupColumn"
+                        [chooseColumn]="chooseColumn"
+                        (selectChooseColumn)="chooseColumn = $event"
+                        (selectFilterHeader)="filterHeader = $event"
+                        (selectFilterRow)="filterRow = $event"
+                        (selectGroupColumn)="groupColumn = $event"
+                ></ghm-setting-data-grid>
+            </div>
+            <div class="form-group pull-right cm-mgr-5">
+                <a class="btn blue cm-mgr-5" *ngIf="permission.add" i18n="@@add"
+                   (click)="add()"
+                   type="button">
+                    Thêm
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <dx-data-grid
+                id="gridContactContainer"
+                keyExpr="id"
+                [allowColumnResizing]="true"
+                [showRowLines]="true"
+                [wordWrapEnabled]="true"
+                [allowColumnReordering]="true"
+                [columnAutoWidth]="false"
+                [dataSource]="listItems"
+                [noDataText]="'Không có dữ liệu'"
+                (onContextMenuPreparing)="rightClickContextMenu($event)"
+                [showBorders]="true">
+
+            <dxo-filter-row [visible]="filterRow"></dxo-filter-row>
+            <dxo-scrolling mode="infinite"></dxo-scrolling>
+            <dxo-header-filter [visible]="filterHeader"></dxo-header-filter>
+            <dxo-group-panel [visible]="groupColumn" title="Chọn cột để nhóm"></dxo-group-panel>
+            <dxo-column-chooser [enabled]="chooseColumn" mode="select"></dxo-column-chooser>
+
+            <dxi-column caption="STT" [width]="50" cellTemplate="NoTemplate" alignment="center"
+                        cssClass="middle"></dxi-column>
+            <div *dxTemplate="let data of 'NoTemplate'">
+                {{ (currentPage - 1) * pageSize + data.rowIndex + 1 }}
+            </div>
+            <dxi-column dataField="agencyName" caption="Tên đại lý" cssClass="middle"></dxi-column>
+            <dxi-column dataField="addressRegistered" caption="Địa chỉ đăng ký" cssClass="middle"></dxi-column>
+            <dxi-column dataField="fullName" [width]="200" caption="Người đăng ký" cssClass="middle"></dxi-column>
+            <dxi-column dataField="phoneNumber" caption="Số điện thoại" width="100" cssClass="middle"></dxi-column>
+            <dxi-column dataField="email" caption="Email" width="100" cssClass="middle" [visible]="false"></dxi-column>
+            <dxi-column dataField="isShow" caption="Hiển thị website" [width]="100" dataType="boolean"
+                        cssClass="middle"></dxi-column>
+            <dxi-column dataField="startTime" caption="Ngày bắt đầu" type="date"
+                        cssClass="middle" [width]="100" cellTemplate="startDateTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'startDateTemplate'">
+                {{cell.data.startTime | dateTimeFormat: 'DD/MM/YYYY'}}
+            </div>
+            <dxi-column dataField="provinceName" [width]="150" caption="Tỉnh/TP" cssClass="middle" [visible]="false"></dxi-column>
+            <dxi-column dataField="districtName" [width]="150" caption="Quận/Huyện" cssClass="middle" [visible]="false"></dxi-column>
+            <dxi-column dataField="order" [width]="100" caption="Thứ tự" cssClass="middle" [visible]="false"></dxi-column>
+            <dxi-column dataField="website" [width]="150" caption="Trang web" [visible]="false"
+                        cssClass="middle" cellTemplate="websiteTemplate"></dxi-column>
+            <div *dxTemplate="let cell of 'websiteTemplate'">
+                <a href="{{cell.data.website}}"></a>
+            </div>
+            <dxi-column dataField="isActive" type="boolean" [width]="100" caption="Trạng thái" alignment="center"
+                        cssClass="middle" cellTemplate="activeTemplate">
+                <dxo-header-filter [dataSource]="[
+                                    {text: 'Kích hoạt', value: ['isActive', '=', true]},
+                                    {text: 'Chưa kích hoạt', value: ['isActive', '=', false]}]"></dxo-header-filter>
+            </dxi-column>
+            <div *dxTemplate="let cell of 'activeTemplate'">
+                <dx-check-box color="primary" [value]="cell.data.isActive"
+                              [disabled]="!permission.edit"
+                              (onValueChanged)="updateStatus(cell.data)"></dx-check-box>
+            </div>
+            <dxi-column cellTemplate="actionTemplate" [width]="100" caption="Thao tác" alignment="center"
+                        *ngIf="permission.edit || permission.delete" cssClass="middle" cssClass="middle"></dxi-column>
+            <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
+                <a *ngIf="permission.edit" class="color-dark-blue text-decoration-none cm-mgr-5"
+                   i18n="@@edit" title="Sửa"
+                   (click)="edit(cell.data.id)">
+                    <i class="dx-icon-edit"></i>
+                </a>
+                <a title="Xóa"
+                   class="color-red text-decoration-none" *ngIf="permission.delete"
+                   (click)="confirm(cell.data)" i18n="@@delete">
+                    <i class="dx-icon-remove"></i>
+                </a>
+            </div>
+        </dx-data-grid>
+    </div>
+    <div class="cm-mgt-10 col-sm-12">
+        <ghm-paging
+                class="pull-right"
+                [totalRows]="totalRows"
+                [currentPage]="currentPage"
+                [pageShow]="6"
+                [pageSize]="pageSize"
+                (pageClick)="search($event)"
+                i18n-pageName="@@product"
+                (selectPage)="changePageSize($event)"
+                [pageName]="'agency'">
+        </ghm-paging>
+    </div>
+</div>
+
+<div dynamic-component-host></div>
+
+<swal
+        #confirmDelete
+        title="Are you sure for delete this agency?"
+        text="You can't recover this agency after delete."
+        type="question"
+        confirmButtonText="Accept"
+        cancelButtonText="Cancel"
+        [showCancelButton]="true"
+        [focusCancel]="true">
+</swal>

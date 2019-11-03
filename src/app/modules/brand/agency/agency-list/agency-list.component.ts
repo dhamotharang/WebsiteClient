@@ -13,6 +13,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 import {finalize} from 'rxjs/operators';
 import {FilterLink} from '../../../../shareds/models/filter-link.model';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
+import {BrandSearchViewModel} from '../../viewmodel/brand-search.viewmodel';
 
 @Component({
     selector: 'app-agency-list',
@@ -21,9 +22,14 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
     providers: [HelperService]
 })
 export class AgencyListComponent extends BaseListComponent<AgencyViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDeleteBrand') swalConfirmDelete: SwalComponent;
+    @ViewChild('confirmDelete') swalConfirmDelete: SwalComponent;
     isActive: boolean;
     agencyId: string;
+
+    filterRow = true;
+    filterHeader = true;
+    groupColumn = false;
+    chooseColumn = false;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
@@ -95,6 +101,30 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
         // this.brandFormComponent.edit(brand.id);
     }
 
+    detail(id: string) {
+    }
+
+    rightClickContextMenu(e) {
+        if (e.row.rowType === 'data' && (this.permission.delete || this.permission.edit || this.permission.view)) {
+            const data = e.row.data;
+            e.items = [ {
+                text: 'Sửa',
+                icon: 'edit',
+                disabled: !this.permission.edit,
+                onItemClick: () => {
+                    this.edit(data.id);
+                }
+            }, {
+                text: 'Xóa',
+                icon: 'remove',
+                disabled: !this.permission.delete,
+                onItemClick: () => {
+                    this.confirm(data);
+                }
+            }];
+        }
+    }
+
     delete(id: string) {
         this.agencyService.delete(id)
             .subscribe(() => {
@@ -113,8 +143,13 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
         this.swalConfirmDelete.show();
     }
 
+    changePageSize(value) {
+        this.pageSize = value;
+        this.search(value);
+    }
+
     private renderFilterLink() {
-        const path = 'products/brands';
+        const path = 'brand/agency';
         const query = this.utilService.renderLocationFilter([
             new FilterLink('keyword', this.keyword),
             new FilterLink('isActive', this.isActive),

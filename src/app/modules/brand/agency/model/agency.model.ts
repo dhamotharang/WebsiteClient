@@ -4,7 +4,6 @@ export class Agency {
     website: string;
     idCard: string;
     idCardDate: string;
-    nationalId: string;
     provinceId: string;
     districtId: string;
     length: number;

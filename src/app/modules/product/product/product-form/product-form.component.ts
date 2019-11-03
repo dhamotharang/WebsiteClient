@@ -29,10 +29,8 @@ import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Pattern} from '../../../../shareds/constants/pattern.const';
 import {ProductAttributeService} from '../../product-attribute/product-attribute.service';
-import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {ProductAttributeViewModel} from '../../product-attribute/product-attribute.viewmodel';
 import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
-import {NewsTranslation} from '../../../news/new/model/news-translations.model';
 
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();

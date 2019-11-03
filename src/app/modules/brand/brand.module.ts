@@ -18,14 +18,18 @@ import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
 import {BrandRoutingModule} from './brand-routing.module';
 import { AgencyListComponent } from './agency/agency-list/agency-list.component';
 import { AgencyFormComponent } from './agency/agency-form/agency-form.component';
+import {DxCheckBoxModule, DxContextMenuModule, DxDataGridModule, DxTemplateModule} from 'devextreme-angular';
+import {GhmSettingDataGridModule} from '../../shareds/components/ghm-setting-data-grid/ghm-setting-data-grid.module';
+import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
+import {GhmInputModule} from '../../shareds/components/ghm-input/ghm-input.module';
 
 @NgModule({
     imports: [
         CommonModule, BrandRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
         NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule, NhDropdownModule,
         DatetimeFormatModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
-        MatRadioModule, FormatNumberModule,
-        MatRadioModule, NhSuggestionModule,
+        MatRadioModule, FormatNumberModule,  DxDataGridModule,  DxContextMenuModule, DxTemplateModule,
+        MatRadioModule, NhSuggestionModule, GhmSettingDataGridModule, GhmSelectModule, GhmInputModule, DxCheckBoxModule,
         SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
