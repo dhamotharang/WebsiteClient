@@ -1,49 +1,47 @@
-import {BrandSearchViewModel} from './viewmodel/brand-search.viewmodel';
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {BaseListComponent} from '../../../../base-list.component';
+import {AgencyViewModel} from '../model/agency.viewmodel';
+import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
+import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
+import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
+import {HelperService} from '../../../../shareds/services/helper.service';
 import {Location} from '@angular/common';
-import {finalize} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BrandService} from './services/brand.service';
-import {BrandFormComponent} from './brand-form/brand-form.component';
+import {UtilService} from '../../../../shareds/services/util.service';
+import {AgencyService} from '../agency-service';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
-import {HelperService} from '../../shareds/services/helper.service';
-import {BaseListComponent} from '../../base-list.component';
-import {IPageId, PAGE_ID} from '../../configs/page-id.config';
-import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
-import {UtilService} from '../../shareds/services/util.service';
-import {SearchResultViewModel} from 'src/app/shareds/view-models/search-result.viewmodel';
-import {ActionResultViewModel} from '../../shareds/view-models/action-result.viewmodel';
-import {FilterLink} from '../../shareds/models/filter-link.model';
+import {finalize} from 'rxjs/operators';
+import {FilterLink} from '../../../../shareds/models/filter-link.model';
+import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 
 @Component({
-    selector: 'app-product-brand',
-    templateUrl: './brand.component.html',
+    selector: 'app-agency-list',
+    templateUrl: './agency-list.component.html',
+    styleUrls: ['./agency-list.component.css'],
     providers: [HelperService]
 })
-export class BrandComponent extends BaseListComponent<BrandSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(BrandFormComponent) brandFormComponent: BrandFormComponent;
+export class AgencyListComponent extends BaseListComponent<AgencyViewModel> implements OnInit, AfterViewInit {
     @ViewChild('confirmDeleteBrand') swalConfirmDelete: SwalComponent;
-    isActive;
-    listBrand: BrandSearchViewModel[];
-    brandId;
+    isActive: boolean;
+    agencyId: string;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private location: Location,
                 private route: ActivatedRoute,
                 private router: Router,
-                private brandService: BrandService,
+                private agencyService: AgencyService,
                 private helperService: HelperService,
                 private utilService: UtilService) {
         super();
     }
 
     ngOnInit(): void {
-        this.appService.setupPage(this.pageId.BRAND, this.pageId.BRAND, 'Quản lý thương hiệu', 'Quản lý thương hiệu');
-        this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<BrandSearchViewModel> }) => {
+        this.appService.setupPage(this.pageId.AGENCY, this.pageId.AGENCY, 'Quản lý đại lý', 'Quản lý đại lý');
+        this.subscribers.data = this.route.data.subscribe((result: { data: SearchResultViewModel<AgencyViewModel> }) => {
             const data = result.data;
             this.totalRows = data.totalRows;
-            this.listBrand = data.items;
+            this.listItems = data.items;
         });
 
         this.subscribers.queryParams = this.route.queryParams.subscribe(params => {
@@ -57,24 +55,19 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
 
     ngAfterViewInit() {
         this.swalConfirmDelete.confirm.subscribe(result => {
-            this.delete(this.brandId);
+            this.delete(this.agencyId);
         });
-    }
-
-    searchKeyUp(keyword) {
-        this.keyword = keyword;
-        this.search(1);
     }
 
     search(currentPage) {
         this.currentPage = currentPage;
         this.isSearching = true;
         this.renderFilterLink();
-        this.brandService.search(this.keyword, this.isActive, this.currentPage, this.pageSize)
+        this.agencyService.search(this.keyword, this.isActive, this.currentPage, this.pageSize)
             .pipe(finalize(() => this.isSearching = false))
-            .subscribe((data: SearchResultViewModel<BrandSearchViewModel>) => {
+            .subscribe((data: SearchResultViewModel<AgencyViewModel>) => {
                 this.totalRows = data.totalRows;
-                this.listBrand = data.items;
+                this.listItems = data.items;
             });
     }
 
@@ -95,31 +88,28 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
     }
 
     add() {
-        this.brandFormComponent.add();
+        // this.brandFormComponent.add();
     }
 
-    edit(brand: BrandSearchViewModel) {
-        this.brandFormComponent.edit(brand.id);
+    edit(agency: AgencyViewModel) {
+        // this.brandFormComponent.edit(brand.id);
     }
 
     delete(id: string) {
-        this.brandService.delete(id)
+        this.agencyService.delete(id)
             .subscribe(() => {
                 this.search(1);
-                // _.remove(this.listBrand, (item: SupplierSearchViewModel) => {
-                //     return item.id === id;
-                // });
             });
     }
 
-    updateStatus(item: BrandSearchViewModel) {
-        this.brandService.updateStatus(item.id, !item.isActive).subscribe((result: ActionResultViewModel) => {
+    updateStatus(item: AgencyViewModel) {
+        this.agencyService.updateStatus(item.id, !item.isActive).subscribe((result: ActionResultViewModel) => {
             item.isActive = !item.isActive;
         });
     }
 
-    confirm(value: BrandSearchViewModel) {
-        this.brandId = value.id;
+    confirm(value: AgencyViewModel) {
+        this.agencyId = value.id;
         this.swalConfirmDelete.show();
     }
 
@@ -133,4 +123,5 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
         ]);
         this.location.go(path, query);
     }
+
 }

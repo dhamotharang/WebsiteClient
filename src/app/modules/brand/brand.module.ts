@@ -16,6 +16,8 @@ import {DatetimeFormatModule} from '../../shareds/pipe/datetime-format/datetime-
 import {FormatNumberModule} from '../../shareds/pipe/format-number/format-number.module';
 import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
 import {BrandRoutingModule} from './brand-routing.module';
+import { AgencyListComponent } from './agency/agency-list/agency-list.component';
+import { AgencyFormComponent } from './agency/agency-form/agency-form.component';
 
 @NgModule({
     imports: [
@@ -32,7 +34,7 @@ import {BrandRoutingModule} from './brand-routing.module';
             showCancelButton: true,
         })
     ],
-    declarations: [BrandComponent, BrandFormComponent],
+    declarations: [BrandComponent, BrandFormComponent, AgencyListComponent, AgencyFormComponent],
     exports: []
 })
 export class BrandModule {

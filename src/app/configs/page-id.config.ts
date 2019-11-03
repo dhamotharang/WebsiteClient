@@ -53,6 +53,7 @@ export interface IPageId {
 
     // ---- Brand: 20000 ------
     BRAND: number;
+    AGENCY: number;
 
     // ---- PRODUCT ---
     PRODUCT: number;
@@ -120,7 +121,7 @@ export const PAGE_ID_DI: IPageId = {
 
     // ------ BRAND: 20000 -----
     BRAND: 20000,
-
+    AGENCY: 232,
     // ----- PRODUCT ----
     PRODUCT: 100001,
     PRODUCT_ATTRIBUTE: 100002,
