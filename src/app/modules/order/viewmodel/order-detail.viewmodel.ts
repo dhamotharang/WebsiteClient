@@ -8,6 +8,7 @@ export class OrderDetailViewModel {
     phoneNumber: string;
     address: string;
     email: string;
+    note: string;
     totalPrice: number;
     discount: number;
     discountType: number;

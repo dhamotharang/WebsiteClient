@@ -18,5 +18,6 @@ export class OrderSearchViewModel {
     deliveryDate: Date;
     createTime: Date;
     creatorFullName: string;
+    note: string;
     orderDetails: OrderDetail[];
 }
