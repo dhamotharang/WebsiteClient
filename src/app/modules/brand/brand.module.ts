@@ -39,6 +39,7 @@ import {GhmInputModule} from '../../shareds/components/ghm-input/ghm-input.modul
         })
     ],
     declarations: [BrandComponent, BrandFormComponent, AgencyListComponent, AgencyFormComponent],
+    entryComponents: [BrandFormComponent, AgencyFormComponent],
     exports: []
 })
 export class BrandModule {

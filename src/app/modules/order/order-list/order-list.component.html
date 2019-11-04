@@ -289,10 +289,10 @@
                                 {{detail.data.note}}
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-sm blue cm-mgr-5">In</button>
+                                <!--<button class="btn btn-sm blue cm-mgr-5">In</button>-->
                                 <button class="btn btn-sm blue cm-mgr-5">Chi tiết</button>
                                 <button class="btn btn-sm blue cm-mgr-5">Sửa</button>
-                                <a class="btn btn-sm red cm-mgr-5">Hủy</a>
+                                <a class="btn btn-sm red cm-mgr-5" (click)="confirm(detail.data)">Hủy</a>
                             </div>
                         </div>
                     </div>
@@ -318,8 +318,6 @@
         #confirmCancelOrder
         title="Are you sure for cancel this order?"
         type="question"
-        i18n-confirmButtonText="@@accept"
-        i18n-cancelButtonText="@@cancel"
         confirmButtonText="Accept"
         cancelButtonText="Cancel"
         [showCancelButton]="true"

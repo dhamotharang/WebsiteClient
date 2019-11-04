@@ -13,7 +13,8 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 import {finalize} from 'rxjs/operators';
 import {FilterLink} from '../../../../shareds/models/filter-link.model';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
-import {BrandSearchViewModel} from '../../viewmodel/brand-search.viewmodel';
+import {DynamicComponentHostDirective} from '../../../../core/directives/dynamic-component-host.directive';
+import {AgencyFormComponent} from '../agency-form/agency-form.component';
 
 @Component({
     selector: 'app-agency-list',
@@ -23,6 +24,7 @@ import {BrandSearchViewModel} from '../../viewmodel/brand-search.viewmodel';
 })
 export class AgencyListComponent extends BaseListComponent<AgencyViewModel> implements OnInit, AfterViewInit {
     @ViewChild('confirmDelete') swalConfirmDelete: SwalComponent;
+    @ViewChild(DynamicComponentHostDirective) dynamicComponentHostDirective: DynamicComponentHostDirective;
     isActive: boolean;
     agencyId: string;
 
@@ -94,14 +96,27 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
     }
 
     add() {
-        // this.brandFormComponent.add();
+        const agencyFormComponent = this.loadComponent(
+            this.dynamicComponentHostDirective.viewContainerRef,
+            AgencyFormComponent);
+        setTimeout(() => {
+            agencyFormComponent.add();
+            this.subscribers.productFormModalDissmiss = agencyFormComponent.saveSuccessful.subscribe(() => {
+                this.search(1);
+            });
+        });
     }
 
     edit(agency: AgencyViewModel) {
-        // this.brandFormComponent.edit(brand.id);
-    }
-
-    detail(id: string) {
+        const agencyFormComponent = this.loadComponent(
+            this.dynamicComponentHostDirective.viewContainerRef,
+            AgencyFormComponent);
+        setTimeout(() => {
+            agencyFormComponent.edit(agency.id);
+            this.subscribers.productFormModalDissmiss = agencyFormComponent.saveSuccessful.subscribe(() => {
+                this.search(1);
+            });
+        });
     }
 
     rightClickContextMenu(e) {

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseListComponent} from '../../../base-list.component';
 import {OrderSearchViewModel} from '../viewmodel/order.viewmodel';
 import {IPageId, PAGE_ID} from '../../../configs/page-id.config';
@@ -16,6 +16,8 @@ import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggest
 import {ActionResultViewModel} from '../../../shareds/view-models/action-result.viewmodel';
 import {OrderDetailViewModel} from '../viewmodel/order-detail.viewmodel';
 import * as _ from 'lodash';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {ProductResultViewModel} from '../../product/product/viewmodel/product-result.viewmodel';
 
 @Component({
     selector: 'app-order-list',
@@ -23,7 +25,9 @@ import * as _ from 'lodash';
     styleUrls: ['./order-list.component.css'],
     providers: [HelperService]
 })
-export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> implements OnInit {
+export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> implements OnInit, AfterViewInit {
+    @ViewChild('confirmCancelOrder') swalConfirmCancel: SwalComponent;
+    orderId: string;
     fromDate;
     toDate;
     userId;
@@ -73,6 +77,12 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
             this.productId = params.productId ? params.productId : null;
             this.currentPage = params.page ? parseInt(params.page) : 1;
             this.pageSize = params.pageSize ? parseInt(params.pageSize) : this.appConfig.PAGE_SIZE;
+        });
+    }
+
+    ngAfterViewInit() {
+        this.swalConfirmCancel.confirm.subscribe(result => {
+            this.cancel(this.orderId);
         });
     }
 
@@ -151,7 +161,7 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
                 icon: 'remove',
                 disabled: !this.permission.delete,
                 onItemClick: () => {
-                    // this.confirm(data);
+                    this.confirm(data);
                 }
             }];
         }
@@ -160,6 +170,17 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
     selectStatus(value: NhSuggestion) {
         this.status = value.id;
         this.search(1);
+    }
+
+    confirm(value: OrderSearchViewModel) {
+        this.orderId = value.id;
+        this.swalConfirmCancel.show();
+    }
+
+    cancel(id: string) {
+        this.orderService.updateStatus(id, OrderStatus.Canceled).subscribe(() => {
+            this.search(1);
+        });
     }
 
     private renderFilterLink() {

@@ -1,8 +1,6 @@
 import {AfterViewInit, Component, Inject, OnInit, QueryList, ViewChild} from '@angular/core';
-import {TinymceComponent} from '../../../../shareds/components/tinymce/tinymce.component';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ProductTranslation} from '../../../product/product/model/product-translation.model';
 import {Product} from '../../../product/product/model/product.model';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {ToastrService} from 'ngx-toastr';
@@ -12,8 +10,6 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 import {Pattern} from '../../../../shareds/constants/pattern.const';
 import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
 import {NhModalComponent} from '../../../../shareds/components/nh-modal/nh-modal.component';
-import {environment} from '../../../../../environments/environment';
-import {ProductDetailViewModel} from '../../../product/product/viewmodel/product-detail.viewmodel';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Agency, AgencyTransaction} from '../model/agency.model';
 import {BaseFormComponent} from '../../../../base-form.component';
@@ -23,7 +19,8 @@ import {AgencyDetailViewModel} from '../model/agency-detail.viewmodel';
 @Component({
     selector: 'app-agency-form',
     templateUrl: './agency-form.component.html',
-    styleUrls: ['./agency-form.component.css']
+    styleUrls: ['./agency-form.component.css'],
+    providers: [NumberValidator]
 })
 
 export class AgencyFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
@@ -48,7 +45,6 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
     }
 
     ngAfterViewInit() {
-
     }
 
     onModalShown() {
@@ -118,7 +114,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
     private buildForm() {
         this.formErrors = this.utilService.renderFormError(['email', 'phoneNumber', 'website', 'idCard', 'idCardDate',
             'provinceId', 'districtId', 'length', 'width', 'height', 'totalArea',
-        'startTime', 'googleMap', 'order', 'isShow', 'isActive']);
+            'startTime', 'googleMap', 'order', 'isShow', 'isActive']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'email': ['maxLength', 'pattern']},
             {'phoneNumber': ['required', 'maxLength', 'pattern']},
@@ -196,7 +192,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         this.model.patchValue(new Product());
         this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
-                name: '',
+                fullName: '',
                 description: '',
             });
         });

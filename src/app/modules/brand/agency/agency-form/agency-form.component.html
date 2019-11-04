@@ -1,37 +1,89 @@
-
-<style>
-  label {
-    text-align: left !important;
-  }
-
-  ::ng-deep numberAlign {
-    text-align: right;
-  }
-</style>
-<nh-modal #productFormModal size="lg"
+<nh-modal #agencyFormModal size="lg"
           (shown)="onModalShown()"
           (hidden)="onModalHidden()">
-  <nh-modal-header class="uppercase bold">
-    <span i18n="@@productFormModalTitle">{isUpdate, select, 0 {Thêm mới sản phẩm} 1 {Cập nhật thông tin sản phẩm}}</span>
-  </nh-modal-header>
-  <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
-    <nh-modal-content>
-    </nh-modal-content>
-    <nh-modal-footer>
-      <div class="form-group">
-        <div class="pull-right cm-mgr-10">
-          <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
-          <button class="btn blue cm-mgr-5" i18n="@@save"
-                  [disabled]="isSaving">
-            <i class="fa fa-spinner" *ngIf="isSaving"></i>
-            Lưu
-          </button>
-          <button type="button" class="btn default" i18n="@@close" nh-dismiss
-                  [disabled]="isSaving">
-            Đóng
-          </button>
-        </div>
-      </div>
-    </nh-modal-footer>
-  </form>
+    <nh-modal-header class="uppercase bold">
+        <span>{isUpdate, select, 0 {Thêm mới đại lý} 1 {Cập nhật thông tin đại lý}}</span>
+    </nh-modal-header>
+    <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
+        <nh-modal-content>
+            <div class="row">
+                {{model.value | json}}
+                <div formArrayName="translations">
+                    <div class="form-group" *ngIf="languages && languages.length > 1">
+                        <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                               class="col-sm-3 control-label"
+                               [required]="true"></label>
+                        <div class="col-sm-9">
+                            <ghm-select [data]="languages"
+                                        i18n-title="@@pleaseSelectLanguage"
+                                        title="-- Please select language --"
+                                        name="language"
+                                        [(value)]="currentLanguage"
+                                        (itemSelected)="currentLanguage = $event.id"></ghm-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 center">
+                        <h3>Thông tin cá nhân</h3>
+                    </div>
+                    <div class="form-group"
+                         *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.fullName">
+                        <div class="col-sm-12">
+                            <label class="control-label" ghmLabel="Họ tên"
+                                   [required]="true"></label>
+                            <ghm-input
+                                    elementId="{{'name ' + currentLanguage}}"
+                                    formControlName="fullName"
+                                    placeholder="Nhập nội dung"></ghm-input>
+                            <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.fullName,
+                                select, required {Vui lòng nhập họ tên.} maxlength {Họ tên không được vượt quá 256 ký tự.}
+                                        pattern  {Họ tên phải là chữ.}
+                                }
+                            </span>
+                        </div>
+                    </div><!-- END: Product name -->
+                    <div class="form-group">
+                        <div class="col-sm-6" [class.has-error]="formErrors?.phoneNumber">
+                            <label class="control-label" ghmLabel="Số điện thoại"></label>
+                            <input name="" class="form-control"
+                                   formControlName="phoneNumber"
+                                   placeholder="Nhập nội dung"/>
+                            <span class="help-block">{formErrors?.phoneNumber, select, required {Vui lòng số điện thoại}
+                                isValid {Số điện thoại không đúng định dạng.} maxlength {Số điện thoại không được vượt quá 50 ký tự.}}</span>
+                        </div>
+                        <div class="col-sm-6" [class.has-error]="formErrors?.email">
+                            <label class="control-label" ghmLabel="Email"></label>
+                            <input name="" class="form-control"
+                                   formControlName="email"
+                                   placeholder="Nhập nội dung"/>
+                            <span class="help-block">{formErrors?.email, select,
+                                isValid {Email không đúng định dạng.} maxlength {Email không được vượt quá 50 ký tự.}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                </div>
+            </div>
+        </nh-modal-content>
+        <nh-modal-footer>
+            <div class="form-group">
+                <div class="pull-right cm-mgr-10">
+                    <dx-check-box *ngIf="!isUpdate" [(value)]="isCreateAnother" text="Tiếp tục tạo"></dx-check-box>
+                    <button class="btn blue cm-mgr-5" i18n="@@save"
+                            [disabled]="isSaving">
+                        <i class="fa fa-spinner" *ngIf="isSaving"></i>
+                        Lưu
+                    </button>
+                    <button type="button" class="btn default" i18n="@@close" nh-dismiss
+                            [disabled]="isSaving">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </nh-modal-footer>
+    </form>
 </nh-modal>
