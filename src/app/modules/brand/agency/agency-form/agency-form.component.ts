@@ -125,14 +125,14 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             {'website': ['maxLength']},
             {'idCard': ['maxLength']},
             {'idCardDate': ['isValid']},
-            {'provinceId': ['required']},
-            {'districtId': ['required']},
-            {'length': ['inValid']},
-            {'width': ['inValid']},
-            {'totalArea': ['inValid']},
-            {'startTime': ['inValid']},
+            {'provinceId': ['required', 'isValid']},
+            {'districtId': ['required', 'isValid']},
+            {'length': ['isValid']},
+            {'width': ['isValid']},
+            {'totalArea': ['isValid']},
+            {'startTime': ['isValid']},
             {'googleMap': ['maxLength']},
-            {'order': ['inValid']},
+            {'order': ['isValid']},
             {'isShow': ['required']},
             {'isActive': ['required']}
         ]);
@@ -142,6 +142,15 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             phoneNumber: [this.agency.phoneNumber, [Validators.required, Validators.maxLength(50), Validators.pattern(Pattern.phoneNumber)]],
             website: [this.agency.website, [Validators.maxLength(500)]],
             idCard: [this.agency.idCard, [Validators.maxLength(50)]],
+            idCardDate: [this.agency.idCardDate],
+            provinceId: [this.agency.provinceId, [Validators.required, this.numberValidator.isValid]],
+            provinceName: [this.agency.provinceName],
+            districtId: [this.agency.districtId, [Validators.required, this.numberValidator.isValid]],
+            districtName: [this.agency.districtName],
+            length: [this.agency.length, [this.numberValidator.isValid]],
+            width: [this.agency.width, [this.numberValidator.isValid]],
+            height: [this.agency.height, [this.numberValidator.isValid]],
+            totalArea: [this.agency.totalArea, [this.numberValidator.isValid]],
         });
         this.model.valueChanges.subscribe(data => this.validateModel(false));
     }
