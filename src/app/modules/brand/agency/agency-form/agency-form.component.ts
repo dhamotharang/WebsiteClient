@@ -18,6 +18,7 @@ import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Agency, AgencyTransaction} from '../model/agency.model';
 import {BaseFormComponent} from '../../../../base-form.component';
 import {AgencyService} from '../agency-service';
+import {AgencyDetailViewModel} from '../model/agency-detail.viewmodel';
 
 @Component({
     selector: 'app-agency-form',
@@ -120,37 +121,27 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         'startTime', 'googleMap', 'order', 'isShow', 'isActive']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'email': ['maxLength', 'pattern']},
-            {'phoneNumber': ['required', 'maxLength']},
+            {'phoneNumber': ['required', 'maxLength', 'pattern']},
             {'website': ['maxLength']},
             {'idCard': ['maxLength']},
-            {'isManagementByLot': ['required']},
-            {'isActive': ['required']},
-            {'salePrice': ['required', 'isValid']},
-            {'id': ['maxLength', 'pattern']},
-            {'unitId': ['required', 'maxLength']},
-            {'thumbnail': ['maxLength']},
-            {'categories': ['required']},
-            {'isManagementByLot': ['required']},
-            {'isActive': ['required']},
-            {'salePrice': ['required', 'isValid']},
-            {'isActive': ['required']},
-            {'salePrice': ['required', 'isValid']},
+            {'idCardDate': ['isValid']},
+            {'provinceId': ['required']},
+            {'districtId': ['required']},
+            {'length': ['inValid']},
+            {'width': ['inValid']},
+            {'totalArea': ['inValid']},
+            {'startTime': ['inValid']},
+            {'googleMap': ['maxLength']},
+            {'order': ['inValid']},
+            {'isShow': ['required']},
+            {'isActive': ['required']}
         ]);
 
         this.model = this.fb.group({
-            unitName: [this.product.unitName],
-            salePrice: [this.product.salePrice, [Validators.required, this.numberValidator.isValid]],
-            thumbnail: [this.product.thumbnail, [Validators.maxLength(500)]],
-            isManagementByLot: [this.product.isManagementByLot, [Validators.required]],
-            isActive: [this.product.isActive, [Validators.required]],
-            isHomePage: [this.product.isHomePage],
-            isHot: [this.product.isHot],
-            categories: [this.categories, [Validators.required]],
-            images: [this.productImages],
-            concurrencyStamp: [this.product.concurrencyStamp],
-            translations: this.fb.array([]),
-            conversionUnits: this.fb.array([]),
-            attributes: this.fb.array([])
+            email: [this.agency.email, [Validators.maxLength(50), Validators.pattern(Pattern.email)]],
+            phoneNumber: [this.agency.phoneNumber, [Validators.required, Validators.maxLength(50), Validators.pattern(Pattern.phoneNumber)]],
+            website: [this.agency.website, [Validators.maxLength(500)]],
+            idCard: [this.agency.idCard, [Validators.maxLength(50)]],
         });
         this.model.valueChanges.subscribe(data => this.validateModel(false));
     }
@@ -204,56 +195,56 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         this.clearFormError(this.translationFormErrors);
     }
 
-    private getDetail(productId: string) {
-        this.productFormModal.open();
-        this.subscribers.getDetail = this.productService.getDetail(productId)
-            .subscribe((result: ProductDetailViewModel) => {
-                this.model.patchValue({
-                    id: productId,
-                    categories: result.categories.map((category: any) => category.categoryId),
-                    unitId: result.unitId,
-                    unitName: result.unitName,
-                    isActive: result.isActive,
-                    isManagementByLot: result.isManagementByLot,
-                    salePrice: result.salePrice,
-                    translations: result.translations,
-                    concurrencyStamp: result.concurrencyStamp,
-                    thumbnail: result.thumbnail,
-                    images: result.images,
-                    isHot: result.isHot,
-                    isHomePage: result.isHomePage
-                });
-
-                if (result.translations && result.translations.length > 0) {
-                    this.translations.controls.forEach(
-                        (model: FormGroup) => {
-                            const detail = _.find(
-                                result.translations,
-                                (newTranslation: ProductTranslation) => {
-                                    return (
-                                        newTranslation.languageId === model.value.languageId
-                                    );
-                                }
-                            );
-                            detail.content = detail.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
-                            if (detail) {
-                                model.patchValue(detail);
-
-                                this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
-                                    const editorId = `productContent${this.currentLanguage}`;
-                                    if (contentEditor.elementId === editorId) {
-                                        contentEditor.setContent(detail.content);
-                                    }
-                                });
-
-                            }
-                        }
-                    );
-                }
-                setTimeout(() => {
-                    this.addConversionUnit();
-                    this.addAttribute();
-                });
+    private getDetail(agencyId: string) {
+        this.agencyFormModal.open();
+        this.subscribers.getDetail = this.agencyService.getDetail(agencyId)
+            .subscribe((result: ActionResultViewModel<AgencyDetailViewModel>) => {
+                // this.model.patchValue({
+                //     id: productId,
+                //     categories: result.categories.map((category: any) => category.categoryId),
+                //     unitId: result.unitId,
+                //     unitName: result.unitName,
+                //     isActive: result.isActive,
+                //     isManagementByLot: result.isManagementByLot,
+                //     salePrice: result.salePrice,
+                //     translations: result.translations,
+                //     concurrencyStamp: result.concurrencyStamp,
+                //     thumbnail: result.thumbnail,
+                //     images: result.images,
+                //     isHot: result.isHot,
+                //     isHomePage: result.isHomePage
+                // });
+                //
+                // if (result.translations && result.translations.length > 0) {
+                //     this.translations.controls.forEach(
+                //         (model: FormGroup) => {
+                //             const detail = _.find(
+                //                 result.translations,
+                //                 (newTranslation: ProductTranslation) => {
+                //                     return (
+                //                         newTranslation.languageId === model.value.languageId
+                //                     );
+                //                 }
+                //             );
+                //             detail.content = detail.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
+                //             if (detail) {
+                //                 model.patchValue(detail);
+                //
+                //                 this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
+                //                     const editorId = `productContent${this.currentLanguage}`;
+                //                     if (contentEditor.elementId === editorId) {
+                //                         contentEditor.setContent(detail.content);
+                //                     }
+                //                 });
+                //
+                //             }
+                //         }
+                //     );
+                // }
+                // setTimeout(() => {
+                //     this.addConversionUnit();
+                //     this.addAttribute();
+                // });
             });
     }
 }
