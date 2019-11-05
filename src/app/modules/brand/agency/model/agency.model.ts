@@ -3,9 +3,9 @@ export class Agency {
     phoneNumber: string;
     website: string;
     idCard: string;
-    idCardDate: string;
-    provinceId: string;
-    districtId: string;
+    idCardDate: Date;
+    provinceId: number;
+    districtId: number;
     length: number;
     width: number;
     height: number;
@@ -26,8 +26,8 @@ export class Agency {
         this.website = '';
         this.idCard = '';
         this.idCardDate = null;
-        this.provinceId = '';
-        this.districtId = '';
+        this.provinceId = 0;
+        this.districtId = 0;
         this.length = 0;
         this.width = 0;
         this.height = 0;

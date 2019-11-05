@@ -15,33 +15,44 @@ import {Agency, AgencyTransaction} from '../model/agency.model';
 import {BaseFormComponent} from '../../../../base-form.component';
 import {AgencyService} from '../agency-service';
 import {AgencyDetailViewModel} from '../model/agency-detail.viewmodel';
+import {ISearchResult} from '../../../../interfaces/isearch.result';
+import {NationalService} from '../../../customer/service/national.service';
+import {DateTimeValidator} from '../../../../validators/datetime.validator';
 
 @Component({
     selector: 'app-agency-form',
     templateUrl: './agency-form.component.html',
     styleUrls: ['./agency-form.component.css'],
-    providers: [NumberValidator]
+    providers: [NumberValidator, NationalService, DateTimeValidator]
 })
 
 export class AgencyFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
     @ViewChild('agencyFormModal') agencyFormModal: NhModalComponent;
     agency = new Agency();
     modelTranslation = new AgencyTransaction();
+    listProvince = [];
+    listDistrict = [];
+    enableSelectDistrict = false;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private numberValidator: NumberValidator,
+                private datetimeValidator: DateTimeValidator,
                 private fb: FormBuilder,
                 private toastr: ToastrService,
                 private utilService: UtilService,
                 private route: ActivatedRoute,
                 private router: Router,
+                private nationalService: NationalService,
                 private agencyService: AgencyService) {
         super();
     }
 
     ngOnInit(): void {
         this.renderForm();
+        this.nationalService.getProvinceByNational(1).subscribe((result: ISearchResult<any>) => {
+            this.listProvince = result.items;
+        });
     }
 
     ngAfterViewInit() {
@@ -89,6 +100,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
                         // this.router.navigate(['/products']);
                     });
             } else {
+                debugger;
                 this.agencyService
                     .insert(this.agency)
                     .pipe(finalize(() => (this.isSaving = false)))
@@ -106,6 +118,16 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         }
     }
 
+    onProvinceSelect(province) {
+        this.enableSelectDistrict = true;
+        this.model.patchValue({provinceId: province.id, provinceName: province.name});
+        this.getDistrictByProvinceId(province.id);
+    }
+
+    onDistrictSelect(district) {
+        this.model.patchValue({districtId: district.id, districtName: district.name});
+    }
+
     private renderForm() {
         this.buildForm();
         this.renderTranslationArray(this.buildFormLanguage);
@@ -114,31 +136,33 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
     private buildForm() {
         this.formErrors = this.utilService.renderFormError(['email', 'phoneNumber', 'website', 'idCard', 'idCardDate',
             'provinceId', 'districtId', 'length', 'width', 'height', 'totalArea',
-            'startTime', 'googleMap', 'order', 'isShow', 'isActive']);
+            'startTime', 'googleMap', 'order', 'isShow', 'isActive', 'website']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'email': ['maxLength', 'pattern']},
             {'phoneNumber': ['required', 'maxLength', 'pattern']},
-            {'website': ['maxLength']},
+            {'website': ['maxLength', 'pattern']},
             {'idCard': ['maxLength']},
             {'idCardDate': ['isValid']},
             {'provinceId': ['required', 'isValid']},
             {'districtId': ['required', 'isValid']},
             {'length': ['isValid']},
             {'width': ['isValid']},
+            {'height': ['isValid']},
             {'totalArea': ['isValid']},
             {'startTime': ['isValid']},
             {'googleMap': ['maxLength']},
             {'order': ['isValid']},
             {'isShow': ['required']},
-            {'isActive': ['required']}
+            {'isActive': ['required']},
+            {'website': ['maxLength']}
         ]);
 
         this.model = this.fb.group({
             email: [this.agency.email, [Validators.maxLength(50), Validators.pattern(Pattern.email)]],
             phoneNumber: [this.agency.phoneNumber, [Validators.required, Validators.maxLength(50), Validators.pattern(Pattern.phoneNumber)]],
-            website: [this.agency.website, [Validators.maxLength(500)]],
+            website: [this.agency.website, [Validators.maxLength(500), Validators.pattern(Pattern.url)]],
             idCard: [this.agency.idCard, [Validators.maxLength(50)]],
-            idCardDate: [this.agency.idCardDate],
+            idCardDate: [this.agency.idCardDate, [this.datetimeValidator.isValid]],
             provinceId: [this.agency.provinceId, [Validators.required, this.numberValidator.isValid]],
             provinceName: [this.agency.provinceName],
             districtId: [this.agency.districtId, [Validators.required, this.numberValidator.isValid]],
@@ -147,6 +171,12 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             width: [this.agency.width, [this.numberValidator.isValid]],
             height: [this.agency.height, [this.numberValidator.isValid]],
             totalArea: [this.agency.totalArea, [this.numberValidator.isValid]],
+            startTime: [this.agency.startTime, [this.datetimeValidator.isValid]],
+            googleMap: [this.agency.googleMap, [Validators.maxLength(500)]],
+            order: [this.agency.order, [this.numberValidator.isValid]],
+            isShow: [this.agency.isShow, [Validators.required]],
+            isActive: [this.agency.isActive, [Validators.required]],
+            translations: this.fb.array([])
         });
         this.model.valueChanges.subscribe(data => this.validateModel(false));
     }
@@ -161,7 +191,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             {fullName: ['required', 'maxlength', 'pattern']},
             {agencyName: ['required', 'maxlength', 'pattern']},
             {idCardAddress: ['maxlength']},
-            {address: ['maxlength']},
+            {address: ['required', 'maxlength']},
             {addressRegistered: ['maxlength']},
         ]);
         const translationModel = this.fb.group({
@@ -178,7 +208,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
                 this.modelTranslation.idCardAddress,
                 [Validators.maxLength(500)]
             ],
-            address: [this.modelTranslation.address, [Validators.maxLength(1000)]],
+            address: [this.modelTranslation.address, [Validators.required, Validators.maxLength(1000)]],
             addressRegistered: [this.modelTranslation.addressRegistered, [Validators.maxLength(1000)]],
         });
         translationModel.valueChanges.subscribe((data: any) =>
@@ -251,5 +281,12 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
                 //     this.addAttribute();
                 // });
             });
+    }
+
+    private getDistrictByProvinceId(provinceId: number) {
+        this.nationalService.getDistrictByProvinceId(provinceId).subscribe((result: ISearchResult<any>) => {
+            this.enableSelectDistrict = true;
+            this.listDistrict = result.items;
+        });
     }
 }

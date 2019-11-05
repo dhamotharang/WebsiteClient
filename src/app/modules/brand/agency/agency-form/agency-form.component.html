@@ -1,4 +1,4 @@
-<nh-modal #agencyFormModal size="lg"
+<nh-modal #agencyFormModal size="lg" style="width: 900px"
           (shown)="onModalShown()"
           (hidden)="onModalHidden()">
     <nh-modal-header class="uppercase bold">
@@ -6,66 +6,255 @@
     </nh-modal-header>
     <form action="" class="form-horizontal" (ngSubmit)="save()" [formGroup]="model">
         <nh-modal-content>
-            <div class="row">
-                {{model.value | json}}
-                <div formArrayName="translations">
-                    <div class="form-group" *ngIf="languages && languages.length > 1">
-                        <label i18n-ghmLabel="@@language" ghmLabel="Language"
-                               class="col-sm-3 control-label"
-                               [required]="true"></label>
-                        <div class="col-sm-9">
-                            <ghm-select [data]="languages"
-                                        i18n-title="@@pleaseSelectLanguage"
-                                        title="-- Please select language --"
-                                        name="language"
-                                        [(value)]="currentLanguage"
-                                        (itemSelected)="currentLanguage = $event.id"></ghm-select>
-                        </div>
+            {{model.value | json}}
+            <div formArrayName="translations">
+                <div class="form-group" *ngIf="languages && languages.length > 1">
+                    <label i18n-ghmLabel="@@language" ghmLabel="Language"
+                           class=" control-label"
+                           [required]="true"></label>
+                    <div class="col-sm-12">
+                        <ghm-select [data]="languages"
+                                    i18n-title="@@pleaseSelectLanguage"
+                                    title="-- Please select language --"
+                                    name="language"
+                                    [(value)]="currentLanguage"
+                                    (itemSelected)="currentLanguage = $event.id"></ghm-select>
                     </div>
-                    <div class="col-sm-12 center">
-                        <h3>Thông tin cá nhân</h3>
-                    </div>
-                    <div class="form-group"
-                         *ngFor="let modelTranslation of translations.controls; index as i"
+                </div>
+                <div class="col-sm-12 center">
+                    <h3 class="cm-mgb-0">Thông tin cá nhân</h3>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" *ngFor="let modelTranslation of translations.controls; index as i"
                          [formGroupName]="i"
                          [hidden]="modelTranslation.value.languageId !== currentLanguage"
                          [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.fullName">
-                        <div class="col-sm-12">
-                            <label class="control-label" ghmLabel="Họ tên"
-                                   [required]="true"></label>
-                            <ghm-input
-                                    elementId="{{'name ' + currentLanguage}}"
-                                    formControlName="fullName"
-                                    placeholder="Nhập nội dung"></ghm-input>
-                            <span class="help-block">
+                        <label class="control-label" ghmLabel="Họ tên"
+                               [required]="true"></label>
+                        <ghm-input
+                                elementId="{{'name ' + currentLanguage}}"
+                                formControlName="fullName"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
                                 {
                                 translationFormErrors[modelTranslation.value.languageId]?.fullName,
                                 select, required {Vui lòng nhập họ tên.} maxlength {Họ tên không được vượt quá 256 ký tự.}
                                         pattern  {Họ tên phải là chữ.}
                                 }
                             </span>
-                        </div>
-                    </div><!-- END: Product name -->
-                    <div class="form-group">
-                        <div class="col-sm-6" [class.has-error]="formErrors?.phoneNumber">
-                            <label class="control-label" ghmLabel="Số điện thoại"></label>
-                            <input name="" class="form-control"
-                                   formControlName="phoneNumber"
-                                   placeholder="Nhập nội dung"/>
-                            <span class="help-block">{formErrors?.phoneNumber, select, required {Vui lòng số điện thoại}
-                                isValid {Số điện thoại không đúng định dạng.} maxlength {Số điện thoại không được vượt quá 50 ký tự.}}</span>
-                        </div>
-                        <div class="col-sm-6" [class.has-error]="formErrors?.email">
-                            <label class="control-label" ghmLabel="Email"></label>
-                            <input name="" class="form-control"
-                                   formControlName="email"
-                                   placeholder="Nhập nội dung"/>
-                            <span class="help-block">{formErrors?.email, select,
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.phoneNumber">
+                        <label class="control-label" [required]="true" ghmLabel="Số điện thoại"></label>
+                        <input name="" class="form-control"
+                               formControlName="phoneNumber"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.phoneNumber, select, required {Vui lòng số điện thoại}
+                                pattern {Số điện thoại không đúng định dạng.} maxlength {Số điện thoại không được vượt quá 50 ký tự.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.email">
+                        <label class="control-label" ghmLabel="Email"></label>
+                        <input name="" class="form-control"
+                               formControlName="email"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.email, select,
                                 isValid {Email không đúng định dạng.} maxlength {Email không được vượt quá 50 ký tự.}}</span>
-                        </div>
+                    </div>
+                </div><!-- END: Product name -->
+                <div class="form-group">
+                    <div class="col-sm-12" *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
+                        <label class="control-label" ghmLabel="Địa chỉ" [required]="true"></label>
+                        <ghm-input
+                                formControlName="address"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.address,
+                                select, required {Vui lòng nhập Địa chỉ.} maxlength {Địa chỉ không được vượt quá 1000 ký tự.}}
+                         </span>
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.idCard">
+                        <label class="control-label" ghmLabel="SỐ CMND"></label>
+                        <input name="" class="form-control"
+                               formControlName="idCard"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.idCard, select,
+                            maxlength {SỐ CMND không được vượt quá 50 ký tự.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.idCardDate">
+                        <label class="control-label" ghmLabel="NGÀY CẤP"></label>
+                        <nh-date [format]="'DD/MM/YYYY'"
+                                 [mask]="true" formControlName="idCardDate"></nh-date>
+                        <span class="help-block">{formErrors?.idCardDate, select,
+                            isValid {NGÀY CẤP không đúng định dạng.}}</span>
+                    </div>
+                    <div class="col-sm-4" *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.idCardAddress">
+                        <label class="control-label" ghmLabel="NƠI CẤP CMND"
+                        ></label>
+                        <ghm-input
+                                formControlName="idCardAddress"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.idCardAddress,
+                                select,  maxlength {Nơi cấp cmnd không được vượt quá 500 ký tự.}}
+                            </span>
+                    </div>
+                </div>
+                <div class="col-sm-12 center">
+                    <h3 class="cm-mgb-0">Thông tin đại lý</h3>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.agencyName">
+                        <label class="control-label" ghmLabel="Tên đại lý"
+                               [required]="true"></label>
+                        <ghm-input
+                                formControlName="agencyName"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.agencyName,
+                                select, required {Vui lòng nhập Tên đại lý.} maxlength {Tên đại lý không được vượt quá 256 ký tự.}
+                                        pattern  {Tên đại lý phải là chữ.}}
+                            </span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.provinceId">
+                        <label class="control-label" [required]="true" ghmLabel="Tỉnh/TP"></label>
+                        <ghm-select [liveSearch]="true" [data]="listProvince"
+                                    [title]="'-- Tỉnh/TP --'"
+                                    formControlName="provinceId"
+                                    [isEnable]="true"
+                                    (itemSelected)="onProvinceSelect($event)"></ghm-select>
+                        <span class="help-block">{formErrors?.provinceId, select, required {Vui lòng Tỉnh/TP}
+                                isValid {Số điện thoại không đúng.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.districtId">
+                        <label class="control-label" [required]="true" ghmLabel="Quận/Huyện"></label>
+                        <ghm-select [liveSearch]="true" [data]="listDistrict"
+                                    [title]="'-- Quận/Huyện --'"
+                                    (itemSelected)="onDistrictSelect($event)"
+                                    [isEnable]="enableSelectDistrict"
+                                    formControlName="districtId"></ghm-select>
+                        <span class="help-block">{formErrors?.districtId, select,
+                                isValid {Quận/Huyện không đúng.}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12" *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.addressRegistered">
+                        <label class="control-label" ghmLabel="Địa chỉ đăng ký"
+                               [required]="true"></label>
+                        <ghm-input
+                                formControlName="addressRegistered"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.addressRegistered,
+                                select, required {Vui lòng nhập Địa chỉ đăng ký.} maxlength {Địa chỉ đăng ký không được vượt quá 1000 ký tự.}
+                                        pattern  {Địa chỉ đăng ký phải là chữ.}
+                                }
+                         </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.length">
+                        <label class="control-label" ghmLabel="CHIỀU DÀI(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="length"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.length, select,
+                            isValid {CHIỀU DÀI phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.width">
+                        <label class="control-label" ghmLabel="CHIỀU RỘNG(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="width"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.width, select,
+                            isValid {CHIỀU RỘNG phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.height">
+                        <label class="control-label" ghmLabel="CHIỀU CAO(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="height"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.height, select,
+                            isValid {CHIỀU CAO phải là số.}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.totalArea">
+                        <label class="control-label" ghmLabel="TỔNG DIỆN TÍCH"></label>
+                        <input name="" class="form-control"
+                               formControlName="totalArea"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.totalArea, select,
+                            isValid {TỔNG DIỆN TÍCH phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.startTime">
+                        <label class="control-label" ghmLabel="Ngày bắt đầu"></label>
+                        <nh-date [format]="'DD/MM/YYYY'"
+                                 [mask]="true" formControlName="startTime"></nh-date>
+                        <span class="help-block">{formErrors?.startTime, select,
+                            isValid {Ngày bắt đầu không đúng định dạng.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.website">
+                        <label class="control-label" ghmLabel="WEBSITE"></label>
+                        <input name="" class="form-control"
+                               formControlName="website"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.website, select,
+                            pattern {website không đúng.}
+                            maxlength {website không được vượt quá 500 ký tự.}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.order">
+                        <label class="control-label" [required]="true" ghmLabel="STT"></label>
+                        <input name="" class="form-control"
+                               formControlName="order"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.order, select,
+                            isValid {STT phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.isShow">
+                        <label class="control-label" [required]="true" ghmLabel="Hiển thị website"></label>
+                        <div>
+                            <dx-check-box formControlName="isShow" text="Hiển thị website"></dx-check-box>
+                        </div>
+                        <span class="help-block">{formErrors?.isShow, select,
+                            required {Hiển thị website không được để trống.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.isActive">
+                        <label class="control-label" [required]="true" ghmLabel="Kích hoạt"></label>
+                        <div>
+                            <dx-check-box formControlName="isActive" text="Kích hoạt"></dx-check-box>
+                        </div>
+                        <span class="help-block">{formErrors?.isActive, select,
+                            required {Kích hoạt không được để trống.}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12" [formGroup]="model" [class.has-error]="formErrors?.googleMap">
+                        <label class="control-label" ghmLabel="Google map"></label>
+                        <input name="" class="form-control"
+                               formControlName="googleMap"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.googleMap, select,
+                            maxlength {googleMap không được vượt quá 500 ký tự.}}</span>
+                    </div>
                 </div>
             </div>
         </nh-modal-content>

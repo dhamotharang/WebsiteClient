@@ -22,12 +22,13 @@ import {DxCheckBoxModule, DxContextMenuModule, DxDataGridModule, DxTemplateModul
 import {GhmSettingDataGridModule} from '../../shareds/components/ghm-setting-data-grid/ghm-setting-data-grid.module';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 import {GhmInputModule} from '../../shareds/components/ghm-input/ghm-input.module';
+import {NhDateModule} from '../../shareds/components/nh-datetime-picker/nh-date.module';
 
 @NgModule({
     imports: [
         CommonModule, BrandRoutingModule, FormsModule, ReactiveFormsModule, CoreModule, MatCheckboxModule, MatTooltipModule,
         NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule, NhDropdownModule,
-        DatetimeFormatModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule,
+        DatetimeFormatModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule, NhDateModule,
         MatRadioModule, FormatNumberModule,  DxDataGridModule,  DxContextMenuModule, DxTemplateModule,
         MatRadioModule, NhSuggestionModule, GhmSettingDataGridModule, GhmSelectModule, GhmInputModule, DxCheckBoxModule,
         SweetAlert2Module.forRoot({
