@@ -18,6 +18,7 @@ import {AgencyDetailViewModel} from '../model/agency-detail.viewmodel';
 import {ISearchResult} from '../../../../interfaces/isearch.result';
 import {NationalService} from '../../../customer/service/national.service';
 import {DateTimeValidator} from '../../../../validators/datetime.validator';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-agency-form',
@@ -100,7 +101,6 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
                         // this.router.navigate(['/products']);
                     });
             } else {
-                debugger;
                 this.agencyService
                     .insert(this.agency)
                     .pipe(finalize(() => (this.isSaving = false)))
@@ -176,6 +176,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             order: [this.agency.order, [this.numberValidator.isValid]],
             isShow: [this.agency.isShow, [Validators.required]],
             isActive: [this.agency.isActive, [Validators.required]],
+            concurrencyStamp: [this.agency.concurrencyStamp],
             translations: this.fb.array([])
         });
         this.model.valueChanges.subscribe(data => this.validateModel(false));
@@ -234,52 +235,47 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         this.agencyFormModal.open();
         this.subscribers.getDetail = this.agencyService.getDetail(agencyId)
             .subscribe((result: ActionResultViewModel<AgencyDetailViewModel>) => {
-                // this.model.patchValue({
-                //     id: productId,
-                //     categories: result.categories.map((category: any) => category.categoryId),
-                //     unitId: result.unitId,
-                //     unitName: result.unitName,
-                //     isActive: result.isActive,
-                //     isManagementByLot: result.isManagementByLot,
-                //     salePrice: result.salePrice,
-                //     translations: result.translations,
-                //     concurrencyStamp: result.concurrencyStamp,
-                //     thumbnail: result.thumbnail,
-                //     images: result.images,
-                //     isHot: result.isHot,
-                //     isHomePage: result.isHomePage
-                // });
-                //
-                // if (result.translations && result.translations.length > 0) {
-                //     this.translations.controls.forEach(
-                //         (model: FormGroup) => {
-                //             const detail = _.find(
-                //                 result.translations,
-                //                 (newTranslation: ProductTranslation) => {
-                //                     return (
-                //                         newTranslation.languageId === model.value.languageId
-                //                     );
-                //                 }
-                //             );
-                //             detail.content = detail.content.replace(new RegExp('"uploads/', 'g'), '"' + environment.fileUrl + 'uploads/');
-                //             if (detail) {
-                //                 model.patchValue(detail);
-                //
-                //                 this.eventContentEditors.forEach((contentEditor: TinymceComponent) => {
-                //                     const editorId = `productContent${this.currentLanguage}`;
-                //                     if (contentEditor.elementId === editorId) {
-                //                         contentEditor.setContent(detail.content);
-                //                     }
-                //                 });
-                //
-                //             }
-                //         }
-                //     );
-                // }
-                // setTimeout(() => {
-                //     this.addConversionUnit();
-                //     this.addAttribute();
-                // });
+                const data = result.data;
+                this.getDistrictByProvinceId(data.provinceId);
+                this.model.patchValue({
+                    email: data.email,
+                    phoneNumber: data.phoneNumber,
+                    website: data.website,
+                    idCard: data.idCard,
+                    idCardDate: data.idCardDate,
+                    provinceId: data.provinceId,
+                    districtId: data.districtId,
+                    length: data.length,
+                    width: data.width,
+                    height: data.height,
+                    totalArea: data.totalArea,
+                    startTime: data.startTime,
+                    googleMap: data.googleMap,
+                    order: data.order,
+                    isShow: data.isShow,
+                    isActive: data.isActive,
+                    provinceName: data.provinceName,
+                    districtName: data.districtName,
+                    concurrencyStamp: data.concurrencyStamp,
+                });
+
+                if (result.data.translations && result.data.translations.length > 0) {
+                    this.translations.controls.forEach(
+                        (model: FormGroup) => {
+                            const detail = _.find(
+                                result.data.translations,
+                                (newTranslation: AgencyTransaction) => {
+                                    return (
+                                        newTranslation.languageId === model.value.languageId
+                                    );
+                                }
+                            );
+                            if (detail) {
+                                model.patchValue(detail);
+                            }
+                        }
+                    );
+                }
             });
     }
 

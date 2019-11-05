@@ -127,7 +127,7 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
                 icon: 'edit',
                 disabled: !this.permission.edit,
                 onItemClick: () => {
-                    this.edit(data.id);
+                    this.edit(data);
                 }
             }, {
                 text: 'Xóa',

@@ -8,8 +8,8 @@ export class AgencyDetailViewModel {
     idCard: string;
     idCardDate: string;
     nationalId: string;
-    provinceId: string;
-    districtId: string;
+    provinceId: number;
+    districtId: number;
     length: number;
     width: number;
     height: number;
@@ -22,5 +22,5 @@ export class AgencyDetailViewModel {
     provinceName: string;
     districtName: string;
     concurrencyStamp: string;
-    transactions: AgencyTransaction[];
+    translations: AgencyTransaction[];
 }

@@ -117,7 +117,7 @@
             <div *dxTemplate="let cell of 'actionTemplate'" class="center middle">
                 <a *ngIf="permission.edit" class="color-dark-blue text-decoration-none cm-mgr-5"
                    i18n="@@edit" title="Sửa"
-                   (click)="edit(cell.data.id)">
+                   (click)="edit(cell.data)">
                     <i class="dx-icon-edit"></i>
                 </a>
                 <a title="Xóa"

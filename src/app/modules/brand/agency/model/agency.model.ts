@@ -18,7 +18,7 @@ export class Agency {
     provinceName: string;
     districtName: string;
     concurrencyStamp: string;
-    transactions: AgencyTransaction[];
+    translations: AgencyTransaction[];
 
     constructor() {
         this.email = '';
