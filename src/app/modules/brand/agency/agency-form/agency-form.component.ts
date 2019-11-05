@@ -88,7 +88,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
         );
         const isLanguageValid = this.validateLanguage();
         if (isValid && isLanguageValid) {
-
+            this.agency = this.model.value;
             this.isSaving = true;
             if (this.isUpdate) {
                 this.agencyService
