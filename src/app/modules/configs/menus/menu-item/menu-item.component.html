@@ -1,5 +1,5 @@
 <div class="menu-list-container">
-    <ul *ngFor="let item of listMenuItem">
+    <ul *ngFor="let item of listMenuItem" [class.cm-pdl-0]="!item.parentId">
         <li>
             <div class="item">
                 <i class="fa" [class.fa-user]="item.subjectType === 0" [class.fa-list]="item.subjectType === 1"

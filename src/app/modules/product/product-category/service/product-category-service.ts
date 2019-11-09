@@ -16,6 +16,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {TreeData} from '../../../../view-model/tree-data';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
+import {CategoryProductSearchForSelectViewModel} from '../../model/category-product-search-for-select.viewmodel';
 
 export class ProductCategoryService {
     url = 'api/v1/warehouse/product-categories';
@@ -104,5 +105,15 @@ export class ProductCategoryService {
             this.toastr.success(result.message);
             return result;
         })) as Observable<ActionResultViewModel>;
+    }
+
+    searchForSelect(keyword: string, page: number = 1, pageSize: number = 20):
+        Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> {
+        return this.http.get(`${this.url}/search-for-select`, {
+            params: new HttpParams()
+                .set('keyword', keyword ? keyword : '')
+                .set('page', page > 0 ? page.toString() : '')
+                .set('pageSize', pageSize > 0 ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())
+        }) as Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> ;
     }
 }

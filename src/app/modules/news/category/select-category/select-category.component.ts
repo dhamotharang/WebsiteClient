@@ -36,7 +36,7 @@ export class SelectCategoryComponent extends BaseListComponent<Category> impleme
         this.isSearching = true;
         this.categoryService.searchForSelect(this.keyword, this.currentPage, this.pageSize)
             .subscribe((result: any) => {
-                this.isSearching = true;
+                this.isSearching = false;
                 this.listGroup = _.map(result.items, (item: any) => {
                     item.selected = false;
                     return item;

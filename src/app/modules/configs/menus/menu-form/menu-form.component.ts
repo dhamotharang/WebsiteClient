@@ -142,11 +142,17 @@ export class MenuFormComponent extends BaseFormComponent implements OnInit, Afte
         }
     }
 
+    addMenuItem() {
+        this.menuItemFormComponent.menuItemTree = this.listMenuItem;
+        this.menuItemFormComponent.add(this.id);
+    }
+
     editMenuItem(value: TreeData) {
         if (value) {
             this.isShowMenuItem = true;
             setTimeout(() => {
-                this.menuItemFormComponent.edit(value.id);
+                this.menuItemFormComponent.menuItemTree = this.listMenuItem;
+                this.menuItemFormComponent.edit(value.id, this.id);
             }, 100);
         }
     }

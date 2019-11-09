@@ -1,40 +1,49 @@
 <div class="row">
-  <div class="col-sm-12">
-    <form class="form-inline" (ngSubmit)="search(1)">
-      <div class="form-group">
-        <input type="text" class="form-control" i18n-placeholder="@@searchPlaceHolder"
-               placeholder="Please enter categoryName"
-               (keyup)="keyword = searchGroupKeyword.value" #searchGroupKeyword/>
-      </div>
-      <div class="form-group">
-        <button type="button" class="btn blue">
-          <i class="fa fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div>
+    <div class="col-sm-12">
+        <form class="form-inline" (ngSubmit)="search(1)">
+            <div class="form-group">
+                <input type="text" class="form-control" i18n-placeholder="@@searchPlaceHolder"
+                       placeholder="Please enter categoryName"
+                       (keyup)="keyword = searchGroupKeyword.value" #searchGroupKeyword/>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn blue">
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 <div class="row cm-mgt-10">
-  <div class="col-sm-12">
-    <ul class="media-list select-category-container cm-pdl-0">
-      <li class="media cursor-pointer" *ngFor="let item of listGroup"
-          [class.selected]="item.selected"
-          (click)="onSelectItem(item)">
-        <h4>{{item.name}}</h4>
-      </li>
-    </ul>
-    <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
-                (pageClick)="search($event)"
-                [isDisabled]="isSearching" i18n-pageName="@@news" pageName="News"></ghm-paging>
-  </div>
+    <div class="col-sm-12">
+        <ul class="media-list select-category-container cm-pdl-0">
+            <li class="media cursor-pointer" *ngFor="let item of listGroup" style="border-bottom: 1px solid #dddddd"
+                [class.selected]="item.selected"
+                (click)="onSelectItem(item)">
+                <div class="media-left">
+                    <a href="javascript://">
+                        <img ghmImage [src]="item.image" class="w50 img-circle"/>
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="bold">{{item.name}}</h4>
+                    <i>{{item.description}}</i>
+                </div>
+            </li>
+        </ul>
+        <ghm-paging [totalRows]="totalRows" [pageSize]="pageSize" [currentPage]="currentPage" [pageShow]="6"
+                    (pageClick)="search($event)"
+                    [isDisabled]="isSearching" i18n-pageName="@@news" pageName="Product caregory"></ghm-paging>
+    </div>
 </div>
 <div class="row">
-  <div class="col-sm-12 text-right">
-    <button type="button" class="btn blue cm-mgr-5" (click)="accept()" i18n="@@accept">
-      Accept
-    </button>
-    <button type="button" class="btn default" (click)="cancel()" i18n="@@close">
-      Close
-    </button>
-  </div>
+    <div class="col-sm-12 text-right">
+        <button type="button" class="btn blue cm-mgr-5" (click)="accept()" i18n="@@accept">
+            Accept
+        </button>
+        <button type="button" class="btn default" (click)="cancel()" i18n="@@close">
+            Close
+        </button>
+    </div>
 </div>

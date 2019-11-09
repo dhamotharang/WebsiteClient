@@ -4,12 +4,13 @@ import {BaseListComponent} from '../../../../base-list.component';
 import {Category} from '../../../news/category/models/category.model';
 import * as _ from 'lodash';
 import {CategoryProductService} from '../../services/category-product.service';
+import {ProductCategoryService} from '../service/product-category-service';
 
 @Component({
   selector: 'app-product-category-select',
   templateUrl: './product-category-select.component.html',
   styleUrls: ['./product-category-select.component.scss'],
-  providers: [CategoryProductService]
+  providers: [ProductCategoryService]
 })
 
 export class ProductCategorySelectComponent extends BaseListComponent<Category> implements OnInit, AfterViewInit {
@@ -20,23 +21,23 @@ export class ProductCategorySelectComponent extends BaseListComponent<Category> 
   listGroup = [];
 
   constructor(private toastr: ToastrService,
-              private categoryProductService: CategoryProductService) {
+              private categoryProductService: ProductCategoryService) {
     super();
   }
 
   ngOnInit() {
+      this.search(1);
   }
 
   ngAfterViewInit() {
-    this.search(1);
   }
 
   search(currentPage) {
     this.currentPage = currentPage;
     this.isSearching = true;
-    this.categoryProductService.searchForSelect(this.keyword, this.currentPage, this.pageSize)
+    this.categoryProductService.suggestions(this.keyword, this.currentPage, this.pageSize)
         .subscribe((result: any) => {
-          this.isSearching = true;
+          this.isSearching = false;
           this.listGroup = _.map(result.items, (item: any) => {
             item.selected = false;
             return item;

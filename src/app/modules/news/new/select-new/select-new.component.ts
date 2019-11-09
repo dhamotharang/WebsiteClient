@@ -46,6 +46,7 @@ export class SelectNewComponent extends BaseListComponent<News> implements OnIni
         this.isSearching = true;
         this.newsService.searchForSelect(this.keyword, this.categoryId, this.currentPage, this.pageSize)
             .subscribe((result: SearchResultViewModel<NewSearchForSelectViewModel>) => {
+                this.isSearching = false;
                 this.renderListNews(result.items);
                 this.totalRows = result.totalRows;
             });

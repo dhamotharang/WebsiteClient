@@ -8,11 +8,13 @@
             <div class="form-group cm-mgr-5">
                 <nh-dropdown-tree [data]="categoryTree"
                                   [width]="350"
+                                  [title]="'Chọn loại tin tức'"
                                   (nodeSelected)="selectCategory($event)"></nh-dropdown-tree>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn blue">
-                    <i class="fa fa-search"></i>
+                    <i class="dx-icon-search" *ngIf="!isSearching"></i>
+                    <i class="fa fa-pulse fa-spinner" *ngIf="isSearching"></i>
                 </button>
             </div>
         </form>
@@ -21,17 +23,17 @@
 <div class="row cm-mgt-10">
     <div class="col-sm-12">
         <ul class="media-list select-news-container">
-            <li class="media cursor-pointer" *ngFor="let item of listNews"
+            <li class="media cursor-pointer" *ngFor="let item of listNews" style="border-bottom: 1px solid #dddddd"
                 [class.selected]="item.selected"
                 (click)="onSelectItem(item)">
                 <div class="media-left">
                     <a href="javascript://">
-                        <img ghmImage [src]="item.featureImage" class="w50" [isUrlAbsolute]="true"/>
+                        <img ghmImage [src]="item.featureImage" class="w50 img-circle"/>
                     </a>
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">{{item.title}}</h4>
-                    {{item.description}}
+                    <i>{{item.description}}</i>
                 </div>
             </li>
         </ul>

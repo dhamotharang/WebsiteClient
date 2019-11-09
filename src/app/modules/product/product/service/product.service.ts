@@ -223,7 +223,7 @@ export class ProductService {
 
     searchForSelect(keyword: string, categoryId: number, page = 1, pageSize = 20)
         : Observable<SearchResultViewModel<ProductSearchForSelectViewModel>> {
-        return this.http.get( `${this.url}search-for-select`, {
+        return this.http.get( `${this.url}/search-for-select`, {
             params: new HttpParams()
                 .set('keyword', keyword ? keyword : '')
                 .set('categoryId', categoryId ? categoryId.toString() : '')

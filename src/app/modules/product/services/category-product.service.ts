@@ -124,10 +124,8 @@ export class CategoryProductService {
 
     searchForSelect(keyword: string, page: number = 1, pageSize: number = 20):
         Observable<SearchResultViewModel<CategoryProductSearchForSelectViewModel>> {
-        return this.http.get(`${this.url}search-for-select`, {
-            headers: new HttpHeaders({'useAuth': this.appConfig.USE_AUTH}),
+        return this.http.get(`${this.url}/search-for-select`, {
             params: new HttpParams()
-                .set('websiteId', this.appService.currentUser.tenantId)
                 .set('keyword', keyword ? keyword : '')
                 .set('page', page > 0 ? page.toString() : '')
                 .set('pageSize', pageSize > 0 ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString())

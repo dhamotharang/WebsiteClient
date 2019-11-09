@@ -6,8 +6,10 @@ export const environment = {
     production: false,
     apiGatewayUrl: 'http://localhost:50008/',
     notificationUrl: 'http://localhost:50004',
-    fileUrl: 'http://localhost:50005/',
-    filemanagementUrl: 'http://localhost:50005/api/v1/',
+    // fileUrl: 'http://localhost:50005/',
+    // filemanagementUrl: 'http://localhost:50005/api/v1/',
+    fileUrl: 'https://testwebsitefile.ghmsoft.vn/',
+    filemanagementUrl: 'https://testwebsitefile.ghmsoft.vn/api/v1/',
 
     // production: true,
     // apiGatewayUrl: 'https://testwebsiteapi.ghmsoft.vn/',

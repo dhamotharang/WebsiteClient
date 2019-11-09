@@ -1,18 +1,19 @@
 export class ProductSearchForSelectViewModel {
     id: string;
-    featureImage: string;
+    image: string;
     languageId: string;
-    title: string;
+    name: string;
     seoLink: string;
     selected: boolean;
+    description: string;
 
-    constructor(id?: string, featureImage?: string, languageId?: string, title?: string,
+    constructor(id?: string, image?: string, languageId?: string, name?: string,
                 seoLink?: string, selected?: boolean) {
 
         this.id = id;
-        this.featureImage = featureImage;
+        this.image = image;
         this.languageId = languageId;
-        this.title = title;
+        this.name = name;
         this.seoLink = seoLink;
         this.selected = selected;
     }

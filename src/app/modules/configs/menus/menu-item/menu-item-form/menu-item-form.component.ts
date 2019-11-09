@@ -16,6 +16,7 @@ import {ToastrService} from 'ngx-toastr';
 import * as _ from 'lodash';
 import {ChoiceMenuItemComponent} from '../../choice-menu-item/choice-menu-item.component';
 import {MenuItemSelectViewModel} from '../../viewmodel/menu-item-select.viewmodel';
+import {NhModalComponent} from '../../../../../shareds/components/nh-modal/nh-modal.component';
 
 @Component({
     selector: 'app-config-menu-item-form',
@@ -24,6 +25,7 @@ import {MenuItemSelectViewModel} from '../../viewmodel/menu-item-select.viewmode
 })
 
 export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
+    @ViewChild('menuItemFormModal') menuItemFormModal: NhModalComponent;
     @ViewChild(ChoiceMenuItemComponent) choiceMenuItemComponent: ChoiceMenuItemComponent;
     @Input() menuItemTree: TreeData[] = [];
     @Input() menuId: string;
@@ -55,14 +57,29 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
         this.renderForm();
     }
 
-    add() {
-        this.isUpdate = false;
+    onModalShown() {
+        this.utilService.focusElement('question');
     }
 
-    edit(id: number) {
+    onModalHidden() {
+        if (this.isModified) {
+            this.saveSuccessful.emit(this.menuItem);
+        }
+    }
+
+    add(menuId: string) {
+        this.menuId = menuId;
+        this.isUpdate = false;
+        this.resetForm();
+        this.menuItemFormModal.open();
+    }
+
+    edit(id: number, menuId: string) {
+        this.menuId = menuId;
         this.isUpdate = true;
         this.id = id;
-        this.getDetail(id);
+        this.getDetail(id, menuId);
+        this.menuItemFormModal.open();
     }
 
     selectImage(file: ExplorerItem) {
@@ -97,9 +114,9 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
         }
     }
 
-    getDetail(id: number) {
+    getDetail(id: number, menuId: string) {
         this.menuService
-            .getDetailMenuItem(this.menuId, id)
+            .getDetailMenuItem(menuId, id)
             .subscribe(
                 (result: ActionResultViewModel<MenuItemDetailViewModel>) => {
                     const menuItemDetail = result.data;
@@ -142,7 +159,6 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
                             });
                     }
                 }
-
             );
 
 
@@ -154,6 +170,7 @@ export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
 
     closeForm() {
         this.onCloseForm.emit();
+        this.menuItemFormModal.dismiss();
     }
 
     selectSubjectType(value) {
