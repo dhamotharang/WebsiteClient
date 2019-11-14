@@ -114,7 +114,7 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
     delete(id: string) {
         this.brandService.delete(id)
             .subscribe(() => {
-                this.search(1);
+                this.search(this.currentPage);
             });
     }
 

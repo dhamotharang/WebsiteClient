@@ -124,7 +124,7 @@
             (pageClick)="search($event)"
             [isDisabled]="isSearching" i18n-pageName="@@banner" [pageName]="'Banner'"></ghm-paging>
 
-<app-banner-form (onSaveSuccess)="search(1)"></app-banner-form>
+<app-banner-form (onSaveSuccess)="search(currentPage)"></app-banner-form>
 <app-banner-item-form
         [bannerId]="bannerId"
         (onSaveSuccess)="saveSuccess($event)"></app-banner-item-form>

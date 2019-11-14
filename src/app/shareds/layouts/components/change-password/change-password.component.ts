@@ -43,6 +43,7 @@ export class ChangePasswordComponent extends BaseFormComponent implements OnInit
                 .subscribe(() => {
                     this.model.reset();
                     this.authService.signOut();
+                    window.location.reload();
                     // setTimeout(() => {
                     //     this.changePasswordModal.dismiss();
                     // }, 500);

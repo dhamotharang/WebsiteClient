@@ -109,7 +109,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             productFormComponent.listProductAttribute = this.listAttribute;
             productFormComponent.add();
             this.subscribers.productFormModalDissmiss = productFormComponent.saveSuccessful.subscribe(() => {
-                this.search();
+                this.search(this.currentPage);
             });
         });
     }
@@ -188,7 +188,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
             productFormComponent.listProductAttribute = this.listAttribute;
             productFormComponent.edit(productId);
             this.subscribers.productFormModalDissmiss = productFormComponent.saveSuccessful.subscribe(() => {
-                this.search();
+                this.search(this.currentPage);
             });
         });
     }

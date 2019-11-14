@@ -12,12 +12,14 @@ import * as _ from 'lodash';
 import { ProductAttributeValueComponent } from '../product-attribute-value/product-attribute-value.component';
 import {NhTabComponent} from '../../../../shareds/components/nh-tab/nh-tab.component';
 import {UtilService} from '../../../../shareds/services/util.service';
+import {Location} from '@angular/common';
 // if (!/localhost/.test(document.location.host)) {
 //     enableProdMode();
 // }
 @Component({
     selector: 'app-product-attribute-form',
-    templateUrl: './product-attribute-form.component.html'
+    templateUrl: './product-attribute-form.component.html',
+    providers: [Location]
 })
 export class ProductAttributeFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
     @ViewChild('productAttributeFormModal') productAttributeFormModal: NhModalComponent;
@@ -32,6 +34,7 @@ export class ProductAttributeFormComponent extends BaseFormComponent implements 
         private route: ActivatedRoute,
         private router: Router,
         private utilService: UtilService,
+        private location: Location,
         private productAttributeService: ProductAttributeService) {
         super();
         this.subscribers.routeParams = this.route.params.subscribe(params => {
@@ -95,7 +98,8 @@ export class ProductAttributeFormComponent extends BaseFormComponent implements 
                         // this.attributeFormWizard.next();
                         this.toastr.success(result.message);
                         if (this.isSelfContent) {
-                            this.router.navigateByUrl('/products/attributes');
+                            this.location.back();
+                            // this.router.navigateByUrl('/products/attributes');
                         } else {
                             this.goToAttributeValueTab();
                             // this.toastr.success(result.message);
@@ -127,7 +131,8 @@ export class ProductAttributeFormComponent extends BaseFormComponent implements 
                         } else {
                             this.resetModel();
                             if (!this.isCreateAnother) {
-                                this.router.navigateByUrl('/products/attributes');
+                                this.location.back();
+                                // this.router.navigateByUrl('/products/attributes');
                             }
                         }
                     });

@@ -45,7 +45,7 @@ export class EventRegisterListComponent extends BaseListComponent<EventRegisterL
     }
 
     onSaveSuccessful() {
-        this.search(1);
+        this.search(this.currentPage);
     }
 
     changeStatus(eventDay: EventRegisterDayViewModel, status: number) {

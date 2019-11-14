@@ -102,7 +102,7 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
         setTimeout(() => {
             agencyFormComponent.add();
             this.subscribers.productFormModalDissmiss = agencyFormComponent.saveSuccessful.subscribe(() => {
-                this.search(1);
+                this.search(this.currentPage);
             });
         });
     }
@@ -114,7 +114,7 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
         setTimeout(() => {
             agencyFormComponent.edit(agency.id);
             this.subscribers.productFormModalDissmiss = agencyFormComponent.saveSuccessful.subscribe(() => {
-                this.search(1);
+                this.search(this.currentPage);
             });
         });
     }
@@ -143,7 +143,7 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
     delete(id: string) {
         this.agencyService.delete(id)
             .subscribe(() => {
-                this.search(1);
+                this.search(this.currentPage);
             });
     }
 

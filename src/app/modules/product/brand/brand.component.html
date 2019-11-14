@@ -38,56 +38,6 @@
         </button>
     </div>
 </form>
-<!--<table class="table table-striped table-hover">-->
-    <!--<thead>-->
-    <!--<tr>-->
-        <!--<th class="middle center w50" i18n="@@no">STT</th>-->
-        <!--<th class="middle" i18n="@@brand">Tên Thương Hiệu</th>-->
-        <!--<th class="middle" i18n="@@email">Email</th>-->
-        <!--<th class="middle" i18n="@@address">Số Điện Thoại</th>-->
-        <!--<th class="middle" i18n="@@address">Địa Chỉ</th>-->
-        <!--<th class="middle center" i18n="@@status">Trạng Thái</th>-->
-        <!--<th class="middle text-right w150" i18n="@@action" *ngIf="permission.edit || permission.delete">Thao Tác</th>-->
-    <!--</tr>-->
-    <!--</thead>-->
-    <!--<tbody>-->
-    <!--<tr *ngFor="let item of listBrand; let i = index"-->
-        <!--nhContextMenuTrigger-->
-        <!--[nhContextMenuTriggerFor]="nhMenu"-->
-        <!--[nhContextMenuData]="item">-->
-        <!--<td class="center middle">{{ (currentPage - 1) * pageSize + i + 1 }}</td>-->
-        <!--<td class="middle">{{ item.name }}</td>-->
-        <!--<td class="middle">{{item.email}}</td>-->
-        <!--<td class="middle">{{item.phoneNumber}}</td>-->
-        <!--<td class="middle">{{item.address}}</td>-->
-        <!--<td class="middle center">-->
-            <!--<mat-checkbox color="primary" [checked]="item.isActive" (change)="updateStatus(item)"></mat-checkbox>-->
-        <!--</td>-->
-        <!--<td class="text-right middle" *ngIf="permission.edit || permission.delete">-->
-            <!--<nh-dropdown>-->
-                <!--<button type="button" class="btn btn-sm btn-light btn-no-background no-border" matTooltip="Menu">-->
-                    <!--<mat-icon>more_horiz</mat-icon>-->
-                <!--</button>-->
-                <!--<ul class="nh-dropdown-menu right" role="menu">-->
-                    <!--<li>-->
-                        <!--<a *ngIf="permission.edit"-->
-                           <!--(click)="edit(item)" i18n="@@edit">-->
-                            <!--<i class="fa fa-edit"></i>-->
-                            <!--Sửa-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li>-->
-                        <!--<a (click)="confirm(item)" i18n="@@delete">-->
-                            <!--<i class="fa fa-trash"></i>-->
-                            <!--Xóa-->
-                        <!--</a>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</nh-dropdown>-->
-        <!--</td>-->
-    <!--</tr>-->
-    <!--</tbody>-->
-<!--</table>-->
 
 <dx-data-grid
     id="gridContainer"
@@ -146,7 +96,7 @@
         [pageName]="'Thương Hiệu'">
     </ghm-paging>
 </div>
-<app-product-brand-form (saveSuccessful)="search(1)"></app-product-brand-form>
+<app-product-brand-form (saveSuccessful)="search(currentPage)"></app-product-brand-form>
 
 <swal
     #confirmDeleteBrand

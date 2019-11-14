@@ -119,7 +119,7 @@ export class ProductCategoryComponent extends BaseListComponent<ProductCategoryS
     delete(id: number) {
         this.productCategoryService.delete(id)
             .subscribe(() => {
-                this.search(1);
+                this.search(this.currentPage);
                 // _.remove(this.listProductCategory, (item: ProductCategorySearchViewModel) => {
                 //     return item.id === id;
                 // });
