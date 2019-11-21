@@ -27,6 +27,7 @@ import { TreeTableModule } from 'primeng/primeng';
 import {FeedbackDetailComponent} from './feedback/feedback-detail/feedback-detail.component';
 import {FeedbackComponent} from './feedback/feedback.component';
 import {FeedbackService} from './feedback/feedback.service';
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
     imports: [
@@ -46,7 +47,7 @@ import {FeedbackService} from './feedback/feedback.service';
     exports: [CustomerComponent],
     declarations: [CustomerComponent, CustomerFormComponent,
         ContactPersonComponent, CustomerContactComponent, CustomerDetailComponent,
-        FeedbackDetailComponent, FeedbackComponent
+        FeedbackDetailComponent, FeedbackComponent, CommentComponent
     ],
     providers: [FeedbackService],
 })
