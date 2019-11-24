@@ -60,22 +60,6 @@
                     </div>
                 </div><!-- END: Product name -->
                 <div class="form-group">
-                    <div class="col-sm-12" *ngFor="let modelTranslation of translations.controls; index as i"
-                         [formGroupName]="i"
-                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
-                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
-                        <label class="control-label" ghmLabel="Địa chỉ" [required]="true"></label>
-                        <ghm-input
-                                formControlName="address"
-                                placeholder="Nhập nội dung"></ghm-input>
-                        <span class="help-block">
-                                {
-                                translationFormErrors[modelTranslation.value.languageId]?.address,
-                                select, required {Vui lòng nhập Địa chỉ.} maxlength {Địa chỉ không được vượt quá 1000 ký tự.}}
-                         </span>
-                    </div>
-                </div>
-                <div class="form-group">
                     <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.idCard">
                         <label class="control-label" ghmLabel="SỐ CMND"></label>
                         <input name="" class="form-control"
@@ -105,6 +89,22 @@
                                 translationFormErrors[modelTranslation.value.languageId]?.idCardAddress,
                                 select,  maxlength {Nơi cấp cmnd không được vượt quá 500 ký tự.}}
                             </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12" *ngFor="let modelTranslation of translations.controls; index as i"
+                         [formGroupName]="i"
+                         [hidden]="modelTranslation.value.languageId !== currentLanguage"
+                         [class.has-error]="translationFormErrors[modelTranslation.value.languageId]?.address">
+                        <label class="control-label" ghmLabel="Địa chỉ" [required]="true"></label>
+                        <ghm-input
+                                formControlName="address"
+                                placeholder="Nhập nội dung"></ghm-input>
+                        <span class="help-block">
+                                {
+                                translationFormErrors[modelTranslation.value.languageId]?.address,
+                                select, required {Vui lòng nhập Địa chỉ.} maxlength {Địa chỉ không được vượt quá 1000 ký tự.}}
+                         </span>
                     </div>
                 </div>
                 <div class="col-sm-12 center">
@@ -168,32 +168,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.length">
-                        <label class="control-label" ghmLabel="CHIỀU DÀI(M)"></label>
-                        <input name="" class="form-control"
-                               formControlName="length"
-                               placeholder="Nhập nội dung"/>
-                        <span class="help-block">{formErrors?.length, select,
-                            isValid {CHIỀU DÀI phải là số.}}</span>
-                    </div>
-                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.width">
-                        <label class="control-label" ghmLabel="CHIỀU RỘNG(M)"></label>
-                        <input name="" class="form-control"
-                               formControlName="width"
-                               placeholder="Nhập nội dung"/>
-                        <span class="help-block">{formErrors?.width, select,
-                            isValid {CHIỀU RỘNG phải là số.}}</span>
-                    </div>
-                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.height">
-                        <label class="control-label" ghmLabel="CHIỀU CAO(M)"></label>
-                        <input name="" class="form-control"
-                               formControlName="height"
-                               placeholder="Nhập nội dung"/>
-                        <span class="help-block">{formErrors?.height, select,
-                            isValid {CHIỀU CAO phải là số.}}</span>
-                    </div>
-                </div>
-                <div class="form-group">
                     <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.totalArea">
                         <label class="control-label" ghmLabel="TỔNG DIỆN TÍCH"></label>
                         <input name="" class="form-control"
@@ -243,6 +217,32 @@
                         </div>
                         <span class="help-block">{formErrors?.isActive, select,
                             required {Kích hoạt không được để trống.}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.length">
+                        <label class="control-label" ghmLabel="CHIỀU DÀI(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="length"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.length, select,
+                            isValid {CHIỀU DÀI phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.width">
+                        <label class="control-label" ghmLabel="CHIỀU RỘNG(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="width"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.width, select,
+                            isValid {CHIỀU RỘNG phải là số.}}</span>
+                    </div>
+                    <div class="col-sm-4" [formGroup]="model" [class.has-error]="formErrors?.height">
+                        <label class="control-label" ghmLabel="CHIỀU CAO(M)"></label>
+                        <input name="" class="form-control"
+                               formControlName="height"
+                               placeholder="Nhập nội dung"/>
+                        <span class="help-block">{formErrors?.height, select,
+                            isValid {CHIỀU CAO phải là số.}}</span>
                     </div>
                 </div>
                 <div class="form-group">

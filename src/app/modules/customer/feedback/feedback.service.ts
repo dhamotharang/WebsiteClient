@@ -52,6 +52,18 @@ export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
         })) as Observable<SearchResultViewModel<FeedbackSearchViewModel>>;
     }
 
+    searchComment(isShow?: boolean, page: number = 1,
+                  pageSize: number = this.appConfig.PAGE_SIZE): Observable<SearchResultViewModel<Comment>> {
+        const params = new HttpParams()
+            .set('isShow', isShow != null ? isShow.toString() : '')
+            .set('page', page ? page.toString() : '1')
+            .set('pageSize', pageSize ? pageSize.toString() : this.appConfig.PAGE_SIZE.toString());
+
+        return this.http.get(`${this.url}/comment`, {
+            params: params
+        }) as Observable<SearchResultViewModel<Comment>>;
+    }
+
     getDetail(id: string): Observable<ActionResultViewModel<FeedbackDetailViewModel>> {
         this.spinnerService.show();
         return this.http.get(`${this.url}/${id}`, {})
@@ -63,8 +75,27 @@ export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
         return this.http.post(`${this.url}/${id}`, resolved)
             .pipe(finalize(() => this.spinnerService.hide()),
                 map((result: ActionResultViewModel) => {
-                this.toastr.success(result.message);
-                return result;
-            })) as Observable<ActionResultViewModel>;
+                    this.toastr.success(result.message);
+                    return result;
+                })) as Observable<ActionResultViewModel>;
+    }
+
+    updateIsShowComment(id: number, isShow: boolean): Observable<ActionResultViewModel> {
+        this.spinnerService.show();
+        return this.http.post(`${this.url}/comment/is-show/${id}`, {
+            params: new HttpParams()
+                .set('isShow', isShow !== null ? isShow.toString() : '')
+        }).pipe(finalize(() => this.spinnerService.hide()),
+                map((result: ActionResultViewModel) => {
+                    this.toastr.success(result.message);
+                    return result;
+                })) as Observable<ActionResultViewModel>;
+    }
+
+    deleteComment(id: number): Observable<ActionResultViewModel> {
+        return this.http.delete(`${this.url}/comment/${id.toString()}`).pipe(map((result: ActionResultViewModel) => {
+            this.toastr.success(result.message);
+            return result;
+        })) as Observable<ActionResultViewModel>;
     }
 }

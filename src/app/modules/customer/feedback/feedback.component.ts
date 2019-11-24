@@ -94,7 +94,6 @@ export class FeedbackComponent extends BaseListComponent<FeedbackSearchViewModel
     }
 
     updateResolve(feedback: FeedbackSearchViewModel) {
-
         this.feedbackService.updateResolve(feedback.id, feedback);
     }
 

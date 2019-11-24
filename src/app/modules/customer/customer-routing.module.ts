@@ -4,6 +4,7 @@ import {CustomerComponent} from './customer.component';
 import {CustomerService} from './service/customer.service';
 import {FeedbackComponent} from './feedback/feedback.component';
 import {FeedbackService} from './feedback/feedback.service';
+import {CommentComponent} from './comment/comment.component';
 
 const routes: Routes = [
     {
@@ -18,6 +19,13 @@ const routes: Routes = [
         component: FeedbackComponent,
         resolve: {
              data: FeedbackService
+        }
+    },
+    {
+        path: 'comment',
+        component: CommentComponent,
+        resolve: {
+            data: FeedbackService
         }
     }
 ]

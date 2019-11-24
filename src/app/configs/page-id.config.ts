@@ -39,6 +39,7 @@ export interface IPageId {
     BANNER: number;
     FOLDER: number;
     FAQ: number;
+    COMMENT: number;
 
     // ----- PATIENT: 800 -----
     PATIENT: number;
@@ -108,6 +109,7 @@ export const PAGE_ID_DI: IPageId = {
     BANNER: 219,
     FOLDER: 217,
     FAQ: 231,
+    COMMENT: 233,
     // ----- PATIENT:  800 ------
     PATIENT: 800,
     CONFIG_JOB: 801,
