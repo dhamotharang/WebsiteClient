@@ -58,7 +58,7 @@ export const routes: Routes = [
     },
     {
         path: 'configs',
-        loadChildren:  './product-config/product-config.module#ProductConfigModule'
+        loadChildren:  () => import('./product-config/product-config.module').then(m => m.ProductConfigModule)
     },
 ];
 

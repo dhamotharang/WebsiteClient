@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
-import {BaseListComponent} from '../../../../base-list.component';
-import {Category} from '../../../news/category/models/category.model';
+import {BaseListComponent} from '../../../../../base-list.component';
+import {Category} from '../../../../news/category/models/category.model';
 import * as _ from 'lodash';
-import {CategoryProductService} from '../../services/category-product.service';
-import {ProductCategoryService} from '../service/product-category-service';
+import {CategoryProductService} from '../../../../product/services/category-product.service';
+import {ProductCategoryService} from '../../../../product/product-category/service/product-category-service';
 
 @Component({
   selector: 'app-product-category-select',

@@ -1,14 +1,14 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
-import {TreeData} from '../../../../view-model/tree-data';
-import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
-import {BaseListComponent} from '../../../../base-list.component';
-import {Products} from '../../model/products.model';
+import {TreeData} from '../../../../../view-model/tree-data';
+import {SearchResultViewModel} from '../../../../../shareds/view-models/search-result.viewmodel';
+import {BaseListComponent} from '../../../../../base-list.component';
+import {Products} from '../../../../product/model/products.model';
 import * as _ from 'lodash';
-import {ProductSearchForSelectViewModel} from '../../model/product-search-for-select.viewmodel';
-import {CategoryProductService} from '../../services/category-product.service';
-import {ProductService} from '../service/product.service';
-import {ProductCategoryService} from '../../product-category/service/product-category-service';
+import {ProductSearchForSelectViewModel} from '../../../../product/model/product-search-for-select.viewmodel';
+import {CategoryProductService} from '../../../../product/services/category-product.service';
+import {ProductService} from '../../../../product/product/service/product.service';
+import {ProductCategoryService} from '../../../../product/product-category/service/product-category-service';
 
 @Component({
     selector: 'app-product-select',

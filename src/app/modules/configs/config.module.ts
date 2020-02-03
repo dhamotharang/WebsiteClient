@@ -18,7 +18,6 @@ import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.mo
 import {PageFormComponent} from './page/page-form.component';
 import {ClientComponent} from './client/client.component';
 import {ClientFormComponent} from './client/client-form.component';
-import {LayoutModule} from '../../shareds/layouts/layout.module';
 import {ConfigComponent} from './config.component';
 import {TenantComponent} from './tenant/tenant.component';
 import {TenantFormComponent} from './tenant/tenant-form.component';
@@ -65,15 +64,16 @@ import {CoreValuesComponent} from './website/core-values/core-values.component';
 import {CoreValuesFormComponent} from './website/core-values/core-values-form/core-values-form.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
-import {ProductModule} from '../product/product.module';
 import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-user-picker.module';
+import {ProductSelectComponent} from './menus/choice-menu-item/product-select/product-select.component';
+import {ProductCategorySelectComponent} from './menus/choice-menu-item/product-category-select/product-category-select.component';
 
 @NgModule({
     imports: [
-        CommonModule, LayoutModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule, ProductModule,
+        CommonModule, ConfigRoutingModule, NhSelectModule, NhImageModule, TinymceModule,
         MatCheckboxModule, MatPaginatorModule, MatButtonModule, MatSlideToggleModule, DatetimeFormatModule, NhDateModule, NhDropdownModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmFileExplorerModule, GhmUserSuggestionModule,
-        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, ProductModule, DragDropModule, GhmSelectModule, NhUserPickerModule,
+        MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, DragDropModule, GhmSelectModule, NhUserPickerModule,
         GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
             buttonsStyling: false,
             customClass: 'modal-content',
@@ -90,7 +90,11 @@ import {NhUserPickerModule} from '../../shareds/components/nh-user-picker/nh-use
         LanguageComponent, UserSettingComponent, MenuFormComponent, MenuComponent, MenuItemComponent, WebsiteInfoComponent,
         SocialNetworkComponent, EmailComponent, EmailFormComponent, WebsiteComponent, BranchComponent, BranchFormComponent,
         BranchItemComponent, LanguageFormComponent, EmailTemplateComponent, EmailTemplateFormComponent, MenuItemFormComponent,
-        ApproverComponent, ChoiceMenuItemComponent, EmailTypeFormComponent, EmailTypeComponent, CoreValuesComponent, CoreValuesFormComponent
+        ApproverComponent, ChoiceMenuItemComponent, EmailTypeFormComponent, EmailTypeComponent, CoreValuesComponent, CoreValuesFormComponent,
+        ProductSelectComponent, ProductCategorySelectComponent
+    ],
+    entryComponents: [
+        ProductSelectComponent, ProductCategorySelectComponent
     ],
     providers: [],
 })

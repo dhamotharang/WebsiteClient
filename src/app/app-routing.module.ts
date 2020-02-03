@@ -1,13 +1,14 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from './shareds/services/auth-guard.service';
 import {LayoutComponent} from './shareds/layouts/layout.component';
 import {AppService} from './shareds/services/app.service';
+import {CustomPreloadingStrategyService} from './shareds/services/custom-preloading-strategy.service';
 
 const routes: Routes = [
     {
         path: 'login',
-        loadChildren: './auth/auth.module#AuthModule'
+        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
     },
     {
         path: '',
@@ -17,29 +18,32 @@ const routes: Routes = [
         },
         canActivate: [AuthGuardService],
         children: [
-            {path: 'customers', loadChildren: './modules/customer/customer.module#CustomerModule'},
-            {path: 'config', loadChildren: './modules/configs/config.module#ConfigModule'},
-            {path: 'error', loadChildren: './modules/error/error.module#ErrorModule'},
-            {path: 'notifications', loadChildren: './modules/notifications/notification.module#NotificationModule'},
-            {path: 'gallery', loadChildren: './modules/gallery/gallery.module#GalleryModule'},
-            {path: 'folders', loadChildren: './modules/folders/folder.module#FolderModule'},
-            {path: 'banners', loadChildren: './modules/banners/banner.module#BannerModule'},
-            {path: 'news', loadChildren: './modules/news/news.module#NewsModule'},
+            {path: 'customers', loadChildren: () => import('./modules/customer/customer.module').then(m => m.CustomerModule)},
+            {path: 'config', loadChildren: () => import('./modules/configs/config.module').then(m => m.ConfigModule)},
+            {path: 'error', loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule)},
+            {path: 'notifications', loadChildren: () => import('./modules/notifications/notification.module').then(m => m.NotificationModule)},
+            {path: 'gallery', loadChildren: () => import('./modules/gallery/gallery.module').then(m => m.GalleryModule)},
+            {path: 'folders', loadChildren: () => import('./modules/folders/folder.module').then(m => m.FolderModule)},
+            {path: 'banners', loadChildren: () => import('./modules/banners/banner.module').then(m => m.BannerModule)},
+            {path: 'news', loadChildren: () => import('./modules/news/news.module').then(m => m.NewsModule)},
             {
                 path: 'products',
-                loadChildren: './modules/product/product.module#ProductModule'},
-            {path: 'event', loadChildren: './modules/event/event.module#EventModule'},
-            {path: 'brand', loadChildren: './modules/brand/brand.module#BrandModule'},
-            {path: 'faq', loadChildren: './modules/faq/faq.module#FaqModule'},
-            {path: 'order', loadChildren: './modules/order/order.module#OrderModule'},
+                loadChildren: () => import('./modules/product/product.module').then(m => m.ProductModule)},
+            {path: 'event', loadChildren: () => import('./modules/event/event.module').then(m => m.EventModule)},
+            {path: 'brand', loadChildren: () => import('./modules/brand/brand.module').then(m => m.BrandModule)},
+            {path: 'faq', loadChildren: () => import('./modules/faq/faq.module').then(m => m.FaqModule)},
+            {path: 'order', loadChildren: () => import('./modules/order/order.module').then(m => m.OrderModule)},
         ]
     },
     {path: '', redirectTo: 'titles', pathMatch: 'full'},
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, {
+        preloadingStrategy: CustomPreloadingStrategyService
+    })],
+    exports: [RouterModule],
+    providers: [CustomPreloadingStrategyService]
 })
 export class AppRoutingModule {
 }

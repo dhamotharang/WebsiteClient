@@ -49,8 +49,8 @@ import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.mo
 import {NhModalModule} from '../../shareds/components/nh-modal/nh-modal.module';
 import {NhSelectModule} from '../../shareds/components/nh-select/nh-select.module';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
-import {ProductSelectComponent} from './product/product-select/product-select.component';
-import {ProductCategorySelectComponent} from './product-category/product-category-select/product-category-select.component';
+import {ProductSelectComponent} from '../configs/menus/choice-menu-item/product-select/product-select.component';
+import {ProductCategorySelectComponent} from '../configs/menus/choice-menu-item/product-category-select/product-category-select.component';
 import {NhSafeHtmlModeule} from '../../shareds/components/nh-safe-html/nh-safe-html.module';
 import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
 
@@ -72,11 +72,10 @@ import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
             cancelButtonText: 'Hủy bỏ'
         })],
     declarations: [ProductComponent, ProductAttributeComponent, ProductAttributeFormComponent, ProductAttributeValueComponent,
-        ProductAttributeValueFormComponent, ProductCategoryFormComponent, ProductCategoryComponent, ProductSelectComponent, ProductCategorySelectComponent,
+        ProductAttributeValueFormComponent, ProductCategoryFormComponent, ProductCategoryComponent,
         ProductAttributeDetailComponent, ProductFormComponent, ProductUnitComponent, ProductFormAttributeComponent, ProductDetailComponent,
         ProductAttributeSuggestionComponent, ProductAttributeValueSuggestionComponent],
     entryComponents: [ProductFormComponent, ProductDetailComponent],
-    exports: [ProductSelectComponent, ProductCategorySelectComponent],
     providers: [UnitService]
 })
 export class ProductModule {
