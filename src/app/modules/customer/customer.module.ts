@@ -8,7 +8,7 @@ import {
 import { NhModalModule } from '../../shareds/components/nh-modal/nh-modal.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GhmPagingModule } from '../../shareds/components/ghm-paging/ghm-paging.module';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NHTreeModule } from '../../shareds/components/nh-tree/nh-tree.module';
 import { NhImageModule } from '../../shareds/components/nh-image/nh-image.module';
 import { GhmSelectPickerModule } from '../../shareds/components/ghm-select-picker/ghm-select-picker.module';
@@ -23,26 +23,18 @@ import { CustomerContactComponent } from './customer-contact/customer-contact.co
 import { GhmUserSuggestionModule } from '../../shareds/components/ghm-user-suggestion/ghm-user-suggestion.module';
 import { CustomerDetailComponent } from './customer-detail/customer-detail.component';
 import { DatetimeFormatModule } from '../../shareds/pipe/datetime-format/datetime-format.module';
-import { TreeTableModule } from 'primeng/primeng';
 import {FeedbackDetailComponent} from './feedback/feedback-detail/feedback-detail.component';
 import {FeedbackComponent} from './feedback/feedback.component';
 import {FeedbackService} from './feedback/feedback.service';
 import { CommentComponent } from './comment/comment.component';
+import { TreeTableModule } from 'primeng';
 
 @NgModule({
     imports: [
         CommonModule, LayoutModule, CustomerRoutingModule, NhSelectModule, NhImageModule, DatetimeFormatModule,
         MatCheckboxModule, NhDateModule, TreeTableModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
-        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        })
+        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot()
     ],
     exports: [CustomerComponent],
     declarations: [CustomerComponent, CustomerFormComponent,

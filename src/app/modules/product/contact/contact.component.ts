@@ -21,8 +21,8 @@ import {ContactType} from '../../../shareds/constants/contact-type.const';
 })
 
 export class ContactComponent extends BaseListComponent<Contact> implements AfterViewInit {
-    @ViewChild(ContactFormComponent) contactForm: ContactFormComponent;
-    @ViewChild('confirmDeleteContact') confirmDeleteContact: SwalComponent;
+    @ViewChild(ContactFormComponent, {static: true}) contactForm: ContactFormComponent;
+    @ViewChild('confirmDeleteContact', {static: true}) confirmDeleteContact: SwalComponent;
     @Input() type = ContactType.supplier;
     @Input() listContact: Contact[];
     @Input() isUpdate: boolean;
@@ -108,7 +108,6 @@ export class ContactComponent extends BaseListComponent<Contact> implements Afte
 
     confirm(value: Contact) {
         this.contactId = value.id;
-        this.confirmDeleteContact.show();
     }
 
     rightClickContextMenu(e) {

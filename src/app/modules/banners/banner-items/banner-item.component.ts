@@ -14,7 +14,7 @@ import {BannerItemFormComponent} from './banner-item-form/banner-item-form.compo
     providers: [BannerService]
 })
 export class BannerItemComponent extends BaseListComponent<BannerItem> implements OnInit {
-    @ViewChild(BannerItemFormComponent) bannerItemFormComponent: BannerItemFormComponent;
+    @ViewChild(BannerItemFormComponent, {static: true}) bannerItemFormComponent: BannerItemFormComponent;
     @Input() listBannerItem: BannerItem[] = [];
     @Input() bannerId: string;
     @Output() onSelectListBannerItem = new EventEmitter<BannerItem[]>();

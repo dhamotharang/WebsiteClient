@@ -18,7 +18,7 @@ import {FilterLink} from '../../../shareds/models/filter-link.model';
 })
 
 export class BannerHistoryComponent extends BaseListComponent<BannerHistoryViewModel> implements OnInit {
-    @ViewChild('bannerHistoryFormModal') bannerHistoryFormModal: NhModalComponent;
+    @ViewChild('bannerHistoryFormModal', {static: true}) bannerHistoryFormModal: NhModalComponent;
 
     fromDate;
     toDate;

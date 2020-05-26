@@ -1,6 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {APP_CONFIG, IAppConfig} from '../../../../../configs/app.config';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {SearchResultViewModel} from '../../../../../shareds/view-models/search-result.viewmodel';
 import {Language} from '../model/language.model';
@@ -11,6 +11,7 @@ import {ActionResultViewModel} from '../../../../../shareds/view-models/action-r
 import {LanguageSearchViewModel} from '../viewmodel/language-search.viewmodel';
 import {environment} from '../../../../../../environments/environment';
 
+@Injectable()
 export class LanguageService {
     url = 'api/v1/core/languages';
 

@@ -15,7 +15,7 @@ import { DestroySubscribers } from '../../../decorator/destroy-subscribes.decora
 
 @DestroySubscribers()
 export class Admin1SidebarComponent implements OnInit, OnDestroy {
-    @ViewChild('sidebarElement') sidebarElement: ElementRef;
+    @ViewChild('sidebarElement', {static: true}) sidebarElement: ElementRef;
     sidebarItems: SidebarItem[];
     subscribers: any = {};
 

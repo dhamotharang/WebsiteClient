@@ -14,7 +14,7 @@ import {GhmFileExplorerModule} from '../../shareds/components/ghm-file-explorer/
 import {NhContextMenuModule} from '../../shareds/components/nh-context-menu/nh-context-menu.module';
 import {DatetimeFormatModule} from '../../shareds/pipe/datetime-format/datetime-format.module';
 import {FormatNumberModule} from '../../shareds/pipe/format-number/format-number.module';
-import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {BrandRoutingModule} from './brand-routing.module';
 import { AgencyListComponent } from './agency/agency-list/agency-list.component';
 import { AgencyFormComponent } from './agency/agency-form/agency-form.component';
@@ -31,13 +31,7 @@ import {NhDateModule} from '../../shareds/components/nh-datetime-picker/nh-date.
         DatetimeFormatModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule, NhDateModule,
         MatRadioModule, FormatNumberModule,  DxDataGridModule,  DxContextMenuModule, DxTemplateModule,
         MatRadioModule, NhSuggestionModule, GhmSettingDataGridModule, GhmSelectModule, GhmInputModule, DxCheckBoxModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            showCancelButton: true,
-        })
+        SweetAlert2Module.forRoot()
     ],
     declarations: [BrandComponent, BrandFormComponent, AgencyListComponent, AgencyFormComponent],
     entryComponents: [BrandFormComponent, AgencyFormComponent],

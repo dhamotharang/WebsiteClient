@@ -23,7 +23,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 })
 
 export class ContactFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('contactFormModal') contactFormModal: NhModalComponent;
+    @ViewChild('contactFormModal', {static: true}) contactFormModal: NhModalComponent;
     @Input() type: number;
     @Input() subjectId: string;
     @Input() listContact: Contact[];

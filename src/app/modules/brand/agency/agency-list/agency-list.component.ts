@@ -9,7 +9,7 @@ import {Location} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {AgencyService} from '../agency-service';
-import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {finalize} from 'rxjs/operators';
 import {FilterLink} from '../../../../shareds/models/filter-link.model';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
@@ -23,8 +23,8 @@ import {AgencyFormComponent} from '../agency-form/agency-form.component';
     providers: [HelperService]
 })
 export class AgencyListComponent extends BaseListComponent<AgencyViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDelete') swalConfirmDelete: SwalComponent;
-    @ViewChild(DynamicComponentHostDirective) dynamicComponentHostDirective: DynamicComponentHostDirective;
+    @ViewChild('confirmDelete', {static: true}) swalConfirmDelete: SwalComponent;
+    @ViewChild(DynamicComponentHostDirective, {static: true}) dynamicComponentHostDirective: DynamicComponentHostDirective;
     isActive: boolean;
     agencyId: string;
 
@@ -155,7 +155,6 @@ export class AgencyListComponent extends BaseListComponent<AgencyViewModel> impl
 
     confirm(value: AgencyViewModel) {
         this.agencyId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     changePageSize(value) {

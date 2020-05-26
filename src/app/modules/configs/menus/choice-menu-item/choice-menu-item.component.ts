@@ -7,7 +7,7 @@ import {SubjectType} from '../models/menu-item.model';
     templateUrl: './choice-menu-item.component.html'
 })
 export class ChoiceMenuItemComponent {
-    @ViewChild('choiceMenuItemModal') choiceMenuItemModal: NhModalComponent;
+    @ViewChild('choiceMenuItemModal', {static: true}) choiceMenuItemModal: NhModalComponent;
     @Output() acceptSelect = new EventEmitter();
     subjectType = SubjectType;
     type;

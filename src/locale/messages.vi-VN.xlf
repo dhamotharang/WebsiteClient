@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="Add">
+        <source>Add</source>
+        <target>Thêm</target>
+      </trans-unit>
+      <trans-unit id="add">
+          <source>Add</source>
+          <target>Thêm</target>
+      </trans-unit>
+      <trans-unit id="Save">
+        <source>Save</source>
+        <target>Sửa</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

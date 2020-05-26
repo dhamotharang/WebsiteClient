@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 })
 
 export class EmailTypeComponent extends BaseListComponent<EmailType> implements OnInit {
-    @ViewChild(EmailTypeFormComponent) emailTypeFormComponent: EmailTypeFormComponent;
+    @ViewChild(EmailTypeFormComponent, {static: true}) emailTypeFormComponent: EmailTypeFormComponent;
     listEmailType: EmailType[];
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,

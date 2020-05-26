@@ -1,6 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Branch} from './model/branch.model';
 import {Observable} from 'rxjs';
@@ -12,6 +12,7 @@ import {SpinnerService} from '../../../../core/spinner/spinner.service';
 import {BranchDetailViewModel} from './viewmodel/branch-detail.viewmodel';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class BranchService {
     url = 'api/v1/website/branchs/';
 

@@ -4,7 +4,7 @@ import { CategoryListComponent } from './category/category-list/category-list.co
 import { CommonModule } from '@angular/common';
 import { NewsRoutingModule } from './news-routing.module';
 import { GhmPagingModule } from '../../shareds/components/ghm-paging/ghm-paging.module';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NHTreeModule } from '../../shareds/components/nh-tree/nh-tree.module';
 import { NhModalModule } from '../../shareds/components/nh-modal/nh-modal.module';
@@ -37,15 +37,7 @@ import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.mo
         NHTreeModule, NhModalModule, GhmUserSuggestionModule, NhTagModule, TinymceModule, NhSafeHtmlModeule, GhmFileExplorerModule,
         NhSelectModule, CoreModule, MatCheckboxModule, GhmDraggableModule, NhDateModule, MatTooltipModule, GhmSelectModule,
         DatetimeFormatModule, NhDropdownModule, MatIconModule, NhContextMenuModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            // confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            // cancelButtonText: 'Hủy bỏ'
-        })],
+        SweetAlert2Module.forRoot()],
     exports: [SelectNewComponent, SelectCategoryComponent],
     declarations: [CategoryFormComponent, CategoryListComponent, NewsComponent, NewsFormComponent,
         NewViewHistoryComponent, NewDetailComponent, NewCommentComponent, NewSeoComponent, SelectNewComponent, SelectCategoryComponent],

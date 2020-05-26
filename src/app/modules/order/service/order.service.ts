@@ -3,7 +3,7 @@ import {map} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
 import {Observable} from 'rxjs';
 import {ActivatedRouteSnapshot} from '@angular/router';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {finalize} from 'rxjs/internal/operators';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
@@ -15,6 +15,7 @@ import {ActionResultViewModel} from '../../../shareds/view-models/action-result.
 import {Order} from '../model/order.model';
 import {OrderDetailViewModel} from '../viewmodel/order-detail.viewmodel';
 
+@Injectable()
 export class OrderService {
     url = 'api/v1/warehouse/orders';
 

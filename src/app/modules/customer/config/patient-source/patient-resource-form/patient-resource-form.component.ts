@@ -31,7 +31,7 @@ import {NumberValidator} from '../../../../../validators/number.validator';
 })
 
 export class PatientResourceFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('patientSourceFormModal') patientSourceFormModal: NhModalComponent;
+    @ViewChild('patientSourceFormModal', {static: true}) patientSourceFormModal: NhModalComponent;
     @Input() elementId: string;
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onCloseForm = new EventEmitter<any>();

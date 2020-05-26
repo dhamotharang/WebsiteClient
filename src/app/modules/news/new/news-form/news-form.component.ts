@@ -44,7 +44,7 @@ declare var tinyMCE;
 })
 
 export class NewsFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild('newsFormModal') newsFormModal: NhModalComponent;
+    @ViewChild('newsFormModal', {static: true}) newsFormModal: NhModalComponent;
     @ViewChildren(TinymceComponent) eventContentEditors: QueryList<TinymceComponent>;
     @Output() onSaveSuccess = new EventEmitter();
     news = new News();

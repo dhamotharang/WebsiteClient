@@ -22,8 +22,8 @@ import {VideoComponent} from '../../videos/video.component';
     styleUrls: ['../album.component.scss']
 })
 export class AlbumFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('editPhotoModal') editPhotoModal: NhModalComponent;
-    @ViewChild(VideoComponent) videoComponent: VideoComponent;
+    @ViewChild('editPhotoModal', {static: true}) editPhotoModal: NhModalComponent;
+    @ViewChild(VideoComponent, {static: true}) videoComponent: VideoComponent;
     album = new Album();
     photo = new Photo();
     translation = new AlbumTranslation();

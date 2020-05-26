@@ -11,7 +11,7 @@ import {VideoType} from '../models/video.model';
 })
 
 export class VideoDetailComponent {
-    @ViewChild('videoDetailModal') videoDetail: NhModalComponent;
+    @ViewChild('videoDetailModal', {static: true}) videoDetail: NhModalComponent;
     url;
 
     constructor(private videoService: VideoService,

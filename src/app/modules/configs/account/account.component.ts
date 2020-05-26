@@ -17,7 +17,7 @@ import { ActionResultViewModel } from '../../../shareds/view-models/action-resul
 })
 
 export class AccountComponent extends BaseListComponent<AccountViewModel> implements OnInit {
-    @ViewChild(AccountFormComponent) accountFormComponent: AccountFormComponent;
+    @ViewChild(AccountFormComponent, {static: true}) accountFormComponent: AccountFormComponent;
     isActive: boolean;
 
     constructor(

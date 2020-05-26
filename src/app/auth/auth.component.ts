@@ -37,12 +37,12 @@ export class AuthComponent implements OnInit, AfterViewInit, OnDestroy {
     subscribers: any = {};
 
     @ViewChild('alertSignin',
-        {read: ViewContainerRef}) alertSignin: ViewContainerRef;
+        { read: ViewContainerRef }) alertSignin: ViewContainerRef;
     @ViewChild('alertSignup',
-        {read: ViewContainerRef}) alertSignup: ViewContainerRef;
+        { read: ViewContainerRef }) alertSignup: ViewContainerRef;
     @ViewChild('alertForgotPass',
-        {read: ViewContainerRef}) alertForgotPass: ViewContainerRef;
-    @ViewChild('loginWrapper') loginWrapper: ElementRef;
+        { read: ViewContainerRef }) alertForgotPass: ViewContainerRef;
+    @ViewChild('loginWrapper', {static: true}) loginWrapper: ElementRef;
 
     constructor(private router: Router,
                 private _script: ScriptLoaderService,

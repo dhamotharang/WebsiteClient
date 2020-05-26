@@ -25,8 +25,8 @@ import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
     providers: [HelperService]
 })
 export class BrandComponent extends BaseListComponent<BrandSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(BrandFormComponent ) brandFormComponent: BrandFormComponent;
-    @ViewChild('confirmDeleteBrand') swalConfirmDelete: SwalComponent;
+    @ViewChild(BrandFormComponent, {static: true}) brandFormComponent: BrandFormComponent;
+    @ViewChild('confirmDeleteBrand', {static: true}) swalConfirmDelete: SwalComponent;
     isActive;
     listBrand: BrandSearchViewModel[];
     brandId;
@@ -126,7 +126,6 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
 
     confirm(value: BrandSearchViewModel) {
         this.brandId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     changePageSize(value) {

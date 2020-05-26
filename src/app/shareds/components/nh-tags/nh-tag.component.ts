@@ -1,16 +1,4 @@
-import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    EventEmitter,
-    HostListener,
-    Inject,
-    Input,
-    OnInit,
-    Output,
-    Renderer,
-    ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Inject, Input, OnInit, Output, ViewChild, Renderer2 } from '@angular/core';
 import {Subject} from 'rxjs';
 import * as _ from 'lodash';
 import {Tag} from './tag.model';
@@ -29,7 +17,7 @@ import {environment} from '../../../../environments/environment';
 })
 
 export class NhTagComponent implements OnInit, AfterViewInit {
-    @ViewChild('tagInput') tagInput: ElementRef;
+    @ViewChild('tagInput', {static: true}) tagInput: ElementRef;
     @Input() url = 'tag/search-tag';
     @Input() urlAbsolute = ``;
     @Input() placeholder = 'Nhập tag';
@@ -69,7 +57,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private el: ElementRef,
-                private renderer: Renderer,
+                private renderer: Renderer2,
                 private nhTagService: TagService,
                 private toastr: ToastrService) {
         this.urlAbsolute = `${appConfig.CORE_API_URL}tags/`;
@@ -86,7 +74,7 @@ export class NhTagComponent implements OnInit, AfterViewInit {
                     this.isSearching = false;
                 })).subscribe((result: SearchResultViewModel<Tag>) => {
                 setTimeout(() => {
-                    this.renderer.invokeElementMethod(this.tagInput.nativeElement, 'focus');
+                    this.tagInput.nativeElement.focus();
                 }, 100);
                 this.isSearching = false;
                 if (result.totalRows <= 0) {

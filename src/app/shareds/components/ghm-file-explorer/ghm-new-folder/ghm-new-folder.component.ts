@@ -12,7 +12,7 @@ import { ActionResultViewModel } from '../../../view-models/action-result.viewmo
     styleUrls: ['./ghm-new-folder.component.css']
 })
 export class GhmNewFolderComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('folderFormModal') folderFormModal: NhModalComponent;
+    @ViewChild('folderFormModal', {static: true}) folderFormModal: NhModalComponent;
 
     @Input() parentId?: number;
     name: string;

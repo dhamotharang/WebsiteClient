@@ -9,7 +9,7 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
     templateUrl: './feedback-detail.component.html'
 })
 export class FeedbackDetailComponent {
-    @ViewChild('feedbackDetailModal') feedbackDetailModal: NhModalComponent;
+    @ViewChild('feedbackDetailModal', {static: true}) feedbackDetailModal: NhModalComponent;
     feedbackDetail: FeedbackDetailViewModel;
     @Output() saveSuccessfully = new EventEmitter();
     constructor(private feedbackService: FeedbackService) {

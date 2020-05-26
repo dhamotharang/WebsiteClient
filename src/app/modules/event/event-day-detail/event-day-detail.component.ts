@@ -10,7 +10,7 @@ import { EventService } from '../event.service';
 })
 
 export class EventDayDetailComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('eventDayDetailModal') eventDayDetailModal: NhModalComponent;
+    @ViewChild('eventDayDetailModal', {static: true}) eventDayDetailModal: NhModalComponent;
     @Input() eventId: string;
 
     eventDayDetail: EventDay;

@@ -91,7 +91,7 @@
                    i18n="@@edit"
                    (click)="edit(cell.data)">
                 </a>
-                <a *ngIf="permission.delete" class="text-decoration-none dx-icon-remove color-red"
+                <a *ngIf="permission.delete" [swal]="confirmDeleteProductCategory" class="text-decoration-none dx-icon-remove color-red"
                    (click)="confirm(cell.data)" i18n="@@delete">
                 </a>
             </div>

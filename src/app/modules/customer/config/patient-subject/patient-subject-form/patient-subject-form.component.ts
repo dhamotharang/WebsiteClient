@@ -32,7 +32,7 @@ import {PatientSubjectDetailViewModel} from '../models/patient-subject-detail.vi
 })
 
 export class PatientSubjectFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('patientSubjectFormModal') patientSubjectFormModal: NhModalComponent;
+    @ViewChild('patientSubjectFormModal', {static: true}) patientSubjectFormModal: NhModalComponent;
     @Input() elementId: string;
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onCloseForm = new EventEmitter<any>();

@@ -18,7 +18,7 @@ import {SearchNewViewModel} from '../viewmodel/searchNewViewModel';
 import {TreeData} from '../../../../view-model/tree-data';
 import {CategoryService} from '../../category/category.service';
 import {ChangeNewsStatus} from '../model/newStatus.model';
-import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
     selector: 'app-news',
@@ -28,7 +28,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 })
 
 export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDeleteNews') swalConfirmDelete: SwalComponent;
+    @ViewChild('confirmDeleteNews', {static: true}) swalConfirmDelete: SwalComponent;
     creatorId; // Id người tạo
     status; // Trạng thái phê duyệt
     height;
@@ -269,7 +269,6 @@ export class NewsComponent extends BaseListComponent<NewsSearchViewModel> implem
 
     confirm(value: NewsSearchViewModel) {
         this.newsId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     updateIsHot(news: NewsSearchViewModel) {

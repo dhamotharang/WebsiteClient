@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatCheckboxModule, MatIconModule, MatTooltipModule} from '@angular/material';
 import {DxCheckBoxModule, DxContextMenuModule, DxDataGridModule, DxTemplateModule, DxTreeListModule} from 'devextreme-angular';
-import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {SupplierFormComponent} from '../supplier/supplier-form/supplier-form.component';
 import {ContactComponent} from '../contact/contact.component';
 import {SupplierComponent} from '../supplier/supplier.component';
@@ -57,13 +57,7 @@ export const routes: Routes = [{
         NHTreeModule, NhSelectModule, MatIconModule, NhModalModule, GhmPagingModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, DxTreeListModule,
         GhmInputModule, GhmSelectModule, NhSuggestionModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            showCancelButton: true,
-        })
+        SweetAlert2Module.forRoot()
     ],
     declarations: [SupplierFormComponent, UnitComponent, UnitFormComponent,
         SupplierComponent, ContactComponent, ContactFormComponent, BrandComponent, BrandFormComponent, SupplierSuggestionComponent,

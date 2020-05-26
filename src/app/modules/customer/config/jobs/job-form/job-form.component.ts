@@ -30,7 +30,7 @@ import { ActionResultViewModel } from '../../../../../shareds/view-models/action
 })
 
 export class JobFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('jobFormModal') jobFormModal: NhModalComponent;
+    @ViewChild('jobFormModal', {static: true}) jobFormModal: NhModalComponent;
     @Input() elementId: string;
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onCloseForm = new EventEmitter<any>();

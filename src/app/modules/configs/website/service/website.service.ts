@@ -1,5 +1,5 @@
 import { APP_CONFIG, IAppConfig } from '../../../../configs/app.config';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { WebsiteInfo } from '../model/website-info.model';
 import { Observable } from 'rxjs';
@@ -11,6 +11,7 @@ import { SearchResultViewModel } from '../../../../shareds/view-models/search-re
 import { SpinnerService } from '../../../../core/spinner/spinner.service';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class WebsiteService {
     url = 'api/v1/website/settings/';
 

@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import {ProductService} from './service/product.service';
 import {TreeData} from '../../../view-model/tree-data';
 import {ProductCategoryService} from '../product-category/service/product-category-service';
-import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {SwalComponent, SweetAlert2LoaderService} from '@sweetalert2/ngx-sweetalert2';
 import {ProductResultViewModel} from './viewmodel/product-result.viewmodel';
 import {NHDropdownTreeComponent} from '../../../shareds/components/nh-tree/nh-dropdown-tree.component';
 import {ProductFormComponent} from './product-form/product-form.component';
@@ -34,9 +34,9 @@ import {ProductAttributeService} from '../product-attribute/product-attribute.se
     providers: [HelperService]
 })
 export class ProductComponent extends BaseListComponent<ProductSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDeleteProduct') swalConfirmDelete: SwalComponent;
-    @ViewChild(NHDropdownTreeComponent) nHDropdownTreeComponent: NHDropdownTreeComponent;
-    @ViewChild(DynamicComponentHostDirective) dynamicComponentHostDirective: DynamicComponentHostDirective;
+    @ViewChild('confirmDeleteProduct', {static: true}) private swalConfirmDelete: SwalComponent;
+    @ViewChild(NHDropdownTreeComponent, {static: true}) nHDropdownTreeComponent: NHDropdownTreeComponent;
+    @ViewChild(DynamicComponentHostDirective, {static: true}) dynamicComponentHostDirective: DynamicComponentHostDirective;
     isActive;
     categoryId;
     isManagementByLot;
@@ -62,6 +62,7 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
                 private productService: ProductService,
                 private productAttributeService: ProductAttributeService,
                 private helperService: HelperService,
+                private readonly sweetAlert2Loader: SweetAlert2LoaderService,
                 private utilService: UtilService) {
         super();
     }
@@ -202,7 +203,6 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
                 // });
             });
     }
-
     updateStatus(item: ProductResultViewModel) {
         this.productService.updateStatus(item.id, !item.isActive).subscribe((result: ActionResultViewModel) => {
             item.isActive = !item.isActive;
@@ -231,7 +231,6 @@ export class ProductComponent extends BaseListComponent<ProductSearchViewModel> 
 
     confirm(value: ProductResultViewModel) {
         this.productId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     rightClickContextMenu(e) {

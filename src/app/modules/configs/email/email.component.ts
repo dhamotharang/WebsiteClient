@@ -23,9 +23,9 @@ import {EmailDetailViewModel} from './viewmodel/email-detail.viewmodel';
     providers: [EmailService]
 })
 export class EmailComponent extends BaseListComponent<EmailSearchViewModel> implements OnInit {
-    @ViewChild(EmailFormComponent) emailFormComponent: EmailFormComponent;
-    @ViewChild(EmailTemplateComponent) emailTemplateComponent: EmailTemplateComponent;
-    @ViewChild(EmailTypeComponent) emailTypeComponent: EmailTypeComponent;
+    @ViewChild(EmailFormComponent, {static: true}) emailFormComponent: EmailFormComponent;
+    @ViewChild(EmailTemplateComponent, {static: true}) emailTemplateComponent: EmailTemplateComponent;
+    @ViewChild(EmailTypeComponent, {static: true}) emailTypeComponent: EmailTypeComponent;
     listEmail;
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,

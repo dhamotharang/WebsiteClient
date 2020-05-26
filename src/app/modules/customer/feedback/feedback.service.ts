@@ -6,13 +6,14 @@ import {ActionResultViewModel} from '../../../shareds/view-models/action-result.
 import {finalize} from 'rxjs/internal/operators';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {Observable} from 'rxjs';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {FeedbackDetailViewModel} from './viewmodel/feedback-detail.viewmodel';
 import {SearchResultViewModel} from '../../../shareds/view-models/search-result.viewmodel';
 import {environment} from '../../../../environments/environment';
 
+@Injectable()
 export class FeedbackService implements Resolve<FeedbackSearchViewModel> {
     url = 'api/v1/website/feedBacks';
 

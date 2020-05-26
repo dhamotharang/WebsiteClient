@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ProductSearchViewModel } from '../viewmodel/product-search.viewmodel';
 import { Product } from '../model/product.model';
 import { ProductDetailViewModel } from '../viewmodel/product-detail.viewmodel';
@@ -22,6 +22,7 @@ import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {ProductSearchForSelectViewModel} from '../../model/product-search-for-select.viewmodel';
 import {AppService} from '../../../../shareds/services/app.service';
 
+@Injectable()
 export class ProductService {
     url = 'api/v1/warehouse/products-management';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,

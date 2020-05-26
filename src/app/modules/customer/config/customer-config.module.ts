@@ -7,7 +7,7 @@ import { NhModalModule } from '../../../shareds/components/nh-modal/nh-modal.mod
 import { NhSelectModule } from '../../../shareds/components/nh-select/nh-select.module';
 import { NHTreeModule } from '../../../shareds/components/nh-tree/nh-tree.module';
 import { GhmPagingModule } from '../../../shareds/components/ghm-paging/ghm-paging.module';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CustomerConfigRoutingModule } from './customer-config-routing.module';
 import { JobComponent } from './jobs/job.component';
 import { JobFormComponent } from './jobs/job-form/job-form.component';
@@ -22,15 +22,7 @@ import { TreeTableModule, SharedModule } from 'primeng/primeng';
         FormsModule, CommonModule, CustomerConfigRoutingModule, MatButtonModule, MatCheckboxModule, TreeTableModule, SharedModule,
         NHTreeModule, NhSelectModule, ReactiveFormsModule, FormsModule, CoreModule, NhModalModule,
         MatButtonModule, MatIconModule, GhmPagingModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        }),
+        SweetAlert2Module.forRoot(),
     ],
     declarations: [
         JobComponent, JobFormComponent, PatientResourceComponent, PatientResourceFormComponent,

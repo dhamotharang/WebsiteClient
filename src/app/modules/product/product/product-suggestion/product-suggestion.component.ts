@@ -13,7 +13,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
     templateUrl: './product-suggestion.component.html'
 })
 export class ProductSuggestionComponent extends BaseListComponent<any> implements OnInit {
-    @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
+    @ViewChild(NhSuggestionComponent, {static: true}) nhSuggestionComponent: NhSuggestionComponent;
     @Input() multiple = false;
     @Input() isReceipt = false;
     @Input() selectedItem;

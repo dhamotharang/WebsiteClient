@@ -19,8 +19,8 @@ import * as _ from 'lodash';
 })
 
 export class EventRegisterListComponent extends BaseListComponent<EventRegisterListViewModel> implements OnInit {
-    @ViewChild(EventRegisterComponent) eventRegisterComponent: EventRegisterComponent;
-    @ViewChild(EventRegisterDetailComponent) eventRegisterDetailComponent: EventRegisterDetailComponent;
+    @ViewChild(EventRegisterComponent, {static: true}) eventRegisterComponent: EventRegisterComponent;
+    @ViewChild(EventRegisterDetailComponent, {static: true}) eventRegisterDetailComponent: EventRegisterDetailComponent;
     eventId: string;
     statusSearch: number;
     status = EventRegisterStatus;

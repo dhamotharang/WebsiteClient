@@ -46,11 +46,11 @@ declare var tinyMCE;
 })
 
 export class ProductFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild(ProductUnitComponent) productUnitComponent: ProductUnitComponent;
-    @ViewChild(ProductFormAttributeComponent) productAttributeComponent: ProductFormAttributeComponent;
-    @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
+    @ViewChild(ProductUnitComponent, {static: true}) productUnitComponent: ProductUnitComponent;
+    @ViewChild(ProductFormAttributeComponent, {static: true}) productAttributeComponent: ProductFormAttributeComponent;
+    @ViewChild(NhTabComponent, {static: true}) nhTabComponent: NhTabComponent;
     @ViewChildren(TinymceComponent) eventContentEditors: QueryList<TinymceComponent>;
-    @ViewChild('productFormModal') productFormModal: NhModalComponent;
+    @ViewChild('productFormModal', {static: true}) productFormModal: NhModalComponent;
     product = new Product();
     categoryTree: TreeData[];
     categoryText;

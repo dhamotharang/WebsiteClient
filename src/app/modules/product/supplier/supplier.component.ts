@@ -25,9 +25,9 @@ import {FilterLink} from '../../../shareds/models/filter-link.model';
 })
 
 export class SupplierComponent extends BaseListComponent<SupplierSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(SupplierFormComponent ) supplierFormComponent: SupplierFormComponent;
-    @ViewChild(SupplierDetailComponent) supplierDetailComponent: SupplierDetailComponent;
-    @ViewChild('confirmDeleteSupplier') swalConfirmDelete: SwalComponent;
+    @ViewChild(SupplierFormComponent, {static: true}) supplierFormComponent: SupplierFormComponent;
+    @ViewChild(SupplierDetailComponent, {static: true}) supplierDetailComponent: SupplierDetailComponent;
+    @ViewChild('confirmDeleteSupplier', {static: true}) swalConfirmDelete: SwalComponent;
     isActive;
     address;
     listSupplier: SupplierSearchViewModel[];
@@ -137,7 +137,6 @@ export class SupplierComponent extends BaseListComponent<SupplierSearchViewModel
 
     confirm(value: SupplierSearchViewModel) {
         this.supplierId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     changePageSize(value) {

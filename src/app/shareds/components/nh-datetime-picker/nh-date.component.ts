@@ -63,9 +63,9 @@ export interface NhDateEvent {
     encapsulation: ViewEncapsulation.None
 })
 export class NhDateComponent implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
-    @ViewChild('datePickerTemplate') datePickerTemplate: TemplateRef<any>;
-    @ViewChild('nhDateInputElement') nhDateInputElement: ElementRef;
-    @ViewChild('dateBox') dateBoxElement: ElementRef;
+    @ViewChild('datePickerTemplate', {static: true}) datePickerTemplate: TemplateRef<any>;
+    @ViewChild('nhDateInputElement', {static: true}) nhDateInputElement: ElementRef;
+    @ViewChild('dateBox', {static: true}) dateBoxElement: ElementRef;
     @Input() themeColor: 'dark' | 'blue' | 'white' | 'green' = 'green';
     @Input() disabled = false;
     @Input() material = false;
@@ -217,7 +217,7 @@ export class NhDateComponent implements OnInit, AfterViewInit, OnDestroy, Contro
         return this._seconds;
     }
 
-    @ViewChild('dateWrapper') dateWrapper: ElementRef;
+    @ViewChild('dateWrapper', {static: true}) dateWrapper: ElementRef;
 
     @Input()
     set locale(value: string) {

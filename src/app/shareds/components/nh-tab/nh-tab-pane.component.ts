@@ -37,9 +37,7 @@ export class NhTabPaneComponent implements OnInit, AfterViewInit {
     private _id: any;
     private isActive: boolean;
     private isShow = true;
-    @ViewChild(NhTabHostDirective) tabHostDirective: NhTabHostDirective;
-
-    @ViewChild(NhTabTitleDirective)
+    @ViewChild(NhTabHostDirective, {static: true}) tabHostDirective: NhTabHostDirective;
     @Input() id: string;
     @Input() title: string;
 

@@ -13,7 +13,7 @@ import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../core/spinner/spinner.service';
 import {environment} from '../../../environments/environment';
 
-declare var signalR: any;
+import * as signalR from '@aspnet/signalr';
 
 @Injectable()
 export class NotificationService {
@@ -35,6 +35,7 @@ export class NotificationService {
         const self = this;
         if (this.authService.token) {
             this.connection = new signalR.HubConnectionBuilder()
+                .configureLogging(signalR.LogLevel.Information)
                 .withUrl(`${environment.notificationUrl}/notifications?token=${this.authService.token}`)
                 .build();
 

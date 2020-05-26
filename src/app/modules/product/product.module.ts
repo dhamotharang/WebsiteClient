@@ -62,15 +62,7 @@ import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
         GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule, NhSuggestionModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, DxTreeListModule, GhmSettingDataGridModule,
         NhImageViewerModule, MatExpansionModule, DxNumberBoxModule, ProductConfigModule, DxHtmlEditorModule, NhSafeHtmlModeule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary cm-mgr-5',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        })],
+        SweetAlert2Module.forRoot()],
     declarations: [ProductComponent, ProductAttributeComponent, ProductAttributeFormComponent, ProductAttributeValueComponent,
         ProductAttributeValueFormComponent, ProductCategoryFormComponent, ProductCategoryComponent,
         ProductAttributeDetailComponent, ProductFormComponent, ProductUnitComponent, ProductFormAttributeComponent, ProductDetailComponent,

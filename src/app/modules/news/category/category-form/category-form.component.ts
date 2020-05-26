@@ -17,7 +17,7 @@ import {NumberValidator} from '../../../../validators/number.validator';
     styleUrls: ['./category-form.component.css']
 })
 export class CategoryFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild(NhModalComponent) categoryFormModal: NhModalComponent;
+    @ViewChild(NhModalComponent, {static: true}) categoryFormModal: NhModalComponent;
     category = new Category();
     modelTranslation = new CategoryTranslation();
     categoryTreeData: TreeData[] = [];

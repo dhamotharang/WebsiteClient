@@ -27,8 +27,8 @@ import {environment} from '../../../../environments/environment';
 })
 
 export class ProductCategoryComponent extends BaseListComponent<ProductCategorySearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(ProductCategoryFormComponent ) productCategoryFormComponent: ProductCategoryFormComponent;
-    @ViewChild('confirmDeleteProductCategory') swalConfirmDelete: SwalComponent;
+    @ViewChild(ProductCategoryFormComponent , {static: true}) productCategoryFormComponent: ProductCategoryFormComponent;
+    @ViewChild('confirmDeleteProductCategory', {static: true}) swalConfirmDelete: SwalComponent;
     isActive;
     listProductCategory: ProductCategorySearchViewModel[];
     productCategoryId;
@@ -154,7 +154,6 @@ export class ProductCategoryComponent extends BaseListComponent<ProductCategoryS
     }
 
     confirm(value: ProductCategorySearchViewModel) {
-        this.swalConfirmDelete.show();
         this.productCategoryId = value.id;
     }
 

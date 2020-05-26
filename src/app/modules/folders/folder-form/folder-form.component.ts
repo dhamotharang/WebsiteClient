@@ -16,7 +16,7 @@ import {finalize} from 'rxjs/operators';
 })
 
 export class FolderFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('folderFormModal') folderFormModal: NhModalComponent;
+    @ViewChild('folderFormModal', {static: true}) folderFormModal: NhModalComponent;
     @Input() elementId: string;
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onCloseForm = new EventEmitter<any>();

@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {BaseListComponent} from '../../../../base-list.component';
 import {BranchSearchViewModel} from './viewmodel/branch-search.viewmodel';
 import {BranchService} from './branch.service';
@@ -13,12 +13,12 @@ import {BranchFormComponent} from './branch-form/branch-form.component';
 })
 
 export class BranchComponent extends BaseListComponent<BranchSearchViewModel> {
-    @ViewChild(BranchFormComponent) branchFormComponent: BranchFormComponent;
+    @ViewChild(BranchFormComponent, {static: false}) branchFormComponent: BranchFormComponent;
     listBranch;
     isShowForm;
     branchId;
 
-    constructor(private  branchService: BranchService) {
+    constructor(private  branchService: BranchService, private cdk: ChangeDetectorRef) {
         super();
     }
 
@@ -39,10 +39,10 @@ export class BranchComponent extends BaseListComponent<BranchSearchViewModel> {
     edit(id: string) {
         this.branchId = id;
         this.isShowForm = true;
+        this.cdk.detectChanges();
         setTimeout(() => {
-            console.log(this.branchFormComponent);
             this.branchFormComponent.edit(id);
-        }, 100);
+        }, 500);
     }
 
     delete(id: string) {

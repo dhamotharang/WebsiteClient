@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 })
 
 export class SliderImageComponent implements AfterViewInit {
-    @ViewChild('sliderImageModal') sliderImageModal: NhModalComponent;
+    @ViewChild('sliderImageModal', {static: true}) sliderImageModal: NhModalComponent;
     imageSelect: FileSearchViewModel;
     listImage: FileSearchViewModel[];
     isEnablePrevious;

@@ -20,7 +20,7 @@ import {EmailTemplateDetailViewModel} from '../viewmodel/email-template-detail.v
 })
 
 export class EmailTemplateFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('emailTemplateFormModal') emailTemplateFormModal: NhModalComponent;
+    @ViewChild('emailTemplateFormModal', {static: true}) emailTemplateFormModal: NhModalComponent;
     @Output() onSaveSuccess = new EventEmitter();
 
     emailTemplate = new EmailTemplate();

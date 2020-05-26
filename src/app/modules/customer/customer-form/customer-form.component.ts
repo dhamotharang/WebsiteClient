@@ -34,7 +34,7 @@ import {Gender, UserContact} from '../model/customer-contact.model';
 })
 
 export class CustomerFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('customerModal') customerModal: NhModalComponent;
+    @ViewChild('customerModal', {static: true}) customerModal: NhModalComponent;
     @Input() elementId: string;
     @Output() onEditorKeyup = new EventEmitter<any>();
     @Output() onCloseForm = new EventEmitter<any>();

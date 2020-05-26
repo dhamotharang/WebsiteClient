@@ -17,7 +17,7 @@ import {BaseListComponent} from '../../../base-list.component';
 })
 
 export class RoleComponent extends BaseListComponent<Role> implements OnInit {
-    @ViewChild(RoleDetailComponent) roleDetailComponent: RoleDetailComponent;
+    @ViewChild(RoleDetailComponent, {static: true}) roleDetailComponent: RoleDetailComponent;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 private route: ActivatedRoute,

@@ -18,7 +18,7 @@ import {TinymceComponent} from '../../../shareds/components/tinymce/tinymce.comp
     providers: [NumberValidator]
 })
 export class EventDayFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('eventDayFormModal') eventDayFormModal: NhModalComponent;
+    @ViewChild('eventDayFormModal', {static: true}) eventDayFormModal: NhModalComponent;
     @Input() eventId: string;
     listEventDays: EventDay[] = [];
     eventDay = new EventDay();

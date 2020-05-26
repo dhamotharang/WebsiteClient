@@ -9,7 +9,7 @@ import { ImageViewer } from '../nh-image-viewer.model';
     encapsulation: ViewEncapsulation.None
 })
 export class NhImageViewerComponent implements OnInit {
-    @ViewChild('imageViewport') imageViewport: ElementRef;
+    @ViewChild('imageViewport', {static: true}) imageViewport: ElementRef;
     image: ImageViewer;
     private scale = 1;
 

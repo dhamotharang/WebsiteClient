@@ -26,8 +26,8 @@ import {APP_CONFIG, IAppConfig} from '../../configs/app.config';
 })
 
 export class CustomerComponent extends BaseListComponent<CustomerSearchViewModel> implements OnInit {
-    @ViewChild(CustomerFormComponent) customerForm: CustomerFormComponent;
-    @ViewChild(CustomerDetailComponent) customerDetail: CustomerDetailComponent;
+    @ViewChild(CustomerFormComponent, {static: true}) customerForm: CustomerFormComponent;
+    @ViewChild(CustomerDetailComponent, {static: true}) customerDetail: CustomerDetailComponent;
     createDate;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,

@@ -26,9 +26,9 @@ import { NhUserPickerComponent } from '../../../../shareds/components/nh-user-pi
 })
 
 export class RoleFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('roleFormModal') roleFormModal: NhModalComponent;
-    @ViewChild(GhmSelectPickerComponent) ghmSelectPickerComponent: GhmSelectPickerComponent;
-    @ViewChild(NhUserPickerComponent) userPickerComponent: NhUserPickerComponent;
+    @ViewChild('roleFormModal', {static: true}) roleFormModal: NhModalComponent;
+    @ViewChild(GhmSelectPickerComponent, {static: true}) ghmSelectPickerComponent: GhmSelectPickerComponent;
+    @ViewChild(NhUserPickerComponent, {static: true}) userPickerComponent: NhUserPickerComponent;
     role = new Role();
     listPages: { id: number, name: string }[] = [];
     selectedPages: RolePageViewModel[] = [];

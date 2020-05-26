@@ -3,7 +3,7 @@ import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/internal/operators';
 import {ActivatedRouteSnapshot} from '@angular/router';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {BrandSearchViewModel} from '../viewmodel/brand-search.viewmodel';
 import {Brand} from '../model/brand.model';
@@ -16,6 +16,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {SpinnerService} from '../../../../core/spinner/spinner.service';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 
+@Injectable()
 export class BrandService {
     url = `${environment.apiGatewayUrl}api/v1/warehouse/brands`;
 

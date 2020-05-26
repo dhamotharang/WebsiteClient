@@ -79,8 +79,8 @@ export class NhTabComponent implements OnInit, AfterViewInit, AfterContentInit {
     @ContentChildren(NhTabPaneComponent) nhTabPanelComponents: QueryList<NhTabPaneComponent>;
     @ViewChildren('nhTabTitle', {read: ViewContainerRef}) nhTabTitleContainerRefs: QueryList<ViewContainerRef>;
     @ViewChildren(NhTabPaneComponent) nhTabPanelComponentsDynamic: QueryList<NhTabPaneComponent>;
-    @ViewChild('nhTabTitleContainer') nhTabTitleContainer: ElementRef;
-    @ViewChild('titleContainer', {read: ViewContainerRef}) titleContainer: ViewContainerRef;
+    @ViewChild('nhTabTitleContainer', {static: true}) nhTabTitleContainer: ElementRef;
+    @ViewChild('titleContainer', { read: ViewContainerRef }) titleContainer: ViewContainerRef;
     @Output() onCloseTab = new EventEmitter();
     @Output() tabSelected = new EventEmitter();
     listTabDynamic = [];

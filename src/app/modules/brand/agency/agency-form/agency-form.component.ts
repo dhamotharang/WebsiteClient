@@ -28,7 +28,7 @@ import * as _ from 'lodash';
 })
 
 export class AgencyFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild('agencyFormModal') agencyFormModal: NhModalComponent;
+    @ViewChild('agencyFormModal', {static: true}) agencyFormModal: NhModalComponent;
     agency = new Agency();
     modelTranslation = new AgencyTransaction();
     listProvince = [];

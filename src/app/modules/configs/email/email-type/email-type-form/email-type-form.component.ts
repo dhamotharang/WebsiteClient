@@ -16,7 +16,7 @@ import {EmailType} from '../email-type.model';
 })
 
 export class EmailTypeFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('emailTypeFormModal') emailTypeFormModal: NhModalComponent;
+    @ViewChild('emailTypeFormModal', {static: true}) emailTypeFormModal: NhModalComponent;
     @Output() onSaveSuccess = new EventEmitter();
 
     emailType = new EmailType();

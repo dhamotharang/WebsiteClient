@@ -15,7 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 
 export class ChangePasswordComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('changePasswordModal') changePasswordModal: NhModalComponent;
+    @ViewChild('changePasswordModal', {static: true}) changePasswordModal: NhModalComponent;
     changePassword = new ChangePassword();
 
     constructor(private accountService: AccountService,

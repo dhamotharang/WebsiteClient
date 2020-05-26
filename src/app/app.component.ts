@@ -22,8 +22,8 @@ import { NotificationService } from './shareds/services/notification.service';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-    @ViewChild('appTabList') appTabListRef: ElementRef;
-    @ViewChild('appTabListContainer') appTabListContainerRef: ElementRef;
+    @ViewChild('appTabList', {static: true}) appTabListRef: ElementRef;
+    @ViewChild('appTabListContainer', {static: true}) appTabListContainerRef: ElementRef;
     subscribers: any = {};
     offsetLeft: number;
 

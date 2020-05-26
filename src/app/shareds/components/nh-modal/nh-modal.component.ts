@@ -7,11 +7,11 @@ import {
     Renderer2, TemplateRef, ViewChild, ViewContainerRef,
     ViewEncapsulation
 } from '@angular/core';
-import { NhModalHeaderComponent } from './nh-modal-header.component';
-import { NhModalFooterComponent } from './nh-modal-footer.component';
-import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { NhModalService } from './nh-modal.service';
+import {NhModalHeaderComponent} from './nh-modal-header.component';
+import {NhModalFooterComponent} from './nh-modal-footer.component';
+import {GlobalPositionStrategy, Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {TemplatePortal} from '@angular/cdk/portal';
+import {NhModalService} from './nh-modal.service';
 
 @Component({
     selector: 'nh-modal',
@@ -26,9 +26,9 @@ import { NhModalService } from './nh-modal.service';
     encapsulation: ViewEncapsulation.None
 })
 export class NhModalComponent implements OnInit {
-    @ContentChild(NhModalHeaderComponent) modalHeaderComponents: NhModalHeaderComponent;
-    @ContentChild(NhModalFooterComponent) modalFooterComponents: NhModalFooterComponent;
-    @ViewChild('modalTemplate') modalTemplateRef: TemplateRef<any>;
+    @ContentChild(NhModalHeaderComponent, {static: true}) modalHeaderComponents: NhModalHeaderComponent;
+    @ContentChild(NhModalFooterComponent, {static: true}) modalFooterComponents: NhModalFooterComponent;
+    @ViewChild('modalTemplate', {static: true}) modalTemplateRef: TemplateRef<any>;
 
     @Input() effect = 'slideDown'; // zoom, fade, slideUp, slideDown, slideLeft, slideRight
     @Input() size = 'sm';

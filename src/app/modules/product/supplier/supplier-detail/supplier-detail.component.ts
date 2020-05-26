@@ -14,7 +14,7 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 })
 
 export class SupplierDetailComponent extends BaseFormComponent {
-    @ViewChild('supplierFormModal') supplierFormModal: NhModalComponent;
+    @ViewChild('supplierFormModal', {static: true}) supplierFormModal: NhModalComponent;
     supplierDetail: SupplierDetailViewModel;
     contactType = ContactType;
 

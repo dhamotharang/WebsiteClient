@@ -23,7 +23,7 @@ import {Positions} from '../../../../shareds/constants/position.const';
 })
 
 export class MenuFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild(MenuItemFormComponent) menuItemFormComponent: MenuItemFormComponent;
+    @ViewChild(MenuItemFormComponent, {static: true}) menuItemFormComponent: MenuItemFormComponent;
     menu = new Menu();
     listMenuItem: TreeData[] = [];
     isShowMenuGroup = true;

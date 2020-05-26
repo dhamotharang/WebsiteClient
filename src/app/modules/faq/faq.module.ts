@@ -32,15 +32,7 @@ export const routes: Routes = [
     imports: [
         CommonModule, CoreModule, FormsModule, ReactiveFormsModule, NhModalModule, TinymceModule, NhSafeHtmlModeule,
         [RouterModule.forChild(routes)], DxCheckBoxModule, GhmSelectModule, GhmInputModule, GhmFileExplorerModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary cm-mgr-5',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        })],
+        SweetAlert2Module.forRoot()],
     declarations: [FaqListComponent, FaqFormComponent, FaqGroupFormComponent]
 })
 

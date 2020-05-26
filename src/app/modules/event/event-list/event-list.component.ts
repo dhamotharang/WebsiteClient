@@ -17,7 +17,7 @@ import { EventRegisterComponent } from '../event-register/event-register.compone
 })
 
 export class EventListComponent extends BaseListComponent<EventViewModel> implements OnInit {
-    @ViewChild(EventRegisterComponent) eventRegisterComponent: EventRegisterComponent;
+    @ViewChild(EventRegisterComponent, {static: true}) eventRegisterComponent: EventRegisterComponent;
     startDate: string;
     endDate: string;
     isActive: boolean;

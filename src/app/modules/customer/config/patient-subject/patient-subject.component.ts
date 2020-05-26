@@ -27,7 +27,7 @@ import {PatientSubjectFormComponent} from './patient-subject-form/patient-subjec
 })
 
 export class PatientSubjectComponent extends BaseListComponent<PatientSubjectSearchViewModel> implements OnInit, AfterViewInit {
-     @ViewChild(PatientSubjectFormComponent) patientSubjectForm: PatientSubjectFormComponent;
+     @ViewChild(PatientSubjectFormComponent, {static: true}) patientSubjectForm: PatientSubjectFormComponent;
     isActive;
     totalReduction;
 

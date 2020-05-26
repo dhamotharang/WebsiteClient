@@ -40,7 +40,7 @@
            (click)="edit(cell.data)">
             <i class="dx-icon-edit"></i>
         </a>
-        <a title="Xóa"
+        <a title="Xóa" [swal]="confirmDeleteContact"
            class="color-red text-decoration-none" *ngIf="permission.delete"
            (click)="confirm(cell.data)" i18n="@@delete">
             <i class="dx-icon-remove"></i>

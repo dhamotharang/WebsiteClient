@@ -25,7 +25,7 @@ import {ajax} from 'rxjs/internal/observable/dom/ajax';
 })
 
 export class VideoFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('videoFormModal') videoFormModal: NhModalComponent;
+    @ViewChild('videoFormModal', {static: true}) videoFormModal: NhModalComponent;
     video = new Video();
     videoLinkId;
     thumbnail;

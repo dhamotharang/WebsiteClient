@@ -6,10 +6,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/internal/operators';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Contact } from '../model/contact.model';
 import { environment } from '../../../../../environments/environment';
 
+@Injectable()
 export class ContactService {
     url = `${environment.apiGatewayUrl}api/v1/warehouse/contacts`;
 

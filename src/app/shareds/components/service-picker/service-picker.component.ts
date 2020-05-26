@@ -14,7 +14,7 @@ import { ISearchResult } from '../../../interfaces/isearch.result';
 })
 @DestroySubscribers()
 export class ServicePickerComponent extends BaseComponent implements OnInit {
-    @ViewChild('servicePickerModal') servicePickerModal: NhModalComponent;
+    @ViewChild('servicePickerModal', {static: true}) servicePickerModal: NhModalComponent;
     @Output() accept = new EventEmitter();
     @Output() cancel = new EventEmitter();
     private _isSelectAll = false;

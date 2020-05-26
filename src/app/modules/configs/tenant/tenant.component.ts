@@ -14,7 +14,7 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 })
 
 export class TenantComponent extends BaseListComponent<Tenant> implements OnInit {
-    @ViewChild(TenantFormComponent) tenantFormComponent: TenantFormComponent;
+    @ViewChild(TenantFormComponent, {static: true}) tenantFormComponent: TenantFormComponent;
     isActive: boolean;
 
     constructor(@Inject(PAGE_ID) public pageId: IPageId,

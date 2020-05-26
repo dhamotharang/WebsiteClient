@@ -292,7 +292,7 @@
                                 <!--<button class="btn btn-sm blue cm-mgr-5">In</button>-->
                                 <button class="btn btn-sm blue cm-mgr-5">Chi tiết</button>
                                 <button class="btn btn-sm blue cm-mgr-5">Sửa</button>
-                                <a class="btn btn-sm red cm-mgr-5" (click)="confirm(detail.data)">Hủy</a>
+                                <a class="btn btn-sm red cm-mgr-5" [swal]="confirmCancelOrder" (click)="confirm(detail.data)">Hủy</a>
                             </div>
                         </div>
                     </div>

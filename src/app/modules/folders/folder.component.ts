@@ -37,9 +37,9 @@ import {environment} from '../../../environments/environment';
 })
 
 export class FolderComponent extends BaseListComponent<FileFolderSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(FolderFormComponent) folderFormComponent: FolderFormComponent;
-    @ViewChild(FileFormComponent) fileFormComponent: FileFormComponent;
-    @ViewChild(SliderImageComponent) sliderImageComponent: SliderImageComponent;
+    @ViewChild(FolderFormComponent, {static: true}) folderFormComponent: FolderFormComponent;
+    @ViewChild(FileFormComponent, {static: true}) fileFormComponent: FileFormComponent;
+    @ViewChild(SliderImageComponent, {static: true}) sliderImageComponent: SliderImageComponent;
     listFile: FileSearchViewModel[];
     listFolder: FolderSearchViewModel[];
     listFolderSelect: any[];

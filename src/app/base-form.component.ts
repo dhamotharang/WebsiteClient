@@ -1,5 +1,5 @@
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
-import {EventEmitter, OnDestroy, Output} from '@angular/core';
+import { EventEmitter, OnDestroy, Output, Directive } from '@angular/core';
 import {LanguageSearchViewModel, LanguageViewModel} from './shareds/models/language.viewmodel';
 import {Observable, Subscriber} from 'rxjs';
 import {AppService} from './shareds/services/app.service';
@@ -8,6 +8,7 @@ import {PermissionViewModel} from './shareds/view-models/permission.viewmodel';
 import {IPageId, PAGE_ID} from './configs/page-id.config';
 import {BriefUser} from './shareds/models/brief-user.viewmodel';
 
+@Directive()
 export class BaseFormComponent implements OnDestroy {
     @Output() saveSuccessful = new EventEmitter();
     appService: AppService;

@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { Injector, NgModule } from '@angular/core';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +27,7 @@ import { setAppInjector } from './shareds/helpers/app-injector';
 import { NotificationService } from './shareds/services/notification.service';
 import {AuthWebsiteGuardService} from './shareds/services/auth-website-guard.service';
 import {AuthWebsiteService} from './shareds/services/auth-website.service';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 
 registerLocaleData(localeVI, 'vi-VN', localeVIExtra);
 
@@ -53,15 +53,7 @@ registerLocaleData(localeVI, 'vi-VN', localeVIExtra);
         AuthModule,
         CoreModule,
         ToastrModule.forRoot(),
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        })
+        SweetAlert2Module.forRoot()
     ],
     providers: [
         ScriptLoaderService, ToastrService, AuthService, AuthGuardService, UtilService, HttpClient,

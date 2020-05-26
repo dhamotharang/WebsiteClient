@@ -35,7 +35,7 @@ import {NhSuggestion} from '../../../shareds/components/nh-suggestion/nh-suggest
 })
 
 export class TenantFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('tenantFormModal') tenantFormModal: NhModalComponent;
+    @ViewChild('tenantFormModal', {static: true}) tenantFormModal: NhModalComponent;
     isSearching = false;
     tenant = new Tenant();
     languages = [];

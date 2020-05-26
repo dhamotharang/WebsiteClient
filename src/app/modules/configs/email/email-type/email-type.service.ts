@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {ToastrService} from 'ngx-toastr';
 import {HttpClient, HttpParams} from '@angular/common/http';
@@ -10,6 +10,7 @@ import {Observable} from 'rxjs';
 import {EmailType} from './email-type.model';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class EmailTypeService {
     url = 'api/v1/website/mail-types/';
 

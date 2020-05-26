@@ -17,7 +17,7 @@ import { ChangePasswordComponent } from '../../components/change-password/change
 })
 
 export class Admin1HeaderComponent implements OnInit, OnDestroy {
-    @ViewChild(ChangePasswordComponent) changePasswordComponent: ChangePasswordComponent;
+    @ViewChild(ChangePasswordComponent, {static: true}) changePasswordComponent: ChangePasswordComponent;
     totalNotifications = 0;
     totalUnreadNotification = 0;
     totalMails = 0;

@@ -3,7 +3,7 @@ import {ToastrService} from 'ngx-toastr';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {ProductCategorySearchViewModel} from '../viewmodel/product-category-search.viewmodel';
 import {ProductCategoryDetailViewModel} from '../viewmodel/product-category-detail.viewmodel';
 import {ProductCategory} from '../model/product-category.model';
@@ -18,6 +18,7 @@ import {TreeData} from '../../../../view-model/tree-data';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 import {CategoryProductSearchForSelectViewModel} from '../../model/category-product-search-for-select.viewmodel';
 
+@Injectable()
 export class ProductCategoryService {
     url = 'api/v1/warehouse/product-categories';
 

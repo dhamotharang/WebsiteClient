@@ -2,7 +2,7 @@ import {SocialNetwork} from './social-network.model';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {ToastrService} from 'ngx-toastr';
 import {HttpClient} from '@angular/common/http';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {SpinnerService} from '../../../../core/spinner/spinner.service';
@@ -10,6 +10,7 @@ import {finalize, map} from 'rxjs/operators';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class SocialNetworkService {
     url = 'api/v1/website/social-networks/';
 

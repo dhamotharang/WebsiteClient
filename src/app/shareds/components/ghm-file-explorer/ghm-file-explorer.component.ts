@@ -40,8 +40,8 @@ import {environment} from '../../../../environments/environment';
 })
 
 export class GhmFileExplorerComponent implements OnInit, OnDestroy {
-    @ViewChild('ghmExplorerTemplate') templateRef: TemplateRef<any>;
-    @ViewChild(GhmNewFolderComponent) ghmNewFolderComponent: GhmNewFolderComponent;
+    @ViewChild('ghmExplorerTemplate', {static: true}) templateRef: TemplateRef<any>;
+    @ViewChild(GhmNewFolderComponent, {static: true}) ghmNewFolderComponent: GhmNewFolderComponent;
 
     @Input() buttonText: string;
     @Input() multiple = false;

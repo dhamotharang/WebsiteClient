@@ -5,7 +5,7 @@ import {finalize} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BrandService} from './services/brand.service';
 import {BrandFormComponent} from './brand-form/brand-form.component';
-import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {HelperService} from '../../shareds/services/helper.service';
 import {BaseListComponent} from '../../base-list.component';
 import {IPageId, PAGE_ID} from '../../configs/page-id.config';
@@ -21,8 +21,8 @@ import {FilterLink} from '../../shareds/models/filter-link.model';
     providers: [HelperService]
 })
 export class BrandComponent extends BaseListComponent<BrandSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(BrandFormComponent) brandFormComponent: BrandFormComponent;
-    @ViewChild('confirmDeleteBrand') swalConfirmDelete: SwalComponent;
+    @ViewChild(BrandFormComponent, {static: true}) brandFormComponent: BrandFormComponent;
+    @ViewChild('confirmDeleteBrand', {static: true}) swalConfirmDelete: SwalComponent;
     isActive;
     listBrand: BrandSearchViewModel[];
     brandId;
@@ -120,7 +120,6 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
 
     confirm(value: BrandSearchViewModel) {
         this.brandId = value.id;
-        this.swalConfirmDelete.show();
     }
 
     private renderFilterLink() {

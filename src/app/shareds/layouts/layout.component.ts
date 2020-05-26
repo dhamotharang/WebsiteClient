@@ -22,7 +22,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 
 export class LayoutComponent implements OnInit {
-    @ViewChild(LayoutDirective) layoutDirective: LayoutDirective;
+    @ViewChild(LayoutDirective, {static: true}) layoutDirective: LayoutDirective;
 
     constructor(private componentFactoryResolve: ComponentFactoryResolver,
                 private renderer: Renderer2,

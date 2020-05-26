@@ -23,7 +23,7 @@ import {EmailSearchViewModel} from '../viewmodel/email-search.viewmodel';
 })
 
 export class EmailFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('emailFormModal') emailFormModal: NhModalComponent;
+    @ViewChild('emailFormModal', {static: true}) emailFormModal: NhModalComponent;
     @Output() onSaveSuccess = new EventEmitter();
     listEmailType;
     email = new Email();

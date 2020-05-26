@@ -29,8 +29,8 @@ import {BannerItemFormComponent} from './banner-items/banner-item-form/banner-it
 })
 
 export class BannerComponent extends BaseListComponent<BannerResultViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(BannerFormComponent) bannerFormComponent: BannerFormComponent;
-    @ViewChild(BannerItemFormComponent) bannerItemFormComponent: BannerItemFormComponent;
+    @ViewChild(BannerFormComponent, {static: true}) bannerFormComponent: BannerFormComponent;
+    @ViewChild(BannerItemFormComponent, {static: true}) bannerItemFormComponent: BannerItemFormComponent;
     isActive: boolean;
     type;
     height;

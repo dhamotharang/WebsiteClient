@@ -26,7 +26,7 @@ import {ProductResultViewModel} from '../../product/product/viewmodel/product-re
     providers: [HelperService]
 })
 export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmCancelOrder') swalConfirmCancel: SwalComponent;
+    @ViewChild('confirmCancelOrder', {static: true}) swalConfirmCancel: SwalComponent;
     orderId: string;
     fromDate;
     toDate;
@@ -174,7 +174,6 @@ export class OrderListComponent extends BaseListComponent<OrderSearchViewModel> 
 
     confirm(value: OrderSearchViewModel) {
         this.orderId = value.id;
-        this.swalConfirmCancel.show();
     }
 
     cancel(id: string) {

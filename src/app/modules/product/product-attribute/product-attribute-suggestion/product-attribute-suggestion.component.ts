@@ -14,7 +14,7 @@ import {ProductAttribute} from '../../product/product-form/product-attribute/mod
     templateUrl: './product-attribute-suggestion.component.html'
 })
 export class ProductAttributeSuggestionComponent extends BaseListComponent<NhSuggestion> implements OnInit {
-    @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
+    @ViewChild(NhSuggestionComponent, {static: true}) nhSuggestionComponent: NhSuggestionComponent;
     @Input() multiple = false;
     @Input() selectedItem;
     @Input() listSelectedItem: ProductAttribute[];

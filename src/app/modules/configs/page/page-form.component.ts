@@ -23,7 +23,7 @@ import { PageDetailViewModel } from './models/page-detail.viewmodel';
 })
 
 export class PageFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('pageFormModal') pageFormModal: NhModalComponent;
+    @ViewChild('pageFormModal', {static: true}) pageFormModal: NhModalComponent;
     @Input() page = new Page();
     @Output() onPageFormClose = new EventEmitter();
     pageTree: TreeData[] = [];

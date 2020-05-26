@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
@@ -15,6 +15,7 @@ import {BannerItem} from '../models/banner-items.model';
 import {BannerResultViewModel} from '../viewmodel/banner-result.viewmodel';
 import {environment} from '../../../../environments/environment';
 
+@Injectable()
 export class BannerService {
     url = 'api/v1/website/banners/';
 

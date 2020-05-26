@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {SpinnerService} from '../../../../core/spinner/spinner.service';
@@ -12,6 +12,7 @@ import {EmailTemplateSearchViewModel} from './viewmodel/email-template-search.vi
 import {SearchResultViewModel} from '../../../../shareds/view-models/search-result.viewmodel';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class EmailTemplateService {
     url = 'api/v1/website/email-templates';
 

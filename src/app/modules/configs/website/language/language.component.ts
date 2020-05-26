@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 })
 
 export class LanguageComponent extends BaseListComponent<LanguageSearchViewModel> implements OnInit {
-    @ViewChild(LanguageFormComponent) languageFormComponent: LanguageFormComponent;
+    @ViewChild(LanguageFormComponent, {static: true}) languageFormComponent: LanguageFormComponent;
     isShowForm;
     listLanguage;
 

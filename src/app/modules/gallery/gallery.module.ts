@@ -5,8 +5,8 @@ import { GalleryComponent } from './gallery/gallery.component';
 import { MatCheckboxModule, MatIconModule, MatTabsModule, MatTooltipModule } from '@angular/material';
 import { GalleryRoutingModule } from './gallery-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
-import { TreeTableModule } from 'primeng/primeng';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { TreeTableModule } from 'primeng';
 import { LayoutModule } from '../../shareds/layouts/layout.module';
 import { NhSelectModule } from '../../shareds/components/nh-select/nh-select.module';
 import { NhImageModule } from '../../shareds/components/nh-image/nh-image.module';
@@ -33,15 +33,7 @@ import {DxCheckBoxModule} from 'devextreme-angular';
         MatCheckboxModule, ReactiveFormsModule, NhDateModule, TreeTableModule, NhTagModule, GhmFileExplorerModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
         MatTabsModule, MatIconModule, NhDropdownModule, GhmFileExplorerModule, CoreModule, DxCheckBoxModule,
-        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            // confirmButtonText: 'Accept',
-            showCancelButton: true,
-            // cancelButtonText: 'Cancel'
-        })
+        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot()
     ],
     declarations: [PhotoComponent, VideoComponent, VideoFormComponent, VideoDetailComponent, GalleryComponent,
         AlbumFormComponent],

@@ -25,8 +25,8 @@ import {NhModalComponent} from '../../../../../shareds/components/nh-modal/nh-mo
 })
 
 export class MenuItemFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('menuItemFormModal') menuItemFormModal: NhModalComponent;
-    @ViewChild(ChoiceMenuItemComponent) choiceMenuItemComponent: ChoiceMenuItemComponent;
+    @ViewChild('menuItemFormModal', {static: true}) menuItemFormModal: NhModalComponent;
+    @ViewChild(ChoiceMenuItemComponent, {static: true}) choiceMenuItemComponent: ChoiceMenuItemComponent;
     @Input() menuItemTree: TreeData[] = [];
     @Input() menuId: string;
     @Output() onSaveSuccess = new EventEmitter();

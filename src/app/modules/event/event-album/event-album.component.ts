@@ -19,7 +19,7 @@ import {SearchResultViewModel} from '../../../shareds/view-models/search-result.
 })
 
 export class EventAlbumComponent extends BaseListComponent<EventAlbumViewmodel> implements OnInit {
-    @ViewChild(EventAlbumFormComponent) eventAlbumForm: EventAlbumFormComponent;
+    @ViewChild(EventAlbumFormComponent, {static: true}) eventAlbumForm: EventAlbumFormComponent;
     listAlbum: EventAlbumViewmodel[];
     eventId;
 

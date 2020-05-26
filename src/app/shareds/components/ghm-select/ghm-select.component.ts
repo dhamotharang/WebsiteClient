@@ -53,7 +53,7 @@ export class GhmSelectComponent implements OnChanges, OnInit, AfterViewInit, OnD
     private _data: GhmSelect[] = [];
     private _selectedItem = null;
     // @ViewChild('searchBox') searchBox: ElementRef<any>;
-    @ViewChild('dropdownTemplate') dropdownTemplate: TemplateRef<any>;
+    @ViewChild('dropdownTemplate', {static: true}) dropdownTemplate: TemplateRef<any>;
     @Input() multiple = false;
     @Input() liveSearch = false;
     @Input() icon = 'fa fa-list';

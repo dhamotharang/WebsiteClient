@@ -8,7 +8,7 @@ import { AppService } from '../../../services/app.service';
 })
 
 export class Admin2SidebarComponent implements OnInit {
-    @ViewChild('sidebarElement') sidebarElement: ElementRef;
+    @ViewChild('sidebarElement', {static: true}) sidebarElement: ElementRef;
 
     constructor(private renderer: Renderer2,
                 private appService: AppService) {

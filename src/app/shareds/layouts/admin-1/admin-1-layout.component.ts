@@ -12,9 +12,9 @@ import { DestroySubscribers } from '../../decorator/destroy-subscribes.decorator
 
 @DestroySubscribers()
 export class Admin1LayoutComponent implements OnDestroy, AfterViewInit {
-    @ViewChild('header') header: ElementRef;
-    @ViewChild('container') container: ElementRef;
-    @ViewChild('pageContent') pageContent: ElementRef;
+    @ViewChild('header', {static: true}) header: ElementRef;
+    @ViewChild('container', {static: true}) container: ElementRef;
+    @ViewChild('pageContent', {static: true}) pageContent: ElementRef;
 
     pageTitle$: Observable<string>;
     moduleTitle$: Observable<string>;

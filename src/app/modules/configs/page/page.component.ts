@@ -23,7 +23,7 @@ import { finalize } from 'rxjs/internal/operators';
 })
 
 export class PageComponent extends BaseListComponent<PageSearchViewModel> implements OnInit {
-    @ViewChild(PageFormComponent) pageFormComponent: PageFormComponent;
+    @ViewChild(PageFormComponent, {static: true}) pageFormComponent: PageFormComponent;
     isActive?: boolean;
     clientId?: string;
     page = new Page();

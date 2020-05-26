@@ -18,7 +18,7 @@ import {ActionResultViewModel} from '../../../../../shareds/view-models/action-r
     templateUrl: './product-attribute-value-form.component.html'
 })
 export class ProductAttributeValueFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('productAttributeValueFormModal') productAttributeValueFormModal: NhModalComponent;
+    @ViewChild('productAttributeValueFormModal', {static: true}) productAttributeValueFormModal: NhModalComponent;
     @Input() attributeId: string;
     productAttributeValue = new ProductAttributeValue();
     productAttributeValueTranslation = new ProductAttributeValueTranslation();

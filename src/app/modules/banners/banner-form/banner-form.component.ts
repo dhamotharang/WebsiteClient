@@ -22,7 +22,7 @@ import {Positions} from '../../../shareds/constants/position.const';
 })
 
 export class BannerFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild('bannerFormModal') bannerFormModal: NhModalComponent;
+    @ViewChild('bannerFormModal', {static: true}) bannerFormModal: NhModalComponent;
     @Output() onSaveSuccess = new EventEmitter();
     banner = new Banner();
     listBannerItem: BannerItem[] = [];

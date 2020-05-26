@@ -17,7 +17,7 @@ import {IPageId, PAGE_ID} from '../../../../configs/page-id.config';
     templateUrl: './product-attribute-value.component.html'
 })
 export class ProductAttributeValueComponent extends BaseListComponent<AttributeValueViewModel> implements OnInit {
-    @ViewChild(ProductAttributeValueFormComponent) productAttributeValueFormComponent: ProductAttributeValueFormComponent;
+    @ViewChild(ProductAttributeValueFormComponent, {static: true}) productAttributeValueFormComponent: ProductAttributeValueFormComponent;
     @Input() readOnly = false;
     @Input() attributeId: string;
     isActive?: boolean;

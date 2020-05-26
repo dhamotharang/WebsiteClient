@@ -16,7 +16,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 })
 
 export class SupplierSuggestionComponent extends BaseListComponent<NhSuggestion> implements OnInit {
-    @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
+    @ViewChild(NhSuggestionComponent, {static: true}) nhSuggestionComponent: NhSuggestionComponent;
     @Input() multiple = false;
     @Input() isReceipt = false;
     @Input() selectedItem;

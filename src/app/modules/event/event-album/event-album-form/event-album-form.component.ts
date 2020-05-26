@@ -24,9 +24,9 @@ import {ActionResultViewModel} from '../../../../shareds/view-models/action-resu
 })
 
 export class EventAlbumFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('albumFormModal') albumFormModal: NhModalComponent;
-    @ViewChild('editPhotoModal') editPhotoModal: NhModalComponent;
-    @ViewChild(VideoComponent) videoComponent: VideoComponent;
+    @ViewChild('albumFormModal', {static: true}) albumFormModal: NhModalComponent;
+    @ViewChild('editPhotoModal', {static: true}) editPhotoModal: NhModalComponent;
+    @ViewChild(VideoComponent, {static: true}) videoComponent: VideoComponent;
     albumExist = false;
     eventId;
     album = new Album();

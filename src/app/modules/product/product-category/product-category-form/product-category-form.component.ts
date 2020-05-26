@@ -34,8 +34,8 @@ import {environment} from '../../../../../environments/environment.prod';
 })
 
 export class ProductCategoryFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('productCategoryFormModal') productCategoryFormModal: NhModalComponent;
-    @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
+    @ViewChild('productCategoryFormModal', {static: true}) productCategoryFormModal: NhModalComponent;
+    @ViewChild(NhTabComponent, {static: true}) nhTabComponent: NhTabComponent;
     productCategory = new ProductCategory();
     productCategoryTree: TreeData[] = [];
     modelTranslation = new ProductCategoryTranslation();

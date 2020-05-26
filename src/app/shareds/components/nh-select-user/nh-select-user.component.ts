@@ -14,7 +14,7 @@ import {debounceTime} from 'rxjs/operators';
     styleUrls: ['./nh-select-user.less']
 })
 export class NhSelectUserComponent implements OnInit {
-    @ViewChild('keyword') keywordElement: ElementRef;
+    @ViewChild('keyword', {static: true}) keywordElement: ElementRef;
     @Input() type = 'link'; // link, listUser
     @Input() url = 'user/search-suggest-user';
     @Input() text: string;

@@ -57,7 +57,7 @@
             <li class="searching" *ngIf="loading; else loadDoneTemplate">
                 <div class="m-loader m-loader--brand"></div>
             </li>
-            <li i18n="@@cantFindPerson" *ngIf="keyword && sources.length === 0 && !isLoading">
+            <li *ngIf="keyword && sources.length === 0 && !isLoading">
                 <ng-container *ngIf="allowAdd; else notFoundMessage">
                     <a href="javascript://" (click)="add()" class="add"><span i18n="@@add"><i class="fa fa-plus"></i> Thêm</span>: {{ keyword }}</a>
                 </ng-container>

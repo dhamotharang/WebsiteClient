@@ -20,7 +20,7 @@ import {environment} from '../../../../environments/environment';
 })
 
 export class FileFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('fileFormModal') fileFormModal: NhModalComponent;
+    @ViewChild('fileFormModal', {static: true}) fileFormModal: NhModalComponent;
     @Output() onSaveSuccess = new EventEmitter();
     file = new Files();
     folderTree: TreeData[];

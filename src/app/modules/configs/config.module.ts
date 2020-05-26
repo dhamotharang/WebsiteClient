@@ -24,7 +24,7 @@ import {TenantFormComponent} from './tenant/tenant-form.component';
 import {RoleComponent} from './role/role.component';
 import {RoleFormComponent} from './role/role-form/role-form.component';
 import {RoleDetailComponent} from './role/role-detail/role-detail.component';
-import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {LanguageComponent} from './website/language/language.component';
 import {NHTreeModule} from '../../shareds/components/nh-tree/nh-tree.module';
 import {UserSettingComponent} from './user-setting/user-setting.component';
@@ -74,15 +74,7 @@ import {ProductCategorySelectComponent} from './menus/choice-menu-item/product-c
         MatCheckboxModule, MatPaginatorModule, MatButtonModule, MatSlideToggleModule, DatetimeFormatModule, NhDateModule, NhDropdownModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmFileExplorerModule, GhmUserSuggestionModule,
         MatTabsModule, NhSuggestionModule, MatIconModule, NewsModule, DragDropModule, GhmSelectModule, NhUserPickerModule,
-        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            // confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            // cancelButtonText: 'Hủy bỏ'
-        })
+        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot()
     ],
     exports: [],
     declarations: [PageComponent, PageFormComponent, ClientComponent, AccountComponent, AccountFormComponent,

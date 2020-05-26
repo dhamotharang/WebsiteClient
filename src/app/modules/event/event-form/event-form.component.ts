@@ -25,8 +25,8 @@ import {environment} from '../../../../environments/environment';
     providers: [NumberValidator]
 })
 export class EventFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild('eventFormModal') eventFormModal: NhModalComponent;
-    @ViewChild('eventWizard') eventWizard: NhWizardComponent;
+    @ViewChild('eventFormModal', {static: true}) eventFormModal: NhModalComponent;
+    @ViewChild('eventWizard', {static: true}) eventWizard: NhWizardComponent;
     @ViewChildren(TinymceComponent) eventContentEditors: QueryList<TinymceComponent>;
     event = new Event();
     eventDays: EventDayViewModel[] = [];

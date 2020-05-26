@@ -16,7 +16,7 @@ import {UtilService} from '../../services/util.service';
 })
 
 export class GhmInputComponent implements OnInit, ControlValueAccessor {
-    @ViewChild('ghmInput') ghmInputElement: ElementRef;
+    @ViewChild('ghmInput', {static: true}) ghmInputElement: ElementRef;
     @Input() icon = 'dx-icon-edit';
     @Input() removeIcon = 'fa fa-times';
     @Input() isDisabled = false;

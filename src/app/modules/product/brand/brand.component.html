@@ -76,6 +76,7 @@
             <i class="dx-icon-edit"></i>
         </a>
         <a title="Xóa"
+           [swal]="confirmDeleteBrand"
            class="color-red text-decoration-none" *ngIf="permission.delete"
            (click)="confirm(cell.data)" i18n="@@delete">
             <i class="dx-icon-remove"></i>

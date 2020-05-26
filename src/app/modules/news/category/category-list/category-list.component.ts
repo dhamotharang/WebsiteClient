@@ -15,7 +15,7 @@ import { IPageId, PAGE_ID } from '../../../../configs/page-id.config';
     styleUrls: ['./category-list.component.css']
 })
 export class CategoryListComponent extends BaseListComponent<TreeData> implements OnInit {
-    @ViewChild(CategoryFormComponent) categoryFormComponent: CategoryFormComponent;
+    @ViewChild(CategoryFormComponent, {static: true}) categoryFormComponent: CategoryFormComponent;
     isActive: boolean;
 
     constructor(

@@ -14,8 +14,8 @@ import { EventDayDetailComponent } from '../event-day-detail/event-day-detail.co
     styleUrls: ['./event-day.component.css']
 })
 export class EventDayComponent extends BaseListComponent<EventDayViewModel> implements OnInit {
-    @ViewChild(EventDayFormComponent) eventDayFormComponent: EventDayFormComponent;
-    @ViewChild(EventDayDetailComponent) eventDayDetailComponent: EventDayDetailComponent;
+    @ViewChild(EventDayFormComponent, {static: true}) eventDayFormComponent: EventDayFormComponent;
+    @ViewChild(EventDayDetailComponent, {static: true}) eventDayDetailComponent: EventDayDetailComponent;
     @Input() eventId: string;
     @Input() readonly = false;
     @Input() eventDays: EventDay[];

@@ -19,7 +19,7 @@ import * as _ from 'lodash';
     templateUrl: './product-attribute-value-suggestion.component.html'
 })
 export class ProductAttributeValueSuggestionComponent extends BaseListComponent<NhSuggestion> implements OnInit {
-    @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
+    @ViewChild(NhSuggestionComponent, {static: true}) nhSuggestionComponent: NhSuggestionComponent;
     @Input() multiple = false;
     @Input() selectedItem;
     @Input() attributeId;

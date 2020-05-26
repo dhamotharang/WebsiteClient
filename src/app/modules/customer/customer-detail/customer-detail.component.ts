@@ -17,7 +17,7 @@ import {UserContact} from '../model/customer-contact.model';
 })
 
 export class CustomerDetailComponent {
-    @ViewChild('customerDetailModal') customerDetailModal: NhModalComponent;
+    @ViewChild('customerDetailModal', {static: true}) customerDetailModal: NhModalComponent;
     tabNo = 1;
     customerDetail = new CustomerDetailViewModel();
     gender = Gender;

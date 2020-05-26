@@ -1,5 +1,5 @@
 import { Observable, Subscriber } from 'rxjs';
-import {ComponentFactoryResolver, OnDestroy, Type, ViewContainerRef} from '@angular/core';
+import { ComponentFactoryResolver, OnDestroy, Type, ViewContainerRef, Directive } from '@angular/core';
 import { AppInjector } from './shareds/helpers/app-injector';
 import { AppService } from './shareds/services/app.service';
 import { BriefUser } from './shareds/models/brief-user.viewmodel';
@@ -7,6 +7,7 @@ import { PermissionViewModel } from './shareds/view-models/permission.viewmodel'
 import {APP_CONFIG, IAppConfig} from './configs/app.config';
 import {IPageId, PAGE_ID} from './configs/page-id.config';
 
+@Directive()
 export class BaseListComponent<TEntity> implements OnDestroy {
     currentUser: BriefUser;
     appService: AppService;

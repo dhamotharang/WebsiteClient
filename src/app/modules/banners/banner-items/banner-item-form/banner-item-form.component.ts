@@ -19,7 +19,7 @@ import {ExplorerItem} from '../../../../shareds/components/ghm-file-explorer/exp
 })
 
 export class BannerItemFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('bannerItemFormModal') bannerItemFormModal: NhModalComponent;
+    @ViewChild('bannerItemFormModal', {static: true}) bannerItemFormModal: NhModalComponent;
     @Input() bannerId;
     @Input() isUpdate;
     @Output() onSaveSuccess = new EventEmitter();

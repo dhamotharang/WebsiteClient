@@ -26,7 +26,7 @@ import * as _ from 'lodash';
 })
 
 export class FeedbackComponent extends BaseListComponent<FeedbackSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(FeedbackDetailComponent) feedbackDetailComponent: FeedbackDetailComponent;
+    @ViewChild(FeedbackDetailComponent, {static: true}) feedbackDetailComponent: FeedbackDetailComponent;
     fromDate;
     toDate;
     isResolve;

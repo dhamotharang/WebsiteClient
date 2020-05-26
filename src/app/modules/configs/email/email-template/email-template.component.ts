@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 })
 
 export class EmailTemplateComponent extends BaseListComponent<EmailTemplateSearchViewModel> implements OnInit {
-    @ViewChild(EmailTemplateFormComponent) emailTemplateFormComponent: EmailTemplateFormComponent;
+    @ViewChild(EmailTemplateFormComponent, {static: true}) emailTemplateFormComponent: EmailTemplateFormComponent;
     listStatus = [
         {id: true, name: 'Active'},
         {id: false, name: 'InActive'}];

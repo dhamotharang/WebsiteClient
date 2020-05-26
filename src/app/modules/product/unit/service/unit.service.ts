@@ -4,7 +4,7 @@ import {ActivatedRouteSnapshot} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/internal/operators';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {UnitSearchViewModel} from '../view-model/unit-search.viewmodel';
 import {UnitDetailViewModel} from '../view-model/unit-detail.viewmodel';
@@ -16,6 +16,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 
+@Injectable()
 export class UnitService {
     url = 'api/v1/warehouse/units';
     constructor(@Inject(APP_CONFIG) private appConfig: IAppConfig,

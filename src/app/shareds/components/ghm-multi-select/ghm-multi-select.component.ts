@@ -19,7 +19,7 @@ class INewsPickerViewModel {
 })
 
 export class GhmMultiSelectComponent extends BaseListComponent<GhmMultiSelect> implements OnInit {
-    @ViewChild('pickerModal') pickerModal: NhModalComponent;
+    @ViewChild('pickerModal', {static: true}) pickerModal: NhModalComponent;
     @Input() data: GhmMultiSelect[] = [];
     @Input() listSelected: GhmMultiSelect[] = [];
     @Input() title: string;

@@ -38,15 +38,7 @@ export const routes: Routes = [
         ProductSuggestionModule, GhmPagingModule, GhmSettingDataGridModule, NhModalModule, NhTabModule, FormatMoneyStringModule,
         DxDataGridModule, DxCheckBoxModule, DxContextMenuModule, DxTemplateModule, GhmSettingDataGridModule, GhmAmountToWordModule,
         DatetimeFormatModule, GhmMaskModule, FormatNumberModule, GhmInputModule, GhmSelectModule,
-        SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn btn-primary cm-mgr-5',
-            cancelButtonClass: 'btn',
-            confirmButtonText: 'Đồng ý',
-            showCancelButton: true,
-            cancelButtonText: 'Hủy bỏ'
-        })],
+        SweetAlert2Module.forRoot()],
     declarations: [OrderFormComponent, OrderListComponent],
     providers: [OrderService]
 })

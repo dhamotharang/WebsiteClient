@@ -20,7 +20,7 @@ import {FaqGroupDetailViewModel} from '../model/faq-group.detail.viewmodel';
 })
 
 export class FaqGroupFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('faqGroupFormModal') faqGroupFormModal: NhModalComponent;
+    @ViewChild('faqGroupFormModal', {static: true}) faqGroupFormModal: NhModalComponent;
 
     faqGroup = new FaqGroup();
     translation = new FaqGroupTranslation();

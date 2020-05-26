@@ -12,7 +12,7 @@ import {
 })
 
 export class EventRegisterDetailComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('registerModal') registerModal: NhModalComponent;
+    @ViewChild('registerModal', {static: true}) registerModal: NhModalComponent;
 
     eventRegisterDetail: EventRegisterDetailViewModel;
     eventId: string;

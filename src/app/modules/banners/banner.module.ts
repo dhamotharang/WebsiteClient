@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {LayoutModule} from '../../shareds/layouts/layout.module';
 import {CommonModule} from '@angular/common';
 import {BannerComponent} from './banner.component';
 import {BannerRoutingModule} from './banner-routing.module';
@@ -14,7 +13,7 @@ import {GhmUserSuggestionModule} from '../../shareds/components/ghm-user-suggest
 import {GhmSelectPickerModule} from '../../shareds/components/ghm-select-picker/ghm-select-picker.module';
 import {CoreModule} from '../../core/core.module';
 import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.module';
-import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
+import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {BannerFormComponent} from './banner-form/banner-form.component';
 import {BannerHistoryComponent} from './banner-history/banner-history.component';
 import {BannerItemComponent} from './banner-items/banner-item.component';
@@ -23,18 +22,10 @@ import {BannerItemFormComponent} from './banner-items/banner-item-form/banner-it
 import {GhmSelectModule} from '../../shareds/components/ghm-select/ghm-select.module';
 
 @NgModule({
-    imports: [LayoutModule, CommonModule, BannerRoutingModule,  NhSelectModule, DatetimeFormatModule, GhmSelectModule,
-        MatCheckboxModule, ReactiveFormsModule, NhDateModule, NhDateModule, MatTooltipModule, GhmFileExplorerModule,
+    imports: [CommonModule, BannerRoutingModule,  NhSelectModule, DatetimeFormatModule, GhmSelectModule,
+        MatCheckboxModule, NhDateModule, NhDateModule, MatTooltipModule, GhmFileExplorerModule,
         NhModalModule, ReactiveFormsModule, FormsModule, MatTooltipModule, NHTreeModule, GhmUserSuggestionModule,
-        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot({
-            buttonsStyling: false,
-            customClass: 'modal-content',
-            confirmButtonClass: 'btn blue cm-mgr-5',
-            cancelButtonClass: 'btn',
-            // confirmButtonText: 'Accept',
-            showCancelButton: true,
-            // cancelButtonText: 'Cancel'
-        })],
+        GhmSelectPickerModule, CoreModule, GhmPagingModule, SweetAlert2Module.forRoot()],
     exports: [BannerComponent],
     declarations: [BannerComponent, BannerFormComponent, BannerHistoryComponent, BannerItemComponent, BannerItemFormComponent]
 })

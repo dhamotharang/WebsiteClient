@@ -11,7 +11,7 @@ import { RolePageViewModel } from '../models/role-page.viewmodel';
 })
 
 export class RoleDetailComponent implements OnInit {
-    @ViewChild(NhModalComponent) detailModal: NhModalComponent;
+    @ViewChild(NhModalComponent, {static: true}) detailModal: NhModalComponent;
     @Input() role: Role = null;
     pages$: Observable<RolePageViewModel[]>;
 

@@ -63,7 +63,7 @@ export class NhSelectComponent implements OnChanges, OnInit, AfterViewInit, OnDe
     private _data: NhSelect[] = [];
     private _selectedItem = null;
     // @ViewChild('searchBox') searchBox: ElementRef<any>;
-    @ViewChild('dropdownTemplate') dropdownTemplate: TemplateRef<any>;
+    @ViewChild('dropdownTemplate', {static: true}) dropdownTemplate: TemplateRef<any>;
     @Input() multiple = false;
     @Input() liveSearch = false;
     @Input() title: string;

@@ -18,7 +18,7 @@ import {ToastrService} from 'ngx-toastr';
 })
 
 export class CoreValuesComponent extends BaseListComponent<CoreValuesSearchViewModel> {
-    @ViewChild(CoreValuesFormComponent) coreValueFormComponent: CoreValuesFormComponent;
+    @ViewChild(CoreValuesFormComponent, {static: true}) coreValueFormComponent: CoreValuesFormComponent;
     listCoreValue: CoreValuesSearchViewModel[];
     isShowForm;
     branchId;

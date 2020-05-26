@@ -14,7 +14,7 @@ import { AccountService } from '../account.service';
 })
 
 export class AccountFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('accountFormModal') accountFormModal: NhModalComponent;
+    @ViewChild('accountFormModal', {static: true}) accountFormModal: NhModalComponent;
     account: Account = new Account();
 
     constructor(private fb: FormBuilder,

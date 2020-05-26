@@ -18,7 +18,7 @@ import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
     templateUrl: './product-attribute.component.html'
 })
 export class ProductAttributeComponent extends BaseListComponent<ProductAttributeViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDelete') swalConfirmDelete: SwalComponent;
+    @ViewChild('confirmDelete', {static: true}) swalConfirmDelete: SwalComponent;
     isSelfContent: boolean;
     isRequire: boolean;
     isActive: boolean;
@@ -88,7 +88,6 @@ export class ProductAttributeComponent extends BaseListComponent<ProductAttribut
 
     confirm(productAttribute: ProductAttributeViewModel) {
         this.productAttributeValue = productAttribute.id;
-        this.swalConfirmDelete.show();
     }
 
     delete(id: string) {

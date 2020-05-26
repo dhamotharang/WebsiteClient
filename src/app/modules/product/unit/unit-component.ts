@@ -26,8 +26,8 @@ import {FilterLink} from '../../../shareds/models/filter-link.model';
 })
 
 export class UnitComponent extends BaseListComponent<UnitSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild('confirmDeleteUnit') swalConfirmDelete: SwalComponent;
-    @ViewChild(UnitFormComponent) unitFormComponent: UnitFormComponent;
+    @ViewChild('confirmDeleteUnit', {static: true}) swalConfirmDelete: SwalComponent;
+    @ViewChild(UnitFormComponent, {static: true}) unitFormComponent: UnitFormComponent;
     isActive;
     address;
     listUnit: UnitSearchViewModel[];
@@ -120,7 +120,6 @@ export class UnitComponent extends BaseListComponent<UnitSearchViewModel> implem
     }
 
     confirm(value: UnitSearchViewModel) {
-        this.swalConfirmDelete.show();
         this.unitId = value.id;
     }
 

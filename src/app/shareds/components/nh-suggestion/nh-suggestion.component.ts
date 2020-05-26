@@ -54,7 +54,7 @@ export class NhSuggestion<T = any> {
 })
 
 export class NhSuggestionComponent implements OnInit, OnDestroy, ControlValueAccessor {
-    @ViewChild('searchResultContainer') private searchResultContainer: ElementRef;
+    @ViewChild('searchResultContainer', {static: true}) private searchResultContainer: ElementRef;
     @Input() multiple = false;
     @Input() isShowSelected = true;
     @Input() placeholder = '';

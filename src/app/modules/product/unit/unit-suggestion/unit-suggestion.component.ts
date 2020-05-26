@@ -14,7 +14,7 @@ import { UnitService } from '../service/unit.service';
   templateUrl: './unit-suggestion.component.html'
 })
 export class UnitSuggestionComponent extends BaseListComponent<NhSuggestion> implements OnInit {
-    @ViewChild(NhSuggestionComponent) nhSuggestionComponent: NhSuggestionComponent;
+    @ViewChild(NhSuggestionComponent, {static: true}) nhSuggestionComponent: NhSuggestionComponent;
     @Input() isReceipt = false;
     @Input() multiple = false;
     @Input() selectedItem;

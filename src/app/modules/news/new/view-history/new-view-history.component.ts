@@ -21,7 +21,7 @@ import {NewsFormComponent} from '../news-form/news-form.component';
 })
 
 export class NewViewHistoryComponent extends BaseListComponent<NewViewHistoryViewModel> implements OnInit {
-    @ViewChild(NewsFormComponent) newsFormComponent: NewsFormComponent;
+    @ViewChild(NewsFormComponent, {static: true}) newsFormComponent: NewsFormComponent;
     fromDate;
     toDate;
     browser;

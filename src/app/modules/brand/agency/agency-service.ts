@@ -3,7 +3,7 @@ import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/internal/operators';
 import {ActivatedRouteSnapshot} from '@angular/router';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {ToastrService} from 'ngx-toastr';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
@@ -14,6 +14,7 @@ import {AgencyViewModel} from './model/agency.viewmodel';
 import {AgencyDetailViewModel} from './model/agency-detail.viewmodel';
 import {Agency} from './model/agency.model';
 
+@Injectable()
 export class AgencyService {
     url = 'api/v1/website/agency-infos';
 

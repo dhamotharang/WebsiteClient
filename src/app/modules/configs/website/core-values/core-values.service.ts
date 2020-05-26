@@ -1,6 +1,6 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {Observable} from 'rxjs';
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
@@ -12,6 +12,7 @@ import {CoreValue} from './model/core-value.model';
 import {CoreValueDetailViewModel} from './viewmodel/core-value-detail.viewmodel';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class CoreValuesService {
     url = 'api/v1/website/core-values/';
 

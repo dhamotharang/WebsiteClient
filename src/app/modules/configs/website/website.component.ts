@@ -15,10 +15,10 @@ import {CoreValuesComponent} from './core-values/core-values.component';
 })
 
 export class WebsiteComponent extends BaseFormComponent implements OnInit {
-    @ViewChild(LanguageComponent) languageComponent: LanguageComponent;
-    @ViewChild(BranchComponent) branchComponent: BranchComponent;
-    @ViewChild(CoreValuesComponent) coreValueComponent: CoreValuesComponent;
-    @ViewChild(SocialNetworkComponent) socialNetworkComponent: SocialNetworkComponent;
+    @ViewChild(LanguageComponent, {static: true}) languageComponent: LanguageComponent;
+    @ViewChild(BranchComponent, {static: true}) branchComponent: BranchComponent;
+    @ViewChild(CoreValuesComponent, {static: true}) coreValueComponent: CoreValuesComponent;
+    @ViewChild(SocialNetworkComponent, {static: true}) socialNetworkComponent: SocialNetworkComponent;
 
     constructor(@Inject(APP_CONFIG) public appConfig: IAppConfig,
                 @Inject(PAGE_ID) public pageId: IPageId) {

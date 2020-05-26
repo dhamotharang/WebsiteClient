@@ -3,7 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { SupplierSearchViewModel } from '../viewmodel/supplier-search.viewmodel';
 import { SupplierDetailViewModel } from '../viewmodel/supplier-detail.viewmodel';
@@ -16,6 +16,7 @@ import {SearchResultViewModel} from '../../../../shareds/view-models/search-resu
 import {ActionResultViewModel} from '../../../../shareds/view-models/action-result.viewmodel';
 import {NhSuggestion} from '../../../../shareds/components/nh-suggestion/nh-suggestion.component';
 
+@Injectable()
 export class SupplierService {
     url = 'api/v1/warehouse/suppliers';
 

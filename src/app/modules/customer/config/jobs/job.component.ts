@@ -23,7 +23,7 @@ import { TreeNode } from 'primeng/api';
 })
 
 export class JobComponent extends BaseListComponent<JobSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(JobFormComponent) jobFormComponent: JobFormComponent;
+    @ViewChild(JobFormComponent, {static: true}) jobFormComponent: JobFormComponent;
     isActive;
     jobs: TreeNode[] = [];
 

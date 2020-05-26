@@ -23,7 +23,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 })
 
 export class UnitFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('productUnitFormModal') productUnitFormModal: NhModalComponent;
+    @ViewChild('productUnitFormModal', {static: true}) productUnitFormModal: NhModalComponent;
     unit = new Unit();
     modelTranslation = new UnitTranslations();
     isGettingTree = false;

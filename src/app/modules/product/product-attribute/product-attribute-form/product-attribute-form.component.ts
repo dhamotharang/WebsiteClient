@@ -22,10 +22,10 @@ import {Location} from '@angular/common';
     providers: [Location]
 })
 export class ProductAttributeFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild('productAttributeFormModal') productAttributeFormModal: NhModalComponent;
-    @ViewChild(ProductAttributeValueComponent) productAttributeValueComponent: ProductAttributeValueComponent;
-    @ViewChild('attributeFormWizard') attributeFormWizard: NhWizardComponent;
-    @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
+    @ViewChild('productAttributeFormModal', {static: true}) productAttributeFormModal: NhModalComponent;
+    @ViewChild(ProductAttributeValueComponent, {static: true}) productAttributeValueComponent: ProductAttributeValueComponent;
+    @ViewChild('attributeFormWizard', {static: true}) attributeFormWizard: NhWizardComponent;
+    @ViewChild(NhTabComponent, {static: true}) nhTabComponent: NhTabComponent;
     productAttribute = new ProductAttribute();
     productAttributeTranslation = new ProductAttributeTranslation();
 

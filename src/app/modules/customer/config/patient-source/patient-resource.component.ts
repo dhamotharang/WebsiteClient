@@ -27,7 +27,7 @@ import {ISearchResult} from '../../../../interfaces/isearch.result';
 })
 
 export class PatientResourceComponent extends BaseListComponent<PatientResourceSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(PatientResourceFormComponent) patientSourceForm: PatientResourceFormComponent;
+    @ViewChild(PatientResourceFormComponent, {static: true}) patientSourceForm: PatientResourceFormComponent;
     isActive;
     constructor(@Inject(PAGE_ID) public pageId: IPageId,
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,

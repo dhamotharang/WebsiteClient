@@ -25,7 +25,7 @@ import {ExplorerItem} from '../../../shareds/components/ghm-file-explorer/explor
 })
 
 export class EventRegisterComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('registerFormModal') registerFormModal: NhModalComponent;
+    @ViewChild('registerFormModal', {static: true}) registerFormModal: NhModalComponent;
 
     eventRegister = new EventRegister();
     eventRegisterDay = new EventDayRegister();

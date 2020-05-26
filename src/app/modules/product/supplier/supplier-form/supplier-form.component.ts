@@ -20,7 +20,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 })
 
 export class SupplierFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('supplierFormModal') supplierFormModal: NhModalComponent;
+    @ViewChild('supplierFormModal', {static: true}) supplierFormModal: NhModalComponent;
     supplier = new Supplier();
     listContact: Contact[] = [];
     contactType = ContactType;

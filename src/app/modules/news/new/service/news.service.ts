@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../../configs/app.config';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ActivatedRouteSnapshot} from '@angular/router';
@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 import {SearchNewViewModel} from '../viewmodel/searchNewViewModel';
 import {environment} from '../../../../../environments/environment';
 
+@Injectable()
 export class NewsService {
     url = 'api/v1/website/news/';
 

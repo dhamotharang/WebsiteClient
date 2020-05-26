@@ -20,6 +20,12 @@ export const environment = {
      // notificationUrl: 'https://websitenotification.ghmsoft.vn',
      // fileUrl: 'https://websitefile.ghmsoft.vn/',
      // filemanagementUrl: 'https://websitefile.ghmsoft.vn/api/v1/',
+
+        // production: false,
+        // apiGatewayUrl: 'http://52.199.85.197:50008/',
+        // notificationUrl: 'http://52.199.85.197:50004',
+        // fileUrl: 'http://52.199.85.197:50005/',
+        // filemanagementUrl: 'http://52.199.85.197:50005/api/v1/',
 };
 
 /*

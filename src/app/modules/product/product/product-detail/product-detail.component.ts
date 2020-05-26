@@ -38,10 +38,10 @@ import {ProductAttributeService} from '../../product-attribute/product-attribute
 })
 
 export class ProductDetailComponent extends BaseFormComponent implements OnInit, AfterViewInit {
-    @ViewChild(ProductUnitComponent) productUnitComponent: ProductUnitComponent;
-    @ViewChild(ProductFormAttributeComponent) productAttributeComponent: ProductFormAttributeComponent;
-    @ViewChild(NhTabComponent) nhTabComponent: NhTabComponent;
-    @ViewChild('productFormModal') productFormModal: NhModalComponent;
+    @ViewChild(ProductUnitComponent, {static: true}) productUnitComponent: ProductUnitComponent;
+    @ViewChild(ProductFormAttributeComponent, {static: true}) productAttributeComponent: ProductFormAttributeComponent;
+    @ViewChild(NhTabComponent, {static: true}) nhTabComponent: NhTabComponent;
+    @ViewChild('productFormModal', {static: true}) productFormModal: NhModalComponent;
     product = new Product();
     categoryTree: TreeData[];
     categories: any[];

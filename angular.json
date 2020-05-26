@@ -1,176 +1,203 @@
 {
-    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-    "version": 1,
-    "newProjectRoot": "projects",
-    "projects": {
-        "GHM-Application": {
-            "root": "",
-            "sourceRoot": "src",
-            "projectType": "application",
-            "prefix": "app",
-            "schematics": {},
-            "architect": {
-                "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
-                    "options": {
-                        "outputPath": "dist/GHM-Application",
-                        "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.app.json",
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ],
-                        "styles": [
-                            "node_modules/devextreme/dist/css/dx.common.css",
-                            "node_modules/devextreme/dist/css/dx.light.css",
-                            "src/assets/plugins/bootstrap/css/bootstrap.min.css",
-                            "node_modules/ngx-toastr/toastr.css",
-                            "node_modules/animate.css/animate.css",
-                            "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/omega/theme.css",
-                            "node_modules/primeng/resources/primeng.min.css",
-                            "src/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css",
-                            "src/assets/global/plugins/simple-line-icons/simple-line-icons.min.css",
-                            "src/assets/fonts/font-awesome/css/font-awesome.min.css",
-                            "src/assets/global/css/components.css",
-                            "src/assets/pages/css/error.css",
-                            "src/assets/styles/ghm-drag-drop.scss",
-                            "src/assets/styles/app.scss"
-                        ],
-                        "scripts": [
-                            "node_modules/jquery/dist/jquery.js",
-                            "src/assets/plugins/bootstrap/js/bootstrap.min.js",
-                            "node_modules/@aspnet/signalr/dist/browser/signalr.js",
-                            "src/assets/plugins/tinymce/tinymce.js",
-                            "src/assets/plugins/tinymce/themes/modern/theme.js",
-                            "src/assets/plugins/tinymce/plugins/link/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/paste/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/table/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/textcolor/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/colorpicker/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/print/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/preview/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/spellchecker/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/fullscreen/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/code/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/lists/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/emoticons/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/autolink/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/image/plugin.js",
-                            "src/assets/plugins/tinymce/plugins/wordcount/plugin.js"
-                        ]
-                    },
-                    "configurations": {
-                        "production": {
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
-                                }
-                            ],
-                            "optimization": true,
-                            "outputHashing": "all",
-                            "sourceMap": false,
-                            "extractCss": true,
-                            "namedChunks": false,
-                            "aot": true,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true
-                        },
-                        "en": {
-                            "aot": true,
-                            "outputPath": "dist/GHM-Application-EN",
-                            "i18nFile": "src/locale/messages.en.xlf",
-                            "i18nFormat": "xlf",
-                            "i18nLocale": "en"
-                        },
-                        "vi": {
-                            "aot": true,
-                            "outputPath": "dist/GHM-Application-VN",
-                            "i18nFile": "src/locale/messages.vi-VN.xlf",
-                            "i18nFormat": "xlf",
-                            "i18nLocale": "vi"
-                        }
-                    }
-                },
-                "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {
-                        "browserTarget": "GHM-Application:build"
-                    },
-                    "configurations": {
-                        "production": {
-                            "browserTarget": "GHM-Application:build:production"
-                        },
-                        "en": {
-                            "browserTarget": "GHM-Application:build:en"
-                        },
-                        "vi": {
-                            "browserTarget": "GHM-Application:build:vi"
-                        }
-                    }
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "browserTarget": "GHM-Application:build"
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "src/test.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "karmaConfig": "src/karma.conf.js",
-                        "styles": [
-                        ],
-                        "scripts": [],
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ]
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "src/tsconfig.app.json",
-                            "src/tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
-                }
-            }
-        },
-        "GHM-Application-e2e": {
-            "root": "e2e/",
-            "projectType": "application",
-            "architect": {
-                "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
-                    "options": {
-                        "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "GHM-Application:serve"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": "e2e/tsconfig.e2e.json",
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
-                    }
-                }
-            }
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "GHM-Application": {
+      "i18n": {
+        "locales": {
+          "en": {
+            "translation": "src/locale/messages.en.xlf",
+            "baseHref": ""
+          },
+          "vi": {
+            "translation": "src/locale/messages.vi-VN.xlf",
+            "baseHref": ""
+          }
         }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "aot": true,
+            "outputPath": "dist/GHM-Application",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/assets/plugins/bootstrap/css/bootstrap.min.css",
+              "src/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css",
+              "src/assets/global/plugins/simple-line-icons/simple-line-icons.min.css",
+              "src/assets/fonts/font-awesome/css/font-awesome.min.css",
+              "src/assets/global/css/components.css",
+              "src/assets/pages/css/error.css",
+              "src/assets/styles/ghm-drag-drop.scss",
+              "src/assets/styles/app.scss",
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.light.css",
+              "node_modules/ngx-toastr/toastr.css"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/chart.js/dist/Chart.js",
+              "src/assets/plugins/bootstrap/js/bootstrap.min.js",
+              "src/assets/plugins/tinymce/tinymce.js",
+              "src/assets/plugins/tinymce/themes/modern/theme.js",
+              "src/assets/plugins/tinymce/plugins/link/plugin.js",
+              "src/assets/plugins/tinymce/plugins/paste/plugin.js",
+              "src/assets/plugins/tinymce/plugins/table/plugin.js",
+              "src/assets/plugins/tinymce/plugins/textcolor/plugin.js",
+              "src/assets/plugins/tinymce/plugins/colorpicker/plugin.js",
+              "src/assets/plugins/tinymce/plugins/print/plugin.js",
+              "src/assets/plugins/tinymce/plugins/preview/plugin.js",
+              "src/assets/plugins/tinymce/plugins/spellchecker/plugin.js",
+              "src/assets/plugins/tinymce/plugins/fullscreen/plugin.js",
+              "src/assets/plugins/tinymce/plugins/code/plugin.js",
+              "src/assets/plugins/tinymce/plugins/lists/plugin.js",
+              "src/assets/plugins/tinymce/plugins/emoticons/plugin.js",
+              "src/assets/plugins/tinymce/plugins/autolink/plugin.js",
+              "src/assets/plugins/tinymce/plugins/image/plugin.js",
+              "src/assets/plugins/tinymce/plugins/wordcount/plugin.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "en": {
+              "aot": true,
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "outputPath": "dist/GHM-Application-EN",
+              "i18nFile": "src/locale/messages.en.xlf",
+              "i18nLocale": "en"
+            },
+            "vi": {
+              "aot": true,
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "outputPath": "dist/GHM-Application-VN",
+              "i18nFile": "src/locale/messages.vi-VN.xlf",
+              "i18nLocale": "vi"
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "GHM-Application:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "GHM-Application:build:production"
+            },
+            "en": {
+              "browserTarget": "GHM-Application:build:en"
+            },
+            "vi": {
+              "browserTarget": "GHM-Application:build:vi"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "GHM-Application:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "styles": [],
+            "scripts": [],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     },
-    "defaultProject": "GHM-Application"
+    "GHM-Application-e2e": {
+      "root": "e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "GHM-Application:serve"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "GHM-Application",
+  "cli": {
+    "analytics": "67a498c3-faf4-4cac-bd88-de36e223deb7"
+  }
 }

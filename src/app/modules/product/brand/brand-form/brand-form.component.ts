@@ -20,7 +20,7 @@ import {Pattern} from '../../../../shareds/constants/pattern.const';
 })
 
 export class BrandFormComponent extends BaseFormComponent implements OnInit {
-    @ViewChild('brandFormModal') brandFormModal: NhModalComponent;
+    @ViewChild('brandFormModal', {static: true}) brandFormModal: NhModalComponent;
     brand = new Brand();
 
     constructor(private fb: FormBuilder,

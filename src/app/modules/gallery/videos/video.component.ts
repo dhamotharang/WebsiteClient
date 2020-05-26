@@ -22,8 +22,8 @@ import * as _ from 'lodash';
 })
 
 export class VideoComponent extends BaseListComponent<VideoSearchViewModel> implements OnInit, AfterViewInit {
-    @ViewChild(VideoFormComponent) videoFormComponent: VideoFormComponent;
-    @ViewChild(VideoDetailComponent) videoDetailComponent: VideoDetailComponent;
+    @ViewChild(VideoFormComponent, {static: true}) videoFormComponent: VideoFormComponent;
+    @ViewChild(VideoDetailComponent, {static: true}) videoDetailComponent: VideoDetailComponent;
     @Input() albumId: string;
     @Input() videos: Video[] = [];
     isActive: boolean;

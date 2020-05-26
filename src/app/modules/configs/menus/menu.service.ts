@@ -1,4 +1,4 @@
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {APP_CONFIG, IAppConfig} from '../../../configs/app.config';
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../core/spinner/spinner.service';
@@ -18,6 +18,7 @@ import {MenuItemSearchViewModel} from './viewmodel/menu-item-search.viewmodel';
 import {environment} from '../../../../environments/environment';
 import {MenuItemSelectViewModel} from './viewmodel/menu-item-select.viewmodel';
 
+@Injectable()
 export class MenuService {
     url = 'api/v1/website/menus/';
 

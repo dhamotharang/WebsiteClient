@@ -37,7 +37,7 @@ declare var tinyMCE;
 
 export class FaqFormComponent extends BaseFormComponent implements OnInit, AfterViewInit {
     @ViewChildren(TinymceComponent) questionContentEditor: QueryList<TinymceComponent>;
-    @ViewChild('faqFormModal') faqFormModal: NhModalComponent;
+    @ViewChild('faqFormModal', {static: true}) faqFormModal: NhModalComponent;
     @Input() listFaqGroup: FaqGroup[];
     faq = new Faq();
     faqId;
