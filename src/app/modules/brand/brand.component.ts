@@ -2,7 +2,7 @@ import {BrandSearchViewModel} from './viewmodel/brand-search.viewmodel';
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Location} from '@angular/common';
 import {finalize} from 'rxjs/operators';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {BrandService} from './services/brand.service';
 import {BrandFormComponent} from './brand-form/brand-form.component';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
@@ -31,9 +31,7 @@ export class BrandComponent extends BaseListComponent<BrandSearchViewModel> impl
                 @Inject(APP_CONFIG) public appConfig: IAppConfig,
                 private location: Location,
                 private route: ActivatedRoute,
-                private router: Router,
                 private brandService: BrandService,
-                private helperService: HelperService,
                 private utilService: UtilService) {
         super();
     }

@@ -2,11 +2,8 @@
  * Created by HoangNH on 5/5/2017.
  */
 import {
-    AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output,
-    Renderer2
+    AfterViewInit, Component, OnInit
 } from '@angular/core';
-import { NhDismissDirective } from './nh-dismiss.directive';
-import { NhModalService } from './nh-modal.service';
 
 @Component({
     selector: 'nh-modal-footer',

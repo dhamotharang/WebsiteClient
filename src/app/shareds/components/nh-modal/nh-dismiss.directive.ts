@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Output, Renderer2 } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 import { NhModalService } from './nh-modal.service';
 
 @Directive({

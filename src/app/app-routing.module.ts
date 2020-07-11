@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from './shareds/services/auth-guard.service';
 import {LayoutComponent} from './shareds/layouts/layout.component';
 import {AppService} from './shareds/services/app.service';
@@ -40,7 +40,11 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, {
-        preloadingStrategy: CustomPreloadingStrategyService
+        preloadingStrategy: CustomPreloadingStrategyService,
+        anchorScrolling: 'enabled',
+        initialNavigation: 'enabled',
+        scrollPositionRestoration: 'enabled',
+        paramsInheritanceStrategy: 'always'
     })],
     exports: [RouterModule],
     providers: [CustomPreloadingStrategyService]

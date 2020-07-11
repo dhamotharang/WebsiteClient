@@ -14,7 +14,6 @@ import {
     MatExpansionModule,
     MatIconModule,
     MatRadioModule,
-    MatTooltipModule
 } from '@angular/material';
 import {ProductAttributeValueComponent} from './product-attribute/product-attribute-value/product-attribute-value.component';
 import {ProductAttributeValueFormComponent} from './product-attribute/product-attribute-value/product-attribute-value-form/product-attribute-value-form.component';
@@ -49,8 +48,6 @@ import {GhmPagingModule} from '../../shareds/components/ghm-paging/ghm-paging.mo
 import {NhModalModule} from '../../shareds/components/nh-modal/nh-modal.module';
 import {NhSelectModule} from '../../shareds/components/nh-select/nh-select.module';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
-import {ProductSelectComponent} from '../configs/menus/choice-menu-item/product-select/product-select.component';
-import {ProductCategorySelectComponent} from '../configs/menus/choice-menu-item/product-category-select/product-category-select.component';
 import {NhSafeHtmlModeule} from '../../shareds/components/nh-safe-html/nh-safe-html.module';
 import {TinymceModule} from '../../shareds/components/tinymce/tinymce.module';
 

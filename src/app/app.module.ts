@@ -16,7 +16,7 @@ import { AuthGuardService } from './shareds/services/auth-guard.service';
 import { UtilService } from './shareds/services/util.service';
 import { LayoutModule } from './shareds/layouts/layout.module';
 import { registerLocaleData } from '@angular/common';
-import { APP_SERVICE, AppService } from './shareds/services/app.service';
+import { AppService } from './shareds/services/app.service';
 
 // Locale.
 import localeVI from '@angular/common/locales/fr';

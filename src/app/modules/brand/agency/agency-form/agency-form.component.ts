@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, Inject, OnInit, QueryList, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Product} from '../../../product/product/model/product.model';
 import {UtilService} from '../../../../shareds/services/util.service';
 import {ToastrService} from 'ngx-toastr';
 import {NumberValidator} from '../../../../validators/number.validator';
@@ -220,7 +219,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
 
     private resetForm() {
         this.id = null;
-        this.model.patchValue(new Product());
+        this.model.patchValue(null);
         this.translations.controls.forEach((model: FormGroup) => {
             model.patchValue({
                 fullName: '',

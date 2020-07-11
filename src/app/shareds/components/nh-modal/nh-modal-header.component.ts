@@ -1,7 +1,7 @@
 /**
  * Created by HoangNH on 5/5/2017.
  */
-import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NhModalService } from './nh-modal.service';
 
 @Component({

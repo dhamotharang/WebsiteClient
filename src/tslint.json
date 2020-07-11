@@ -13,5 +13,6 @@
             "app",
             "kebab-case"
         ]
-    }
+    },
+    "angularCompilerOptions": { "fullTemplateTypeCheck": true, "strictInjectionParameters": true, "enableIvy": false }
 }

@@ -30,7 +30,7 @@ import {NhDateModule} from '../../shareds/components/nh-datetime-picker/nh-date.
         NhSelectModule, NhDropdownModule, MatIconModule, NhModalModule, GhmPagingModule, NhDropdownModule,
         DatetimeFormatModule, NhSuggestionModule, GhmFileExplorerModule, NhContextMenuModule, NhDateModule,
         MatRadioModule, FormatNumberModule,  DxDataGridModule,  DxContextMenuModule, DxTemplateModule,
-        MatRadioModule, NhSuggestionModule, GhmSettingDataGridModule, GhmSelectModule, GhmInputModule, DxCheckBoxModule,
+        MatRadioModule, GhmSettingDataGridModule, GhmSelectModule, GhmInputModule, DxCheckBoxModule,
         SweetAlert2Module.forRoot()
     ],
     declarations: [BrandComponent, BrandFormComponent, AgencyListComponent, AgencyFormComponent],
