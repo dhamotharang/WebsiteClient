@@ -6,7 +6,6 @@ import {BaseListComponent} from '../../../../../base-list.component';
 import {Products} from '../../../../product/model/products.model';
 import * as _ from 'lodash';
 import {ProductSearchForSelectViewModel} from '../../../../product/model/product-search-for-select.viewmodel';
-import {CategoryProductService} from '../../../../product/services/category-product.service';
 import {ProductService} from '../../../../product/product/service/product.service';
 import {ProductCategoryService} from '../../../../product/product-category/service/product-category-service';
 
