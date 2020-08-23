@@ -4,7 +4,7 @@ import { APP_CONFIG, IAppConfig } from '../../../configs/app.config';
 import { Page } from './models/page.model';
 import { IResponseResult } from '../../../interfaces/iresponse-result';
 import { Observable } from 'rxjs';
-import { map, finalize } from 'rxjs/Operators';
+import { map, finalize } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { PageGetByUserViewModel } from '../../../view-model/page-get-by-user.viewmodel';
 import { TreeData } from '../../../view-model/tree-data';

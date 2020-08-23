@@ -134,7 +134,7 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
 
     private buildForm() {
         this.formErrors = this.utilService.renderFormError(['email', 'phoneNumber', 'website', 'idCard', 'idCardDate',
-            'provinceId', 'districtId', 'length', 'width', 'height', 'totalArea',
+            'provinceId', 'districtId', 'width', 'height', 'totalArea',
             'startTime', 'googleMap', 'order', 'isShow', 'isActive', 'website']);
         this.validationMessages = this.utilService.renderFormErrorMessage([
             {'email': ['maxLength', 'pattern']},
@@ -144,7 +144,6 @@ export class AgencyFormComponent extends BaseFormComponent implements OnInit, Af
             {'idCardDate': ['isValid']},
             {'provinceId': ['required', 'isValid']},
             {'districtId': ['required', 'isValid']},
-            {'length': ['isValid']},
             {'width': ['isValid']},
             {'height': ['isValid']},
             {'totalArea': ['isValid']},

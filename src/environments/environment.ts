@@ -4,11 +4,14 @@
 
 export const environment = {
     production: false,
-    apiGatewayUrl: 'http://localhost:50008/',
-    notificationUrl: 'http://localhost:50004',
-    fileUrl: 'http://localhost:50005/',
-    filemanagementUrl: 'http://localhost:50005/api/v1/',
-
+    // apiGatewayUrl: 'http://localhost:50008/',
+    // notificationUrl: 'http://localhost:50004',
+    // fileUrl: 'http://localhost:50005/',
+    // filemanagementUrl: 'http://localhost:50005/api/v1/',
+    apiGatewayUrl: 'http://34.87.83.21:50008/',
+    notificationUrl: 'http://34.87.83.21:50004',
+    fileUrl: 'http://34.87.83.21:50005/',
+    filemanagementUrl: 'http://34.87.83.21:50005/api/v1/'
     // production: true,
     // apiGatewayUrl: 'https://testwebsiteapi.ghmsoft.vn/',
     // notificationUrl: 'https://testwebsitenotification.ghmsoft.vn',
