@@ -8,10 +8,10 @@ export const environment = {
     // notificationUrl: 'http://localhost:50004',
     // fileUrl: 'http://localhost:50005/',
     // filemanagementUrl: 'http://localhost:50005/api/v1/',
-    apiGatewayUrl: 'http://34.87.83.21:50008/',
-    notificationUrl: 'http://34.87.83.21:50004',
-    fileUrl: 'http://34.87.83.21:50005/',
-    filemanagementUrl: 'http://34.87.83.21:50005/api/v1/'
+    // apiGatewayUrl: 'http://34.87.83.21:50008/',
+    // notificationUrl: 'http://34.87.83.21:50004',
+    // fileUrl: 'http://34.87.83.21:50005/',
+    // filemanagementUrl: 'http://34.87.83.21:50005/api/v1/'
     // production: true,
     // apiGatewayUrl: 'https://testwebsiteapi.ghmsoft.vn/',
     // notificationUrl: 'https://testwebsitenotification.ghmsoft.vn',
@@ -25,10 +25,10 @@ export const environment = {
      // filemanagementUrl: 'https://websitefile.ghmsoft.vn/api/v1/',
 
         // production: false,
-        // apiGatewayUrl: 'http://52.199.85.197:50008/',
-        // notificationUrl: 'http://52.199.85.197:50004',
-        // fileUrl: 'http://52.199.85.197:50005/',
-        // filemanagementUrl: 'http://52.199.85.197:50005/api/v1/',
+    apiGatewayUrl: 'http://websiteapi.rogervn.com/',
+    notificationUrl: 'http://websitenotification.rogervn.com',
+    fileUrl: 'http://websitefile.rogervn.com/',
+    filemanagementUrl: 'http://websitefile.rogervn.com/api/v1/',
 };
 
 /*
