@@ -1,10 +1,10 @@
 export const environment = {
 
   production: true,
-  apiGatewayUrl: 'https://websiteapi.rogervn.com/',
-  notificationUrl: 'https://websitenotification.rogervn.com',
-  fileUrl: 'https://websitefile.rogervn.com/',
-  filemanagementUrl: 'https://websitefile.rogervn.com/api/v1/',
+  apiGatewayUrl: 'http://websiteapi.rogervn.com/',
+  notificationUrl: 'http://websitenotification.rogervn.com',
+  fileUrl: 'http://websitefile.rogervn.com/',
+  filemanagementUrl: 'http://websitefile.rogervn.com/api/v1/',
 
     // apiGatewayUrl: 'http://52.199.85.197:50008/',
     // notificationUrl: 'http://52.199.85.197:50004',
